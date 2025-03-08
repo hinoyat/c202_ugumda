@@ -83,3 +83,8 @@ CREATE TABLE diary (
 - zuul의 패치 중단 → spring cloud gateway
 - Netty(비동기 방식), Spring WebFlux 기반의 특징
 
+
+# 2025-03-07-금요일
+ - ERD 설계
+ - API 명세서 작성
+
