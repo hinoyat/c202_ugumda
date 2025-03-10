@@ -11,7 +11,7 @@
 - 하나의 컴퓨터 환경 내에서 독립적인 컴퓨터 환경을 구성해서, 각 환경에 프로그램을 별도로 설치할 수 있게 만든 개념이다.
 - 하나의 컴퓨터 환경 내에서 여러개의 미니 컴퓨터 환경을 구성할 수 있는 형태이다.
 - 여기서 말하는 미니 컴퓨터를 Docker에서는 _컨테이너_ 라고 한다.
-  ![alt text](image.png)
+  ![alt text](images/image.png)
 
 # 3. 이미지(Image)란?
 
@@ -82,7 +82,7 @@ docker run -d -p [호스트 포트]:[컨테이너 포트] 이미지명
 doxker run -d -p 4000:80 nginx
 ```
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 - docker run -p 4000:80 라고 입력하게 되면, 도커를 실행하는 호스트의 4000번 포트를 컨테이너의 80번 포트로 연결하도록 설정한다.
 
@@ -258,7 +258,7 @@ docker run -d -p 8080:8080 hello-server
 docker ps
 ```
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 # 6. RUN
 
@@ -436,7 +436,7 @@ services:
 docker compose up --build -d
 ```
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
 </details>
 
@@ -455,19 +455,19 @@ docker compose up --build -d
 - 파드 내부의 공간 일부를 볼륨으로 활용하는 방식이다.
 - 이 방식은 파드가 삭제되는 즉시 데이터도 함께 삭제된다.
 - 그래서 실제로 사용되는 일이 잘 없다.
-  ![alt text](image-4.png)
+  ![alt text](images/image-4.png)
 
 ## 퍼시스턴트 볼륨(Persistent Volume, PV)
 
 - 파드 외부의 공간 일부를 볼륨(Volume)으로 활용하는 방식이다.
 - 이 방식은 피드가 삭제되는 것과 상관없이 데이터를 영구적으로 사용할 수 있다는 장점이 있다.
 - 현업에서는 주로 이 방식을 많이 활용한다.
-  ![alt text](image-5.png)
+  ![alt text](images/image-5.png)
 
 - 하지만 실제로 파드가 퍼시스턴트 볼륨에 직접 연결할 수 없다.
 - **퍼시스턴트 볼륨 클레임** 이라는 중개자가 있어야 한다.
   그래서 쿠버네티스 구조에서는 아래와 같은 구조로 퍼시스턴트 볼륨을 연결한다.
-  ![alt text](image-6.png)
+  ![alt text](images/image-6.png)
 
 # 볼륨 이용해서 mysql이랑 spring 띄우기
 
@@ -743,9 +743,9 @@ $ kubectl apply -f spring-service.yaml
 ```
 
 **결과**
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 **아키텍쳐**
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
 </details>
