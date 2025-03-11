@@ -51,7 +51,7 @@ CREATE TABLE diary (
 
 - 두 테이블 모두 임시 사용
 - spring.io에서 의존성을 추가하여 프로젝트 생성
-![image.png](./image.png)
+![image.png](./images/image.png)
 
 - Eureka 서버 설정
 - Eureka 클라이언트 설정
