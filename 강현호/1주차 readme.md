@@ -3,7 +3,6 @@
 
   # 25.03.04 (화)
   ## PM(Project Management) 모듈형 강의 1회차
-  ![image.png](https://file.notion.so/f/f/027144b5-975b-4fa5-af99-cc3143308bef/c7406684-6ebb-4543-a981-870590a37546/image.png?table=block&id=1ac9ac6d-a02c-8075-9b7c-e297483fb7a3&spaceId=027144b5-975b-4fa5-af99-cc3143308bef&expirationTimestamp=1741284000000&signature=UwMtCBntETnvuMXdx_Bvb5ExPLOfIG0U3cuYsxciKtU&downloadName=image.png)
 
   1. AI가 대체할 수 없는 부분
       - 대인 관계와 감성적인 이해(공감 능력)
@@ -418,4 +417,191 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 ```
 
+</details>
+
+
+------------------
+
+<details>
+<summary><b>2025-03-07(Spring Refresh token)</b></summary>
+
+## Refresh Token 구현
+### Refresh Token Entity
+```java
+package com.c202.userservice.global.auth.refreshtoken;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "refresh_tokens")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RefreshToken {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // 사용자 ID와 매핑
+    @Column(nullable = false)
+    private Long userId;
+
+    // 토큰 값 저장
+    @Column(nullable = false, unique = true, length = 255)
+    private String token;
+
+    // 토큰 만료 시간
+    @Column(nullable = false)
+    private String expiryDate;
+
+    // 토큰 값 업데이트 메소드
+    public void updateToken(String token, String expiryDate) {
+        this.token = token;
+        this.expiryDate = expiryDate;
+    }
+}
+```
+### Refresh Token Repository
+
+```java
+package com.c202.userservice.global.auth.refreshtoken;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+
+
+    // 토큰 값으로 리프레시 토큰 조회
+    Optional<RefreshToken> findByToken(String token);
+
+    // 사용자 ID로 리프레시 토큰 조회
+    Optional<RefreshToken> findByUserId(Long userId);
+
+    // 사용자 ID로 토큰 삭제 (로그아웃 시 사용)
+    void deleteByUserId(Long userId);
+}
+```
+
+### JwtTokenProvider에 refreshToken 메소드 추가
+
+``` java
+    // 리프레시 토큰 생성 메소드
+    public String createRefreshToken(String username, Long userId) {
+        // JWT 클레임 설정
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
+        claims.put("type", "refresh"); // 토큰 타입 지정
+
+        // 현재 시간과 만료 시간 설정
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + refreshTokenValidity);
+
+        // JWT 리프레시 토큰 생성
+        String refreshToken = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        // 만료 시간을 문자열로 변환
+        String expiryDate = LocalDateTime.now().plusNanos(refreshTokenValidity * 1000000).format(DATE_FORMATTER);
+
+        // DB에 리프레시 토큰 저장 또는 업데이트
+        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserId(userId);
+
+        if (existingToken.isPresent()) {
+            // 기존 토큰이 있으면 업데이트
+            RefreshToken tokenEntity = existingToken.get();
+            tokenEntity.updateToken(refreshToken, expiryDate);
+            refreshTokenRepository.save(tokenEntity);
+        } else {
+            // 기존 토큰이 없으면 새로 생성
+            RefreshToken tokenEntity = RefreshToken.builder()
+                    .userId(userId)
+                    .token(refreshToken)
+                    .expiryDate(expiryDate)
+                    .build();
+            refreshTokenRepository.save(tokenEntity);
+        }
+
+        return refreshToken;
+    }
+
+    // 리프레시 토큰을 쿠키에 설정하는 메소드 추가
+    public void addRefreshTokenToCookie(HttpServletResponse response, String refreshToken) {
+        Cookie cookie = new Cookie("refresh_token", refreshToken);
+        cookie.setHttpOnly(true);  // JavaScript에서 접근 불가능하게 설정
+        cookie.setSecure(true);    // HTTPS에서만 전송 (운영 환경에서 활성화)
+        cookie.setPath("/api/users");  // 쿠키 경로 설정
+        cookie.setMaxAge((int) (refreshTokenValidity / 1000));  // 초 단위로 변환
+
+        response.addCookie(cookie);
+    }
+
+    // 쿠키에서 리프레시 토큰 추출
+    public String extractRefreshTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refresh_token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    // 리프레시 토큰 쿠키 삭제
+    public void deleteRefreshTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("refresh_token", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/api/users");
+        cookie.setMaxAge(0);  // 즉시 만료
+
+        response.addCookie(cookie);
+    }
+
+        // 리프레시 토큰으로 새 액세스 토큰 발급
+    public String refreshAccessToken(String refreshToken) {
+        // 리프레시 토큰 유효성 검증
+        if (!validateToken(refreshToken)) {
+            throw new ServiceException.AuthenticationException("유효하지 않은 리프레시 토큰입니다.");
+        }
+
+        // 토큰 타입 확인
+        String tokenType = getTokenType(refreshToken);
+        if (!"refresh".equals(tokenType)) {
+            throw new ServiceException.AuthenticationException("유효한 리프레시 토큰이 아닙니다.");
+        }
+
+        // DB에 저장된 리프레시 토큰 확인
+        Optional<RefreshToken> savedToken = refreshTokenRepository.findByToken(refreshToken);
+        if (savedToken.isEmpty()) {
+            throw new ServiceException.AuthenticationException("저장된 리프레시 토큰을 찾을 수 없습니다.");
+        }
+
+        // 토큰에서 사용자 정보 추출
+        String username = getUsername(refreshToken);
+        Long userId = getUserId(refreshToken);
+
+        // 새 액세스 토큰 생성 및 반환
+        return createAccessToken(username, userId);
+    }
+
+```
+### 테스트 결과
+![image](./images/1w/login.png)
+![image](./images/1w/cookie.png)
+![image](./images/1w/logout.png)
+![image](./images/1w/refresh.png)
 </details>
