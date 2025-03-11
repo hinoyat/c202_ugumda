@@ -1,0 +1,47 @@
+package com.c202.diaryservice.diary.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Table(name = "diary")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Diary {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int diarySeq;
+
+    @Column(nullable = false)
+    private int userSeq;
+
+    @Column(nullable = false, length = 50)
+    private String title;
+
+    @Column(nullable = false, length = 255)
+    private String content;
+
+    @Column(nullable = true, length = 100)
+    private String videoUrl;
+
+    @Column(nullable = false, length = 8)
+    private String dreamDate;
+
+    @Column(nullable = false, length = 15)
+    private String createdAt;
+
+    @Column(nullable = false, length = 15)
+    private String updatedAt;
+
+    @Column(nullable = true, length = 15)
+    private String deletedAt;
+
+    @Column(nullable = false, length = 1)
+    private String isDeleted;
+
+    @Column(nullable = false, length = 1)
+    private String isPublic;
+}
