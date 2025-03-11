@@ -71,3 +71,20 @@ aws configure
 후에는 EKS 클러스터 생성 할 예정!
 
 </details>
+
+<details>
+    <summary>2025.03.12</summary>
+
+# 1. 로그인 페이지 디자인
+
+![alt text](images/login.png)
+
+# 2. 회원가입 페이지 디자인
+
+![alt text](images/signup.png)
+
+# 3. 우주선 페이지 디자인
+
+![alt text](images/spaceship.png)
+
+</details>
