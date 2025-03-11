@@ -1,4 +1,4 @@
-# 2025-03-11 월요일
+# 2025-03-10 월요일
 
 ## Spring Cloud Gateway와 Eureka
 
@@ -72,3 +72,5 @@ eureka:
     prefer-ip-address: true  # IP 기반 등록
 ```
 - prefer-ip-address: true는 ip를 기준으로 Eureka에 등록하겠다는 설정
+
+# 2025-03-11 화요일
