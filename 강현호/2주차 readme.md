@@ -1,6 +1,6 @@
 <details>
   # 25.03.10 (월)
-<summary><b>2025-03-11(Development Tools)</b></summary>
+<summary><b>2025-03-10(Gradle VS Maven)</b></summary>
 
 # Maven과 Gradle 개념 및 차이점
 
@@ -48,7 +48,7 @@ Maven은 표준화된 빌드 프로세스를 제공하며 안정적이고, Gradl
 
 ---------------------------------------
 <details>
-  <summary><b>2025-03-12()</b></summary>
+  <summary><b>2025-03-11()</b></summary>
 
 </details>
 
