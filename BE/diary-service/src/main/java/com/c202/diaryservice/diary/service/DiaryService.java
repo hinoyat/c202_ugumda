@@ -1,25 +1,27 @@
 package com.c202.diaryservice.diary.service;
 
 import com.c202.diaryservice.diary.model.request.DiaryCreateRequestDto;
+import com.c202.diaryservice.diary.model.request.DiaryUpdateRequestDto;
 import com.c202.diaryservice.diary.model.response.DiaryDetailResponseDto;
+import com.c202.diaryservice.diary.model.response.DiaryListResponseDto;
+
+import java.util.List;
 
 public interface DiaryService {
 
     DiaryDetailResponseDto createDiary(DiaryCreateRequestDto request);
 
-//    void updateDiary();
-//
-//    void deleteDiary(String userId, Long diaryId);
-//
-//    void getMyDiaries(String userId, int page, int size);
-//
-//    void getUserDiaries(String userId, String targetUserId, int page, int size);
-//
-//    void getDiaryDetail(String userId, Long diaryId);
-//
-//    boolean toggleDiaryVisibility(String userId, Long diaryId, boolean isPublic);
-//
+    DiaryDetailResponseDto updateDiary(int diarySeq, DiaryUpdateRequestDto request);
+
+    void deleteDiary(int diaryId);
+
+    List<DiaryListResponseDto> getMyDiaries(int userSeq);
+
+    List<DiaryListResponseDto> getUserDiaries(int userSeq);
+
+    DiaryDetailResponseDto getDiary(int diarySeq);
+
+    String toggleDiaryIsPublic(int diarySeq);
+
 //    boolean toggleDiaryLike(String userId, Long diaryId);
-//
-//    void updateDiaryVideoUrl(String userId, int diarySeq, String videoUrl);
 }

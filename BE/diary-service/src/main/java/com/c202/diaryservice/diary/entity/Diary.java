@@ -44,4 +44,7 @@ public class Diary {
 
     @Column(nullable = false, length = 1)
     private String isPublic;
+
+    public void deleteDiary() { this.isDeleted = "Y"; }
+
 }
