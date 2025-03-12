@@ -73,7 +73,7 @@ aws configure
 </details>
 
 <details>
-    <summary>2025.03.12</summary>
+    <summary>2025-03-11</summary>
 
 # 1. 로그인 페이지 디자인
 
@@ -86,5 +86,30 @@ aws configure
 # 3. 우주선 페이지 디자인
 
 ![alt text](images/spaceship.png)
+
+</details>
+
+<details>
+    <summary>2025-03-12</summary>
+
+# 1. 꿈해몽
+
+![alt text](images/luckynumber.png)
+
+# 2. 오늘의 운세
+
+![alt text](images/fortune.png)
+
+# 3. 꿈해몽
+
+![alt text](images/solvebutton.png)
+
+# 4. 꿈해몽2
+
+![alt text](images/dreamsolve.png)
+
+# 5. 비밀번호 체크
+
+![alt text](images/passwordcheck.png)
 
 </details>
