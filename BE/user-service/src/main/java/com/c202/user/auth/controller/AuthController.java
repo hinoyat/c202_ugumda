@@ -1,10 +1,10 @@
 package com.c202.user.auth.controller;
 
+import com.c202.user.auth.service.AuthService;
 import com.c202.user.auth.service.AuthServiceImpl;
 import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
 import com.c202.user.user.model.response.UserResponseDto;
-import com.c202.user.auth.jwt.CustomUserDetails;
 import com.c202.user.auth.jwt.JwtTokenProvider;
 import com.c202.user.auth.jwt.TokenDto;
 import com.c202.user.global.common.response.ApiResponse;
@@ -23,12 +23,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authServiceImpl;
+    private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserResponseDto>> register(@RequestBody SignupRequestDto requestDto) {
-        UserResponseDto user = authServiceImpl.register(requestDto);
+        UserResponseDto user = authService.register(requestDto);
         return ResponseEntity.ok(ApiResponse.success(user, "회원가입 성공"));
     }
 
@@ -38,7 +38,7 @@ public class AuthController {
             @RequestBody LoginRequestDto requestDto,
             HttpServletResponse response) {
 
-        TokenDto.TokenResponseDto tokens = authServiceImpl.login(requestDto);
+        TokenDto.TokenResponseDto tokens = authService.login(requestDto);
 
         // 리프레시 토큰을 쿠키에 설정
         jwtTokenProvider.addRefreshTokenToCookie(response, tokens.getRefreshToken());
@@ -55,11 +55,10 @@ public class AuthController {
     // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestHeader("X-User-Seq") Long userSeq,
             HttpServletResponse response) {
 
-        // 로그아웃 처리 - 서비스에서 토큰 추출하지 않고 userId만 사용
-        authServiceImpl.logout(userDetails.getId());
+        authService.logout(userSeq);
 
         // 리프레시 토큰 쿠키 삭제
         jwtTokenProvider.deleteRefreshTokenCookie(response);
@@ -69,7 +68,7 @@ public class AuthController {
 
     @GetMapping("/check-username/{username}")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkUsernameAvailability(@PathVariable String username) {
-        boolean isAvailable = authServiceImpl.isUsernameAvailable(username);
+        boolean isAvailable = authService.isUsernameAvailable(username);
         return ResponseEntity.ok(ApiResponse.success(
                 Map.of("available", isAvailable),
                 isAvailable ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다."
@@ -78,7 +77,7 @@ public class AuthController {
 
     @GetMapping("/check-nickname/{nickname}")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkNicknameAvailability(@PathVariable String nickname) {
-        boolean isAvailable = authServiceImpl.isNicknameAvailable(nickname);
+        boolean isAvailable = authService.isNicknameAvailable(nickname);
         return ResponseEntity.ok(ApiResponse.success(
                 Map.of("available", isAvailable),
                 isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다."
