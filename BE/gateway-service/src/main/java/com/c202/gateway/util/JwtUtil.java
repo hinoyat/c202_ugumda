@@ -1,7 +1,6 @@
 package com.c202.gateway.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.SignatureException;
@@ -24,20 +23,31 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            System.out.println(token);
+
             return true;
+        } catch (ExpiredJwtException e) {
+            log.warn("만료된 JWT 토큰");
+        } catch (UnsupportedJwtException e) {
+            log.warn("지원되지 않는 JWT 토큰");
+        } catch (MalformedJwtException e) {
+            log.warn("잘못된 JWT 토큰 형식");
         } catch (SignatureException e) {
             log.warn("유효하지 않은 JWT 서명");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            log.warn("JWT 토큰이 비어 있음");
+        } catch (JwtException e) {
             log.warn("JWT 검증 실패: {}", e.getMessage());
         }
         return false;
     }
 
-    public Claims getClaims(String token) {
-        return Jwts.parserBuilder()
+    public Long getUserSeq(String token) {
+        return ((Number) Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
+                .getBody()
+                .get("userSeq")).longValue();
     }
 }

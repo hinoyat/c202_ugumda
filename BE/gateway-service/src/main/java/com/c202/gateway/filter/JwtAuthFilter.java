@@ -1,7 +1,6 @@
 package com.c202.gateway.filter;
 
 import com.c202.gateway.util.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -12,10 +11,14 @@ import org.springframework.web.server.ServerWebExchange;
 
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtAuthFilter  extends AbstractGatewayFilterFactory<JwtAuthFilter.Config> {
-    private final JwtUtil jwtTokenProvider;
+    private final JwtUtil jwtUtil;
+
+    public JwtAuthFilter(JwtUtil jwtUtil) {
+        super(JwtAuthFilter.Config.class);
+        this.jwtUtil = jwtUtil;
+    }
 
     public static class Config {
     }
@@ -25,9 +28,21 @@ public class JwtAuthFilter  extends AbstractGatewayFilterFactory<JwtAuthFilter.C
         return (exchange, chain) -> {
             String token = resolveToken(exchange);
 
-            if (token != null && jwtTokenProvider.validateToken(token)) {
+            if (token != null && jwtUtil.validateToken(token)) {
                 log.info("JWT 유효성 검증 성공");
-                return chain.filter(exchange);
+
+                // JWT에서 사용자 정보 추출 (예: username, roles)
+                Long userSeq = jwtUtil.getUserSeq(token);
+
+                log.info("기존 userSeq : {}", userSeq);
+                // 헤더에 사용자 정보 추가
+                ServerWebExchange modifiedExchange = exchange.mutate()
+                        .request(builder -> builder
+                                .header("X-User-Seq", String.valueOf(userSeq))  // 사용자 ID 추가
+                        )
+                        .build();
+                log.info("[JWT 필터] userSeq: {}", userSeq);
+                return chain.filter(modifiedExchange);
             } else {
                 log.warn("유효하지 않은 토큰 또는 없음");
             }
