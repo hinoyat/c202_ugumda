@@ -1,0 +1,105 @@
+/* LuckyNumber.css */
+.star {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: center center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .star.visible {
+    opacity: 1;
+    transform: scale(1.0);
+  }
+  
+  /* 별이 빛나는 효과 */
+  @keyframes glow {
+    0% {
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7))
+              drop-shadow(0 0 5px rgba(255, 255, 255, 0.5))
+              drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+      opacity: 0.7;
+    }
+    50% {
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9))
+              drop-shadow(0 0 15px rgba(255, 255, 255, 0.8))
+              drop-shadow(0 0 30px rgba(255, 255, 255, 0.6))
+              drop-shadow(0 0 50px rgba(255, 255, 255, 0.4));
+      opacity: 1;
+    }
+    100% {
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7))
+              drop-shadow(0 0 5px rgba(255, 255, 255, 0.5))
+              drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+      opacity: 0.7;
+    }
+  }
+  
+  .star.visible {
+    animation: glow 3s infinite;
+  }
+  
+  /* 선(연결선)이 그려지는 효과 */
+  .constellation-line {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 1s ease-in-out;
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.6));
+  }
+  
+  .constellation-line.visible {
+    stroke-dashoffset: 0;
+  }
+  
+  /* 행운의 번호 텍스트 효과 */
+  .lucky-text {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  
+  .lucky-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    animation: textGlow 3s infinite;
+  }
+  
+  @keyframes textGlow {
+    0% {
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.7),
+                   0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.9),
+                   0 0 20px rgba(255, 255, 255, 0.7),
+                   0 0 30px rgba(255, 255, 255, 0.5),
+                   0 0 40px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.7),
+                   0 0 10px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  /* 별 중심 빛 효과 */
+  .star-center {
+    filter: blur(0.5px);
+    transition: all 0.8s ease;
+  }
+  
+  .star-center.visible {
+    filter: blur(0.5px) brightness(1.5);
+  }
+  
+  /* 별 주변 빛 효과 */
+  .star-glow {
+    opacity: 0;
+    transition: all 0.8s ease;
+  }
+  
+  .star-glow.visible {
+    opacity: 0.6;
+    filter: blur(1.5px);
+  }
+  
