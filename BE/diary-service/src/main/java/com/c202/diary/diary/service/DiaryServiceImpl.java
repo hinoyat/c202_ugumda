@@ -1,11 +1,11 @@
-package com.c202.diaryservice.diary.service;
+package com.c202.diary.diary.service;
 
-import com.c202.diaryservice.diary.entity.Diary;
-import com.c202.diaryservice.diary.model.request.DiaryCreateRequestDto;
-import com.c202.diaryservice.diary.model.request.DiaryUpdateRequestDto;
-import com.c202.diaryservice.diary.model.response.DiaryDetailResponseDto;
-import com.c202.diaryservice.diary.model.response.DiaryListResponseDto;
-import com.c202.diaryservice.diary.repository.DiaryRepository;
+import com.c202.diary.diary.entity.Diary;
+import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
+import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
+import com.c202.diary.diary.model.response.DiaryDetailResponseDto;
+import com.c202.diary.diary.model.response.DiaryListResponseDto;
+import com.c202.diary.diary.repository.DiaryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -77,7 +77,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public List<DiaryListResponseDto> getMyDiaries(int userSeq) {
-        List<Diary> diaries = diaryRepository.findAll();
+        List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
 
         return DiaryListResponseDto.toDto(diaries);
     }
@@ -86,7 +86,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     // 전체 조회(유저 연동 되면 분기해서 조회)
     public List<DiaryListResponseDto> getUserDiaries(int userSeq) {
-        List<Diary> diaries = diaryRepository.findAll();
+        List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
         return DiaryListResponseDto.toDto(diaries);
     }
     

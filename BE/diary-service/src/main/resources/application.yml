@@ -21,3 +21,6 @@ spring:
       com.c202.userservice: DEBUG
       org.springframework.security: DEBUG
       org.springframework.data.redis: DEBUG
+
+server:
+  port: 80

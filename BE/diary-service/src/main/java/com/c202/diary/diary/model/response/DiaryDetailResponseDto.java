@@ -1,6 +1,6 @@
-package com.c202.diaryservice.diary.model.response;
+package com.c202.diary.diary.model.response;
 
-import com.c202.diaryservice.diary.entity.Diary;
+import com.c202.diary.diary.entity.Diary;
 import lombok.Builder;
 import lombok.Data;
 

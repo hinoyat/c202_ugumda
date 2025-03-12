@@ -1,9 +1,9 @@
-package com.c202.diaryservice.diary.service;
+package com.c202.diary.diary.service;
 
-import com.c202.diaryservice.diary.model.request.DiaryCreateRequestDto;
-import com.c202.diaryservice.diary.model.request.DiaryUpdateRequestDto;
-import com.c202.diaryservice.diary.model.response.DiaryDetailResponseDto;
-import com.c202.diaryservice.diary.model.response.DiaryListResponseDto;
+import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
+import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
+import com.c202.diary.diary.model.response.DiaryDetailResponseDto;
+import com.c202.diary.diary.model.response.DiaryListResponseDto;
 
 import java.util.List;
 

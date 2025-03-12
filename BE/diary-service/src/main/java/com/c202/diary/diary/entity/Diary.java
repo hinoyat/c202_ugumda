@@ -1,9 +1,8 @@
-package com.c202.diaryservice.diary.entity;
+package com.c202.diary.diary.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "diary")
 @Entity
 @Getter
 @Setter
@@ -12,7 +11,7 @@ import lombok.*;
 @Builder
 public class Diary {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int diarySeq;
 
     @Column(nullable = false)

@@ -1,10 +1,10 @@
-package com.c202.diaryservice.diary.controller;
+package com.c202.diary.diary.controller;
 
-import com.c202.diaryservice.diary.model.request.DiaryCreateRequestDto;
-import com.c202.diaryservice.diary.model.request.DiaryUpdateRequestDto;
-import com.c202.diaryservice.diary.model.response.DiaryDetailResponseDto;
-import com.c202.diaryservice.diary.model.response.DiaryListResponseDto;
-import com.c202.diaryservice.diary.service.DiaryServiceImpl;
+import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
+import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
+import com.c202.diary.diary.model.response.DiaryDetailResponseDto;
+import com.c202.diary.diary.model.response.DiaryListResponseDto;
+import com.c202.diary.diary.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiaryController {
 
-    private final DiaryServiceImpl diaryService;
+    private final DiaryService diaryService;
 
     @PostMapping("")
     public DiaryDetailResponseDto createDiary(@RequestBody DiaryCreateRequestDto dto) {
@@ -36,14 +36,12 @@ public class DiaryController {
     // 조회 부분은 일단 더미 숫자로 넣었습니다 연동 성공 후 테스트 하면서 작업할게요!
     @GetMapping("/me")
     public List<DiaryListResponseDto> getMyDiaries() {
-        diaryService.getMyDiaries(1);
         return diaryService.getMyDiaries(1);
     }
 
     @GetMapping("/users/{userSeq}")
     public List<DiaryListResponseDto> getUserDiaries() {
-        diaryService.getUserDiaries(1);
-        return diaryService.getMyDiaries(1);
+        return diaryService.getUserDiaries(2);
     }
 
     // 개별 조회
@@ -52,6 +50,7 @@ public class DiaryController {
         return diaryService.getDiary(diarySeq);
     }
 
+    // 공개 비공개 토글
     @PutMapping("/{diarySeq}/visibility")
     public String toggleDiaryIsPublic(@PathVariable Integer diarySeq) {
         return diaryService.toggleDiaryIsPublic(diarySeq);
