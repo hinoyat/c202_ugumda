@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: gateway-service
+
+  # 게이트웨이 설정
+  cloud:
+    gateway:
+      default-filters:
+        - GlobalFilter
+
+      routes:
+        - id: user-serivce
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - name: JwtAuthFilter
+
+#        - id: ex2-serivce
+#          uri: lb://ex2-service
+#          predicates:
+#            - Path=/diaries/**
+
+server:
+  port: 80
+
+logging:
+  charset:
+    console: 'UTF-8'
+    file: 'UTF-8'
+
+  file:
+    name: ./log/${spring.application.name}.log
+
+  level:
+    com.netflix.eureka: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+
+  client:
+    service-url:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        defaultZone: "http://localhost:8761/eureka/" # 유레카 서버 주소

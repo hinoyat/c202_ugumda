@@ -1,0 +1,35 @@
+@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+@import url('https://fonts.googleapis.com/css2?family=Galindo&family=Gowun+Batang&display=swap');
+@import url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff');
+@import 'tailwindcss';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  font-family: Arial, sans-serif;
+  background-color: rgb(246, 246, 246);
+}
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+.galmuri-font {
+  font-family: 'Galmuri11', sans-serif;
+}
+.galindo-regular {
+  font-family: 'Galindo', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.pretendard-font {
+  font-family: 'Pretendard-Regular', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
