@@ -1,16 +1,24 @@
-## 🐤 250304
+<details>
+<summary><b>2025-03-04</b></summary>
 
 백과 프론트가 어떻게 데이터를 주고 받는지 공부하는 중.
 
 백에서 인증 설정하는 것을 배웠음.
 
 Basic Authentication, Bearer Token Authentication, JWT, OAuth에 대해 배울 수 있었음.
-<br>
-<br>
-<br>
-<br>
 
-## 🐤 250405
+백에서 어떤 식으로 설계하는지
+
+springboot는 어떻게 사용되는지 실습을 통해서 경험해 볼 수 있었음!
+
+1학기에는 완성된 api를 사용했기 때문에 api가 잘못 보내질 수도 있다는 생각을 못했어서
+<br> 첫 번째 프로젝트에서 백엔드와 소통하며 문제를 해결하는데 어려움이 있었는데
+<br> 그 부분에 대해서 궁금증이 해소되었음.
+
+</details>
+
+<details>
+<summary><b>2025-03-05</b></summary>
 
 인증 관련해서 추가로 정보를 찾아봄.
 
@@ -45,13 +53,28 @@ Basic Authentication, Bearer Token Authentication, JWT, OAuth에 대해 배울 �
 
    </details>
 
-<br>
-<br>
+</details>
 
-## 🐤 250306
+<details>
+<summary><b>2025-03-06</b></summary>
 
 피그잼 사용법을 배워서 와이어 프레임을 만들었음.
 
 component 단위로 묶어서 피그마를 사용할 수 있다는 것을 배웠음.
 
 공통 컴포넌트, 컴포넌트 만들때 도움이 될 것 같음.
+
+</details>
+
+<details>
+<summary><b>2025-03-07</b></summary>
+피그마 목업 제작을 시작함.
+
+기능 명세서와 와이어 프레임이 중요하다는 것을 느꼈음.
+
+팀원들이 꼼꼼하게 문서를 작성해줘서 피그마 제작 속도를 낼 수 있었음!!
+
+목업으로 화면을 구성하다보니 놓쳤던 부분들을 추가할 수 있어서
+<br> 목업이 단순히 디자인을 위한 것이 아니라는 것을 경험할 수 있었음.
+
+</details>
