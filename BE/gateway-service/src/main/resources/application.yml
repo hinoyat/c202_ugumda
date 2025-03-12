@@ -10,10 +10,11 @@ spring:
 
       routes:
         - id: user-serivce
-          #          uri: http://localhost:8081
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
+          filters:
+            - name: JwtAuthFilter
 
 #        - id: ex2-serivce
 #          uri: lb://ex2-service
@@ -38,8 +39,7 @@ logging:
 
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.ip-address}:${server.port} # IP와 랜덤문자열을 통해 id 설정(server.port=0 사용시 동일한 id가 생성되어 random 사용)
-    # instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
 
   client:
     service-url:
