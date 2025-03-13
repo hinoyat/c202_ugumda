@@ -19,17 +19,7 @@ public class UserController {
 
     // 사용자 정보 조회
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserResponseDto>> getUserInfo(@RequestHeader("X-User-Seq") String userSeqStr) {
-        Long userSeq = null;
-        // 헤더 값이 null이 아니면 Long으로 변환
-
-        if (userSeqStr != null) {
-            try {
-                userSeq = Long.parseLong(userSeqStr); // String을 Long으로 변환
-            } catch (NumberFormatException e) {
-                log.error("잘못된 X-User-Seq 값: {}", userSeqStr);
-            }
-        }
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserInfo(@RequestHeader("X-User-Seq") Long userSeq) {
         UserResponseDto user = userService.getUserInfo(userSeq);
         return ResponseEntity.ok(ApiResponse.success(user, "사용자 정보 조회 성공"));
     }
