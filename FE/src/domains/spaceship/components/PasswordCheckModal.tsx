@@ -41,7 +41,7 @@ const PasswordCheckModal = () => {
       />
       <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 z-50 tracking-widest animate-pulse flex flex-col items-center gap-5">
         <h1
-          className="text-white text-3xl "
+          className="text-white text-3xl press-start-2p-regular"
           style={glowingTextStyle}>
           ENTER PASSWORD!!!
         </h1>
@@ -54,7 +54,10 @@ const PasswordCheckModal = () => {
           <button
             onClick={onClickGoMyInfomation}
             className="cursor-pointer">
-            <AiOutlineEnter className="text-cyan-300 text-[40px]" />
+            <img
+              src="enter.svg"
+              alt=""
+            />
           </button>
         </div>
       </div>

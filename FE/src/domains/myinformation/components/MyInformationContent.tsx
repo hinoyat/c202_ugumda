@@ -34,7 +34,7 @@ const MyInformationContent: React.FC = () => {
       />
       <div className="absolute z-31 top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/6">
         <h1
-          className="text-white text-[38px] tracking-widest"
+          className="text-white text-[33px]  press-start-2p-regular"
           style={glowingTextStyle}>
           Update Profile
         </h1>
