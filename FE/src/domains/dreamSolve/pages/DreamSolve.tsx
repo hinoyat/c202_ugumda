@@ -5,7 +5,7 @@ import RightDreamSection from '../components/RightDreamSection';
 const DreamSolve: React.FC = () => {
   const nav = useNavigate();
   const onClickHome = () => {
-    nav('/');
+    nav('/spaceship');
   };
 
   return (
