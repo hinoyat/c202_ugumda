@@ -13,10 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -49,8 +45,8 @@ public class JwtTokenProvider {
     // 날짜 포맷터
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    // 사용자 상세 정보 서비스
-    private final UserDetailsService userDetailsService;
+//    // 사용자 상세 정보 서비스
+//    private final UserDetailsService userDetailsService;
 
     // 리프레시 토큰 저장소
     private final RefreshTokenRepository refreshTokenRepository;
@@ -62,15 +58,15 @@ public class JwtTokenProvider {
     @PostConstruct
     public void init() {
         // 시크릿 키를 Base64로 인코딩하여 JWT 서명용 키 생성
-        String encodedKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        key = Keys.hmacShaKeyFor(encodedKey.getBytes());
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey); // ✅ Base64 디코딩
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // 액세스 토큰 생성 메소드
-    public String createAccessToken(String username, Long userId) {
+    public String createAccessToken(String username, Long userSeq) {
         // JWT 클레임 설정 - 사용자 식별자와 권한 정보 담기
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("userId", userId);
+        claims.put("userSeq", userSeq);
         claims.put("type", "access"); // 토큰 타입 지정
 
         // 현재 시간과 만료 시간 설정
@@ -87,10 +83,10 @@ public class JwtTokenProvider {
     }
 
     // 리프레시 토큰 생성 메소드
-    public String createRefreshToken(String username, Long userId) {
+    public String createRefreshToken(String username, Long userSeq) {
         // JWT 클레임 설정
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("userId", userId);
+        claims.put("userSeq", userSeq);
         claims.put("type", "refresh"); // 토큰 타입 지정
 
         // 현재 시간과 만료 시간 설정
@@ -109,7 +105,7 @@ public class JwtTokenProvider {
         String expiryDate = LocalDateTime.now().plusNanos(refreshTokenValidity * 1000000).format(DATE_FORMATTER);
 
         // DB에 리프레시 토큰 저장 또는 업데이트
-        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserId(userId);
+        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserSeq(userSeq);
 
         if (existingToken.isPresent()) {
             // 기존 토큰이 있으면 업데이트
@@ -119,7 +115,7 @@ public class JwtTokenProvider {
         } else {
             // 기존 토큰이 없으면 새로 생성
             RefreshToken tokenEntity = RefreshToken.builder()
-                    .userId(userId)
+                    .userSeq(userSeq)
                     .token(refreshToken)
                     .expiryDate(expiryDate)
                     .build();
@@ -164,13 +160,13 @@ public class JwtTokenProvider {
         response.addCookie(cookie);
     }
 
-    // JWT 토큰으로부터 인증 객체 생성
-    public Authentication getAuthentication(String token) {
-        // 토큰에서 사용자명 추출
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-        // Spring Security 인증 객체 생성 및 반환
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
+//    // JWT 토큰으로부터 인증 객체 생성
+//    public Authentication getAuthentication(String token) {
+//        // 토큰에서 사용자명 추출
+//        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+//        // Spring Security 인증 객체 생성 및 반환
+//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+//    }
 
     // 토큰에서 사용자명 추출
     public String getUsername(String token) {
@@ -178,9 +174,9 @@ public class JwtTokenProvider {
     }
 
     // 토큰에서 사용자 ID 추출
-    public Long getUserId(String token) {
+    public Long getUserSeq(String token) {
         return ((Number) Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody().get("userId")).longValue();
+                .parseClaimsJws(token).getBody().get("userSeq")).longValue();
     }
 
     // 토큰 유형 확인 (액세스 또는 리프레시)
@@ -248,10 +244,10 @@ public class JwtTokenProvider {
 
         // 토큰에서 사용자 정보 추출
         String username = getUsername(refreshToken);
-        Long userId = getUserId(refreshToken);
+        Long userSeq = getUserSeq(refreshToken);
 
         // 새 액세스 토큰 생성 및 반환
-        return createAccessToken(username, userId);
+        return createAccessToken(username, userSeq);
     }
 
 //    // 로그아웃 처리 블랙리스트

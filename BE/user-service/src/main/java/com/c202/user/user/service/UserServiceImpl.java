@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
 
     // 사용자 정보 조회
     @Override
-    public UserResponseDto getUserInfo(String username) {
-        User user = userRepository.findByUsername(username)
+    public UserResponseDto getUserInfo(Long userSeq) {
+        User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
         if ("Y".equals(user.getIsDeleted())) {
             throw new ServiceException.ResourceNotFoundException("탈퇴한 계정입니다.");
@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
     // 사용자 정보 수정
     @Override
     @Transactional
-    public UserResponseDto updateUser(String username, UpdateUserRequestDto request) {
-        User user = userRepository.findByUsername(username)
+    public UserResponseDto updateUser(Long userSeq, UpdateUserRequestDto request) {
+        User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
         if ("Y".equals(user.getIsDeleted())) {
@@ -78,8 +78,8 @@ public class UserServiceImpl implements UserService {
     // 회원 탈퇴
     @Override
     @Transactional
-    public void deleteUser(String username) {
-        User user = userRepository.findByUsername(username)
+    public void deleteUser(Long userSeq) {
+        User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
         if ("Y".equals(user.getIsDeleted())) {
