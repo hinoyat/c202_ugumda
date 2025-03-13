@@ -1,0 +1,110 @@
+/* 카드 컨테이너 기본 스타일 */
+.card-container {
+    position: relative;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    border-radius: 12px;
+    /* 초기 상태: 360도 회전된 상태와 투명 */
+    transform: rotateY(360deg);
+    opacity: 0;
+}
+
+/* 입장 애니메이션: 카드와 텍스트가 같이 360도 회전하며 등장 */
+.card-container.animated {
+    animation: cardEntrance 1.2s forwards;
+}
+
+@keyframes cardEntrance {
+    0% {
+      transform: rotateY(360deg);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+}
+
+/* 카드 이미지 스타일 */
+.card-container img {
+    display: block;
+    border-radius: 12px;
+}
+
+/* 호버 시 아우라 효과 (애니메이션 완료 후) */
+.card-container.animation-complete:hover {
+    transform: rotateY(10deg) scale(1.05);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    box-shadow: 
+      0 0 7px #ffd700,
+      0 0 10px #ffd700,
+      0 0 21px #ffd700,
+      0 0 42px rgba(255, 215, 0, 0.6),
+      0 0 82px rgba(255, 215, 0, 0.4),
+      0 0 92px rgba(255, 215, 0, 0.2),
+      0 0 102px rgba(255, 215, 0, 0.1);
+    z-index: 10;
+}
+
+/* 호버 시 빛나는 테두리 효과 */
+.card-container.animation-complete:hover::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 16px;
+    background: linear-gradient(45deg, #ffd700, #f1cc0f, #daa520, #b8860b);
+    background-size: 400% 400%;
+    z-index: -1;
+    filter: blur(6px);
+    animation: glowingBorder 3s ease infinite;
+    opacity: 0.7;
+}
+
+@keyframes glowingBorder {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+}
+
+/* 운세 텍스트 스타일 */
+.fortune-text {
+    width: 80%;
+    max-width: 250px;
+    font-size: 16px;
+    opacity: 0;
+    /* 텍스트도 카드와 함께 바로 등장하도록 딜레이 제거 */
+    animation: textFadeIn 0.5s forwards;
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+}
+
+@keyframes textFadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+
+/* 호버 시 텍스트 강조 효과 */
+.card-container.animation-complete:hover .fortune-text {
+    transform: scale(1.03);
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    text-shadow: 
+      0 0 5px #ffffff, 
+      0 0 10px #ffffff, 
+      0 0 15px #f1cc0f;
+}
