@@ -15,7 +15,7 @@ public class Diary {
     private int diarySeq;
 
     @Column(nullable = false)
-    private int userSeq;
+    private Long userSeq;
 
     @Column(nullable = false, length = 50)
     private String title;

@@ -18,8 +18,8 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("")
-    public DiaryDetailResponseDto createDiary(@RequestBody DiaryCreateRequestDto dto) {
-        return diaryService.createDiary(dto);
+    public DiaryDetailResponseDto createDiary(@RequestHeader("X-User-Seq") Long userSeq, @RequestBody DiaryCreateRequestDto dto) {
+        return diaryService.createDiary(userSeq, dto);
     }
 
     @PutMapping("/{diarySeq}")
@@ -35,13 +35,13 @@ public class DiaryController {
 
     // 조회 부분은 일단 더미 숫자로 넣었습니다 연동 성공 후 테스트 하면서 작업할게요!
     @GetMapping("/me")
-    public List<DiaryListResponseDto> getMyDiaries() {
-        return diaryService.getMyDiaries(1);
+    public List<DiaryListResponseDto> getMyDiaries(@RequestHeader("X-User-Seq") Long userSeq) {
+        return diaryService.getMyDiaries(userSeq);
     }
 
     @GetMapping("/users/{userSeq}")
-    public List<DiaryListResponseDto> getUserDiaries() {
-        return diaryService.getUserDiaries(2);
+    public List<DiaryListResponseDto> getUserDiaries(@RequestHeader("X-User-Seq") Long userSeq) {
+        return diaryService.getUserDiaries(userSeq);
     }
 
     // 개별 조회

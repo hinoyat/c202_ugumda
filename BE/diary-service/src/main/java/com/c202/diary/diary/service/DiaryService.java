@@ -9,15 +9,15 @@ import java.util.List;
 
 public interface DiaryService {
 
-    DiaryDetailResponseDto createDiary(DiaryCreateRequestDto request);
+    DiaryDetailResponseDto createDiary(Long userSeq, DiaryCreateRequestDto request);
 
     DiaryDetailResponseDto updateDiary(int diarySeq, DiaryUpdateRequestDto request);
 
     void deleteDiary(int diaryId);
 
-    List<DiaryListResponseDto> getMyDiaries(int userSeq);
+    List<DiaryListResponseDto> getMyDiaries(Long userSeq);
 
-    List<DiaryListResponseDto> getUserDiaries(int userSeq);
+    List<DiaryListResponseDto> getUserDiaries(Long userSeq);
 
     DiaryDetailResponseDto getDiary(int diarySeq);
 

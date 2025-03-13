@@ -1847,3 +1847,207 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 
 2025-03-13T12:01:24.227+09:00  INFO 9572 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2025-03-13T12:01:32.542+09:00  INFO 11596 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Starting GatewayServiceApplication using Java 21.0.6 with PID 11596 (C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service\target\classes started by SSAFY in C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service)
+2025-03-13T12:01:32.543+09:00  INFO 11596 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-03-13T12:01:33.081+09:00  INFO 11596 --- [gateway-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=121bddf0-c9ef-3838-b8dc-1b1c5da15813
+2025-03-13T12:01:33.684+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-03-13T12:01:33.684+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-03-13T12:01:33.684+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-03-13T12:01:33.685+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-03-13T12:01:33.686+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-03-13T12:01:33.686+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-03-13T12:01:33.846+09:00 DEBUG 11596 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data healthcheckUrl: http://DESKTOP-QFN2D55:80/actuator/health
+2025-03-13T12:01:33.847+09:00 DEBUG 11596 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data statusPageUrl: http://DESKTOP-QFN2D55:80/actuator/info
+2025-03-13T12:01:33.859+09:00  INFO 11596 --- [gateway-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-03-13T12:01:33.884+09:00  WARN 11596 --- [gateway-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-03-13T12:01:33.930+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-03-13T12:01:33.948+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-03-13T12:01:33.953+09:00  INFO 11596 --- [gateway-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:01:33.960+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T12:01:33.960+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T12:01:33.961+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T12:01:33.961+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T12:01:33.961+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T12:01:33.961+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-03-13T12:01:33.961+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T12:01:34.334+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T12:01:34.335+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-03-13T12:01:34.337+09:00  INFO 11596 --- [gateway-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-03-13T12:01:34.338+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1741834894337 with initial instances count: 0
+2025-03-13T12:01:34.341+09:00  INFO 11596 --- [gateway-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY-SERVICE with eureka with status UP
+2025-03-13T12:01:34.341+09:00  INFO 11596 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741834894341, current=UP, previous=STARTING]
+2025-03-13T12:01:34.343+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T12:01:34.421+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T12:01:34.473+09:00  INFO 11596 --- [gateway-service] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 80 (http)
+2025-03-13T12:01:34.474+09:00  INFO 11596 --- [gateway-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 80
+2025-03-13T12:01:34.486+09:00  INFO 11596 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Started GatewayServiceApplication in 2.329 seconds (process running for 2.863)
+2025-03-13T12:02:04.347+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T12:02:04.347+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T12:02:04.348+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T12:02:04.348+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T12:02:04.348+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T12:02:04.348+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-03-13T12:02:04.348+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T12:02:04.375+09:00  INFO 11596 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T12:02:32.692+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:02:32.712+09:00 DEBUG 11596 --- [gateway-service] [reactor-http-nio-3] .l.EurekaLoadBalancerClientConfiguration : Setting the value of 'spring.cloud.loadbalancer.zone' to defaultZone
+2025-03-13T12:02:33.056+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:02:39.748+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-13T12:02:39.913+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/register , 응답코드 : POST
+2025-03-13T12:02:42.356+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:02:42.714+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:04:26.327+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-13T12:04:26.328+09:00  WARN 11596 --- [gateway-service] [reactor-http-nio-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T12:04:44.358+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:04:44.549+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:04:47.158+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-13T12:04:47.296+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/register , 응답코드 : POST
+2025-03-13T12:04:50.567+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:04:50.624+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:05:00.467+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries
+2025-03-13T12:05:00.467+09:00  WARN 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-13T12:05:00.467+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries , 응답코드 : POST
+2025-03-13T12:06:17.600+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries
+2025-03-13T12:06:17.617+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:06:17.618+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:06:17.621+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:06:17.788+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries , 응답코드 : POST
+2025-03-13T12:06:33.971+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:07:01.320+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/2
+2025-03-13T12:07:01.321+09:00  WARN 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-13T12:07:01.321+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/2 , 응답코드 : GET
+2025-03-13T12:07:26.302+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/2
+2025-03-13T12:07:26.304+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:07:26.306+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:07:26.306+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:07:26.436+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/2 , 응답코드 : GET
+2025-03-13T12:07:29.929+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/1
+2025-03-13T12:07:29.930+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:07:29.931+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:07:29.932+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:07:29.942+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1 , 응답코드 : GET
+2025-03-13T12:10:22.219+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/1/visibility
+2025-03-13T12:10:22.222+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:10:22.223+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:10:22.224+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:10:22.248+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1/visibility , 응답코드 : PUT
+2025-03-13T12:10:23.276+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/1/visibility
+2025-03-13T12:10:23.278+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:10:23.279+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:10:23.279+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:10:23.301+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1/visibility , 응답코드 : PUT
+2025-03-13T12:10:28.731+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/1
+2025-03-13T12:10:28.733+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:10:28.734+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:10:28.734+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:10:28.742+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1 , 응답코드 : GET
+2025-03-13T12:10:30.966+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/users/2
+2025-03-13T12:10:30.968+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:10:30.969+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:10:30.969+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:10:30.983+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/users/2 , 응답코드 : GET
+2025-03-13T12:10:33.822+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/me
+2025-03-13T12:10:33.825+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T12:10:33.826+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T12:10:33.826+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T12:10:33.837+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/me , 응답코드 : GET
+2025-03-13T12:10:42.718+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:10:42.759+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:10:45.468+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:10:45.490+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:11:00.216+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:11:00.226+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:11:33.986+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:12:48.668+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T12:12:48.698+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T12:16:33.988+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:21:33.995+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:26:34.009+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:31:34.023+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:36:34.036+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:41:34.050+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:46:34.055+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:51:34.069+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T12:56:34.073+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:01:34.081+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:06:34.097+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:11:34.105+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:16:34.112+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:21:34.126+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:26:34.140+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:31:34.144+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:31:51.835+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/me
+2025-03-13T13:31:51.840+09:00  WARN 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-13T13:31:51.840+09:00  WARN 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-13T13:31:51.840+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/me , 응답코드 : GET
+2025-03-13T13:32:27.415+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T13:32:27.449+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T13:32:40.495+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/me
+2025-03-13T13:32:40.498+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:32:40.499+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:32:40.499+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:32:40.509+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/me , 응답코드 : GET
+2025-03-13T13:33:00.710+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-13T13:33:00.712+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:33:00.713+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:33:00.713+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:33:00.730+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-13] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-13T13:35:17.168+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T13:35:17.182+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T13:35:25.691+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T13:35:25.697+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T13:35:51.988+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T13:35:52.028+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T13:36:10.951+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T13:36:10.956+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-15] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T13:36:34.158+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:37:52.139+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-17] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-13T13:37:52.141+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-17] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:37:52.142+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-17] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:37:52.142+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-17] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:37:52.152+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-17] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-13T13:41:34.170+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:45:53.797+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-13T13:45:53.799+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:45:53.800+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:45:53.800+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:45:53.812+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-13T13:46:02.011+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-13T13:46:02.012+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:46:02.013+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:46:02.013+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:46:02.108+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-19] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : PUT
+2025-03-13T13:46:34.177+09:00  INFO 11596 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T13:47:52.582+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/me
+2025-03-13T13:47:52.584+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:47:52.584+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:47:52.584+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:47:52.596+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/me , 응답코드 : GET
+2025-03-13T13:48:01.286+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/users/2
+2025-03-13T13:48:01.288+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:48:01.289+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:48:01.289+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:48:01.295+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/users/2 , 응답코드 : GET
+2025-03-13T13:48:03.371+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/1
+2025-03-13T13:48:03.373+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:48:03.373+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:48:03.374+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:48:03.380+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1 , 응답코드 : GET
+2025-03-13T13:48:05.386+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/2
+2025-03-13T13:48:05.388+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:48:05.389+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:48:05.389+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:48:05.403+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/2 , 응답코드 : PUT
+2025-03-13T13:48:08.970+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : Request path: /api/diaries/1
+2025-03-13T13:48:08.971+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T13:48:08.973+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T13:48:08.973+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T13:48:08.993+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1 , 응답코드 : PUT

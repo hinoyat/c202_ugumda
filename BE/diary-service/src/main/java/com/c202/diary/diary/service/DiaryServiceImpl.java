@@ -25,12 +25,12 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Transactional
     @Override
-    public DiaryDetailResponseDto createDiary(DiaryCreateRequestDto request) {
+    public DiaryDetailResponseDto createDiary(Long userSeq, DiaryCreateRequestDto request) {
 
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
 
         Diary diary = Diary.builder()
-                .userSeq(1)
+                .userSeq(userSeq)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .dreamDate(request.getDreamDate())
@@ -76,7 +76,7 @@ public class DiaryServiceImpl implements DiaryService {
     // 전체 조회(유저 연동 되면 분기해서 조회)
     @Transactional
     @Override
-    public List<DiaryListResponseDto> getMyDiaries(int userSeq) {
+    public List<DiaryListResponseDto> getMyDiaries(Long userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
 
         return DiaryListResponseDto.toDto(diaries);
@@ -85,7 +85,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     // 전체 조회(유저 연동 되면 분기해서 조회)
-    public List<DiaryListResponseDto> getUserDiaries(int userSeq) {
+    public List<DiaryListResponseDto> getUserDiaries(Long userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
         return DiaryListResponseDto.toDto(diaries);
     }
@@ -118,10 +118,5 @@ public class DiaryServiceImpl implements DiaryService {
 
         return result;
     }
-
-
-
-
-    
 
 }

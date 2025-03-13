@@ -10,5 +10,5 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer> {
     Diary findByDiarySeq(int diarySeq);
 
 
-    List<Diary> findByUserSeq(int userSeq);
+    List<Diary> findByUserSeq(Long userSeq);
 }
