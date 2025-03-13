@@ -2783,3 +2783,136 @@ Caused by: java.net.ConnectException: Connection refused: getsockopt
 2025-03-13T17:49:39.593+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
 2025-03-13T17:49:39.609+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - deregister  status: 200
 2025-03-13T17:49:39.609+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2025-03-13T20:04:24.749+09:00  INFO 20876 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Starting GatewayServiceApplication using Java 21.0.5 with PID 20876 (C:\Users\82102\Desktop\S12P21C202\BE\gateway-service\target\classes started by 82102 in C:\Users\82102\Desktop\S12P21C202\BE\gateway-service)
+2025-03-13T20:04:24.750+09:00  INFO 20876 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-03-13T20:04:25.336+09:00  INFO 20876 --- [gateway-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=121bddf0-c9ef-3838-b8dc-1b1c5da15813
+2025-03-13T20:04:26.707+09:00  INFO 20876 --- [gateway-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2025-03-13T20:04:26.924+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-03-13T20:04:26.924+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-03-13T20:04:26.924+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-03-13T20:04:26.924+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-03-13T20:04:26.924+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-03-13T20:04:26.924+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-03-13T20:04:26.925+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-03-13T20:04:28.093+09:00  INFO 20876 --- [gateway-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2025-03-13T20:04:28.096+09:00 DEBUG 20876 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data healthcheckUrl: http://localhost:80/actuator/health
+2025-03-13T20:04:28.096+09:00 DEBUG 20876 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data statusPageUrl: http://localhost:80/actuator/info
+2025-03-13T20:04:28.109+09:00  INFO 20876 --- [gateway-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-03-13T20:04:29.129+09:00  INFO 20876 --- [gateway-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2025-03-13T20:04:29.152+09:00  WARN 20876 --- [gateway-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-03-13T20:04:29.194+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-03-13T20:04:29.212+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-03-13T20:04:29.217+09:00  INFO 20876 --- [gateway-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T20:04:29.224+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T20:04:29.225+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T20:04:29.225+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T20:04:29.225+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T20:04:29.225+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T20:04:29.225+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-03-13T20:04:29.225+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T20:04:29.601+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T20:04:29.602+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-03-13T20:04:29.603+09:00  INFO 20876 --- [gateway-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-03-13T20:04:29.604+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1741863869604 with initial instances count: 0
+2025-03-13T20:04:29.607+09:00  INFO 20876 --- [gateway-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY-SERVICE with eureka with status UP
+2025-03-13T20:04:29.607+09:00  INFO 20876 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741863869607, current=UP, previous=STARTING]
+2025-03-13T20:04:29.608+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/169.254.65.167:80: registering service...
+2025-03-13T20:04:29.685+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/169.254.65.167:80 - registration status: 204
+2025-03-13T20:04:29.724+09:00  INFO 20876 --- [gateway-service] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 80 (http)
+2025-03-13T20:04:29.726+09:00  INFO 20876 --- [gateway-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 80
+2025-03-13T20:04:30.737+09:00  INFO 20876 --- [gateway-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2025-03-13T20:04:31.744+09:00  INFO 20876 --- [gateway-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2025-03-13T20:04:31.756+09:00  INFO 20876 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Started GatewayServiceApplication in 8.443 seconds (process running for 10.118)
+2025-03-13T20:04:59.612+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T20:04:59.612+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T20:04:59.612+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T20:04:59.612+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T20:04:59.612+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T20:04:59.612+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-03-13T20:04:59.613+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T20:04:59.640+09:00  INFO 20876 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T20:09:29.228+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T20:11:25.871+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-13T20:11:25.892+09:00 DEBUG 20876 --- [gateway-service] [reactor-http-nio-3] .l.EurekaLoadBalancerClientConfiguration : Setting the value of 'spring.cloud.loadbalancer.zone' to defaultZone
+2025-03-13T20:11:25.911+09:00  WARN 20876 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T20:12:17.991+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-13T20:12:18.399+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/register , 응답코드 : POST
+2025-03-13T20:12:24.427+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:12:24.581+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:12:28.299+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:12:28.439+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:12:29.579+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:12:29.717+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:14:29.230+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T20:14:33.580+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:14:33.892+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:14:36.275+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:14:36.372+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:14:39.185+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:14:39.269+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:16:01.727+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:16:01.813+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:16:02.824+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:16:02.909+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:18:22.470+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:18:22.711+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:18:23.584+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:18:23.602+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:18:25.250+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:18:25.271+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:18:27.714+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:18:27.730+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:19:12.198+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:19:12.216+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:19:29.235+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T20:20:43.104+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:20:43.370+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:20:44.492+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:20:44.564+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:20:46.168+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:20:46.297+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:23:50.204+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:23:50.204+09:00  WARN 20876 --- [gateway-service] [reactor-http-nio-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T20:23:55.935+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T20:23:55.935+09:00  WARN 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-13T20:23:55.935+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T20:23:57.915+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:23:57.916+09:00  WARN 20876 --- [gateway-service] [reactor-http-nio-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T20:23:59.091+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:23:59.092+09:00  WARN 20876 --- [gateway-service] [reactor-http-nio-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T20:24:29.242+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T20:24:46.988+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:24:47.302+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:27:37.365+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:27:37.677+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:27:43.341+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:27:43.426+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:28:31.598+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T20:28:31.938+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T20:29:29.247+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T20:30:04.996+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T20:30:04.996+09:00  WARN 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-13T20:30:04.996+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T20:30:35.183+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T20:30:35.204+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T20:30:35.205+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T20:30:35.208+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T20:30:35.229+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T20:30:59.116+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-13T20:30:59.117+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T20:30:59.118+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T20:30:59.118+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T20:30:59.127+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-13T20:31:16.221+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-13T20:31:16.223+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T20:31:16.224+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T20:31:16.224+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T20:31:16.230+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-13T20:34:29.258+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration

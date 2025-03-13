@@ -49,7 +49,7 @@ public class AuthController {
         Map<String, String> tokenResponse = Map.of("accessToken", tokens.getAccessToken());
         
         // 헤더에 토큰 추가
-
+        response.addHeader("Authorization", "Bearer " + tokens.getAccessToken());
 
         return ResponseEntity.ok(ApiResponse.success(tokenResponse, "로그인이 성공했습니다."));
     }
