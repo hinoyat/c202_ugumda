@@ -40,6 +40,8 @@ public class AuthController {
 
         TokenDto.TokenResponseDto tokens = authService.login(requestDto);
 
+        System.out.println("로그인 성공 access" + tokens.getAccessToken() + "refresh" + tokens.getRefreshToken());
+
         // 리프레시 토큰을 쿠키에 설정
         jwtTokenProvider.addRefreshTokenToCookie(response, tokens.getRefreshToken());
 
@@ -57,6 +59,8 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Void>> logout(
             @RequestHeader("X-User-Seq") Long userSeq,
             HttpServletResponse response) {
+
+        System.out.println("요청이 들어왔다");
 
         authService.logout(userSeq);
 

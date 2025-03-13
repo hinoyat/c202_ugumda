@@ -12,6 +12,8 @@ import com.c202.user.global.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +66,8 @@ public class AuthServiceImpl implements AuthService {
     // 로그인 메소드 - 액세스 토큰과 리프레시 토큰 모두 발급
     @Override
     public TokenDto.TokenResponseDto login(LoginRequestDto request) {
+
+        //
 
         // 삭제된 계정인지 확인
         User user = userRepository.findByUsername(request.getUsername())

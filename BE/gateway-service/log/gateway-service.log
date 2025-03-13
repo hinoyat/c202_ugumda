@@ -2051,3 +2051,735 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 2025-03-13T13:48:08.973+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
 2025-03-13T13:48:08.973+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
 2025-03-13T13:48:08.993+09:00  INFO 11596 --- [gateway-service] [reactor-http-nio-21] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/diaries/1 , 응답코드 : PUT
+2025-03-13T16:25:19.174+09:00  INFO 17440 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Starting GatewayServiceApplication using Java 21.0.6 with PID 17440 (C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service\target\classes started by SSAFY in C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service)
+2025-03-13T16:25:19.176+09:00  INFO 17440 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-03-13T16:25:19.790+09:00  INFO 17440 --- [gateway-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=121bddf0-c9ef-3838-b8dc-1b1c5da15813
+2025-03-13T16:25:20.431+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-03-13T16:25:20.431+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-03-13T16:25:20.431+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-03-13T16:25:20.431+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-03-13T16:25:20.431+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-03-13T16:25:20.432+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-03-13T16:25:20.614+09:00 DEBUG 17440 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data healthcheckUrl: http://DESKTOP-QFN2D55:80/actuator/health
+2025-03-13T16:25:20.614+09:00 DEBUG 17440 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data statusPageUrl: http://DESKTOP-QFN2D55:80/actuator/info
+2025-03-13T16:25:20.630+09:00  INFO 17440 --- [gateway-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-03-13T16:25:20.655+09:00  WARN 17440 --- [gateway-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-03-13T16:25:20.704+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-03-13T16:25:20.726+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-03-13T16:25:20.731+09:00  INFO 17440 --- [gateway-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:25:20.738+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T16:25:20.739+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T16:25:20.739+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T16:25:20.739+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T16:25:20.739+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T16:25:20.739+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-03-13T16:25:20.739+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T16:25:21.106+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T16:25:21.108+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-03-13T16:25:21.109+09:00  INFO 17440 --- [gateway-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-03-13T16:25:21.110+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1741850721109 with initial instances count: 0
+2025-03-13T16:25:21.112+09:00  INFO 17440 --- [gateway-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY-SERVICE with eureka with status UP
+2025-03-13T16:25:21.113+09:00  INFO 17440 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741850721113, current=UP, previous=STARTING]
+2025-03-13T16:25:21.114+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T16:25:21.198+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T16:25:21.254+09:00  INFO 17440 --- [gateway-service] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 80 (http)
+2025-03-13T16:25:21.256+09:00  INFO 17440 --- [gateway-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 80
+2025-03-13T16:25:21.270+09:00  INFO 17440 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Started GatewayServiceApplication in 2.494 seconds (process running for 3.172)
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-03-13T16:25:51.111+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T16:25:51.137+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T16:26:15.887+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:26:15.911+09:00 DEBUG 17440 --- [gateway-service] [reactor-http-nio-3] .l.EurekaLoadBalancerClientConfiguration : Setting the value of 'spring.cloud.loadbalancer.zone' to defaultZone
+2025-03-13T16:26:15.932+09:00  WARN 17440 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:26:19.770+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:26:19.771+09:00  WARN 17440 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:26:41.119+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:26:41.472+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T16:27:00.048+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:27:00.058+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T16:29:26.016+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:29:26.025+09:00 ERROR 17440 --- [gateway-service] [reactor-http-nio-5] a.w.r.e.AbstractErrorWebExceptionHandler : [798e3dc4-5]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:56687
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:29:27.740+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:29:27.743+09:00 ERROR 17440 --- [gateway-service] [reactor-http-nio-5] a.w.r.e.AbstractErrorWebExceptionHandler : [798e3dc4-6]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:56687
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:29:36.589+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:29:36.593+09:00 ERROR 17440 --- [gateway-service] [reactor-http-nio-5] a.w.r.e.AbstractErrorWebExceptionHandler : [798e3dc4-7]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:56687
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:29:47.089+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:29:47.091+09:00 ERROR 17440 --- [gateway-service] [reactor-http-nio-5] a.w.r.e.AbstractErrorWebExceptionHandler : [798e3dc4-8]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:56687
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:29:48.379+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:29:48.382+09:00 ERROR 17440 --- [gateway-service] [reactor-http-nio-5] a.w.r.e.AbstractErrorWebExceptionHandler : [798e3dc4-9]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:56687
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:29:58.087+09:00  INFO 17440 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:29:58.089+09:00 ERROR 17440 --- [gateway-service] [reactor-http-nio-5] a.w.r.e.AbstractErrorWebExceptionHandler : [798e3dc4-10]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:56687
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:30:07.068+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application GATEWAY-SERVICE with eureka with status DOWN
+2025-03-13T16:30:07.069+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741851007069, current=DOWN, previous=UP]
+2025-03-13T16:30:07.069+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T16:30:07.072+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-13T16:30:07.076+09:00  INFO 17440 --- [gateway-service] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-03-13T16:30:07.093+09:00  INFO 17440 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T16:30:09.161+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2025-03-13T16:30:12.174+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2025-03-13T16:30:12.208+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/} exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:701)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateEurekaHttpClient.cancel(RestTemplateEurekaHttpClient.java:100)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.execute(RedirectingEurekaHttpClient.java:91)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:120)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.DiscoveryClient.unregister(DiscoveryClient.java:919)
+	at com.netflix.discovery.DiscoveryClient.shutdown(DiscoveryClient.java:900)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeDestroyMethods(InitDestroyAnnotationBeanPostProcessor.java:415)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeDestruction(InitDestroyAnnotationBeanPostProcessor.java:239)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:202)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.run(DisposableBeanAdapter.java:195)
+	at org.springframework.cloud.context.scope.GenericScope$BeanLifecycleWrapper.destroy(GenericScope.java:389)
+	at org.springframework.cloud.context.scope.GenericScope.destroy(GenericScope.java:136)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:735)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:692)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1401)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:651)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1394)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180)
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.doClose(ReactiveWebServerApplicationContext.java:155)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:216)
+	at org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:490)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:164)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:174)
+	at org.apache.hc.client5.http.impl.classic.ConnectExec.execute(ConnectExec.java:144)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ProtocolExec.execute(ProtocolExec.java:192)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ContentCompressionExec.execute(ContentCompressionExec.java:150)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.HttpRequestRetryExec.execute(HttpRequestRetryExec.java:113)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.InternalHttpClient.doExecute(InternalHttpClient.java:174)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:87)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:55)
+	at org.apache.hc.client5.http.classic.HttpClient.executeOpen(HttpClient.java:183)
+	at org.springframework.http.client.HttpComponentsClientHttpRequest.executeInternal(HttpComponentsClientHttpRequest.java:99)
+	at org.springframework.http.client.AbstractStreamingClientHttpRequest.executeInternal(AbstractStreamingClientHttpRequest.java:71)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:117)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClientFactory.lambda$restTemplate$3(RestTemplateTransportClientFactory.java:141)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:88)
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:72)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:48)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
+	... 37 more
+
+2025-03-13T16:30:12.209+09:00  WARN 17440 --- [gateway-service] [SpringApplicationShutdownHook] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-03-13T16:30:12.236+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:701)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateEurekaHttpClient.cancel(RestTemplateEurekaHttpClient.java:100)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.executeOnNewServer(RedirectingEurekaHttpClient.java:121)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.execute(RedirectingEurekaHttpClient.java:80)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:120)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.DiscoveryClient.unregister(DiscoveryClient.java:919)
+	at com.netflix.discovery.DiscoveryClient.shutdown(DiscoveryClient.java:900)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeDestroyMethods(InitDestroyAnnotationBeanPostProcessor.java:415)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeDestruction(InitDestroyAnnotationBeanPostProcessor.java:239)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:202)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.run(DisposableBeanAdapter.java:195)
+	at org.springframework.cloud.context.scope.GenericScope$BeanLifecycleWrapper.destroy(GenericScope.java:389)
+	at org.springframework.cloud.context.scope.GenericScope.destroy(GenericScope.java:136)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:735)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:692)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1401)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:651)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1394)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180)
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.doClose(ReactiveWebServerApplicationContext.java:155)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:216)
+	at org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:490)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:164)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:174)
+	at org.apache.hc.client5.http.impl.classic.ConnectExec.execute(ConnectExec.java:144)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ProtocolExec.execute(ProtocolExec.java:192)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ContentCompressionExec.execute(ContentCompressionExec.java:150)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.HttpRequestRetryExec.execute(HttpRequestRetryExec.java:113)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.InternalHttpClient.doExecute(InternalHttpClient.java:174)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:87)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:55)
+	at org.apache.hc.client5.http.classic.HttpClient.executeOpen(HttpClient.java:183)
+	at org.springframework.http.client.HttpComponentsClientHttpRequest.executeInternal(HttpComponentsClientHttpRequest.java:99)
+	at org.springframework.http.client.AbstractStreamingClientHttpRequest.executeInternal(AbstractStreamingClientHttpRequest.java:71)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:117)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClientFactory.lambda$restTemplate$3(RestTemplateTransportClientFactory.java:141)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:88)
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:72)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:48)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
+	... 38 more
+
+2025-03-13T16:30:12.237+09:00  WARN 17440 --- [gateway-service] [SpringApplicationShutdownHook] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-03-13T16:30:12.237+09:00 ERROR 17440 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - de-registration failedCannot execute request on any known server
+
+com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.DiscoveryClient.unregister(DiscoveryClient.java:919) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.DiscoveryClient.shutdown(DiscoveryClient.java:900) ~[eureka-client-2.0.4.jar:2.0.4]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeDestroyMethods(InitDestroyAnnotationBeanPostProcessor.java:415) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeDestruction(InitDestroyAnnotationBeanPostProcessor.java:239) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:202) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.run(DisposableBeanAdapter.java:195) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.cloud.context.scope.GenericScope$BeanLifecycleWrapper.destroy(GenericScope.java:389) ~[spring-cloud-context-4.2.0.jar:4.2.0]
+	at org.springframework.cloud.context.scope.GenericScope.destroy(GenericScope.java:136) ~[spring-cloud-context-4.2.0.jar:4.2.0]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:735) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:692) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1401) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:651) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1394) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.doClose(ReactiveWebServerApplicationContext.java:155) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.4.3.jar:3.4.3]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.4.3.jar:3.4.3]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T16:30:12.238+09:00  INFO 17440 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2025-03-13T16:30:23.060+09:00  INFO 11840 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Starting GatewayServiceApplication using Java 21.0.6 with PID 11840 (C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service\target\classes started by SSAFY in C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service)
+2025-03-13T16:30:23.062+09:00  INFO 11840 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-03-13T16:30:23.609+09:00  INFO 11840 --- [gateway-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=121bddf0-c9ef-3838-b8dc-1b1c5da15813
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-03-13T16:30:24.153+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-03-13T16:30:24.154+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-03-13T16:30:24.323+09:00 DEBUG 11840 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data healthcheckUrl: http://DESKTOP-QFN2D55:80/actuator/health
+2025-03-13T16:30:24.323+09:00 DEBUG 11840 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data statusPageUrl: http://DESKTOP-QFN2D55:80/actuator/info
+2025-03-13T16:30:24.338+09:00  INFO 11840 --- [gateway-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-03-13T16:30:24.358+09:00  WARN 11840 --- [gateway-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-03-13T16:30:24.404+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-03-13T16:30:24.426+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-03-13T16:30:24.429+09:00  INFO 11840 --- [gateway-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:30:24.437+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T16:30:24.437+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T16:30:24.438+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T16:30:24.438+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T16:30:24.438+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T16:30:24.438+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-03-13T16:30:24.438+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T16:30:24.796+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T16:30:24.797+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-03-13T16:30:24.798+09:00  INFO 11840 --- [gateway-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-03-13T16:30:24.800+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1741851024800 with initial instances count: 0
+2025-03-13T16:30:24.803+09:00  INFO 11840 --- [gateway-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY-SERVICE with eureka with status UP
+2025-03-13T16:30:24.804+09:00  INFO 11840 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741851024804, current=UP, previous=STARTING]
+2025-03-13T16:30:24.805+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T16:30:24.886+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T16:30:24.929+09:00  INFO 11840 --- [gateway-service] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 80 (http)
+2025-03-13T16:30:24.930+09:00  INFO 11840 --- [gateway-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 80
+2025-03-13T16:30:24.943+09:00  INFO 11840 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Started GatewayServiceApplication in 2.25 seconds (process running for 2.771)
+2025-03-13T16:30:50.279+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:30:50.301+09:00 DEBUG 11840 --- [gateway-service] [reactor-http-nio-3] .l.EurekaLoadBalancerClientConfiguration : Setting the value of 'spring.cloud.loadbalancer.zone' to defaultZone
+2025-03-13T16:30:50.322+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:30:52.566+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:30:52.568+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:30:53.514+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:30:53.515+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:30:54.439+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:30:54.440+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:30:54.811+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T16:30:54.811+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T16:30:54.812+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T16:30:54.812+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T16:30:54.812+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T16:30:54.812+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-03-13T16:30:54.812+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T16:30:54.840+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T16:30:55.348+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:30:55.350+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:30:57.391+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:30:57.393+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:31:13.161+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:31:13.163+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:31:15.311+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:31:15.313+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:31:16.180+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:31:16.182+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:31:17.179+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:31:17.180+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:31:34.719+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-13T16:31:35.183+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/register , 응답코드 : POST
+2025-03-13T16:31:37.642+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:31:37.765+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T16:32:14.731+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:32:14.741+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T16:35:24.454+09:00  INFO 11840 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:36:10.972+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:36:10.973+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:36:14.426+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:36:14.428+09:00  WARN 11840 --- [gateway-service] [reactor-http-nio-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: user-service
+2025-03-13T16:37:03.689+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:37:03.779+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T16:37:09.932+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:37:09.937+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T16:39:38.659+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/refresh
+2025-03-13T16:39:38.793+09:00  INFO 11840 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/refresh , 응답코드 : POST
+2025-03-13T16:40:24.465+09:00  INFO 11840 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:45:24.469+09:00  INFO 11840 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:48:37.813+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application GATEWAY-SERVICE with eureka with status DOWN
+2025-03-13T16:48:37.813+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741852117813, current=DOWN, previous=UP]
+2025-03-13T16:48:37.813+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T16:48:37.816+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-13T16:48:37.818+09:00  INFO 11840 --- [gateway-service] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-03-13T16:48:37.834+09:00  INFO 11840 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T16:48:39.907+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2025-03-13T16:48:42.911+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2025-03-13T16:48:42.930+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - deregister  status: 200
+2025-03-13T16:48:42.930+09:00  INFO 11840 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2025-03-13T16:48:54.711+09:00  INFO 7856 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Starting GatewayServiceApplication using Java 21.0.6 with PID 7856 (C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service\target\classes started by SSAFY in C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service)
+2025-03-13T16:48:54.712+09:00  INFO 7856 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-03-13T16:48:55.286+09:00  INFO 7856 --- [gateway-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=121bddf0-c9ef-3838-b8dc-1b1c5da15813
+2025-03-13T16:48:55.907+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-03-13T16:48:55.908+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-03-13T16:48:56.070+09:00 DEBUG 7856 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data healthcheckUrl: http://DESKTOP-QFN2D55:80/actuator/health
+2025-03-13T16:48:56.071+09:00 DEBUG 7856 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data statusPageUrl: http://DESKTOP-QFN2D55:80/actuator/info
+2025-03-13T16:48:56.084+09:00  INFO 7856 --- [gateway-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-03-13T16:48:56.108+09:00  WARN 7856 --- [gateway-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-03-13T16:48:56.161+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-03-13T16:48:56.184+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-03-13T16:48:56.188+09:00  INFO 7856 --- [gateway-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-03-13T16:48:56.195+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-13T16:48:56.455+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-13T16:48:56.457+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-03-13T16:48:56.459+09:00  INFO 7856 --- [gateway-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-03-13T16:48:56.460+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1741852136459 with initial instances count: 2
+2025-03-13T16:48:56.462+09:00  INFO 7856 --- [gateway-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY-SERVICE with eureka with status UP
+2025-03-13T16:48:56.462+09:00  INFO 7856 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741852136462, current=UP, previous=STARTING]
+2025-03-13T16:48:56.463+09:00  INFO 7856 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T16:48:56.505+09:00  INFO 7856 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T16:48:56.602+09:00  INFO 7856 --- [gateway-service] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 80 (http)
+2025-03-13T16:48:56.603+09:00  INFO 7856 --- [gateway-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 80
+2025-03-13T16:48:56.620+09:00  INFO 7856 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Started GatewayServiceApplication in 2.334 seconds (process running for 2.879)
+2025-03-13T16:49:58.060+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:49:58.079+09:00 DEBUG 7856 --- [gateway-service] [reactor-http-nio-3] .l.EurekaLoadBalancerClientConfiguration : Setting the value of 'spring.cloud.loadbalancer.zone' to defaultZone
+2025-03-13T16:49:58.457+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T16:50:03.193+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:50:03.212+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T16:50:03.214+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T16:50:03.216+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T16:50:03.249+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T16:50:16.070+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T16:50:16.103+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T16:50:24.045+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-13T16:50:24.047+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-13T16:50:24.049+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-13T16:50:24.049+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-13T16:50:24.063+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-13T16:53:56.213+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T16:58:56.218+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:03:07.666+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:03:07.704+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T17:03:56.221+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:06:36.358+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:06:36.375+09:00 ERROR 7856 --- [gateway-service] [reactor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [debeab9c-6]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:57308
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T17:06:49.058+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:06:49.062+09:00 ERROR 7856 --- [gateway-service] [reactor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [debeab9c-7]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:57308
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T17:07:02.032+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:07:02.035+09:00 ERROR 7856 --- [gateway-service] [reactor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [debeab9c-8]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:57308
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T17:07:02.883+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:07:02.886+09:00 ERROR 7856 --- [gateway-service] [reactor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [debeab9c-9]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:57308
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T17:07:03.794+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:07:03.797+09:00 ERROR 7856 --- [gateway-service] [reactor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [debeab9c-10]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:57308
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T17:07:04.873+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:07:04.877+09:00 ERROR 7856 --- [gateway-service] [reactor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [debeab9c-11]  500 Server Error for HTTP POST "/api/auth/login"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:57308
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "/api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-13T17:07:20.717+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:07:20.893+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T17:07:33.748+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-13T17:07:33.754+09:00  INFO 7856 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-13T17:08:56.228+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:13:56.238+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:18:56.245+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:23:56.251+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:28:56.254+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:33:56.264+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:38:56.276+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:43:56.285+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:48:56.293+09:00  INFO 7856 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-13T17:49:34.471+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application GATEWAY-SERVICE with eureka with status DOWN
+2025-03-13T17:49:34.471+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741855774471, current=DOWN, previous=UP]
+2025-03-13T17:49:34.471+09:00  INFO 7856 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-13T17:49:34.473+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-13T17:49:34.475+09:00  INFO 7856 --- [gateway-service] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-03-13T17:49:34.479+09:00  INFO 7856 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-13T17:49:36.589+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2025-03-13T17:49:39.593+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2025-03-13T17:49:39.609+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - deregister  status: 200
+2025-03-13T17:49:39.609+09:00  INFO 7856 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
