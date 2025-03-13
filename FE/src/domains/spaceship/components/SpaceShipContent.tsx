@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import "../themes/SpaceShip.css";
+import { useNavigate } from 'react-router-dom';
+import '../themes/SpaceShip.css';
+import { IoClose } from 'react-icons/io5';
 
 const SpaceShipContent = () => {
-    const nav = useNavigate();
+  const nav = useNavigate();
   const onClickLucky = () => {
     nav('/luckynumber');
   };
@@ -15,22 +16,21 @@ const SpaceShipContent = () => {
   const onClickHome = () => {
     nav('/');
   };
-  const onClickEditMyInformation =() => {
-    nav('/passwordcheck')
-  }
+  const onClickEditMyInformation = () => {
+    nav('/passwordcheck');
+  };
   const glowingTextStyle = {
     textShadow: '0 0 5px #9decf9, 0 0 10px #9decf9, 0 0 15px #67e8f9',
   };
 
-  const glowingButtonStyle = {
-    boxShadow:
-      '0 0 5px #9decf9, 0 0 10px #9decf9, 0 0 15px #67e8f9, 0 0 20px #67e8f9',
-    transition: 'box-shadow 0.3s ease',
-  };
-
   return (
     <div>
-        <div className="absolute top-[44%] w-full flex justify-center items-center gap-x-70 z-20">
+      <div
+        className="absolute z-40 top-[2%] right-[1%] cursor-pointer"
+        onClick={onClickHome}>
+        <IoClose className="text-white text-4xl" />
+      </div>
+      <div className="absolute top-[44%] w-full flex justify-center items-center gap-x-70 z-20">
         <button
           onClick={onClickLucky}
           className="text-white text-3xl font-bold cursor-pointer hover:scale-105 transition-transform"
@@ -60,7 +60,7 @@ const SpaceShipContent = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SpaceShipContent
+export default SpaceShipContent;
