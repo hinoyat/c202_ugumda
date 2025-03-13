@@ -2,11 +2,19 @@ import Blackhole from '@/domains/mainpage/components/Blackhole';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import GuestbookIcon from '@/domains/mainpage/components/GuestbookIcon';
 import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
+import Universe from '@/domains/mainpage/components/universe/Universe';
 import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader ';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const MainPage = () => {
+  console.log('🟡 부모 컴포넌트(MainPage)가 렌더링됨!');
+
+  useEffect(() => {
+    console.log('✅ MainPage 마운트됨!');
+  }, []);
+
   const nav = useNavigate();
 
   const onClickLogin = () => {
@@ -56,7 +64,8 @@ const MainPage = () => {
   };
 
   return (
-    <div className="flex flex-col overflow-hidden items-start min-h-screen bg-black text-white">
+    <div className="flex flex-col items-start min-h-screen bg-black text-white">
+      <Universe />
       {/* 다이어리 미리보기 컴포넌트 */}
       <div className="absolute top-40 left-5">
         <DiaryPreview {...exampleEntry} />
@@ -78,6 +87,7 @@ const MainPage = () => {
         />
       </div>
       메인페이지 입니다.
+      <Universe />
       <div className="flex flex-col">
         <button
           onClick={onClickLogin}
@@ -122,6 +132,7 @@ const MainPage = () => {
           <GuestbookIcon size={0.5} />
         </div>
       </div>
+      <Universe />
     </div>
   );
 };
