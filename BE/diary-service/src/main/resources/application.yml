@@ -23,4 +23,13 @@ spring:
       org.springframework.data.redis: DEBUG
 
 server:
-  port: 80
+  port: 0
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${random.value} # IP와 랜덤문자열을 통해 id 설정(server.port=0 사용시 동일한 id가 생성되어 random 사용)
+    # instance-id: ${spring.cloud.client.ip-address}:${server.port}
+
+  client:
+    service-url:
+      defaultZone: "http://localhost:8761/eureka/"

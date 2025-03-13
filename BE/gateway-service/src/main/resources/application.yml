@@ -21,6 +21,12 @@ spring:
           predicates:
             - Path=/api/auth/**
 
+        - id: diary-serivce
+          uri: lb://diary-service
+          predicates:
+            - Path=/api/diaries/**
+          filters:
+            - name: JwtAuthFilter
 #        - id: ex2-serivce
 #          uri: lb://ex2-service
 #          predicates:
