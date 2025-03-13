@@ -16,6 +16,11 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: auth-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/**
+
 #        - id: ex2-serivce
 #          uri: lb://ex2-service
 #          predicates:
@@ -36,6 +41,13 @@ logging:
     com.netflix.eureka: DEBUG
     org.springframework.cloud.netflix.eureka: DEBUG
 
+
+jwt:
+  secret: yourVerySecretKeyHereItShouldBeAtLeast32CharactersLong
+  access-token-validity-in-ms: 3600000
+  refresh-token-validity-in-ms: 2592000000
+  token-prefix: Bearer
+  header-string: Authorization
 
 eureka:
   instance:
