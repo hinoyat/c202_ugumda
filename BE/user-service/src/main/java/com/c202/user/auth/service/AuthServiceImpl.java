@@ -5,7 +5,6 @@ import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
 import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.repository.UserRepository;
-import com.c202.user.auth.jwt.CustomUserDetails;
 import com.c202.user.auth.jwt.JwtTokenProvider;
 import com.c202.user.auth.jwt.TokenDto;
 import com.c202.user.auth.jwt.refreshtoken.RefreshTokenRepository;
@@ -13,8 +12,6 @@ import com.c202.user.global.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +30,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Override
@@ -68,13 +64,6 @@ public class AuthServiceImpl implements AuthService {
     // 로그인 메소드 - 액세스 토큰과 리프레시 토큰 모두 발급
     @Override
     public TokenDto.TokenResponseDto login(LoginRequestDto request) {
-        // Spring Security 인증 처리
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-
-        // 인증된 사용자 정보 가져오기
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         // 삭제된 계정인지 확인
         User user = userRepository.findByUsername(request.getUsername())
@@ -85,8 +74,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 액세스 토큰과 리프레시 토큰 생성
-        String accessToken = jwtTokenProvider.createAccessToken(userDetails.getUsername(), userDetails.getId());
-        String refreshToken = jwtTokenProvider.createRefreshToken(userDetails.getUsername(), userDetails.getId());
+        String accessToken = jwtTokenProvider.createAccessToken(user.getUsername(), user.getUserSeq());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUsername(), user.getUserSeq());
 
         // 토큰 응답 객체 생성 및 반환
         return TokenDto.TokenResponseDto.builder()
@@ -98,13 +87,13 @@ public class AuthServiceImpl implements AuthService {
     // 로그아웃
     @Override
     @Transactional
-    public void logout(Long userId) {
-        log.debug("사용자 ID={}의 로그아웃 처리 시작", userId);
+    public void logout(Long userSeq) {
+        log.debug("사용자 ID={}의 로그아웃 처리 시작", userSeq);
 
         try {
             // 1. 리프레시 토큰 제거
-            refreshTokenRepository.deleteByUserId(userId);
-            log.debug("리프레시 토큰 삭제 완료: 사용자 ID={}", userId);
+            refreshTokenRepository.deleteByUserSeq(userSeq);
+            log.debug("리프레시 토큰 삭제 완료: 사용자 ID={}", userSeq);
         } catch (Exception e) {
             log.error("로그아웃 처리 중 오류 발생: {}", e.getMessage(), e);
         }
