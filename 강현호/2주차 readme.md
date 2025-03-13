@@ -48,7 +48,103 @@ Maven은 표준화된 빌드 프로세스를 제공하며 안정적이고, Gradl
 
 ---------------------------------------
 <details>
-  <summary><b>2025-03-11()</b></summary>
+  <summary><b>2025-03-11(GenerationType.IDENTITY와 GenerationType.AUTO 전략 비교)</b></summary>
+# JPA의 GenerationType.IDENTITY와 GenerationType.AUTO 전략 비교
+
+## GenerationType.AUTO
+
+`GenerationType.AUTO`는 JPA가 데이터베이스의 종류와 방언(dialect)에 따라 가장 적합한 식별자 생성 전략을 자동으로 선택합니다.
+
+### 작동 방식
+
+- **MySQL**: 보통 `TABLE` 전략을 사용 (시퀀스 객체를 지원하지 않기 때문)
+- **Oracle, PostgreSQL**: 주로 `SEQUENCE` 전략을 사용
+- **H2**: 데이터베이스 모드에 따라 다름
+
+### 시퀀스 테이블 생성 원인
+
+MySQL에서는 시퀀스 객체를 지원하지 않기 때문에, Hibernate는 시퀀스를 시뮬레이션하기 위해 별도의 테이블(`diary_seq`)을 생성합니다. 이 테이블은 다음과 같은 역할을 합니다:
+
+1. 각 엔티티 타입별로 다음 ID 값을 저장
+2. ID를 획득하기 위해 추가 SELECT와 UPDATE 쿼리가 실행됨
+
+```sql
+sql
+Copy
+-- ID 획득 시 실행되는 쿼리 예시
+SELECT next_val FROM diary_seq FOR UPDATE;
+UPDATE diary_seq SET next_val = next_val + 1;
+
+```
+
+### 장점
+
+- 데이터베이스 변경 시 코드 수정 없이 적합한 전략 사용 가능
+- 데이터베이스 시스템에 독립적인 코드 작성 가능
+
+### 단점
+
+- MySQL에서는 추가 테이블 생성 및 추가 쿼리로 인한 성능 오버헤드
+- 트랜잭션 내에서 새 ID를 얻기 위해 추가 쿼리 필요
+
+## GenerationType.IDENTITY
+
+`GenerationType.IDENTITY`는 데이터베이스의 자동 증가 컬럼을 사용합니다.
+
+### 작동 방식
+
+- MySQL의 `AUTO_INCREMENT`
+- SQL Server의 `IDENTITY`
+- PostgreSQL의 `SERIAL`
+
+```sql
+sql
+Copy
+CREATE TABLE Diary (
+    diary_seq INT AUTO_INCREMENT PRIMARY KEY,
+    ...
+);
+
+```
+
+ID 생성은 완전히 데이터베이스에 위임되며, INSERT 실행 시 자동으로 값이 생성됩니다.
+
+### 장점
+
+- 별도의 테이블이나 시퀀스 객체가 필요 없음
+- 단일 INSERT 쿼리로 처리됨 (추가 SELECT/UPDATE 없음)
+- 구현이 단순하고 직관적임
+
+### 단점
+
+- JDBC 드라이버가 `getGeneratedKeys()` 메서드를 지원해야 함
+- ID 값은 실제 INSERT 후에만 사용 가능 (영속성 컨텍스트 이슈)
+- 일괄 처리(batch insert) 최적화가 어려움
+
+## 핵심 차이점
+
+1. **테이블 생성**:
+    - `AUTO`: MySQL에서 시퀀스 테이블(`diary_seq`) 생성
+    - `IDENTITY`: 별도 테이블 없음, 테이블 컬럼 자체에 AUTO_INCREMENT 적용
+2. **ID 생성 시점**:
+    - `AUTO`: 엔티티가 영속화되는 시점 (EntityManager.persist() 호출 시)
+    - `IDENTITY`: 데이터베이스에 INSERT 쿼리가 실행된 후
+3. **쿼리 실행**:
+    - `AUTO`: ID 획득을 위한 별도 SELECT/UPDATE + INSERT 쿼리
+    - `IDENTITY`: INSERT 쿼리만 실행
+4. **성능**:
+    - `AUTO`: 추가 쿼리로 인한 오버헤드 발생
+    - `IDENTITY`: 단일 쿼리로 효율적, 다만 일괄 처리에서는 비효율적
+5. **휴대성**:
+    - `AUTO`: 다양한 DB 환경에서 쉽게 코드 이식 가능
+    - `IDENTITY`: 특정 DB 기능에 의존
+</details>
+
+---------------------------------------
+<details>
+  <summary><b>2025-03-12(Lombok 생성자 어노테이션)</b></summary>
+
+  
 
 </details>
 
