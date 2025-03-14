@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 flex w-full text-3xl text-gray-400 opacity-40 items-center justify-center gap-15 p-3 bg-transparent">
+      <nav className="fixed top-0 flex w-fit left-1/2 transform -translate-x-1/2 text-3xl text-gray-400 opacity-40 items-center justify-center gap-15 p-3 bg-transparent z-50">
         {/* home */}
         <Link
           to="/"

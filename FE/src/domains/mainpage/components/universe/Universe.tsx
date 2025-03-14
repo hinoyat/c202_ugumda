@@ -6,7 +6,6 @@ import { Stars, OrbitControls } from '@react-three/drei';
 import DiaryStar from './DiaryStar';
 import DiaryForm from './DiaryForm';
 import DiaryDetail from './DiaryDetail';
-import Controls from './Controls';
 import '../../themes/universe.css';
 import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
@@ -55,16 +54,6 @@ const Universe: React.FC = () => {
   const handleFormSubmit = (content: string): void => {
     addEntry(content);
     setShowForm(false);
-  };
-
-  // 줌 인 핸들러
-  const handleZoomIn = (): void => {
-    setCameraDistance((prev) => Math.max(prev - 5, 5));
-  };
-
-  // 줌 아웃 핸들러
-  const handleZoomOut = (): void => {
-    setCameraDistance((prev) => Math.min(prev + 5, 200));
   };
 
   //          우주공간 더블 클릭 시 일기 생성          //
@@ -185,12 +174,6 @@ const Universe: React.FC = () => {
           </group>
         </Canvas>
       </div>
-
-      {/* 사용자 UI 컨트롤 */}
-      <Controls
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-      />
 
       {/* 일기 작성 폼 (조건부 렌더링) */}
       {showForm && (

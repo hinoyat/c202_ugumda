@@ -1,15 +1,21 @@
+// 나의 우주페이지
+import GuestBook from '@/domains/guestbook/GuestBook';
 import Blackhole from '@/domains/mainpage/components/Blackhole';
-import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import GuestbookIcon from '@/domains/mainpage/components/GuestbookIcon';
-import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 import Universe from '@/domains/mainpage/components/universe/Universe';
 import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader ';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const MainPage = () => {
-  console.log('🟡 부모 컴포넌트(MainPage)가 렌더링됨!');
+  console.log('🟡 내 메인 렌더링!');
+
+  //      방명록 표시 여부      //
+  const [showGuestbook, setShowGuestbook] = useState(false);
+  const onClickGuestBookModal = () => {
+    setShowGuestbook(!showGuestbook);
+  };
 
   useEffect(() => {
     console.log('✅ MainPage 마운트됨!');
@@ -33,40 +39,12 @@ const MainPage = () => {
     console.log('로그아웃 버튼 클릭됨');
   };
 
-  //          일기 미리보기 DiaryPreview 컴포넌트          //
-  const exampleEntry = {
-    title: '일기제목',
-    content:
-      '오늘은 무서운 꿈을 꿨다. 사자가 쫓아왔다. 나무가 엄청 많았고 엄청 빠르게 달렸지만...',
-    tags: [
-      { id: '1', name: '악몽' },
-      { id: '2', name: '사자' },
-      { id: '3', name: '달리기' },
-    ],
-  };
-
-  //          StarHoverMenu 컴포넌트          //
-  const handleStarEdit = () => {
-    console.log('호버메뉴 - 수정클릭');
-  };
-
-  const handleStarDelete = () => {
-    console.log('호버메뉴 - 삭제클릭');
-  };
-
-  const handleStarView = () => {
-    console.log('호버메뉴 - 일기보기');
-    nav('/diary/view/123'); // 예시 일기 ID
-  };
-
   return (
-    <div className="flex flex-col items-start min-h-screen bg-black text-white">
+    <div className="flex flex-col items-start bg-black text-white relative w-screen h-screen overflow-hidden">
+      {/* 우주영역 */}
       <Universe />
-      {/* 다이어리 미리보기 컴포넌트 */}
-      <div className="absolute top-40 left-5">
-        <DiaryPreview {...exampleEntry} />
-      </div>
-      {/* 닉네임님의 우주입니다 + 버튼 */}
+
+      {/* 닉네임님의 우주입니다 & 버튼 */}
       <div className="absolute top-5 left-5">
         <UserSpaceHeader
           nickname={isMySpace ? myNickname : othernickname}
@@ -74,17 +52,10 @@ const MainPage = () => {
           buttonLabel={isMySpace ? '로그아웃' : '구독취소'}
         />
       </div>
-      {/* 별 호버 메뉴 테스트 */}
-      <div className="absolute top-1/2 left-1/2">
-        <StarHoverMenu
-          onEdit={handleStarEdit}
-          onDelete={handleStarDelete}
-          onView={handleStarView}
-        />
-      </div>
-      메인페이지 입니다.
+
       {/* 주짜니 쓰는 부분  relative z-10 해서 위로 올려둠 */}
-      <div className="flex flex-col relative z-10">
+      <div className="flex flex-col absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <p>메인페이지 입니다.</p>
         <button
           onClick={onClickLogin}
           className="text-yellow-500 cursor-pointer">
@@ -117,17 +88,22 @@ const MainPage = () => {
           className="text-yellow-500 cursor-pointer">
           꿈해몽
         </Link>
+      </div>
 
-        {/* 블랙홀 - 다른 사람의 우주로 가기 */}
-        <div className="absolute left-20 bottom-30">
-          <Blackhole />
-        </div>
+      {/* 블랙홀 - 다른 사람의 우주로 가기 */}
+      <div className="absolute top-0 right-0">
+        <Blackhole />
+      </div>
 
-        {/* 방명록 */}
-        <div className="absolute left-70 bottom-60">
+      {/* 방명록 */}
+      <div className="absolute bottom-0 left-0 mb-5 ml-5 z-10">
+        <div onClick={onClickGuestBookModal}>
           <GuestbookIcon size={0.5} />
         </div>
       </div>
+
+      {/* 방명록 모달 (조건부 렌더링) */}
+      {showGuestbook && <GuestBook onClose={onClickGuestBookModal} />}
     </div>
   );
 };

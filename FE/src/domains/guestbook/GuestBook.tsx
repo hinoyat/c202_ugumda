@@ -3,7 +3,10 @@ import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import MainPage from '../mainpage/pages/MainPage';
 
-const GuestBook = () => {
+interface MainPageProps {
+  onClose: () => void;
+}
+const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
   const owner = {
     user_id: 1,
     nickname: '어린왕자',
@@ -15,15 +18,15 @@ const GuestBook = () => {
     nav('/');
   };
   return (
-    <div className="w-screen h-screen relative">
-      <MainPage />
-      <div className="absolute inset-0 backdrop-blur-sm"></div>
+    <div className="">
+      {/* <MainPage /> */}
+      <div className="absolute inset-0 backdrop-blur-lg"></div>
       <div className="absolute w-[80%] h-[85%] bg-[#6E6E6E] opacity-80 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
 
       <div className="absolute w-[80%] h-[85%] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div
           className="absolute z-40 top-[1%] right-[0.5%] cursor-pointer"
-          onClick={onClickHome}>
+          onClick={onClose}>
           <IoClose className="text-white text-4xl hover:text-gray-400" />
         </div>
         <div className="flex flex-col p-10 gap-10 w-full">
