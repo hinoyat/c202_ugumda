@@ -20,8 +20,8 @@ extend({
 
 // 타입 정의
 interface DiaryStarProps {
-  entry: DiaryEntry; // DiaryEntry 객체를 전달받음
-  onClick: (entry: DiaryEntry) => void; // 별 클릭 시 호출되는 함수
+  entry: DiaryEntry;
+  onClick: (entry: DiaryEntry, position: { x: number; y: number }) => void;
   onHover: (
     entry: DiaryEntry | null,
     position: { x: number; y: number } | null
@@ -54,7 +54,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick, onHover }) => {
   });
 
   // 마우스가 별에 올려졌을 때와 벗어났을 때의 핸들러
-  const handlePointerOver = (event): void => {
+  const handlePointerOver = (event: THREE.Event): void => {
     setHovered(true);
     // 마우스 포인터 위치 가져오기
     const x = event.clientX + 20; // 오른쪽으로 20만큼 이동
@@ -69,15 +69,17 @@ const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick, onHover }) => {
 
   return (
     <group position={[x, y, z]}>
-      {' '}
       {/* 별 위치 설정 */}
       <mesh
         ref={meshRef} // 메쉬 참조 연결
-        onClick={() => onClick(entry)} // 별 클릭 시 onClick 호출
-        onPointerOver={handlePointerOver} // 호버 상태 변경
+        onClick={(e) => {
+          e.stopPropagation();
+          // 클릭위치 전달
+          onClick(entry, { x: e.clientX, y: e.clientY });
+        }}
+        // 영역 내 마우스 올라와 있는지 상태
+        onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}>
-        {' '}
-        {/* 호버 상태 변경 */}
         {/* 별 모양의 지오메트리 */}
         <sphereGeometry args={[entry.size / 2, 16, 16]} />
         {/* 별의 색과 발광 효과 */}

@@ -11,6 +11,7 @@ import '../../themes/universe.css';
 import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
+import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
@@ -29,9 +30,20 @@ const Universe: React.FC = () => {
   // 카메라 컨트롤 참조
   const controlsRef = useRef<any>(null);
 
-  // 일기 항목 선택 핸들러
-  const handleSelectEntry = (entry: DiaryEntry): void => {
-    setSelectedEntry(entry);
+  // 별 선택 핸들러 - 클릭 시 메뉴 보임
+  const handleSelectEntry = (
+    entry: DiaryEntry,
+    position: { x: number; y: number }
+  ): void => {
+    // 이미 선택된 별을 다시 클릭하면 선택 해제
+    if (selectedEntry && selectedEntry.id === entry.id) {
+      setSelectedEntry(null);
+      setSelectedPosition(null);
+    } else {
+      // 새로운 별 선택
+      setSelectedEntry(entry);
+      setSelectedPosition(position);
+    }
   };
 
   // 선택 해제 핸들러
@@ -66,9 +78,21 @@ const Universe: React.FC = () => {
 
   //          미리보기를 위해 별의 위치를 2D 좌표로 변환          //
   const [hoveredPosition, setHoveredPosition] = useState<{
-    x: Number;
+    x: number;
     y: number;
   } | null>(null);
+
+  //          별 클릭 위치 저장          //
+  const [selectedPosition, setSelectedPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  //          별 클릭 시 StarHoverMenu 보임          //
+  const handleEdit = () => {
+    console.log('일기 수정??');
+    // 일기 수정 로직 구현..?
+  };
 
   return (
     <div className="universe-container">
@@ -148,7 +172,10 @@ const Universe: React.FC = () => {
               <DiaryStar
                 key={entry.id}
                 entry={entry}
-                onClick={handleSelectEntry}
+                onClick={(entry, position) => {
+                  setSelectedEntry(entry);
+                  setSelectedPosition(position);
+                }}
                 onHover={(entry, position) => {
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
@@ -179,13 +206,24 @@ const Universe: React.FC = () => {
         </div>
       )}
 
-      {/* 선택된 일기 상세 정보 (조건부 렌더링) */}
-      {selectedEntry && (
-        <div className="detail-overlay">
-          <DiaryDetail
-            entry={selectedEntry}
-            onClose={handleClearSelection}
-            onDelete={removeEntry}
+      {/* 별 클릭 시 StarHoverMenu 보임 */}
+      {selectedEntry && selectedPosition && (
+        <div
+          className="absolute z-20"
+          style={{
+            left: `${selectedPosition.x}px`,
+            top: `${selectedPosition.y - 50}px`, // 별 위쪽에 표시
+          }}>
+          <StarHoverMenu
+            position={selectedPosition}
+            onEdit={() => console.log('수정하기 클릭')}
+            onDelete={() => {
+              console.log('삭제하기 클릭');
+              removeEntry(selectedEntry.id);
+            }}
+            onView={() => {
+              console.log('일기보기 클릭');
+            }}
           />
         </div>
       )}
