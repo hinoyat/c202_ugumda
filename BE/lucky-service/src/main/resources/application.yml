@@ -14,8 +14,7 @@ server:
 
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.ip-address}:${random.value} # IP와 랜덤문자열을 통해 id 설정(server.port=0 사용시 동일한 id가 생성되어 random 사용)
-    # instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    instance-id: ${spring.cloud.client.ip-address}:${random.value}
 
   client:
     service-url:
