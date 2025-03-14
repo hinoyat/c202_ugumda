@@ -132,3 +132,12 @@ Netty(Spring Cloud Gateway)
 3. 클라이언트가 Gateway로 요청
 4. Gateway는 Eureka에서 user-service의 주소를 가져와 요청을 전달
 5. JWT 검증등의 필터를 거쳐 서비스로 전달
+
+# 2025-03-12 수요일
+1. Eureka 서버 설정 완료
+2. Gateway 서버 설정 완료
+
+# 2025-03-13 목요일
+1. Gateway JWT 필터 분리
+2. luck-service(행운 번호 서비스) CRUD 생성
+
