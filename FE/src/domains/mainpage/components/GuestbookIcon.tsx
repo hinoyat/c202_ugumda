@@ -12,8 +12,8 @@ const GuestbookIcon = ({ size = 1 }: GuestbookIconProps) => {
   };
 
   // 행성의 크기
-  const width = 300 * size;
-  const height = 300 * size;
+  const width = 200 * size;
+  const height = 200 * size;
 
   return (
     <div
