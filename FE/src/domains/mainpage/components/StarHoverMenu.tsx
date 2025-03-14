@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 //          이미지 import          //
-import hover_delete from '/public/main/hover-delete.svg';
-import hover_diary from '/public/main/hover-diary.svg';
-import hover_edit from '/public/main/hover-edit.svg';
+import hover_delete from '@/assets/main/hover-delete.svg';
+import hover_diary from '@/assets/main/hover-diary.svg';
+import hover_edit from '@/assets/main/hover-edit.svg';
 
 interface StarMenuProps {
   position?: { x: number; y: number };
