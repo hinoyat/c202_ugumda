@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from '../common/Layout'; // Layout 컴포넌트 import
+import OtherMainPage from '@/domains/mainpage/pages/OtherMainPage';
 
 const ErrorPage = lazy(() => import('../domains/error/ErrorPage'));
 const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
@@ -35,6 +36,10 @@ const AppRouter = () => {
           <Route
             path="/"
             element={<MainPage />}
+          />
+          <Route
+            path="/othermain"
+            element={<OtherMainPage />}
           />
           <Route
             path="/spaceship"
