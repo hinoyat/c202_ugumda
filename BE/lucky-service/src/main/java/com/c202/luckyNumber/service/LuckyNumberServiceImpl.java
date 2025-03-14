@@ -1,13 +1,17 @@
 package com.c202.luckyNumber.service;
 
+import com.c202.luckyNumber.exception.LuckyNumberAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LuckyNumberServiceImpl implements LuckyNumberService {
@@ -15,25 +19,41 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
 
     @Override
     public void createLuckyNumber(int userSeq) {
-        List<Integer> luckyNumbers = new Random().ints(1, 46)
-                .distinct() // 중복을 제거
-                .limit(6)   // 6개 숫자만 선택
-                .boxed()    // IntStream을 List<Integer>로 변환
-                .collect(Collectors.toList());
+        List<Integer> luckyNumbers = generateLuckyNumbers();
 
-        // Redis에 행운 번호 저장
+        if (redisTemplate.opsForHash().hasKey("lucky_number:" + userSeq, "number1")) {
+            throw new LuckyNumberAlreadyExistsException();
+        }
+
         for (int i = 0; i < luckyNumbers.size(); i++) {
             redisTemplate.opsForHash().put("lucky_number:" + userSeq, "number" + (i + 1), luckyNumbers.get(i).toString());
         }
+
+        redisTemplate.expire("lucky_number:" + userSeq,  calculateTimeToMidnight(), TimeUnit.SECONDS);
     }
 
     @Override
     public List<String> getLuckyNumber(int userSeq) {
         List<Object> luckyNumbers = redisTemplate.opsForHash().values("lucky_number:" + userSeq);
 
-        // Redis에서 조회된 행운 번호 반환
         return luckyNumbers.stream()
-                .map(String::valueOf)  // 숫자를 문자열로 변환
+                .map(String::valueOf)
                 .collect(Collectors.toList());
+    }
+
+    private List<Integer> generateLuckyNumbers() {
+        return new Random().ints(1, 46)
+                .distinct()
+                .limit(6)
+                .boxed()
+                .collect(Collectors.toList());
+    }
+
+    private long calculateTimeToMidnight() {
+        long currentTimeMillis = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(9); // 9시간을 더함
+
+        long midnightMillis = (currentTimeMillis / 86400000) * 86400000 + 86400000;
+
+        return (midnightMillis - currentTimeMillis) / 1000;
     }
 }
