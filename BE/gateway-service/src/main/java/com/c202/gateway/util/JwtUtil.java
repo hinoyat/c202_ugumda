@@ -42,12 +42,12 @@ public class JwtUtil {
         return false;
     }
 
-    public Long getUserSeq(String token) {
-        return ((Number) Jwts.parserBuilder()
+    public int getUserSeq(String token) {
+        return ((int) Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("userSeq")).longValue();
+                .get("userSeq"));
     }
 }

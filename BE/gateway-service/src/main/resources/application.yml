@@ -16,7 +16,14 @@ spring:
           filters:
             - name: JwtAuthFilter
 
-        - id: auth-service
+        - id: auth-logout-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/logout
+          filters:
+            - name: JwtAuthFilter
+
+        - id: auth-service-other
           uri: lb://user-service
           predicates:
             - Path=/api/auth/**

@@ -63,7 +63,7 @@ public class JwtTokenProvider {
     }
 
     // 액세스 토큰 생성 메소드
-    public String createAccessToken(String username, Long userSeq) {
+    public String createAccessToken(String username, int userSeq) {
         // JWT 클레임 설정 - 사용자 식별자와 권한 정보 담기
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("userSeq", userSeq);
@@ -83,7 +83,7 @@ public class JwtTokenProvider {
     }
 
     // 리프레시 토큰 생성 메소드
-    public String createRefreshToken(String username, Long userSeq) {
+    public String createRefreshToken(String username, int userSeq) {
         // JWT 클레임 설정
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("userSeq", userSeq);
@@ -174,9 +174,9 @@ public class JwtTokenProvider {
     }
 
     // 토큰에서 사용자 ID 추출
-    public Long getUserSeq(String token) {
-        return ((Number) Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody().get("userSeq")).longValue();
+    public int getUserSeq(String token) {
+        return ((int) Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody().get("userSeq"));
     }
 
     // 토큰 유형 확인 (액세스 또는 리프레시)
@@ -244,7 +244,7 @@ public class JwtTokenProvider {
 
         // 토큰에서 사용자 정보 추출
         String username = getUsername(refreshToken);
-        Long userSeq = getUserSeq(refreshToken);
+        int userSeq = getUserSeq(refreshToken);
 
         // 새 액세스 토큰 생성 및 반환
         return createAccessToken(username, userSeq);

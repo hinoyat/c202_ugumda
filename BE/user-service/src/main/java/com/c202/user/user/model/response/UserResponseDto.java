@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class UserResponseDto {
 
-    private Long id;
+    private int userSeq;
     private String username;
     private String nickname;
     private String birthDate;
@@ -16,7 +16,7 @@ public class UserResponseDto {
     // Dto 변환
     public static UserResponseDto toDto(User user) {
         return UserResponseDto.builder()
-                .id(user.getUserSeq())
+                .userSeq(user.getUserSeq())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .birthDate(user.getBirthDate())

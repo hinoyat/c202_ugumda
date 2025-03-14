@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUserSeq(Long userSeq);
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findByUserSeq(int userSeq);
     boolean existsByUsername(String username);
     boolean existsByNickname(String nickname);
     Optional<User> findByUsername(String username);
