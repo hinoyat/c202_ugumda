@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: diary-service
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/diary_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      #      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  logging:
+    level:
+      root: INFO
+      com.c202.userservice: DEBUG
+      org.springframework.security: DEBUG
+      org.springframework.data.redis: DEBUG
+
+server:
+  port: 0
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${random.value} # IP와 랜덤문자열을 통해 id 설정(server.port=0 사용시 동일한 id가 생성되어 random 사용)
+    # instance-id: ${spring.cloud.client.ip-address}:${server.port}

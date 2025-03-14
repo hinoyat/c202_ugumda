@@ -8,11 +8,3 @@ spring:
   cloud:
     config:
       fail-fast: true   # Config 서버 연결 실패시 애플리케이션  시작 중단
-
-#
-#jwt:
-#  secret: yourVerySecretKeyHereItShouldBeAtLeast32CharactersLong
-#  access-token-validity-in-ms: 3600000
-#  refresh-token-validity-in-ms: 2592000000
-#  token-prefix: Bearer
-#  header-string: Authorization

@@ -51,13 +51,3 @@ jwt:
   token-prefix: Bearer
   header-string: Authorization
 
-eureka:
-  instance:
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-
-  client:
-    service-url:
-      register-with-eureka: true
-      fetch-registry: true
-      service-url:
-        defaultZone: "http://localhost:8761/eureka/" # 유레카 서버 주소
