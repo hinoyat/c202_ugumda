@@ -11,8 +11,8 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     Optional<RefreshToken> findByToken(String token);
 
     // 사용자 ID로 리프레시 토큰 조회
-    Optional<RefreshToken> findByUserSeq(Long userSeq);
+    Optional<RefreshToken> findByUserSeq(int userSeq);
 
     // 사용자 ID로 토큰 삭제 (로그아웃 시 사용)
-    void deleteByUserSeq(Long userSeq);
+    void deleteByUserSeq(int userSeq);
 }

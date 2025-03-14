@@ -1,5 +1,6 @@
 @import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
 @import url('https://fonts.googleapis.com/css2?family=Galindo&family=Gowun+Batang&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Galindo&family=Gowun+Batang&family=Press+Start+2P&display=swap');
 @import 'tailwindcss';
 
 /* Pretendard 폰트는 @font-face로 정의 */
@@ -41,6 +42,12 @@ body {
 
 .pretendard-font {
   font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.press-start-2p-regular {
+  font-family: 'Press Start 2P', system-ui;
   font-weight: 400;
   font-style: normal;
 }

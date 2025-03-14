@@ -11,7 +11,7 @@ public interface AuthService {
 
     TokenDto.TokenResponseDto login(LoginRequestDto request);
 
-    void logout(Long userSeq);
+    void logout(int userSeq);
 
     boolean isUsernameAvailable(String username);
 

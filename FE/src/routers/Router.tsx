@@ -6,8 +6,18 @@ const ErrorPage = lazy(() => import('../domains/error/ErrorPage'));
 const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
 const Login = lazy(() => import('../domains/login/pages/Login'));
 const Signup = lazy(() => import('../domains/signup/pages/Signup'));
+const GuestBook = lazy(() => import('../domains/guestbook/GuestBook'));
 const SpaceShip = lazy(() => import('../domains/spaceship/pages/SpaceShip'));
-const PasswordCheck = lazy(() => import('../domains/spaceship/pages/PasswordCheck'))
+const PasswordCheck = lazy(
+  () => import('../domains/spaceship/pages/PasswordCheck')
+);
+const MyInformation = lazy(
+  () => import('../domains/myinformation/pages/MyInformation')
+);
+const SuccessfulEdit = lazy(
+  () => import('../domains/myinformation/pages/SuccessfulEdit')
+);
+const FailEdit = lazy(() => import('../domains/myinformation/pages/FailEdit'));
 const LuckyNumber = lazy(
   () => import('../domains/luckyNumber/pages/LuckyNumber')
 );
@@ -42,12 +52,30 @@ const AppRouter = () => {
             path="/dreamsolve"
             element={<DreamSolve />}
           />
+          <Route
+            path="/test"
+            element={<GuestBook />}
+          />
         </Route>
         {/* 로그인 및 회원가입은 Navbar 없이 */}
-        <Route 
-          path="/passwordcheck"
-          element={<PasswordCheck/>}
+        <Route
+          path="/myinformation"
+          element={<MyInformation />}
         />
+
+        <Route
+          path="/passwordcheck"
+          element={<PasswordCheck />}
+        />
+        <Route
+          path="/successedit"
+          element={<SuccessfulEdit />}
+        />
+        <Route
+          path="/failedit"
+          element={<FailEdit />}
+        />
+
         <Route
           path="/login"
           element={<Login />}

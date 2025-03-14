@@ -12,6 +12,8 @@ import com.c202.user.global.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Override
@@ -65,11 +66,14 @@ public class AuthServiceImpl implements AuthService {
     // 로그인 메소드 - 액세스 토큰과 리프레시 토큰 모두 발급
     @Override
     public TokenDto.TokenResponseDto login(LoginRequestDto request) {
-
         // 삭제된 계정인지 확인
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
+        // 비밀번호 체크 (passwordEncoder.matches() 사용)
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ServiceException.AuthenticationException("잘못된 비밀번호입니다.");
+        }
         if ("Y".equals(user.getIsDeleted())) {
             throw new ServiceException.ResourceNotFoundException("탈퇴한 계정입니다.");
         }
@@ -88,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
     // 로그아웃
     @Override
     @Transactional
-    public void logout(Long userSeq) {
+    public void logout(int userSeq) {
         log.debug("사용자 ID={}의 로그아웃 처리 시작", userSeq);
 
         try {

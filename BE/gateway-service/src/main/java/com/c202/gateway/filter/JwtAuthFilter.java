@@ -32,7 +32,7 @@ public class JwtAuthFilter  extends AbstractGatewayFilterFactory<JwtAuthFilter.C
                 log.info("JWT 유효성 검증 성공");
 
                 // JWT에서 사용자 정보 추출 (예: username, roles)
-                Long userSeq = jwtUtil.getUserSeq(token);
+                int userSeq = jwtUtil.getUserSeq(token);
 
                 log.info("기존 userSeq : {}", userSeq);
                 // 헤더에 사용자 정보 추가
