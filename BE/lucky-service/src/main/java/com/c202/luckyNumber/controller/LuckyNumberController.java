@@ -17,14 +17,11 @@ public class LuckyNumberController {
     @PostMapping
     public ResponseEntity<String> generateLuckyNumber(@RequestHeader("X-User-Seq") int userSeq){
         luckyNumberService.createLuckyNumber(userSeq);
-        return ResponseEntity.ok("생성 완료");
+        return ResponseEntity.ok("생성 완료"); // TODO : Common Response
     }
 
     @GetMapping
     public ResponseEntity<List<String>> getLuckyNumbers(@RequestHeader("X-User-Seq") int userSeq){
-        return ResponseEntity.ok(luckyNumberService.getLuckyNumber(userSeq));
+        return ResponseEntity.ok(luckyNumberService.getLuckyNumber(userSeq)); // TODO : Common Response
     }
-
-    // TODO : 12시마다 삭제 (redis ttl)
-
 }
