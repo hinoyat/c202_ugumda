@@ -6,6 +6,7 @@ const ErrorPage = lazy(() => import('../domains/error/ErrorPage'));
 const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
 const Login = lazy(() => import('../domains/login/pages/Login'));
 const Signup = lazy(() => import('../domains/signup/pages/Signup'));
+const GuestBook = lazy(() => import('../domains/guestbook/GuestBook'));
 const SpaceShip = lazy(() => import('../domains/spaceship/pages/SpaceShip'));
 const PasswordCheck = lazy(
   () => import('../domains/spaceship/pages/PasswordCheck')
@@ -50,6 +51,10 @@ const AppRouter = () => {
           <Route
             path="/dreamsolve"
             element={<DreamSolve />}
+          />
+          <Route
+            path="/test"
+            element={<GuestBook />}
           />
         </Route>
         {/* 로그인 및 회원가입은 Navbar 없이 */}
