@@ -30,11 +30,7 @@ const MainPage = () => {
   const othernickname = '다른 유저 우주일때';
 
   const handleButtonClick = () => {
-    if (isMySpace) {
-      console.log('로그아웃 실행');
-    } else {
-      console.log('구독 취소 실행');
-    }
+    console.log('로그아웃 버튼 클릭됨');
   };
 
   //          일기 미리보기 DiaryPreview 컴포넌트          //
@@ -87,8 +83,8 @@ const MainPage = () => {
         />
       </div>
       메인페이지 입니다.
-      <Universe />
-      <div className="flex flex-col">
+      {/* 주짜니 쓰는 부분  relative z-10 해서 위로 올려둠 */}
+      <div className="flex flex-col relative z-10">
         <button
           onClick={onClickLogin}
           className="text-yellow-500 cursor-pointer">
@@ -132,7 +128,6 @@ const MainPage = () => {
           <GuestbookIcon size={0.5} />
         </div>
       </div>
-      <Universe />
     </div>
   );
 };

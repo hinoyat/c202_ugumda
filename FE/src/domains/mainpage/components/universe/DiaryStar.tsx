@@ -9,6 +9,7 @@ import { extend, useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
+import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 
 // THREE.js 메쉬 및 재질 확장
 extend({
@@ -17,12 +18,17 @@ extend({
   MeshStandardMaterial: THREE.MeshStandardMaterial,
 });
 
+// 타입 정의
 interface DiaryStarProps {
   entry: DiaryEntry; // DiaryEntry 객체를 전달받음
   onClick: (entry: DiaryEntry) => void; // 별 클릭 시 호출되는 함수
+  onHover: (
+    entry: DiaryEntry | null,
+    position: { x: number; y: number } | null
+  ) => void;
 }
 
-const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick }) => {
+const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick, onHover }) => {
   const { x, y, z } = entry.position; // 일기 위치
   const [hovered, setHovered] = useState<boolean>(false); // 마우스 호버 상태
   const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
@@ -48,8 +54,18 @@ const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick }) => {
   });
 
   // 마우스가 별에 올려졌을 때와 벗어났을 때의 핸들러
-  const handlePointerOver = (): void => setHovered(true);
-  const handlePointerOut = (): void => setHovered(false);
+  const handlePointerOver = (event): void => {
+    setHovered(true);
+    // 마우스 포인터 위치 가져오기
+    const x = event.clientX + 20; // 오른쪽으로 20만큼 이동
+    const y = event.clientY + 20; // 아래로 20만큼 이동
+    onHover(entry, { x, y });
+  };
+
+  const handlePointerOut = (): void => {
+    setHovered(false);
+    onHover(null, null);
+  };
 
   return (
     <group position={[x, y, z]}>
@@ -71,23 +87,6 @@ const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick }) => {
           emissiveIntensity={hovered ? 2 : 1}
         />
       </mesh>
-      {/* 호버 시 일기 미리보기 HTML 표시 */}
-      {hovered && (
-        <Html
-          position={[0, entry.size / 2 + 1, 0]}
-          center
-          distanceFactor={10}>
-          <div className="diary-preview">
-            <p className="diary-date">{entry.date.toLocaleDateString()}</p>
-            <p className="diary-content">
-              {/* 일기 내용이 50자 이상일 경우 생략 */}
-              {entry.content.length > 50
-                ? `${entry.content.substring(0, 50)}...`
-                : entry.content}
-            </p>
-          </div>
-        </Html>
-      )}
     </group>
   );
 };

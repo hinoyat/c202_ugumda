@@ -10,6 +10,7 @@ import Controls from './Controls';
 import '../../themes/universe.css';
 import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
+import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
@@ -54,16 +55,51 @@ const Universe: React.FC = () => {
     setCameraDistance((prev) => Math.min(prev + 5, 200));
   };
 
+  //          우주공간 더블 클릭 시 일기 생성          //
+  const handleCanvasDoubleClick = (event: any) => {
+    console.log('일기생성! 위치는 ---> ', event.point);
+    // 여기에 일기 추가 로직 구현
+  };
+
+  //          호버된 일기 항목          //
+  const [hoveredEntry, setHoveredEntry] = useState<DiaryEntry | null>(null);
+
+  //          미리보기를 위해 별의 위치를 2D 좌표로 변환          //
+  const [hoveredPosition, setHoveredPosition] = useState<{
+    x: Number;
+    y: number;
+  } | null>(null);
+
   return (
     <div className="universe-container">
       {/* 3D 우주 공간 */}
       <div
         className="space-scene-container"
-        style={{ width: '100%', height: '100vh' }}>
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100vh',
+          zIndex: 0, // 배경처럼 설정
+        }}>
         <Canvas
           camera={{ position: [0, 0, cameraDistance], fov: 75 }}
           // -----------------------------------------------------------------width: '100vw', height: '100vh' 추가
           style={{ background: 'black', width: '100vw', height: '100vh' }}>
+          {/* ---------------------------- 정확한 위치 파악을 위해서 넓은 투명 네모 추가 */}
+          <mesh
+            position={[0, 0, -100]}
+            onDoubleClick={(e) => {
+              console.log('일기생성! 위치는 --->', e.point);
+              e.stopPropagation();
+              setShowForm(true); // 일기 작성 모달 표시
+            }}>
+            <planeGeometry args={[2000, 2000]} />
+            <meshBasicMaterial
+              transparent
+              opacity={0}
+            />
+          </mesh>
+
           {/* 우주 배경 - 작은 별들 */}
           <Stars
             radius={300}
@@ -113,6 +149,10 @@ const Universe: React.FC = () => {
                 key={entry.id}
                 entry={entry}
                 onClick={handleSelectEntry}
+                onHover={(entry, position) => {
+                  setHoveredEntry(entry);
+                  setHoveredPosition(position);
+                }}
               />
             ))}
           </group>
@@ -121,7 +161,6 @@ const Universe: React.FC = () => {
 
       {/* 사용자 UI 컨트롤 */}
       <Controls
-        onAddEntry={() => setShowForm(true)}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
       />
@@ -147,6 +186,22 @@ const Universe: React.FC = () => {
             entry={selectedEntry}
             onClose={handleClearSelection}
             onDelete={removeEntry}
+          />
+        </div>
+      )}
+
+      {/* 호버된 일기 미리보기 */}
+      {hoveredEntry && hoveredPosition && (
+        <div
+          className="absolute z-10"
+          style={{
+            left: `${hoveredPosition.x}px`,
+            top: `${hoveredPosition.y}px`,
+          }}>
+          <DiaryPreview
+            title={hoveredEntry.date.toLocaleDateString()}
+            content={hoveredEntry.content}
+            tags={[{ id: '1', name: '일기' }]}
           />
         </div>
       )}
