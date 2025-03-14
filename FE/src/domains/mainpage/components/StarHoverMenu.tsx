@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 //          이미지 import          //
-import hover_delete from '/public/main/hover-delete.svg';
-import hover_diary from '/public/main/hover-diary.svg';
-import hover_edit from '/public/main/hover-edit.svg';
+import hover_delete from '@/assets/main/hover-delete.svg';
+import hover_diary from '@/assets/main/hover-diary.svg';
+import hover_edit from '@/assets/main/hover-edit.svg';
 
 interface StarMenuProps {
   position?: { x: number; y: number };
@@ -18,73 +18,60 @@ const StarHoverMenu = ({
   onDelete,
   onView,
 }: StarMenuProps) => {
-  const [isVisible, setIsVisible] = useState(false);
+  // 별을 클릭해서 메뉴가 나타나기 때문에 isVisible를 true로 시작
+  const [isVisible, setIsVisible] = useState(true);
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const menuContainerRef = useRef<HTMLDivElement>(null);
-  const starRef = useRef<HTMLDivElement>(null);
 
-  // 메뉴 토글 및 마우스 이동 영역 계산을 위한 상태
+  // 메뉴 토글 및 마우스 이동 영영역 계산
   const [safePath, setSafePath] = useState(false);
+
+  // 부모 컴포넌트에서 메뉴를 다시 표시할 수 있도록 prop 추가
+  useEffect(() => {
+    setIsVisible(true);
+  }, [position]); // position이 변경될 때마다 메뉴 다시 표시
 
   // 별에서 메뉴 컨테이너로 마우스가 이동할 수 있는 안전 경로 설정
   useEffect(() => {
-    if (!isVisible) return;
-
     const handleMouseMove = (e: MouseEvent) => {
-      // 별과 메뉴 컨테이너의 위치 정보
-      const starRect = starRef.current?.getBoundingClientRect();
       const menuRect = menuContainerRef.current?.getBoundingClientRect();
+      if (!menuRect) return;
 
-      if (!starRect || !menuRect) return;
-
-      // 마우스가 별이나 메뉴 영역 안에 있는지 확인
-      const isOverStar =
-        e.clientX >= starRect.left &&
-        e.clientX <= starRect.right &&
-        e.clientY >= starRect.top &&
-        e.clientY <= starRect.bottom;
-
-      const isOverMenu =
-        e.clientX >= menuRect.left &&
-        e.clientX <= menuRect.right &&
-        e.clientY >= menuRect.top &&
-        e.clientY <= menuRect.bottom;
-
-      // 별과 메뉴 사이의 안전 경로 (넓은 영역 설정)
-      const safePathArea = {
-        left: starRect.left - 40,
-        right: starRect.left + 60, // starRect.left + 200 - 140 (전체 너비 - right)
-        top: starRect.top - 40,
-        bottom: starRect.top + 20, // starRect.top + 150 - 130 (전체 높이 - bottom)
+      // 메뉴 주변의 안전 영역 정의 (버튼들 포함)
+      const safeArea = {
+        left: menuRect.left - 40,
+        right: menuRect.right - 140,
+        top: menuRect.top - 40,
+        bottom: menuRect.bottom - 110,
       };
 
-      const isInSafePath =
-        e.clientX >= safePathArea.left &&
-        e.clientX <= safePathArea.right &&
-        e.clientY >= safePathArea.top &&
-        e.clientY <= safePathArea.bottom;
+      // 마우스가 안전 영역 안에 있는지 확인
+      const isInSafeArea =
+        e.clientX >= safeArea.left &&
+        e.clientX <= safeArea.right &&
+        e.clientY >= safeArea.top &&
+        e.clientY <= safeArea.bottom;
 
-      // 안전 경로에 있으면 메뉴 유지, 아니면 닫기
-      if (isOverStar || isOverMenu || isInSafePath) {
-        setSafePath(true);
-      } else {
-        setSafePath(false);
+      if (!isInSafeArea) {
         setIsVisible(false);
       }
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    // 메뉴가 보이는 상태일 때만 이벤트 리스너 추가
+    if (isVisible) {
+      document.addEventListener('mousemove', handleMouseMove);
+    }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [isVisible]);
+  }, [isVisible]); // isVisible 상태에 따라 이펙트 재실행
 
   //          버튼위치          //
   const buttonLayout = [
-    { top: '-22px', left: '-32px' }, // 편집 버튼 위치 (좌측)
-    { top: '-35px', left: '-3px' }, // 삭제 버튼 위치 (중앙)
-    { top: '-22px', left: '28px' }, // 일기보기 버튼 위치 (우측)
+    { top: '5px', left: '-40px' }, // 편집 버튼 위치 (좌측)
+    { top: '-10px', left: '-10px' }, // 삭제 버튼 위치 (중앙)
+    { top: '5px', left: '20px' }, // 일기보기 버튼 위치 (우측)
   ];
 
   //          툴팁관련          //
@@ -96,14 +83,6 @@ const StarHoverMenu = ({
 
   return (
     <div className="relative inline-block">
-      {/* 호버할 별 요소 */}
-      <div
-        ref={starRef}
-        className="w-4 h-4 bg-white rounded-full cursor-pointer"
-        onMouseEnter={() => setIsVisible(true)}
-      />
-
-      {/* 호버 시 나타나는 메뉴 */}
       {isVisible && (
         <div
           ref={menuContainerRef}
@@ -116,16 +95,17 @@ const StarHoverMenu = ({
             pointerEvents: 'auto', // 이벤트 캡처 허용
           }}>
           {/* 별과 메뉴 사이 안전 영역 () 확인하려면 background 색상 변경해서 보기*/}
-          <div
+          {/* <div
             className="absolute"
             style={{
               left: '-40px',
               top: '-40px',
               right: '140px',
               bottom: '130px',
-              background: 'rgba(255, 255, 0, 0)',
+              background: 'yellow',
             }}
-          />
+          /> */}
+
           {/* ------------------------툴팁들------------------------ */}
           {/* 툴팁 */}
           {hoveredButton === 'edit' && (

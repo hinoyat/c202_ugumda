@@ -32,6 +32,8 @@
     "forceConsistentCasingInFileNames": true // 파일 이름의 대소문자 일관성 강제
   },
   "include": [
+    "src/**/*", // 'src' 폴더 내의 모든 파일을 포함 (기본적으로 모든 파일을 포함)
+    "src/react-three.d.ts", // 'src/react-three.d.ts' 파일을 명시적으로 포함
     "src/**/*.d.ts", // 'src' 폴더 내에 있는 모든 타입 정의 파일 포함
     "src/**/*.js", // 'src' 폴더 내에 있는 모든 JavaScript 파일 포함
     "src/**/*.jsx", // 'src' 폴더 내에 있는 모든 JSX 파일 포함 (React 파일)
