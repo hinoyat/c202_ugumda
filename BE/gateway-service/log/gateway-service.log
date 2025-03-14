@@ -2916,3 +2916,473 @@ Caused by: java.net.ConnectException: Connection refused: getsockopt
 2025-03-13T20:31:16.224+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
 2025-03-13T20:31:16.230+09:00  INFO 20876 --- [gateway-service] [reactor-http-nio-1] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
 2025-03-13T20:34:29.258+09:00  INFO 20876 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-14T10:30:31.167+09:00  INFO 15204 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Starting GatewayServiceApplication using Java 21.0.6 with PID 15204 (C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service\target\classes started by SSAFY in C:\Users\SSAFY\Desktop\S12P21C202\BE\gateway-service)
+2025-03-14T10:30:31.169+09:00  INFO 15204 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-03-14T10:30:31.745+09:00  INFO 15204 --- [gateway-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=121bddf0-c9ef-3838-b8dc-1b1c5da15813
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-03-14T10:30:32.341+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-03-14T10:30:32.342+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-03-14T10:30:32.342+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-03-14T10:30:32.342+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-03-14T10:30:32.342+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-03-14T10:30:32.520+09:00 DEBUG 15204 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data healthcheckUrl: http://DESKTOP-QFN2D55:80/actuator/health
+2025-03-14T10:30:32.520+09:00 DEBUG 15204 --- [gateway-service] [main] .n.e.m.DefaultManagementMetadataProvider : Constructed eureka meta-data statusPageUrl: http://DESKTOP-QFN2D55:80/actuator/info
+2025-03-14T10:30:32.533+09:00  INFO 15204 --- [gateway-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-03-14T10:30:32.558+09:00  WARN 15204 --- [gateway-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-03-14T10:30:32.605+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-03-14T10:30:32.622+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-03-14T10:30:32.626+09:00  INFO 15204 --- [gateway-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-14T10:30:32.633+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-14T10:30:32.634+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-14T10:30:32.634+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-14T10:30:32.634+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-14T10:30:32.634+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-14T10:30:32.634+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-03-14T10:30:32.634+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-14T10:30:32.979+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-14T10:30:32.980+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-03-14T10:30:32.981+09:00  INFO 15204 --- [gateway-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-03-14T10:30:32.983+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1741915832983 with initial instances count: 0
+2025-03-14T10:30:32.986+09:00  INFO 15204 --- [gateway-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY-SERVICE with eureka with status UP
+2025-03-14T10:30:32.986+09:00  INFO 15204 --- [gateway-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741915832986, current=UP, previous=STARTING]
+2025-03-14T10:30:32.987+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-14T10:30:33.069+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration status: 204
+2025-03-14T10:30:33.116+09:00  INFO 15204 --- [gateway-service] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 80 (http)
+2025-03-14T10:30:33.117+09:00  INFO 15204 --- [gateway-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 80
+2025-03-14T10:30:33.132+09:00  INFO 15204 --- [gateway-service] [main] c.c.gateway.GatewayServiceApplication    : Started GatewayServiceApplication in 2.355 seconds (process running for 3.012)
+2025-03-14T10:31:02.996+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-03-14T10:31:02.996+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-03-14T10:31:02.997+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-03-14T10:31:02.997+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-03-14T10:31:02.997+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-03-14T10:31:02.997+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-03-14T10:31:02.997+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-03-14T10:31:03.023+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-03-14T10:32:37.447+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:32:37.472+09:00 DEBUG 15204 --- [gateway-service] [reactor-http-nio-3] .l.EurekaLoadBalancerClientConfiguration : Setting the value of 'spring.cloud.loadbalancer.zone' to defaultZone
+2025-03-14T10:32:37.930+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:32:41.417+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:32:41.435+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:32:41.437+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:32:41.440+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:32:41.482+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:32:48.633+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:32:48.760+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:32:50.691+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:32:50.693+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:32:50.694+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:32:50.695+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:32:50.716+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:32:54.367+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:32:54.371+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:32:54.372+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:32:54.373+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:32:54.382+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:32:55.303+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:32:55.305+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:32:55.306+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:32:55.307+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:32:55.316+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:32:56.079+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:32:56.081+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:32:56.082+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:32:56.082+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:32:56.091+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:32:58.016+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:32:58.019+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:32:58.022+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:32:58.022+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:32:58.029+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:33:16.561+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:33:16.658+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:33:24.270+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:33:24.346+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:33:32.496+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/logout
+2025-03-14T10:33:32.498+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:33:32.500+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:33:32.500+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:33:32.525+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/logout , 응답코드 : POST
+2025-03-14T10:33:39.645+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/refresh
+2025-03-14T10:33:39.650+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/refresh , 응답코드 : POST
+2025-03-14T10:33:45.170+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:33:45.266+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:33:47.232+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/refresh
+2025-03-14T10:33:47.256+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/refresh , 응답코드 : POST
+2025-03-14T10:33:49.679+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/nickname/test
+2025-03-14T10:33:49.689+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/nickname/test , 응답코드 : GET
+2025-03-14T10:34:08.852+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/register
+2025-03-14T10:34:08.880+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/register , 응답코드 : POST
+2025-03-14T10:34:27.717+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/check-nickname/test
+2025-03-14T10:34:27.729+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/check-nickname/test , 응답코드 : GET
+2025-03-14T10:34:48.965+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/check-username/test
+2025-03-14T10:34:48.972+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/check-username/test , 응답코드 : GET
+2025-03-14T10:34:56.318+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/check-nickname/정현수
+2025-03-14T10:34:56.328+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/check-nickname/%EC%A0%95%ED%98%84%EC%88%98 , 응답코드 : GET
+2025-03-14T10:35:00.293+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/check-nickname/test
+2025-03-14T10:35:00.301+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-3] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/check-nickname/test , 응답코드 : GET
+2025-03-14T10:35:32.645+09:00  INFO 15204 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-14T10:36:46.773+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:36:46.775+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:36:46.775+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:36:46.775+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:36:47.821+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:36:47.824+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:36:47.824+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:36:47.824+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:37:13.746+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:37:13.747+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:37:13.747+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:37:13.747+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:37:30.786+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:37:30.788+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:37:30.789+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:37:30.789+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:37:31.632+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:37:31.636+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:37:31.637+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:37:31.637+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:37:36.246+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:37:36.248+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:37:36.248+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:37:36.248+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:37:39.445+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:37:39.446+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:37:39.447+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:37:39.447+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:38:06.783+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:38:06.872+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:38:09.983+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:38:10.075+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:38:28.430+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:38:28.432+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:38:28.432+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:38:28.432+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:38:29.205+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:38:29.207+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:38:29.207+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:38:29.207+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:38:29.759+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:38:29.761+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:38:29.761+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:38:29.761+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-5] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:40:03.980+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:40:03.982+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:40:03.982+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:40:03.982+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-7] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:40:32.658+09:00  INFO 15204 --- [gateway-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-03-14T10:41:20.740+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:41:20.743+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.util.JwtUtil            : 만료된 JWT 토큰
+2025-03-14T10:41:20.743+09:00  WARN 15204 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.JwtAuthFilter    : 유효하지 않은 토큰 또는 없음
+2025-03-14T10:41:20.743+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : PUT
+2025-03-14T10:41:25.680+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : Request path: /api/auth/login
+2025-03-14T10:41:25.836+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-9] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/auth/login , 응답코드 : POST
+2025-03-14T10:42:51.556+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:42:51.559+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:42:51.561+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:42:51.562+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:42:51.587+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:42:54.101+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:42:54.103+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:42:54.106+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:42:54.106+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:42:54.119+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : GET
+2025-03-14T10:43:02.483+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:43:02.485+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:43:02.486+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:43:02.486+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:43:02.516+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : DELETE
+2025-03-14T10:43:05.162+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : Request path: /api/users/me
+2025-03-14T10:43:05.165+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : JWT 유효성 검증 성공
+2025-03-14T10:43:05.167+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : 기존 userSeq : 1
+2025-03-14T10:43:05.167+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.JwtAuthFilter    : [JWT 필터] userSeq: 1
+2025-03-14T10:43:05.179+09:00  INFO 15204 --- [gateway-service] [reactor-http-nio-11] com.c202.gateway.filter.GlobalFilter     : [글로벌 필터] RESPONSE 응답 >>> IP : /0:0:0:0:0:0:0:1, URI : http://localhost/api/users/me , 응답코드 : DELETE
+2025-03-14T10:43:25.873+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application GATEWAY-SERVICE with eureka with status DOWN
+2025-03-14T10:43:25.873+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1741916605873, current=DOWN, previous=UP]
+2025-03-14T10:43:25.873+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80: registering service...
+2025-03-14T10:43:25.875+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-14T10:43:25.879+09:00  INFO 15204 --- [gateway-service] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-03-14T10:43:25.914+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/} exception=I/O error on POST request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:701)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateEurekaHttpClient.register(RestTemplateEurekaHttpClient.java:87)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.execute(RedirectingEurekaHttpClient.java:91)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59)
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:120)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59)
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
+	at com.netflix.discovery.DiscoveryClient.register(DiscoveryClient.java:828)
+	at com.netflix.discovery.InstanceInfoReplicator.run(InstanceInfoReplicator.java:125)
+	at com.netflix.discovery.InstanceInfoReplicator$2.run(InstanceInfoReplicator.java:105)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:216)
+	at org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:490)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:164)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:174)
+	at org.apache.hc.client5.http.impl.classic.ConnectExec.execute(ConnectExec.java:144)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ProtocolExec.execute(ProtocolExec.java:192)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ContentCompressionExec.execute(ContentCompressionExec.java:150)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.HttpRequestRetryExec.execute(HttpRequestRetryExec.java:113)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.InternalHttpClient.doExecute(InternalHttpClient.java:174)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:87)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:55)
+	at org.apache.hc.client5.http.classic.HttpClient.executeOpen(HttpClient.java:183)
+	at org.springframework.http.client.HttpComponentsClientHttpRequest.executeInternal(HttpComponentsClientHttpRequest.java:99)
+	at org.springframework.http.client.AbstractStreamingClientHttpRequest.executeInternal(AbstractStreamingClientHttpRequest.java:71)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:117)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClientFactory.lambda$restTemplate$3(RestTemplateTransportClientFactory.java:141)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:88)
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:72)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:48)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
+	... 21 more
+
+2025-03-14T10:43:25.914+09:00  WARN 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on POST request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-03-14T10:43:25.944+09:00  INFO 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on POST request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:701)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateEurekaHttpClient.register(RestTemplateEurekaHttpClient.java:87)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.executeOnNewServer(RedirectingEurekaHttpClient.java:121)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.execute(RedirectingEurekaHttpClient.java:80)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59)
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:120)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59)
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
+	at com.netflix.discovery.DiscoveryClient.register(DiscoveryClient.java:828)
+	at com.netflix.discovery.InstanceInfoReplicator.run(InstanceInfoReplicator.java:125)
+	at com.netflix.discovery.InstanceInfoReplicator$2.run(InstanceInfoReplicator.java:105)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:216)
+	at org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:490)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:164)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:174)
+	at org.apache.hc.client5.http.impl.classic.ConnectExec.execute(ConnectExec.java:144)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ProtocolExec.execute(ProtocolExec.java:192)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ContentCompressionExec.execute(ContentCompressionExec.java:150)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.HttpRequestRetryExec.execute(HttpRequestRetryExec.java:113)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.InternalHttpClient.doExecute(InternalHttpClient.java:174)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:87)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:55)
+	at org.apache.hc.client5.http.classic.HttpClient.executeOpen(HttpClient.java:183)
+	at org.springframework.http.client.HttpComponentsClientHttpRequest.executeInternal(HttpComponentsClientHttpRequest.java:99)
+	at org.springframework.http.client.AbstractStreamingClientHttpRequest.executeInternal(AbstractStreamingClientHttpRequest.java:71)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:117)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClientFactory.lambda$restTemplate$3(RestTemplateTransportClientFactory.java:141)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:88)
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:72)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:48)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
+	... 22 more
+
+2025-03-14T10:43:25.944+09:00  WARN 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on POST request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-03-14T10:43:25.944+09:00  WARN 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - registration failed Cannot execute request on any known server
+
+com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.DiscoveryClient.register(DiscoveryClient.java:828) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.InstanceInfoReplicator.run(InstanceInfoReplicator.java:125) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.InstanceInfoReplicator$2.run(InstanceInfoReplicator.java:105) ~[eureka-client-2.0.4.jar:2.0.4]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-14T10:43:25.946+09:00  WARN 15204 --- [gateway-service] [DiscoveryClient-InstanceInfoReplicator-%d] c.n.discovery.InstanceInfoReplicator     : There was a problem with the instance info replicator
+
+com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$1.execute(EurekaHttpClientDecorator.java:59) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.DiscoveryClient.register(DiscoveryClient.java:828) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.InstanceInfoReplicator.run(InstanceInfoReplicator.java:125) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.InstanceInfoReplicator$2.run(InstanceInfoReplicator.java:105) ~[eureka-client-2.0.4.jar:2.0.4]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-14T10:43:27.971+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2025-03-14T10:43:30.984+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2025-03-14T10:43:31.016+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:701)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateEurekaHttpClient.cancel(RestTemplateEurekaHttpClient.java:100)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.executeOnNewServer(RedirectingEurekaHttpClient.java:121)
+	at com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient.execute(RedirectingEurekaHttpClient.java:80)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:120)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74)
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76)
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
+	at com.netflix.discovery.DiscoveryClient.unregister(DiscoveryClient.java:919)
+	at com.netflix.discovery.DiscoveryClient.shutdown(DiscoveryClient.java:900)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeDestroyMethods(InitDestroyAnnotationBeanPostProcessor.java:415)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeDestruction(InitDestroyAnnotationBeanPostProcessor.java:239)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:202)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.run(DisposableBeanAdapter.java:195)
+	at org.springframework.cloud.context.scope.GenericScope$BeanLifecycleWrapper.destroy(GenericScope.java:389)
+	at org.springframework.cloud.context.scope.GenericScope.destroy(GenericScope.java:136)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:735)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:692)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1401)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:651)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1394)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180)
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.doClose(ReactiveWebServerApplicationContext.java:155)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:216)
+	at org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:490)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:164)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.connectEndpoint(InternalExecRuntime.java:174)
+	at org.apache.hc.client5.http.impl.classic.ConnectExec.execute(ConnectExec.java:144)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ProtocolExec.execute(ProtocolExec.java:192)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ContentCompressionExec.execute(ContentCompressionExec.java:150)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.HttpRequestRetryExec.execute(HttpRequestRetryExec.java:113)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.InternalHttpClient.doExecute(InternalHttpClient.java:174)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:87)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:55)
+	at org.apache.hc.client5.http.classic.HttpClient.executeOpen(HttpClient.java:183)
+	at org.springframework.http.client.HttpComponentsClientHttpRequest.executeInternal(HttpComponentsClientHttpRequest.java:99)
+	at org.springframework.http.client.AbstractStreamingClientHttpRequest.executeInternal(AbstractStreamingClientHttpRequest.java:71)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:117)
+	at org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClientFactory.lambda$restTemplate$3(RestTemplateTransportClientFactory.java:141)
+	at org.springframework.http.client.InterceptingClientHttpRequest$InterceptingRequestExecution.execute(InterceptingClientHttpRequest.java:88)
+	at org.springframework.http.client.InterceptingClientHttpRequest.executeInternal(InterceptingClientHttpRequest.java:72)
+	at org.springframework.http.client.AbstractBufferingClientHttpRequest.executeInternal(AbstractBufferingClientHttpRequest.java:48)
+	at org.springframework.http.client.AbstractClientHttpRequest.execute(AbstractClientHttpRequest.java:81)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
+	... 38 more
+
+2025-03-14T10:43:31.017+09:00  WARN 15204 --- [gateway-service] [SpringApplicationShutdownHook] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/GATEWAY-SERVICE/192.168.100.148:80": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-03-14T10:43:31.017+09:00 ERROR 15204 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_GATEWAY-SERVICE/192.168.100.148:80 - de-registration failedCannot execute request on any known server
+
+com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator$2.execute(EurekaHttpClientDecorator.java:74) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.SessionedEurekaHttpClient.execute(SessionedEurekaHttpClient.java:76) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.DiscoveryClient.unregister(DiscoveryClient.java:919) ~[eureka-client-2.0.4.jar:2.0.4]
+	at com.netflix.discovery.DiscoveryClient.shutdown(DiscoveryClient.java:900) ~[eureka-client-2.0.4.jar:2.0.4]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMethod.invoke(InitDestroyAnnotationBeanPostProcessor.java:457) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeDestroyMethods(InitDestroyAnnotationBeanPostProcessor.java:415) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeDestruction(InitDestroyAnnotationBeanPostProcessor.java:239) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:202) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.run(DisposableBeanAdapter.java:195) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.cloud.context.scope.GenericScope$BeanLifecycleWrapper.destroy(GenericScope.java:389) ~[spring-cloud-context-4.2.0.jar:4.2.0]
+	at org.springframework.cloud.context.scope.GenericScope.destroy(GenericScope.java:136) ~[spring-cloud-context-4.2.0.jar:4.2.0]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:735) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:692) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1401) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:651) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1394) ~[spring-beans-6.2.3.jar:6.2.3]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.doClose(ReactiveWebServerApplicationContext.java:155) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.4.3.jar:3.4.3]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.4.3.jar:3.4.3]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2025-03-14T10:43:31.017+09:00  INFO 15204 --- [gateway-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient

@@ -57,7 +57,7 @@ public class AuthController {
     // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
-            @RequestHeader("X-User-Seq") Long userSeq,
+            @RequestHeader("X-User-Seq") int userSeq,
             HttpServletResponse response) {
 
         System.out.println("요청이 들어왔다");

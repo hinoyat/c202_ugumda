@@ -5,9 +5,9 @@ import com.c202.user.user.model.response.UserResponseDto;
 
 public interface UserService {
 
-    UserResponseDto getUserInfo(Long userSeq);
+    UserResponseDto getUserInfo(int userSeq);
 
-    UserResponseDto updateUser(Long userSeq, UpdateUserRequestDto request);
+    UserResponseDto updateUser(int userSeq, UpdateUserRequestDto request);
 
-    void deleteUser(Long userSeq);
+    void deleteUser(int userSeq);
 }

@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
     // 로그아웃
     @Override
     @Transactional
-    public void logout(Long userSeq) {
+    public void logout(int userSeq) {
         log.debug("사용자 ID={}의 로그아웃 처리 시작", userSeq);
 
         try {
