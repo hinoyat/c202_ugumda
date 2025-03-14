@@ -8,6 +8,7 @@ const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
 const Login = lazy(() => import('../domains/login/pages/Login'));
 const Signup = lazy(() => import('../domains/signup/pages/Signup'));
 const GuestBook = lazy(() => import('../domains/guestbook/GuestBook'));
+const DiaryDetail = lazy(() => import('../domains/diary/modals/DiaryDetail'));
 const SpaceShip = lazy(() => import('../domains/spaceship/pages/SpaceShip'));
 const PasswordCheck = lazy(
   () => import('../domains/spaceship/pages/PasswordCheck')
@@ -60,6 +61,10 @@ const AppRouter = () => {
           <Route
             path="/test"
             element={<GuestBook />}
+          />
+          <Route
+            path="/test2"
+            element={<DiaryDetail />}
           />
         </Route>
         {/* 로그인 및 회원가입은 Navbar 없이 */}

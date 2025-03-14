@@ -13,15 +13,16 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
-          filters:
-            - name: JwtAuthFilter
-
-        - id: auth-logout-service
-          uri: lb://user-service
-          predicates:
             - Path=/api/auth/logout
           filters:
             - name: JwtAuthFilter
+
+#        - id: auth-logout-service
+#          uri: lb://user-service
+#          predicates:
+#            - Path=/api/auth/logout
+#          filters:
+#            - name: JwtAuthFilter
 
         - id: auth-service-other
           uri: lb://user-service
@@ -34,10 +35,13 @@ spring:
             - Path=/api/diaries/**
           filters:
             - name: JwtAuthFilter
-#        - id: ex2-serivce
-#          uri: lb://ex2-service
-#          predicates:
-#            - Path=/diaries/**
+
+        - id: lucky-serivce
+          uri: lb://lucky-service
+          predicates:
+            - Path=/api/lucky-numbers/**
+          filters:
+            - name: JwtAuthFilter
 
 server:
   port: 80
