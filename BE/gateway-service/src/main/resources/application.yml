@@ -21,6 +21,13 @@ spring:
           predicates:
             - Path=/api/auth/**
 
+        - id: lucky-serivce
+          uri: lb://lucky-service
+          predicates:
+            - Path=/api/lucky-numbers/**
+          filters:
+            - name: JwtAuthFilter
+
 #        - id: ex2-serivce
 #          uri: lb://ex2-service
 #          predicates:
