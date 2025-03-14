@@ -113,3 +113,16 @@ aws configure
 ![alt text](images/passwordcheck.png)
 
 </details>
+
+<details>
+    <summary>2025-03-13</summary>
+
+# 1. 방명록 모달 완성
+
+![alt text](images/guest_book.png)
+
+# 2. 검색 모달창 제작 중
+
+![alt text](images/search_ing.png)
+
+</details>
