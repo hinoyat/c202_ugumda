@@ -18,7 +18,8 @@ const UserSpaceHeader = ({
       </p>
       <button
         onClick={onButtonClick}
-        className="mt-2 w-[80px] h-[25px] bg-white/50 text-white rounded-[6px] text-xs">
+        className="mt-2 w-[80px] h-[25px] bg-white/50 text-white rounded-[6px] text-xs cursor-pointer hover:bg-white/70 transition-colors">
+        {' '}
         {buttonLabel}
       </button>
     </div>

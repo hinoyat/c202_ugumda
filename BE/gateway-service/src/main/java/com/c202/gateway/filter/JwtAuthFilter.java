@@ -29,19 +29,17 @@ public class JwtAuthFilter  extends AbstractGatewayFilterFactory<JwtAuthFilter.C
             String token = resolveToken(exchange);
 
             if (token != null && jwtUtil.validateToken(token)) {
-                log.info("JWT 유효성 검증 성공");
 
                 // JWT에서 사용자 정보 추출 (예: username, roles)
-                Long userSeq = jwtUtil.getUserSeq(token);
+                int userSeq = jwtUtil.getUserSeq(token);
 
-                log.info("기존 userSeq : {}", userSeq);
                 // 헤더에 사용자 정보 추가
                 ServerWebExchange modifiedExchange = exchange.mutate()
                         .request(builder -> builder
                                 .header("X-User-Seq", String.valueOf(userSeq))  // 사용자 ID 추가
                         )
                         .build();
-                log.info("[JWT 필터] userSeq: {}", userSeq);
+                log.info("[JWT 필터] 유효성 검증 성공 >>> userSeq: {}", userSeq);
                 return chain.filter(modifiedExchange);
             } else {
                 log.warn("유효하지 않은 토큰 또는 없음");

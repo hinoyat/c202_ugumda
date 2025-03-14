@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userSeq;
+    private int userSeq;
 
     @Column(unique = true, nullable = false, length = 50)
     private String username;

@@ -40,6 +40,8 @@ public class AuthController {
 
         TokenDto.TokenResponseDto tokens = authService.login(requestDto);
 
+        System.out.println("로그인 성공 access" + tokens.getAccessToken() + "refresh" + tokens.getRefreshToken());
+
         // 리프레시 토큰을 쿠키에 설정
         jwtTokenProvider.addRefreshTokenToCookie(response, tokens.getRefreshToken());
 
@@ -47,7 +49,7 @@ public class AuthController {
         Map<String, String> tokenResponse = Map.of("accessToken", tokens.getAccessToken());
         
         // 헤더에 토큰 추가
-
+        response.addHeader("Authorization", "Bearer " + tokens.getAccessToken());
 
         return ResponseEntity.ok(ApiResponse.success(tokenResponse, "로그인이 성공했습니다."));
     }
@@ -55,8 +57,10 @@ public class AuthController {
     // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
-            @RequestHeader("X-User-Seq") Long userSeq,
+            @RequestHeader("X-User-Seq") int userSeq,
             HttpServletResponse response) {
+
+        System.out.println("요청이 들어왔다");
 
         authService.logout(userSeq);
 
