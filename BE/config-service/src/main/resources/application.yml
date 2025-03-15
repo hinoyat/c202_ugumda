@@ -1,0 +1,22 @@
+server:
+  port: 8888
+
+spring:
+  # ???? ?? ?? ?? ??
+  profiles:
+    active: native
+
+  application:
+    name: config-service
+
+  cloud:
+    config:
+      server:
+        native:
+          #   configurations ?????? ????
+          search-locations: classpath:/configurations
+
+#logging:
+#  level:
+#    org.springframework.cloud.config: DEBUG
+#    org.springframework.boot: DEBUG

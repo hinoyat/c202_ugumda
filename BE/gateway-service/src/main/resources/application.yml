@@ -2,77 +2,9 @@ spring:
   application:
     name: gateway-service
 
-  # 게이트웨이 설정
+  config:
+    import: configserver:http://localhost:8888
+
   cloud:
-    gateway:
-      default-filters:
-        - GlobalFilter
-
-      routes:
-        - id: user-serivce
-          uri: lb://user-service
-          predicates:
-            - Path=/api/users/**
-            - Path=/api/auth/logout
-          filters:
-            - name: JwtAuthFilter
-
-#        - id: auth-logout-service
-#          uri: lb://user-service
-#          predicates:
-#            - Path=/api/auth/logout
-#          filters:
-#            - name: JwtAuthFilter
-
-        - id: auth-service-other
-          uri: lb://user-service
-          predicates:
-            - Path=/api/auth/**
-
-        - id: diary-serivce
-          uri: lb://diary-service
-          predicates:
-            - Path=/api/diaries/**
-          filters:
-            - name: JwtAuthFilter
-
-        - id: lucky-serivce
-          uri: lb://lucky-service
-          predicates:
-            - Path=/api/lucky-numbers/**
-          filters:
-            - name: JwtAuthFilter
-
-server:
-  port: 80
-
-logging:
-  charset:
-    console: 'UTF-8'
-    file: 'UTF-8'
-
-  file:
-    name: ./log/${spring.application.name}.log
-
-  level:
-    com.netflix.eureka: DEBUG
-    org.springframework.cloud.netflix.eureka: DEBUG
-
-
-jwt:
-  secret: yourVerySecretKeyHereItShouldBeAtLeast32CharactersLong
-  access-token-validity-in-ms: 3600000
-  refresh-token-validity-in-ms: 2592000000
-  token-prefix: Bearer
-  header-string: Authorization
-
-eureka:
-  instance:
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-
-  client:
-    service-url:
-      register-with-eureka: true
-      fetch-registry: true
-      service-url:
-        defaultZone: "http://localhost:8761/eureka/" # 유레카 서버 주소
+    config:
+      fail-fast: true   # Config 서버 연결 실패시 애플리케이션  시작 중단
