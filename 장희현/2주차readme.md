@@ -11,7 +11,7 @@
 
 <details>
 <summary><b>2025-03-12</b></summary>
-[리액트 아이콘] https://react-icons.github.io/react-icons/search/#q=TRASH
+[리액트 아이콘] (https://react-icons.github.io/react-icons/search/#q=TRASH)
 이 사이트를 이용하면 리액트에서 제공하는 아이콘을 바로 import해서 쓸 수 있다.
 피그마에서 따로 svg 파일 다운받을 필요가 없어서 편할 것 같다.
 
