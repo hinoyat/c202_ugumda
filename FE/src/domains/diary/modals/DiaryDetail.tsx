@@ -7,6 +7,7 @@ import DetailTags from '../components/details/DetailTags';
 import DetailLike from '../components/details/DetailLike';
 import DetailButtons from '../components/details/DetailButtons';
 import DiaryComponent from './DiaryComponent'; // 수정 모달용 컴포넌트 import
+import loginVideo from "@/assets/video/loginVideo.mp4"
 
 import '../../search/styles/DiarySearch.css';
 
@@ -18,7 +19,7 @@ const DiaryDetail = () => {
     id: 1,
     title: '현호공쥬와 세계최강귀요미왕자의 결혼식',
     created_at: '2025-03-14',
-    dream_video: '/loginVideo.mp4',
+    dream_video: `${loginVideo}`,
     content:
       'fdsfasdfjhsakfhjksdhfjkhsdjkfhnjksadfjkshdnfjkhsdjkfhsadjkfhjdskfhjksadhjkdsahjksdhfkjslahfjksdhfjksafhsdaj',
     tags: ['행복', '결혼', '경사'],
