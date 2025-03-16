@@ -26,14 +26,14 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit }) => {
   return (
     <div className="flex w-full flex-col gap-3">
       <button 
-        className="bg-[#545454] hover:bg-cyan-400 text-white rounded cursor-pointer h-10"
+        className="bg-[#545454] hover:bg-cyan-400 text-white rounded cursor-pointer h-10 text-lg font-bold"
         onClick={handleEditClick}
       >
         수정하기
       </button>
 
       <button 
-        className="bg-[rgba(255,255,255,0.7)] hover:bg-indigo-700 text-black rounded cursor-pointer h-10"
+        className="bg-[rgba(255,255,255,0.7)] hover:bg-indigo-700 text-black rounded cursor-pointer h-10 text-lg font-bold"
         onClick={handleDreamInterpretation}
       >
         꿈 해몽 하러가기

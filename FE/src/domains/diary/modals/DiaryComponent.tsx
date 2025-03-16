@@ -5,6 +5,8 @@ import DiaryInput from '../components/create_edit/DiaryInput';
 import DiaryTags from '../components/create_edit/DiaryTags';
 import DiaryDisclose from '../components/create_edit/DiaryDisclose';
 import DiaryCreateButton from '../components/create_edit/DiaryCreateButton';
+import DetailTags from '../components/details/DetailTags';
+import MainPage from '@/domains/mainpage/pages/MainPage';
 
 interface DiaryData {
   id?: number;
@@ -131,19 +133,10 @@ const DiaryComponent: React.FC<DiaryProps> = ({
   const Count = 3; // 동영상 생성 가능 횟수
 
   return (
-    <div className="w-screen h-screen relative">
-      <div 
-        className="absolute inset-0 backdrop-blur-sm bg-black opacity-70" 
-        onClick={handleClose}
-      ></div>
-      {/*모달 시작하는 부분 - DiaryDetail과 동일한 스타일 적용 */}
-      <div 
-        className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[45%] h-[87%] modal-back-color p-1 z-50"
-        onClick={stopPropagation}
-      >
-        {/*모달 내용*/}
-        <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
-          {/*모달 컴포넌트 모아둘 공간 */}
+    <div className="absolute inset-0">
+      {isEditing ? (
+        // 수정 모드일 때는 위치 지정 스타일 제거
+        <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[rgba(110,110,110,0.47)]" onClick={stopPropagation}>
           <div className="pr-3 flex flex-col gap-5">
             <div>
               <DiaryHeader onClose={handleClose} isEditing={isEditing} />
@@ -159,8 +152,9 @@ const DiaryComponent: React.FC<DiaryProps> = ({
             </div>
 
             <div>
-              <DiaryTags 
-                initialTags={tags}
+              <DetailTags 
+                initialTags={diaryData?.tags || []}
+                isEditing={true}
                 onTagsChange={setTags}
               />
             </div>
@@ -182,7 +176,49 @@ const DiaryComponent: React.FC<DiaryProps> = ({
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        // 생성 모드일 때는 중앙 정렬 위치 지정
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45%] h-[87%] py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[rgba(110,110,110,0.47)]" onClick={stopPropagation}>
+          <div className="pr-3 flex flex-col gap-5">
+            <div>
+              <DiaryHeader onClose={handleClose} isEditing={isEditing} />
+            </div>
+
+            <div>
+              <DiaryInput 
+                title={title}
+                content={content}
+                onTitleChange={setTitle}
+                onContentChange={setContent}
+              />
+            </div>
+
+            <div>
+              <DetailTags 
+                initialTags={diaryData?.tags || []}
+                isEditing={true}
+                onTagsChange={setTags}
+              />
+            </div>
+
+            <div>
+              <DiaryDisclose 
+                isPublic={isPublic}
+                onToggle={setIsPublic}
+              />
+            </div>
+
+            <div>
+              <DiaryCreateButton 
+                onCreate={handleSave} 
+                onCreateVideo={handleCreateVideo} 
+                Count={Count}
+                isEditing={isEditing}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

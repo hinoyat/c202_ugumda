@@ -66,17 +66,7 @@ const DiaryDetail = () => {
       <div className="absolute inset-0 backdrop-blur-sm"></div>
       
       {isEditing ? (
-        <>
-          {console.log("DiaryComponent 렌더링 시작", { 
-            diaryData: {
-              id: diarydata.id,
-              title: diarydata.title,
-              content: diarydata.content,
-              tags: diarydata.tags,
-              dream_video: diarydata.dream_video,
-              isPublic: diarydata.isPublic
-            }
-          })}
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[45%] h-[87%] z-50 bg-[rgba(110,110,110,0.47)]">
           <DiaryComponent 
             onClose={handleCloseEdit} 
             isEditing={true}
@@ -89,7 +79,7 @@ const DiaryDetail = () => {
               isPublic: diarydata.isPublic
             }}
           />
-        </>
+        </div>
       ) : (
         <>
           {console.log("상세보기 모달 렌더링")}
@@ -116,7 +106,7 @@ const DiaryDetail = () => {
                 </div>
 
                 <div className="">
-                  <DetailTags initialTags={diarydata.tags} />
+                  <DetailTags initialTags={diarydata.tags} isEditing={false} />
                 </div>
 
                 <div className="h-10 flex items-center justify-end">
@@ -140,3 +130,4 @@ const DiaryDetail = () => {
 };
 
 export default DiaryDetail;
+
