@@ -116,7 +116,7 @@ const DiaryDetail = () => {
                 </div>
 
                 <div className="">
-                  <DetailTags tags={diarydata.tags} />
+                  <DetailTags initialTags={diarydata.tags} />
                 </div>
 
                 <div className="h-10 flex items-center justify-end">
