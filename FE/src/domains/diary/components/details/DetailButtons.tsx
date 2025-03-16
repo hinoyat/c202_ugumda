@@ -5,10 +5,15 @@ interface DetailButtonsProps {
 }
 
 const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit }) => {
-  // 일기 수정 핸들러
-  const handleEdit = () => {
+  // 버튼 직접 클릭 핸들러
+  const handleEditClick = () => {
+    console.log("수정 버튼 직접 클릭");
     if (onEdit) {
+      console.log("onEdit 함수 존재함, 호출 전");
       onEdit();
+      console.log("onEdit 함수 호출 후");
+    } else {
+      console.log("onEdit이 undefined임");
     }
   };
 
@@ -22,7 +27,7 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit }) => {
     <div className="flex w-full flex-col gap-3">
       <button 
         className="bg-[#545454] hover:bg-cyan-400 text-white rounded cursor-pointer h-10"
-        onClick={handleEdit}
+        onClick={handleEditClick}
       >
         수정하기
       </button>

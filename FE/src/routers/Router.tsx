@@ -60,11 +60,15 @@ const AppRouter = () => {
             element={<DreamSolve />}
           />
           <Route
-            path="/test"
+            path="/diary/create"
             element={<DiaryComponent />}
           />
           <Route
-            path="/test2"
+            path="/diary/edit/:id"
+            element={<DiaryComponent isEditing={true} />}
+          />
+          <Route
+            path="/diary/:id"
             element={<DiaryDetail />}
           />
         </Route>
