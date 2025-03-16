@@ -1,20 +1,25 @@
-/* From Uiverse.io by mobinkakei */
 .btn-lock {
+  /* 부모 컨테이너가 relative이므로 절대 위치가 컨테이너 내부에서 설정됨 */
   position: absolute;
-  top: calc(50% - 32px);
-  left: calc(50% - 32px);
-  display: inline-block;
+  top: 0;
+  left: 0;
+  
+  /* flexbox로 내부의 svg 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   background: #ff5b5b;
-  width: 64px;
-  height: 64px;
-  box-sizing: border-box;
-  padding: 12px 0 0 18px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 .btn-lock svg {
+  width: 36px;
+  height: 30px;
   fill: none;
   transform: translate3d(0, 0, 0);
 }
@@ -78,7 +83,6 @@
     stroke-dasharray: 3;
     stroke-dashoffset: 12;
   }
-
   100% {
     stroke-dasharray: 3;
     stroke-dashoffset: 9;

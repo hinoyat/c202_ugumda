@@ -8,6 +8,7 @@ const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
 const Login = lazy(() => import('../domains/login/pages/Login'));
 const Signup = lazy(() => import('../domains/signup/pages/Signup'));
 const GuestBook = lazy(() => import('../domains/guestbook/GuestBook'));
+const DiaryComponent = lazy(() => import('../domains/diary/modals/DiaryComponent'));
 const DiaryDetail = lazy(() => import('../domains/diary/modals/DiaryDetail'));
 const SpaceShip = lazy(() => import('../domains/spaceship/pages/SpaceShip'));
 const PasswordCheck = lazy(
@@ -60,7 +61,7 @@ const AppRouter = () => {
           />
           <Route
             path="/test"
-            element={<GuestBook />}
+            element={<DiaryComponent />}
           />
           <Route
             path="/test2"
