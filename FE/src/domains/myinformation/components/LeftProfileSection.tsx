@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import profileFrame from "@/assets/images/profileFrame.svg";
 
 interface LeftProfileSectionProps {
   mockdata: {
@@ -16,7 +17,7 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
     <div className="text-white flex-1">
       <div className="w-full h-full flex flex-col gap-10 items-center justify-center pr-20 pb-10">
         <img
-          src="profileFrame.svg"
+          src={profileFrame}
           alt="Profile Frame"
           className="w-40"
         />

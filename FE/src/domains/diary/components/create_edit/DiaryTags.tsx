@@ -1,4 +1,5 @@
 import React, { useState, FC, ChangeEvent, KeyboardEvent, useRef, useEffect } from 'react';
+import history_image from "@/assets/images/diary_history.svg";
 
 interface DiaryTagsProps {
   initialTags?: string[]; // 수정 시 기존 태그 전달
@@ -204,7 +205,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
                   className="cursor-pointer p-2 hover:bg-[rgba(151,151,151,0.24)] flex items-center gap-5"
                   onClick={() => handleOptionClick(option)}
                 >
-                  <img src="/diary_history.svg" alt="" className="w-5" />
+                  <img src={history_image} alt="" className="w-5" />
                   <p>{highlightSearchTerm(option)}</p>
                 </li>
               ))}

@@ -1,11 +1,13 @@
 import SignupForm from "../components/SignupForm";
+import signupVideo from "@/assets/video/signupVideo.mp4"
+import signup_image from "@/assets/images/signup_image.svg"
 
 const Signup =() => {
 
     return (
         <div className="relative h-screen w-screen">
           <video
-            src="signupVideo.mp4"
+            src={signupVideo}
             autoPlay
             loop
             muted
@@ -17,7 +19,7 @@ const Signup =() => {
             
             {/* 왼쪽 이미지 */}
             <div className="h-[75vh]">
-              <img src="signupImage.png" alt="loginImage" className="object-contain h-full rounded" />
+              <img src={signup_image} alt="loginImage" className="object-contain h-full rounded" />
             </div>
 
             <SignupForm/>

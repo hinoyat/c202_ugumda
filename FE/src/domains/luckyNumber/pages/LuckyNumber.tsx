@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style/LuckyNumber.css';
+import space_bg from "@/assets/images/space_bg.svg"
 
 const LuckyNumber = () => {
   const [visibleStars, setVisibleStars] = useState<number[]>([]);
@@ -87,9 +88,9 @@ const LuckyNumber = () => {
     <div className="w-screen h-screen relative galmuri-font">
       {/* 배경 이미지 */}
       <img
-        src="space.png"
+        src={space_bg}
         alt="space background"
-        className="w-full h-full"
+        className="w-full h-full object-cover"
       />
 
       <div className="absolute top-3 right-4 text-2xl text-white">

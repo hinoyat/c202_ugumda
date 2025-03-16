@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import { GrPowerCycle } from 'react-icons/gr';
+import exampleProfile from "@/assets/images/exampleProfile.svg";
 
 const SignupForm = () => {
   const nav = useNavigate();
@@ -38,9 +39,9 @@ const SignupForm = () => {
           {/* 이미지와 버튼을 감싸는 컨테이너를 relative로 설정 */}
           <div className="relative w-[60px] h-[60px]">
             <img
-              src="defaultProfile.png"
+              src={exampleProfile}
               alt=""
-              className="w-full h-full object-cover rounded-full"
+              className="w-full h-full object-cover rounded-full bg-purple-400"
             />
             <button className="absolute top-8 left-9 text-[25px] bg- px-1 py-0.5 rounded ">
               <GrPowerCycle className="text-white bg-purple-950 rounded-4xl cursor-pointer border border-white p-0.5 hover:bg-purple-800" />
