@@ -16,6 +16,8 @@ const DreamSolve: React.FC = () => {
         alt="꿈해몽 배경 사진"
         className="w-full h-full object-cover"
       />
+
+      {/* 닫기버튼 */}
       <div className="absolute top-3 right-3 text-2xl text-white">
         <button
           onClick={onClickHome}

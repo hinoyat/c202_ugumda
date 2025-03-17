@@ -40,7 +40,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-start bg-black text-white relative w-screen h-screen overflow-hidden">
+    <div className="flex flex-col items-start text-white relative w-screen h-screen overflow-hidden">
       {/* 우주영역 */}
       <Universe />
 
@@ -91,12 +91,12 @@ const MainPage = () => {
       </div>
 
       {/* 블랙홀 - 다른 사람의 우주로 가기 */}
-      <div className="absolute top-0 right-0">
+      <div className="absolute top-0 right-5">
         <Blackhole />
       </div>
 
       {/* 방명록 */}
-      <div className="absolute bottom-0 left-0 mb-5 ml-5 z-10">
+      <div className="absolute bottom-0 left-5 mb-10 ml-5 z-10">
         <div onClick={onClickGuestBookModal}>
           <GuestbookIcon size={0.5} />
         </div>

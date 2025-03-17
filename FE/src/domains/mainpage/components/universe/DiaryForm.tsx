@@ -1,4 +1,4 @@
-// 일기 작성 폼
+// 일기 작성 폼 - 삭제예정
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 

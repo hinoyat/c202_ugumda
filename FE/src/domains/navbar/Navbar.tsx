@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 flex w-fit left-1/2 transform -translate-x-1/2 text-3xl text-gray-400 opacity-40 items-center justify-center gap-15 p-3 bg-transparent z-50">
+      <nav className="fixed top-0 flex w-fit left-1/2 transform -translate-x-1/2 text-2xl text-gray-400 opacity-40 items-center justify-center gap-15 p-6 bg-transparent z-50">
         {/* home */}
         <Link
           to="/"
@@ -28,15 +28,15 @@ const Navbar = () => {
         <Link
           to="/spaceship"
           className="hover:text-white">
-          <BsFillRocketTakeoffFill />
+          <BsFillRocketTakeoffFill className="w-5 h-5" />
         </Link>
         {/* search (클릭하면 모달 열림) */}
         <VscSearch
           onClick={openModal}
-          className="hover:text-white cursor-pointer"
+          className="hover:text-white cursor-pointer w-5 h-5"
         />
         {/* bell */}
-        <FaRegBell className="hover:text-white cursor-pointer" />
+        <FaRegBell className="hover:text-white cursor-pointer w-5 h-5" />
       </nav>
 
       {/* SearchModal 컴포넌트 */}

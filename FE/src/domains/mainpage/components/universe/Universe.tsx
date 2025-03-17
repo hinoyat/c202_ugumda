@@ -2,15 +2,15 @@
 
 import React, { useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Stars, OrbitControls } from '@react-three/drei';
-import DiaryStar from './DiaryStar';
-import DiaryForm from './DiaryForm';
-import DiaryDetail from './DiaryDetail';
+import { OrbitControls } from '@react-three/drei';
 import '../../themes/universe.css';
 import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
+import StarField from '@/domains/mainpage/components/universe/StarField';
+import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
+import DiaryForm from '@/domains/mainpage/components/universe/DiaryForm';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
@@ -59,7 +59,7 @@ const Universe: React.FC = () => {
   //          우주공간 더블 클릭 시 일기 생성          //
   const handleCanvasDoubleClick = (event: any) => {
     console.log('일기생성! 위치는 ---> ', event.point);
-    // 여기에 일기 추가 로직 구현
+    // 여기에 일기 추가 로직 구현 (임시로 공간에 더블 클릭 시 별 생성되게 해 둠)
   };
 
   //          호버된 일기 항목          //
@@ -95,9 +95,12 @@ const Universe: React.FC = () => {
           zIndex: 0, // 배경처럼 설정
         }}>
         <Canvas
-          camera={{ position: [0, 0, cameraDistance], fov: 75 }}
-          // -----------------------------------------------------------------width: '100vw', height: '100vh' 추가
-          style={{ background: 'black', width: '100vw', height: '100vh' }}>
+          camera={{ position: [0, 0, cameraDistance], fov: 90 }}
+          style={{
+            background: 'black',
+            width: '100vw',
+            height: '100vh',
+          }}>
           {/* ---------------------------- 정확한 위치 파악을 위해서 넓은 투명 네모 추가 */}
           <mesh
             position={[0, 0, -100]}
@@ -113,23 +116,8 @@ const Universe: React.FC = () => {
             />
           </mesh>
 
-          {/* 우주 배경 - 작은 별들 */}
-          <Stars
-            radius={300}
-            depth={100}
-            count={5000}
-            factor={4}
-            saturation={0.5}
-          />
-
-          {/* 은하수 느낌의 더 밝은 별들 */}
-          <Stars
-            radius={150}
-            depth={50}
-            count={1000}
-            factor={6}
-            saturation={1}
-          />
+          {/* 별 배경 컴포넌트 */}
+          <StarField />
 
           {/* 카메라 컨트롤 */}
           <OrbitControls

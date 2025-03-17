@@ -1,4 +1,4 @@
-// 일기 상세 보기
+// 일기 상세 보기 - 삭제예정
 
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
 import React from 'react';
