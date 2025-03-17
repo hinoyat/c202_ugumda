@@ -9,7 +9,7 @@ spring:
         - GlobalFilter
 
       routes:
-        - id: user-serivce
+        - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
@@ -29,14 +29,14 @@ spring:
           predicates:
             - Path=/api/auth/**
 
-        - id: diary-serivce
+        - id: diary-service
           uri: lb://diary-service
           predicates:
             - Path=/api/diaries/**
           filters:
             - name: JwtAuthFilter
 
-        - id: lucky-serivce
+        - id: lucky-service
           uri: lb://lucky-service
           predicates:
             - Path=/api/lucky-numbers/**
