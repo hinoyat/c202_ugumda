@@ -25,7 +25,6 @@ class DiaryEntry {
 
   // UI 관련 추가 속성
   position: Position;
-  color: string;
   tags: string[];
   size: number; // 별의 크기 추가
 
@@ -76,9 +75,6 @@ class DiaryEntry {
 
     // 별 크기 설정 (기본값: 1)
     this.size = params.size || 1;
-
-    // 색상 설정 - 새로 추가하는 데이터는 빨간색으로 표시
-    this.color = params.color || '#FF0000'; // 빨간색 기본값
   }
 
   // 구 표면 위의 랜덤 위치 생성 정적 메서드
@@ -97,12 +93,6 @@ class DiaryEntry {
     const z = radius * Math.cos(phi);
 
     return { x, y, z };
-  }
-
-  // 별 색상 - 고정 색상 반환
-  static getRandomColor(): string {
-    // 랜덤 색상 대신 고정 색상 사용
-    return '#00FF00'; // 초록색 고정
   }
 
   // 일기를 삭제 상태로 표시
@@ -132,7 +122,6 @@ class DiaryEntry {
     if (params.is_public !== undefined) this.is_public = params.is_public;
     if (params.tags !== undefined) this.tags = params.tags;
     if (params.size !== undefined) this.size = params.size;
-    if (params.color !== undefined) this.color = params.color;
 
     // 수정 시간 업데이트
     const now = new Date();
@@ -174,14 +163,6 @@ class DiaryEntry {
     entry.updated_at = dummyData.updated_at || entry.updated_at;
     entry.deleted_at = dummyData.deleted_at || entry.deleted_at;
     entry.is_deleted = dummyData.is_deleted || entry.is_deleted;
-
-    // 태그가 있으면 설정
-    if (dummyData.tags) {
-      entry.tags = dummyData.tags;
-    }
-
-    // 목데이터는 항상 초록색으로 표시
-    entry.color = '#00FF00';
 
     return entry;
   }
