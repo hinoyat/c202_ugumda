@@ -1,3 +1,4 @@
+// 일기 미리보기 컴포넌트
 import React from 'react';
 
 interface Tag {

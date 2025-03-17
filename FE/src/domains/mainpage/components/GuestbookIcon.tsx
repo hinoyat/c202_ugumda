@@ -1,3 +1,5 @@
+// 방명록 아이콘? 버튼? 컴포넌트. 태양같이 생긴거
+
 import React from 'react';
 import '../themes/GuestbookIcon.css';
 
