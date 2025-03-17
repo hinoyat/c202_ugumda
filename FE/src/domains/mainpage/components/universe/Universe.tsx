@@ -159,6 +159,9 @@ const Universe: React.FC = () => {
     // 여기에 일기 추가 로직 구현 (임시로 공간에 더블 클릭 시 별 생성되게 해 둠)
   };
 
+  // 새로 생성된 일기의 ID를 저장하는 상태 추가
+  const [newStarId, setNewStarId] = useState<number | null>(null);
+
   //          호버된 일기 항목          //
   const [hoveredEntry, setHoveredEntry] = useState<DiaryEntry | null>(null);
 
@@ -275,6 +278,7 @@ const Universe: React.FC = () => {
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
+                isNew={entry.diary_seq === newStarId} // 새 별 여부 전달
               />
             ))}
           </group>
@@ -298,10 +302,13 @@ const Universe: React.FC = () => {
               // 새 일기 추가
               setEntries((prev) => [...prev, newEntry]);
 
-              // 새 일기 위치로 카메라 이동
+              // 새 별 ID 설정 (하이라이트 효과를 위해)
+              setNewStarId(newEntry.diary_seq);
+
+              // 일정 시간 후 하이라이트 효과 제거
               setTimeout(() => {
-                moveCameraToNewEntry(newEntry);
-              }, 500); // 약간의 딜레이를 두고 카메라 이동
+                setNewStarId(null);
+              }, 10000); // 10초 동안 하이라이트 효과 유지
             }
           }}
           isEditing={false}

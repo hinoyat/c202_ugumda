@@ -8,7 +8,7 @@
 // 호버했을 때 위치를 universe로 넘겨서 2D위치에 맞게 미리보기 띄우는걸로 추후 수정해봐야겠음
 // 나중에 작성 날짜에 따라서 별의 수명주기에 맞게 별 색상을 표현해도 재밌을 것 같음
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { extend, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
@@ -29,19 +29,53 @@ interface DiaryStarProps {
     entry: DiaryEntry | null,
     position: { x: number; y: number } | null
   ) => void;
+  isNew?: boolean; // 새로 생성된 별인지 여부
 }
 
-const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick, onHover }) => {
+const DiaryStar: React.FC<DiaryStarProps> = ({
+  entry,
+  onClick,
+  onHover,
+  isNew,
+}) => {
   const { x, y, z } = entry.position; // 일기 위치
   const [hovered, setHovered] = useState<boolean>(false); // 마우스 호버 상태
   const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
+
+  // 새 별을 위한 상태 추가
+  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
+
+  // 새 별의 경우 특별한 애니메이션 효과 적용
+  useEffect(() => {
+    if (isNew) {
+      // 10초 동안 깜빡임 효과
+      const startTime = Date.now();
+      const duration = 20000; // 10000 = 10초동안 반짝임!
+
+      const animateNewStar = () => {
+        const elapsed = Date.now() - startTime;
+        if (elapsed < duration) {
+          // 깜빡임 효과 (사인 파동)
+          const intensity = 5 + 3 * Math.sin(elapsed / 300);
+          setHighlightIntensity(intensity);
+          requestAnimationFrame(animateNewStar);
+        } else {
+          // 10초 후 일반 별로 변환
+          setHighlightIntensity(3);
+        }
+      };
+
+      const animationFrame = requestAnimationFrame(animateNewStar);
+      return () => cancelAnimationFrame(animationFrame);
+    }
+  }, [isNew]);
 
   // 매 프레임마다 실행되는 애니메이션 로직
   useFrame((state) => {
     if (meshRef.current) {
       // 별의 확대/축소 효과 (펄스 애니메이션)
-      const pulseFactor = 0.05;
-      const pulseSpeed = 1.5;
+      const pulseFactor = isNew ? 0.1 : 0.05; // 새 별은 더 큰 펄스 효과
+      const pulseSpeed = isNew ? 2 : 1.5; // 새 별은 더 빠른 펄스
       const scale =
         1 + pulseFactor * Math.sin(state.clock.elapsedTime * pulseSpeed);
 
@@ -89,7 +123,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({ entry, onClick, onHover }) => {
         <meshStandardMaterial
           color={entry.color}
           emissive={entry.color}
-          emissiveIntensity={hovered ? 5 : 3}
+          emissiveIntensity={hovered ? 5 : highlightIntensity} // 하이라이트 강도 사용
         />
       </mesh>
     </group>
