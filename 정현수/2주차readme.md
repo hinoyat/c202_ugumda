@@ -308,5 +308,17 @@ public class JwtUtil {
 
 ### 따라서, Spring Security 역할은 여전히 user-service에서 진행하고, Spring security의 filter 역할만 gateway-service로 분리
 
-=> 민감한 정보(token등)를 print 하는 테스트했을 때, dev 브랜치에 올리지 않도록 주의할 것것
+=> 민감한 정보(token등)를 print 하는 테스트했을 때, dev 브랜치에 올리지 않도록 주의할 것
+
+# 2025-03-14 금요일
+1. 공통 response를 위한 response dto 필요
+2. 공통 에러 처리를 위한 custom exception, global exception handler 필요
+3. response dto에는 status, message, data가 들어갈 것
+
+## status
+- 2XX: Success(성공)
+- 3XX: Redirection(리다이렉션)
+- 4XX: Client Error(클라이언트 에러)
+- 5XX: Server Error(서버 에러)
+
 
