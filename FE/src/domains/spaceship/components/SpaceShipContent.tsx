@@ -30,7 +30,7 @@ const SpaceShipContent = () => {
         onClick={onClickHome}>
         <IoClose className="text-white text-4xl" />
       </div>
-      <div className="absolute top-[44%] w-full flex justify-center items-center gap-x-70 z-20">
+      <div className="absolute top-[44%] w-full flex justify-center items-center gap-x-60 z-20">
         <button
           onClick={onClickLucky}
           className="text-white text-3xl font-bold cursor-pointer hover:scale-105 transition-transform"

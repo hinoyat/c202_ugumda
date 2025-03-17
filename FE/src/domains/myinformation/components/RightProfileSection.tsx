@@ -1,6 +1,11 @@
 import '../styles/MyInformationContent.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import close from "@/assets/images/closeEye.svg";
+import open from "@/assets/images/openEye.svg";
+import check from "@/assets/images/pixcelCheck.svg";
+import docs from "@/assets/images/pixcelDoc.svg";
+
 
 interface LeftProfileSectionProps {
   mockdata: {
@@ -51,7 +56,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
           <p className="w-1/4">nickname</p>
           <p className="flex-1">{mockdata.nickname}</p>
           <img
-            src="pixcelcheck.svg"
+            src={check}
             alt="닉네임 확인"
             className="w-6 h-6"
           />
@@ -71,13 +76,13 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
               className="cursor-pointer">
               {showPassword ? (
                 <img
-                  src="closeeye.svg"
+                  src={close}
                   alt="비밀번호 숨기기"
                   className="w-6 h-6"
                 />
               ) : (
                 <img
-                  src="openeye.svg"
+                  src={open}
                   alt="비밀번호 표시"
                   className="w-6 h-6"
                 />
@@ -100,13 +105,13 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
               className="cursor-pointer">
               {showPw_Check ? (
                 <img
-                  src="closeeye.svg"
+                  src={close}
                   alt="비밀번호 숨기기"
                   className="w-6 h-6"
                 />
               ) : (
                 <img
-                  src="openeye.svg"
+                  src={open}
                   alt="비밀번호 표시"
                   className="w-6 h-6"
                 />
@@ -120,7 +125,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
           <p className="w-1/4">birth</p>
           <p className="flex-1">{mockdata.birth}</p>
           <img
-            src="pixceldoc.svg"
+            src={docs}
             alt="생년월일 확인"
             className="w-6 h-6"
           />

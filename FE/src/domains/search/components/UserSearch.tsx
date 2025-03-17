@@ -1,39 +1,41 @@
 import '../styles/DiarySearch.css';
 import UserList from './UserList';
+import exampleProfile from "@/assets/images/exampleProfile.svg"
+
 
 const UserSearch = () => {
   const UserData = [
     {
       id: 1,
-      profile: '/exampleprofile.svg',
+      profile: `${exampleProfile}`,
       nickname: '서린공쥬',
       account: 'PrincessKim1',
       subscribe: true,
     },
     {
       id: 2,
-      profile: '/exampleprofile.svg',
+      profile: `${exampleProfile}`,
       nickname: '채현공쥬',
       account: 'PrincessLim1',
       subscribe: false,
     },
     {
       id: 3,
-      profile: '/exampleprofile.svg',
+      profile: `${exampleProfile}`,
       nickname: '희현공쥬',
       account: 'PrincessJang1',
       subscribe: false,
     },
     {
       id: 4,
-      profile: '/exampleprofile.svg',
+      profile: `${exampleProfile}`,
       nickname: '현수공쥬',
       account: 'PrincessJung1',
       subscribe: true,
     },
     {
       id: 5,
-      profile: '/exampleprofile.svg',
+      profile: `${exampleProfile}`,
       nickname: '킹갓현호공듀',
       account: 'KingGodBestGeneralHinoyatPrincess1',
       subscribe: true,

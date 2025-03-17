@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import LeftDreamSection from '../components/LeftDreamSection';
 import RightDreamSection from '../components/RightDreamSection';
+import dreamSolve_bg from "@/assets/images/dreamSolve_bg.svg"
 
 const DreamSolve: React.FC = () => {
   const nav = useNavigate();
@@ -11,9 +12,9 @@ const DreamSolve: React.FC = () => {
   return (
     <div className="w-screen h-screen relative">
       <img
-        src="dreamsolve_bg.png"
+        src={dreamSolve_bg}
         alt="꿈해몽 배경 사진"
-        className="w-full h-full"
+        className="w-full h-full object-cover"
       />
       <div className="absolute top-3 right-3 text-2xl text-white">
         <button

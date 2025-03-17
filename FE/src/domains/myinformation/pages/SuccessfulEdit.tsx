@@ -1,6 +1,7 @@
 import SpaceShipComponent from '@/domains/spaceship/components/SpaceShipComponent';
 import '../styles/MyInformationContent.css';
 import { useNavigate } from 'react-router-dom';
+import smallFrame from "@/assets/images/smallFrame.svg"
 
 const SuccessfulEdit = () => {
   const nav = useNavigate();
@@ -12,7 +13,7 @@ const SuccessfulEdit = () => {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black opacity-40 z-20"></div>
         <img
-          src="smallframe.svg"
+          src={smallFrame}
           alt=""
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-200 animate-pulse"
         />

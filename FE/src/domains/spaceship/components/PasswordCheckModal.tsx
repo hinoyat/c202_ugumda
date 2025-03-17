@@ -1,6 +1,8 @@
 import { AiOutlineEnter } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
+import passwordFrame from "@/assets/images/passwordFrame.svg";
+import enter from "@/assets/images/enter.svg";
 
 const PasswordCheckModal = () => {
   const glowingTextStyle = {
@@ -35,7 +37,7 @@ const PasswordCheckModal = () => {
       {/* 전체 영역을 덮는 어두운 오버레이 */}
       <div className="absolute inset-0 bg-black opacity-50 z-20"></div>
       <img
-        src="passwordcheck.png"
+        src={passwordFrame}
         alt=""
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-200 animate-pulse"
       />
@@ -55,7 +57,7 @@ const PasswordCheckModal = () => {
             onClick={onClickGoMyInfomation}
             className="cursor-pointer">
             <img
-              src="enter.svg"
+              src={enter}
               alt=""
             />
           </button>

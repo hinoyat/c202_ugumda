@@ -2,6 +2,7 @@ import GuestBookList from './components/GuestBookList';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import MainPage from '../mainpage/pages/MainPage';
+import exampleProfile from "@/assets/images/exampleProfile.svg";
 
 interface MainPageProps {
   onClose: () => void;
@@ -11,7 +12,7 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
     user_id: 1,
     nickname: '어린왕자',
     introduction: '안녕하세요 한줄 소개글 테스트 중입니다.',
-    profile: 'exampleprofile.svg',
+    profile: `${exampleProfile}`
   };
   const nav = useNavigate();
   const onClickHome = () => {

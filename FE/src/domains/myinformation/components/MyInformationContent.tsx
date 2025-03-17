@@ -4,6 +4,9 @@ import '../styles/MyInformationContent.css';
 import LeftProfileSection from './LeftProfileSection';
 import RightProfileSection from './RightProfileSection';
 import { IoClose } from 'react-icons/io5';
+import exampleProfile from "@/assets/images/exampleProfile.svg";
+import information_bg from "@/assets/images/information_bg.svg";
+
 
 const MyInformationContent: React.FC = () => {
   const glowingTextStyle: React.CSSProperties = {
@@ -19,7 +22,7 @@ const MyInformationContent: React.FC = () => {
 
   const mockdata = {
     id: 1,
-    profile: 'exampleprofile.svg',
+    profile: `${exampleProfile}`,
     nickname: 'Test',
     birth: '1999-06-22',
   };
@@ -28,7 +31,7 @@ const MyInformationContent: React.FC = () => {
     <div className="absolute inset-0">
       <div className="absolute inset-0 bg-black opacity-50 z-20"></div>
       <img
-        src="informationframe.png"
+        src={information_bg}
         alt=""
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-320 animate-pulse"
       />

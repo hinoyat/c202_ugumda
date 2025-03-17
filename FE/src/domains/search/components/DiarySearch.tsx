@@ -1,5 +1,6 @@
 import '../styles/DiarySearch.css';
 import DiaryList from './DiaryList';
+import exampleProfile from "@/assets/images/exampleProfile.svg"
 
 const DiarySearch = () => {
   const sampleData = [
@@ -8,7 +9,7 @@ const DiarySearch = () => {
       title: '첫 번째 일기',
       content:
         '오늘은 날씨가 참 좋았다...ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
-      profile: 'exampleprofile.svg',
+      profile: `${exampleProfile}`,
       user: '닉네임1',
       tags: ['#태그1', '#태그2'],
     },
@@ -16,7 +17,7 @@ const DiarySearch = () => {
       id: 2,
       title: '두 번째 일기',
       content: '내용이 조금 길어질 수 있다...',
-      profile: 'exampleprofile.svg',
+      profile: `${exampleProfile}`,
       user: '닉네임2',
       tags: ['#태그3', '#태그4'],
     },
@@ -25,7 +26,7 @@ const DiarySearch = () => {
       title: '세 번째 일기',
       content:
         '내용이 조금 길어질 수 있다...ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇssssssss',
-      profile: 'exampleprofile.svg',
+      profile: `${exampleProfile}`,
       user: '닉네임3',
       tags: ['#태그3', '#태그4', '태그5'],
     },

@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import '../style/TodayFortune.css';
+import card from "@/assets/images/fortune_card.svg"
+import space_bg from "@/assets/images/space_bg.svg"
 
 const TodayFortune = () => {
   const nav = useNavigate();
@@ -33,9 +35,9 @@ const TodayFortune = () => {
   return (
     <div className="w-screen h-screen relative">
       <img
-        src="space.png"
+        src={space_bg}
         alt="space background"
-        className="w-full h-full"
+        className="w-full h-full object-cover"
       />
       <div className="absolute top-3 right-4 text-2xl text-white">
         <button
@@ -49,7 +51,7 @@ const TodayFortune = () => {
         <div
           className={`card-container ${isAnimated ? 'animated' : ''} ${initialAnimationComplete ? 'animation-complete' : ''}`}>
           <img
-            src="card.png"
+            src={card}
             alt="fortune card"
             className="w-80"
           />

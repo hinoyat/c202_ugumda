@@ -1,14 +1,16 @@
 import { useState } from "react";
+import exampleProfile from "@/assets/images/exampleProfile.svg";
+import trash from "@/assets/images/trash.svg";
 
 const GuestBookList = () => {
     const owner = { user_id: 1 };
   
     const mockdata = [
-      { id: 1, user_id: 1, content: "방명록 테스트입니다.룰루랄라", profile: "exampleprofile.svg", nickname: "어린왕자", created_at: "2025-03-13" },
-      { id: 2, user_id: 6, content: "방명록 테스트입니다.룰루랄라1", profile: "exampleprofile.svg", nickname: "꿈여행자2", created_at: "2025-03-13" },
-      { id: 3, user_id: 5, content: "방명록 테스트입니다.룰루랄라12", profile: "exampleprofile.svg", nickname: "꿈여행자3", created_at: "2025-03-13" },
-      { id: 4, user_id: 4, content: "방명록 테스트입니다.룰루랄라123", profile: "exampleprofile.svg", nickname: "꿈여행자4", created_at: "2025-03-13" },
-      { id: 5, user_id: 2, content: "방명록 테스트입니다.룰루랄라1234", profile: "exampleprofile.svg", nickname: "꿈여행자5", created_at: "2025-03-13" },
+      { id: 1, user_id: 1, content: "방명록 테스트입니다.룰루랄라", profile: `${exampleProfile}`, nickname: "어린왕자", created_at: "2025-03-13" },
+      { id: 2, user_id: 6, content: "방명록 테스트입니다.룰루랄라1", profile: `${exampleProfile}`, nickname: "꿈여행자2", created_at: "2025-03-13" },
+      { id: 3, user_id: 5, content: "방명록 테스트입니다.룰루랄라12", profile: `${exampleProfile}`, nickname: "꿈여행자3", created_at: "2025-03-13" },
+      { id: 4, user_id: 4, content: "방명록 테스트입니다.룰루랄라123", profile: `${exampleProfile}`, nickname: "꿈여행자4", created_at: "2025-03-13" },
+      { id: 5, user_id: 2, content: "방명록 테스트입니다.룰루랄라1234", profile:`${exampleProfile}`, nickname: "꿈여행자5", created_at: "2025-03-13" },
     ];
 
     // 페이지네이션 관련 state
@@ -54,7 +56,7 @@ const GuestBookList = () => {
             <div className="flex gap-3">
                 <p className="w-24">{visitor.created_at}</p>
                 <div className="w-8 text-center">
-                {owner.user_id === visitor.user_id ? <img src="trash.svg" className="w-4 h-6 hover:animate-pulse cursor-pointer" /> : ""}
+                {owner.user_id === visitor.user_id ? <img src={trash} className="w-4 h-6 hover:animate-pulse cursor-pointer" /> : ""}
                 </div>
             </div>
           </div>

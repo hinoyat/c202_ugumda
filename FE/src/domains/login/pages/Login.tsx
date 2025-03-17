@@ -1,10 +1,12 @@
 import LoginForm from "../components/LoginForm"
+import loginVideo from "@/assets/video/loginVideo.mp4"
+import login_image from "@/assets/images/login_image.svg";
 
 const Login = () => {
   return (
     <div className="relative h-screen w-screen">
       <video
-        src="loginVideo.mp4"
+        src={loginVideo}
         autoPlay
         loop
         muted
@@ -18,7 +20,7 @@ const Login = () => {
 
         {/* 오른쪽 이미지 */}
         <div className="h-[75vh]">
-          <img src="loginImage.png" alt="loginImage" className="object-contain h-full rounded" />
+          <img src={login_image} alt="loginImage" className="object-contain h-full rounded" />
         </div>
       </div>
     </div>
