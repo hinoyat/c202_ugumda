@@ -16,6 +16,11 @@ const StarField = () => {
   // 각 레이어의 머티리얼 참조
   const materialRefs = useRef<THREE.PointsMaterial[]>([]);
 
+  // 별 모양을 동그랗게
+  const starTexture = new THREE.TextureLoader().load(
+    'https://threejs.org/examples/textures/sprites/circle.png'
+  );
+
   // 프레임마다 실행되는 애니메이션 로직
   useFrame((state) => {
     const time = state.clock.elapsedTime;
@@ -50,10 +55,12 @@ const StarField = () => {
               if (ref) materialRefs.current[index] = ref;
             }}
             color="white"
-            size={0.5}
+            size={3}
             sizeAttenuation
             transparent
             opacity={0.8}
+            map={starTexture}
+            depthWrite={false}
           />
         </points>
       ))}
