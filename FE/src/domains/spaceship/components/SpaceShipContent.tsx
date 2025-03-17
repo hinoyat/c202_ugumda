@@ -42,7 +42,7 @@ const SpaceShipContent = () => {
         {/* 꿈해몽 하기 버튼 */}
         <button
           onClick={onClickDream}
-          className="text-white text-2xl font-bold cursor-pointer hover:scale-105 transition-transform neon-text">
+          className="relative top-[-20px] text-white text-2xl font-bold cursor-pointer hover:scale-105 transition-transform neon-text">
           꿈해몽 하기
         </button>
 

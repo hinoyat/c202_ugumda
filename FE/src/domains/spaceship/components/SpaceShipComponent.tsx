@@ -13,7 +13,8 @@ const SpaceShipComponent = ({ children }: SpaceShipComponentProps) => {
       <img
         src={spaceShip_bg}
         alt=""
-        className="absolute top-0 left-0 w-full h-full z-10 opacity-75"
+        // className="absolute top-0 left-0 w-full h-full z-10 opacity-75"
+        className="object-cover w-full h-full absolute left-0 top-0 z-10 opacity-75" // object-cover 사진이 잘리지 않게 함
       />
       {children}
     </div>
