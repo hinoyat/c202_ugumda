@@ -126,3 +126,26 @@ aws configure
 ![alt text](images/search_ing.png)
 
 </details>
+
+<details>
+    <summary>2025-03-14</summary>
+# 1. 일기 작성, 수정, 조회 모달을 생성하였습니다.
+
+## 일기 생성
+
+![alt text](images/diary-create.png)
+
+## 일기 상세 조회
+
+![alt text](images/diary-detail.png)
+
+## 일기 수정
+
+![alt text](images/diary-edit.png)
+![alt text](images/diary-edit-full.png)
+
+## 일기 태그
+
+![alt text](images/tag-option.png)
+
+</details>

@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
+  <!-- Background -->
+  <rect x="10" y="10" width="980" height="680" fill="#f8f9fa" stroke="#343a40" stroke-width="2" rx="10" />
+  
+  <!-- Title -->
+  <text x="500" y="50" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" font-weight="bold">마이크로서비스 아키텍처 (MSA)</text>
+  
+  <!-- Kubernetes Cluster Container -->
+  <rect x="30" y="80" width="940" height="580" fill="#e9ecef" stroke="#495057" stroke-width="2" stroke-dasharray="5,5" rx="10" />
+  <text x="500" y="110" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">Kubernetes Cluster (EC2)</text>
+  
+  <!-- Ingress Controller -->
+  <rect x="50" y="140" width="900" height="70" fill="#dee2e6" stroke="#495057" stroke-width="2" rx="5" />
+  <text x="500" y="180" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" font-weight="bold">Nginx Ingress Controller</text>
+  
+  <!-- MSA Services Container -->
+  <rect x="50" y="230" width="900" height="400" fill="#ffffff" stroke="#6c757d" stroke-width="2" rx="5" />
+  
+  <!-- Config Service -->
+  <rect x="80" y="260" width="180" height="80" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" rx="5" />
+  <text x="170" y="305" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Config Service</text>
+  
+  <!-- Eureka Service -->
+  <rect x="80" y="360" width="180" height="80" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="5" />
+  <text x="170" y="405" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Eureka Service</text>
+  
+  <!-- Gateway Service -->
+  <rect x="80" y="460" width="180" height="80" fill="#f8d7da" stroke="#dc3545" stroke-width="2" rx="5" />
+  <text x="170" y="505" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Gateway Service</text>
+  
+  <!-- Microservices Group -->
+  <rect x="320" y="260" width="600" height="280" fill="#f1f3f5" stroke="#adb5bd" stroke-width="2" rx="5" />
+  <text x="620" y="290" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Microservices</text>
+  
+  <!-- User Service -->
+  <rect x="350" y="320" width="160" height="70" fill="#fff3cd" stroke="#ffc107" stroke-width="2" rx="5" />
+  <text x="430" y="365" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">User Service</text>
+  
+  <!-- Diary Service -->
+  <rect x="540" y="320" width="160" height="70" fill="#e2e3e5" stroke="#6c757d" stroke-width="2" rx="5" />
+  <text x="620" y="365" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Diary Service</text>
+  
+  <!-- Lucky Service -->
+  <rect x="730" y="320" width="160" height="70" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="5" />
+  <text x="810" y="365" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Lucky Service</text>
+  
+  <!-- Frontend Service -->
+  <rect x="540" y="420" width="160" height="70" fill="#cff4fc" stroke="#0dcaf0" stroke-width="2" rx="5" />
+  <text x="620" y="465" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Frontend Service</text>
+  
+  <!-- External User -->
+  <circle cx="500" cy="40" r="15" fill="#ced4da" stroke="#495057" stroke-width="2" />
+  <circle cx="500" cy="30" r="5" fill="#495057" />
+  <path d="M500 45 L500 60 M490 50 L510 50 M500 60 L490 70 M500 60 L510 70" stroke="#495057" stroke-width="2" fill="none" />
+  
+  <!-- Connection Lines -->
+  <!-- User to Ingress -->
+  <line x1="500" y1="75" x2="500" y2="140" stroke="#495057" stroke-width="2" />
+  <polygon points="500,140 495,130 505,130" fill="#495057" />
+  
+  <!-- Ingress to Gateway -->
+  <line x1="170" y1="210" x2="170" y2="460" stroke="#dc3545" stroke-width="2" />
+  <polygon points="170,460 165,450 175,450" fill="#dc3545" />
+  
+  <!-- Ingress to Frontend -->
+  <line x1="620" y1="210" x2="620" y2="420" stroke="#0dcaf0" stroke-width="2" />
+  <polygon points="620,420 615,410 625,410" fill="#0dcaf0" />
+  
+  <!-- Gateway to Microservices -->
+  <line x1="260" y1="500" x2="350" y2="355" stroke="#dc3545" stroke-width="2" />
+  <polygon points="350,355 339,356 345,366" fill="#dc3545" />
+  
+  <line x1="260" y1="500" x2="540" y2="355" stroke="#dc3545" stroke-width="2" />
+  <polygon points="540,355 529,356 535,366" fill="#dc3545" />
+  
+  <line x1="260" y1="500" x2="730" y2="355" stroke="#dc3545" stroke-width="2" />
+  <polygon points="730,355 719,356 725,366" fill="#dc3545" />
+  
+  <!-- Config Service Connections -->
+  <line x1="170" y1="340" x2="170" y2="360" stroke="#0d6efd" stroke-width="2" />
+  <polygon points="170,360 165,350 175,350" fill="#0d6efd" />
+  
+  <line x1="170" y1="340" x2="350" y2="355" stroke="#0d6efd" stroke-width="2" stroke-dasharray="5,3" />
+  <polygon points="350,355 339,356 345,366" fill="#0d6efd" />
+  
+  <line x1="170" y1="340" x2="540" y2="355" stroke="#0d6efd" stroke-width="2" stroke-dasharray="5,3" />
+  <polygon points="540,355 529,356 535,366" fill="#0d6efd" />
+  
+  <line x1="170" y1="340" x2="730" y2="355" stroke="#0d6efd" stroke-width="2" stroke-dasharray="5,3" />
+  <polygon points="730,355 719,356 725,366" fill="#0d6efd" />
+  
+  <!-- Eureka Service Connections -->
+  <line x1="170" y1="440" x2="170" y2="460" stroke="#198754" stroke-width="2" />
+  <polygon points="170,460 165,450 175,450" fill="#198754" />
+  
+  <line x1="260" y1="400" x2="350" y2="355" stroke="#198754" stroke-width="2" stroke-dasharray="5,3" />
+  <polygon points="350,355 339,356 345,366" fill="#198754" />
+  
+  <line x1="260" y1="400" x2="540" y2="355" stroke="#198754" stroke-width="2" stroke-dasharray="5,3" />
+  <polygon points="540,355 529,356 535,366" fill="#198754" />
+  
+  <line x1="260" y1="400" x2="730" y2="355" stroke="#198754" stroke-width="2" stroke-dasharray="5,3" />
+  <polygon points="730,355 719,356 725,366" fill="#198754" />
+  
+  <!-- Legend -->
+  <rect x="50" y="580" width="900" height="70" fill="#ffffff" stroke="#6c757d" stroke-width="1" rx="5" />
+  <text x="80" y="605" font-family="Arial, sans-serif" font-size="14" font-weight="bold">범례:</text>
+  
+  <line x1="80" y1="625" x2="110" y2="625" stroke="#495057" stroke-width="2" />
+  <text x="120" y="630" font-family="Arial, sans-serif" font-size="12">HTTP 통신</text>
+  
+  <line x1="220" y1="625" x2="250" y2="625" stroke="#495057" stroke-width="2" stroke-dasharray="5,3" />
+  <text x="260" y="630" font-family="Arial, sans-serif" font-size="12">서비스 디스커버리/설정 연동</text>
+  
+  <rect x="420" y="615" width="20" height="20" fill="#cfe2ff" stroke="#0d6efd" stroke-width="1" rx="2" />
+  <text x="450" y="630" font-family="Arial, sans-serif" font-size="12">설정 서비스</text>
+  
+  <rect x="550" y="615" width="20" height="20" fill="#d1e7dd" stroke="#198754" stroke-width="1" rx="2" />
+  <text x="580" y="630" font-family="Arial, sans-serif" font-size="12">서비스 디스커버리</text>
+  
+  <rect x="680" y="615" width="20" height="20" fill="#f8d7da" stroke="#dc3545" stroke-width="1" rx="2" />
+  <text x="710" y="630" font-family="Arial, sans-serif" font-size="12">게이트웨이</text>
+  
+  <rect x="810" y="615" width="20" height="20" fill="#cff4fc" stroke="#0dcaf0" stroke-width="1" rx="2" />
+  <text x="840" y="630" font-family="Arial, sans-serif" font-size="12">프론트엔드</text>
+</svg>
