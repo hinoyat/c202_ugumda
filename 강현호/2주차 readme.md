@@ -384,3 +384,63 @@ public class ProductService {
 </details>
 
 ---------------------------------------
+
+<details>
+  <summary><b>2025-03-14(Config Server)</b></summary>
+
+# Spring Cloud Config Server
+
+
+## 주요 특징
+
+1. **중앙 집중식 설정 관리**: 모든 마이크로서비스의 설정을 한 곳에서 관리할 수 있습니다.
+
+2. **외부 저장소 지원**: Git, JDBC, HashiCorp Vault 등 다양한 저장소를 설정 원본으로 사용 가능합니다.
+
+3. **동적 설정 업데이트**: 서비스를 재배포하지 않고도 설정을 실시간으로 변경할 수 있습니다.
+
+4. **환경별 설정 관리**: 개발, 테스트, 운영 등 다양한 환경에 대한 설정을 쉽게 관리할 수 있습니다.
+
+## 작동 방식
+
+1. 마이크로서비스가 시작될 때 Config Server에 설정 정보를 요청.
+
+2. Config Server는 외부 저장소(예: Git)에서 최신 설정을 가져와 마이크로서비스에 제공.
+
+3. 설정이 변경되면 각 마이크로서비스에 변경 사항 알려줍니다.
+
+## 장점
+
+- 설정의 일관성 유지
+- 환경 간 설정 차이 최소화
+- 버전 관리 시스템과 연동 가능
+- 보안 강화 (민감한 정보 암호화 가능)
+
+## 단점
+
+- Config Server 장애 시 전체 시스템에 영향을 줍니다
+- 추가적인 인프라 구성 필요
+
+## 구현 방법
+
+1. `spring-cloud-config-server` 의존성 추가
+2. 메인 클래스에 `@EnableConfigServer` 어노테이션 추가
+3. `application.yml`에 Git 저장소 등 설정 추가
+
+```yaml
+server:
+  port: 8888
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/your-repo/config-repo
+```
+
+이렇게 Spring Cloud Config Server를 사용하면 복잡한 마이크로서비스 환경에서도 설정을 효율적으로 관리할 수 있고, 설정 변경이 필요할 때마다 각 서비스를 재배포할 필요 없이 중앙에서 한 번에 관리할 수 있다는 게 큰 장점입니다.
+
+
+## 현재 프로젝트에서는 로컬 파일로 설정을 관리하고 있지만 배포 과정에서 git을 통해 관리하는 방법을 검토중입니다.
+
+</details>
