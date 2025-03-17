@@ -1,7 +1,7 @@
 # 2025-03-17 월요일
 
 ## common-module 도입
-1. 공통 dto
+### 1. 공통 dto
 ```
 @Getter
 @Builder
@@ -34,7 +34,7 @@ public class ResponseDto<T> {
 }
 ```
 
-2. custom exception
+### 2. custom exception
 ```
 public class CustomException extends RuntimeException {
     public CustomException(String message) {
@@ -43,7 +43,7 @@ public class CustomException extends RuntimeException {
 }
 ```
 
-3. global exception handler
+### 3. global exception handler
 ```
 @RestControllerAdvice
 public class GlobalExceptionHandler {
