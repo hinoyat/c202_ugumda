@@ -38,7 +38,7 @@ const DiaryInput: React.FC<DiaryInputProps> = ({
       />
       <textarea
         placeholder="내용을 작성해주세요"
-        className="p-2 bg-[rgba(110,110,110,0.47)] placeholder-[rgba(255,255,255,0.7)] text-sm h-70 text-[rgba(255,255,255,0.7)]"
+        className="p-2 bg-[rgba(110,110,110,0.47)] placeholder-[rgba(255,255,255,0.7)] text-sm h-50 text-[rgba(255,255,255,0.7)]"
         value={content}
         onChange={handleContentChange}
       />
