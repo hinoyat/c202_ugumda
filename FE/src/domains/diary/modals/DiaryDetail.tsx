@@ -13,10 +13,20 @@ import DiaryComponent from './DiaryComponent';
 
 import '../../search/styles/DiarySearch.css';
 
-const DiaryDetail = () => {
-  console.log('DiaryDetail 컴포넌트 렌더링');
-  const { id } = useParams(); // URL에서 일기 ID 가져오기
-  const navigate = useNavigate();
+interface DiaryDetailProps {
+  initialDiary: {
+    id: number;
+    title: string;
+    content: string;
+    tags: string[];
+    created_at: string;
+    isPublic: boolean;
+    dream_video?: string;
+  };
+  onClose: () => void;
+}
+
+const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   // 컴포넌트 마운트/업데이트 시 로그
@@ -25,28 +35,25 @@ const DiaryDetail = () => {
   }, [isEditing]);
 
   // 예시 데이터 (실제로는 ID를 기반으로 API에서 가져와야 함)
-  const diarydata = {
-    id: parseInt(id || '1'),
-    title: '현호공쥬와 세계최강귀요미왕자의 결혼식',
-    created_at: '2025-03-14',
-    dream_video: '/loginVideo.mp4',
-    content:
-      'fdsfasdfjhsakfhjksdhfjkhsdjkfhnjksadfjkshdnfjkhsdjkfhsadjkfhjdskfhjksadhjkdsahjksdhfkjslahfjksdhfjksafhsdaj',
-    tags: ['행복', '결혼', '경사'],
-    likes_boolean: true,
-    likes: 22,
-    isPublic: true, // 공개 여부 추가
-  };
+  // const diarydata = {
+  //   id: parseInt(id || '1'),
+  //   title: '현호공쥬와 세계최강귀요미왕자의 결혼식',
+  //   created_at: '2025-03-14',
+  //   dream_video: '/loginVideo.mp4',
+  //   content:
+  //     'fdsfasdfjhsakfhjksdhfjkhsdjkfhnjksadfjkshdnfjkhsdjkfhsadjkfhjdskfhjksadhjkdsahjksdhfkjslahfjksdhfjksafhsdaj',
+  //   tags: ['행복', '결혼', '경사'],
+  //   likes_boolean: true,
+  //   likes: 22,
+  //   isPublic: true, // 공개 여부 추가
+  // };
 
   // 문자열 앞뒤 공백 제거 후 비교
-  const flag = diarydata.dream_video.trim() !== '';
+  // const flag = diarydata.dream_video.trim() !== '';
 
   // 수정 모드 활성화
   const handleEdit = () => {
-    console.log('handleEdit 함수 실행됨');
-    console.log('수정 전 tags:', diarydata.tags);
     setIsEditing(true);
-    console.log('isEditing 상태 변경 후:', true);
   };
 
   // 수정 모드 종료
@@ -57,28 +64,24 @@ const DiaryDetail = () => {
 
   // 일기 상세 페이지 닫기
   const handleClose = () => {
-    navigate(-1); // 이전 페이지로 이동
+    onClose();
   };
 
   console.log('렌더링 전 현재 isEditing 상태:', isEditing);
 
   return (
-    <div className="relative w-screen h-screen">
-      <MainPage />
-      <div className="absolute inset-0 backdrop-blur-sm"></div>
-
+    <div className="relative w-full h-full">
       {isEditing ? (
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[45%] h-[87%] z-50 bg-[rgba(110,110,110,0.47)]">
           <DiaryComponent
             onClose={handleCloseEdit}
             isEditing={true}
             diaryData={{
-              id: diarydata.id,
-              title: diarydata.title,
-              content: diarydata.content,
-              tags: diarydata.tags,
-              dream_video: diarydata.dream_video,
-              isPublic: diarydata.isPublic,
+              id: initialDiary.id,
+              title: initialDiary.title,
+              content: initialDiary.content,
+              tags: initialDiary.tags,
+              isPublic: initialDiary.isPublic,
             }}
           />
         </div>
@@ -92,37 +95,46 @@ const DiaryDetail = () => {
               <div className="pr-3 flex flex-col gap-3">
                 <div className="">
                   <DetailHeader
-                    title={diarydata.title}
-                    created_at={diarydata.created_at}
+                    title={initialDiary.title}
+                    created_at={initialDiary.created_at}
                   />
                 </div>
 
-                {flag && (
+                {/* {flag && (
                   <div className="">
                     <DetailVideo dream_video={diarydata.dream_video} />
+                  </div>
+                )} */}
+
+                {initialDiary.dream_video && (
+                  <div className="">
+                    <DetailVideo dream_video={initialDiary.dream_video} />
                   </div>
                 )}
 
                 <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words">
-                  <DetailContent content={diarydata.content} />
+                  <DetailContent content={initialDiary.content} />
                 </div>
 
                 <div className="">
                   <DetailTags
-                    initialTags={diarydata.tags}
+                    initialTags={initialDiary.tags}
                     isEditing={false}
                   />
                 </div>
 
                 <div className="h-10 flex items-center justify-end">
                   <DetailLike
-                    likes={diarydata.likes}
-                    likes_boolean={diarydata.likes_boolean}
+                    likes={0} // 임시 값
+                    likes_boolean={false} // 임시 값
                   />
                 </div>
 
                 <div className="">
-                  <DetailButtons onEdit={handleEdit} />
+                  <DetailButtons
+                    onEdit={handleEdit}
+                    onClose={handleClose}
+                  />
                 </div>
               </div>
             </div>

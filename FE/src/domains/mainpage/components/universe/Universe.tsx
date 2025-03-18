@@ -13,6 +13,7 @@ import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
 // 목데이터 import - 이미 존재하는 목데이터를 가져옵니다
 import { dummyDiaries } from '@/data/dummyDiaries';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
+import DiaryDetail from '@/domains/diary/modals/DiaryDetail';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
@@ -60,6 +61,22 @@ const Universe: React.FC = () => {
 
   // 선택된 일기 항목
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
+
+  //-----------일기 조회----------//
+  // 일기 조회
+  const [viewingEntry, setViewingEntry] = useState<DiaryEntry | null>(null);
+
+  // 일기 조회 핸들러 추가
+  const handleView = () => {
+    if (selectedEntry) {
+      setViewingEntry(selectedEntry);
+    }
+  };
+
+  // 일기 조회 모달 닫기 핸들러
+  const handleCloseView = () => {
+    setViewingEntry(null);
+  };
 
   // 폼 표시 여부
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -276,6 +293,27 @@ const Universe: React.FC = () => {
           }
         />
       )}
+
+      {/* ---------------------일기 조회 모달------------------------ */}
+      {viewingEntry && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-[45%] h-[87%] bg-[rgba(110,110,110,0.47)] rounded-lg overflow-hidden">
+            <DiaryDetail
+              initialDiary={{
+                id: viewingEntry.diary_seq,
+                title: viewingEntry.title,
+                content: viewingEntry.content,
+                tags: viewingEntry.tags,
+                created_at: viewingEntry.dream_date,
+                isPublic: viewingEntry.is_public === 'Y',
+                // 추가 정보가 필요하다면 여기에 추가
+              }}
+              onClose={handleCloseView}
+            />
+          </div>
+        </div>
+      )}
+
       {/* --------------------별 클릭 시 StarHoverMenu 보임--------------------- */}
       {selectedEntry && selectedPosition && (
         <div
@@ -291,9 +329,7 @@ const Universe: React.FC = () => {
               console.log('삭제하기 클릭');
               handleDelete(selectedEntry);
             }}
-            onView={() => {
-              console.log('일기보기 클릭');
-            }}
+            onView={handleView}
           />
         </div>
       )}
