@@ -17,6 +17,9 @@ import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
 
+  // 수정 모드를 위한 상태 추가
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   // 목데이터로 초기화된 일기 항목 상태
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
 
@@ -96,6 +99,14 @@ const Universe: React.FC = () => {
   const [newEntryPosition, setNewEntryPosition] = useState<Position | null>(
     null
   );
+
+  // 일기 수정 핸들러
+  const handleEdit = () => {
+    if (selectedEntry) {
+      setIsEditing(true);
+      setShowForm(true);
+    }
+  };
 
   return (
     <div className="universe-container">
@@ -197,14 +208,36 @@ const Universe: React.FC = () => {
           </group>
         </Canvas>
       </div>
-      {/* ----------------------일기 작성 폼 (조건부 렌더링)----------------------- */}
+      {/* ----------------------일기 작성/수정 폼 (조건부 렌더링)----------------------- */}
       {showForm && (
         <DiaryComponent
           onClose={(newDiary) => {
             setShowForm(false);
-            // 일기데이터가 있을 때만 새 일기 생성
-            if (newDiary) {
-              // 새로운 일기 생성
+            setIsEditing(false);
+
+            // 수정 모드일 때
+            if (isEditing && newDiary && selectedEntry) {
+              setEntries((prev) =>
+                prev.map((entry) =>
+                  entry.diary_seq === selectedEntry.diary_seq
+                    ? {
+                        ...entry,
+                        title: newDiary.title || entry.title,
+                        content: newDiary.content || entry.content,
+                        tags: newDiary.tags || entry.tags,
+                        is_public: newDiary.isPublic ? 'Y' : 'N', // 이 부분 주목
+                      }
+                    : entry
+                )
+              );
+
+              // 선택된 항목 초기화
+              setSelectedEntry(null);
+              setSelectedPosition(null);
+            }
+
+            // 새로운 일기 생성
+            if (!isEditing && newDiary) {
               const newEntry = DiaryEntry.create({
                 user_seq: 1, // 기본 유저 ID
                 title: newDiary.title || '',
@@ -228,10 +261,21 @@ const Universe: React.FC = () => {
               }, 10000); // 10초 동안 하이라이트 효과 유지
             }
           }}
-          isEditing={false}
+          // 수정 모드 및 현재 선택된 일기 데이터 전달
+          isEditing={isEditing}
+          diaryData={
+            isEditing
+              ? {
+                  id: selectedEntry?.diary_seq,
+                  title: selectedEntry?.title,
+                  content: selectedEntry?.content,
+                  tags: selectedEntry?.tags,
+                  isPublic: selectedEntry?.is_public === 'Y',
+                }
+              : undefined
+          }
         />
       )}
-      ~~
       {/* --------------------별 클릭 시 StarHoverMenu 보임--------------------- */}
       {selectedEntry && selectedPosition && (
         <div
@@ -242,7 +286,7 @@ const Universe: React.FC = () => {
           }}>
           <StarHoverMenu
             position={selectedPosition}
-            onEdit={() => console.log('수정하기 클릭')}
+            onEdit={handleEdit}
             onDelete={() => {
               console.log('삭제하기 클릭');
               handleDelete(selectedEntry);

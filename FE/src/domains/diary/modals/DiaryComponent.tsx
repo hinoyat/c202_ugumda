@@ -160,7 +160,7 @@ const DiaryComponent: React.FC<DiaryProps> = ({
       {isEditing ? (
         // 수정 모드일 때는 위치 지정 스타일 제거
         <div
-          className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[rgba(110,110,110,0.47)]"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[27%] h-[75%] py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[rgba(110,110,110,0.47)]"
           onClick={stopPropagation}>
           <div className="pr-3 flex flex-col gap-5">
             <div>
