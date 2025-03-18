@@ -9,6 +9,8 @@ import com.c202.user.auth.jwt.JwtTokenProvider;
 import com.c202.user.auth.jwt.TokenDto;
 import com.c202.user.auth.jwt.refreshtoken.RefreshTokenRepository;
 import com.c202.user.global.exception.ServiceException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -92,13 +95,24 @@ public class AuthServiceImpl implements AuthService {
     // 로그아웃
     @Override
     @Transactional
-    public void logout(int userSeq) {
+    public void logout(HttpServletRequest request, HttpServletResponse response, int userSeq) {
         log.debug("사용자 ID={}의 로그아웃 처리 시작", userSeq);
 
         try {
-            // 1. 리프레시 토큰 제거
+            // 엑세스 토큰 블랙리스트 처리
+            String accessToken = extractTokenFromRequest(request);
+            if (StringUtils.hasText(accessToken)) {
+                jwtTokenProvider.blacklistToken(accessToken);
+                log.info("엑세스 토큰 블랙리스트 처리 완료: 사용자 ID={}", userSeq);
+            }
+
+            // 리프레시 토큰 제거
             refreshTokenRepository.deleteByUserSeq(userSeq);
             log.debug("리프레시 토큰 삭제 완료: 사용자 ID={}", userSeq);
+
+            // 쿠키 삭제
+            jwtTokenProvider.deleteRefreshTokenCookie(response);
+
         } catch (Exception e) {
             log.error("로그아웃 처리 중 오류 발생: {}", e.getMessage(), e);
         }
@@ -114,4 +128,11 @@ public class AuthServiceImpl implements AuthService {
         return !userRepository.existsByNickname(nickname);
     }
 
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
 }
