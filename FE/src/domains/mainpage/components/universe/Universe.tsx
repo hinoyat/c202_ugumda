@@ -111,7 +111,7 @@ const Universe: React.FC = () => {
         <Canvas
           // camera={{ position: [0, 0, cameraDistance], fov: 90 }}
           // 구 내부에서 별들을 바라보는 느낌
-          camera={{ position: [0, 0, 30], fov: 75 }}
+          camera={{ position: [0, 0, -30], fov: 75 }}
           style={{
             background: 'black',
             width: '100vw',
