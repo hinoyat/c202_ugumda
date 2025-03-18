@@ -27,12 +27,12 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
         <>
           <button
             onClick={onCreate}
-            className="text-white cursor-pointer w-full bg-[rgba(84,84,84,1)] py-2 rounded text-lg font-bold">
+            className="text-white cursor-pointer w-full bg-[rgba(84,84,84,1)] py-2 rounded text-sm font-bold">
             꿈 일기 등록하기
           </button>
           <button
             onClick={onCreateVideo}
-            className="text-white cursor-pointer w-full bg-[rgba(189,189,189,0.7)] py-2 rounded text-lg font-bold">
+            className="text-white cursor-pointer w-full bg-[rgba(189,189,189,0.7)] py-2 rounded text-sm font-bold">
             등록 후 영상 생성하기({Count}/3)
           </button>
         </>

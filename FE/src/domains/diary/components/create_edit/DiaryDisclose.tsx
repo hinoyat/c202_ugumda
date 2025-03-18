@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import "../../styles/DiaryDisclose.css"
+import React, { useState, useEffect } from 'react';
+import '../../styles/DiaryDisclose.css';
 
 interface DiaryDiscloseProps {
-  isPublic?: boolean;                // 공개 여부 초기값
-  onToggle?: (isPublic: boolean) => void;  // 공개 여부 변경 핸들러
+  isPublic?: boolean; // 공개 여부 초기값
+  onToggle?: (isPublic: boolean) => void; // 공개 여부 변경 핸들러
 }
 
 const DiaryDisclose: React.FC<DiaryDiscloseProps> = ({
   isPublic = true,
-  onToggle
+  onToggle,
 }) => {
   const [publicStatus, setPublicStatus] = useState<boolean>(isPublic);
 
@@ -27,13 +27,13 @@ const DiaryDisclose: React.FC<DiaryDiscloseProps> = ({
 
   return (
     <div className="flex flex-col my-10">
-      <h1 className="text-white text-xl">공개 범위</h1>
-      <div className="flex justify-around">
+      <h1 className="text-white text-base">공개 범위</h1>
+      <div className="flex justify-around text-sm">
         <label className="radio-button">
-          <input 
-            type="radio" 
-            name="example-radio" 
-            value="public" 
+          <input
+            type="radio"
+            name="example-radio"
+            value="public"
             checked={publicStatus}
             onChange={() => handleToggle(true)}
           />
@@ -42,9 +42,9 @@ const DiaryDisclose: React.FC<DiaryDiscloseProps> = ({
         </label>
 
         <label className="radio-button">
-          <input 
-            type="radio" 
-            name="example-radio" 
+          <input
+            type="radio"
+            name="example-radio"
             value="private"
             checked={!publicStatus}
             onChange={() => handleToggle(false)}
@@ -54,7 +54,7 @@ const DiaryDisclose: React.FC<DiaryDiscloseProps> = ({
         </label>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DiaryDisclose
+export default DiaryDisclose;
