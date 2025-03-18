@@ -6,7 +6,7 @@ import Universe from '@/domains/mainpage/components/universe/Universe';
 import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader ';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const MainPage = () => {
   console.log('🟡 내 메인 렌더링!');
@@ -54,7 +54,7 @@ const MainPage = () => {
       </div>
 
       {/* 주짜니 쓰는 부분  relative z-10 해서 위로 올려둠 */}
-      <div className="flex flex-col absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      {/* <div className="flex flex-col absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <p>메인페이지 입니다.</p>
         <button
           onClick={onClickLogin}
@@ -88,7 +88,7 @@ const MainPage = () => {
           className="text-yellow-500 cursor-pointer">
           꿈해몽
         </Link>
-      </div>
+      </div> */}
 
       {/* 블랙홀 - 다른 사람의 우주로 가기 */}
       <div className="absolute top-0 right-5">

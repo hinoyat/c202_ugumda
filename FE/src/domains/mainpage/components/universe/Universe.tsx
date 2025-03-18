@@ -1,21 +1,106 @@
 // 메인 우주 컴포넌트
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import '../../themes/universe.css';
 import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
-import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
+import DiaryEntry, { Position } from '@/domains/mainpage/models/DiaryEntry';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 import StarField from '@/domains/mainpage/components/universe/StarField';
+import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
+
+// 목데이터 import - 이미 존재하는 목데이터를 가져옵니다
+import { dummyDiaries } from '@/data/dummyDiaries';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
-import DiaryForm from '@/domains/mainpage/components/universe/DiaryForm';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
+
   // 일기 항목 관리 훅 사용
-  const { entries, addEntry, removeEntry } = useDiaryEntries();
+  const { entries: hookEntries, addEntry, removeEntry } = useDiaryEntries();
+
+  // 목데이터로 초기화된 일기 항목 상태
+  const [entries, setEntries] = useState<DiaryEntry[]>([]);
+
+  // ------------------목데이터로 일기 별 뿌려두기----------------------- //
+  useEffect(() => {
+    // 더미 데이터를 DiaryEntry 객체로 변환
+    const diaryEntries = dummyDiaries.map((dummy, index) => {
+      // 각 더미 데이터의 dream_date를 Date 객체로 변환 (YYYYMMDD 형식에서)
+      const year = parseInt(dummy.dream_date.substring(0, 4));
+      const month = parseInt(dummy.dream_date.substring(4, 6)) - 1; // JS의 월은 0부터 시작
+      const day = parseInt(dummy.dream_date.substring(6, 8));
+
+      // 3D 공간에서의 랜덤 위치 생성
+      const position: Position = DiaryEntry.generateRandomSpherePosition(100);
+
+      // DiaryEntry 객체 생성
+      const entry = DiaryEntry.create({
+        user_seq: dummy.user_seq,
+        title: dummy.title,
+        content: dummy.content,
+        video_url: dummy.video_url,
+        dream_date: dummy.dream_date,
+        is_public: dummy.is_public as 'Y' | 'N',
+        position: position,
+        tags: [], // 더미 데이터에 태그가 없다면 빈 배열로 초기화
+      });
+
+      // diary_seq를 명시적으로 설정 (인덱스에 1000을 더해 충분히 큰 고유값 생성)
+      // date.now()일 때의 키 중복 방지용
+      // api 연결 후 지울부분
+      entry.diary_seq = 1000 + index;
+
+      return entry;
+    });
+
+    setEntries(diaryEntries);
+  }, []);
+
+  // 새로 추가된 일기 위치로 카메라 이동 함수
+  const moveCameraToNewEntry = (entry: DiaryEntry) => {
+    if (controlsRef.current) {
+      // 카메라를 별을 바라보는 위치로 이동
+      const { x, y, z } = entry.position;
+
+      // 별을 타겟으로 설정
+      controlsRef.current.target.set(x, y, z);
+
+      // 별로부터 적당한 거리에 카메라 위치
+      const distance = 20;
+      const scaleFactor = 0.7;
+
+      // 카메라 위치 계산 (별 방향에서 약간 떨어진 위치)
+      const cameraX = x * scaleFactor;
+      const cameraY = y * scaleFactor;
+      const cameraZ = z * scaleFactor + distance;
+
+      // 카메라 위치 설정
+      controlsRef.current.object.position.set(cameraX, cameraY, cameraZ);
+
+      // 카메라 거리 설정
+      setCameraDistance(Math.sqrt(x * x + y * y + z * z) * 0.3);
+
+      // 컨트롤 업데이트
+      controlsRef.current.update();
+
+      // 사용자가 다음에 마우스/컨트롤을 움직이면 자유롭게 탐색 가능하도록
+      // 사용자 상호작용 감지를 위한 리스너 추가
+      const handleUserInteraction = () => {
+        // 사용자가 상호작용하면 리스너 제거
+        controlsRef.current.removeEventListener(
+          'change',
+          handleUserInteraction
+        );
+        // 여기서 추가 설정을 할 수 있음 (필요하다면)
+      };
+
+      // 컨트롤이 변경될 때(사용자가 움직일 때) 이벤트 감지
+      controlsRef.current.addEventListener('change', handleUserInteraction);
+    }
+  };
 
   // 선택된 일기 항목
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
@@ -35,7 +120,7 @@ const Universe: React.FC = () => {
     position: { x: number; y: number }
   ): void => {
     // 이미 선택된 별을 다시 클릭하면 선택 해제
-    if (selectedEntry && selectedEntry.id === entry.id) {
+    if (selectedEntry && selectedEntry.diary_seq === entry.diary_seq) {
       setSelectedEntry(null);
       setSelectedPosition(null);
     } else {
@@ -51,8 +136,20 @@ const Universe: React.FC = () => {
   };
 
   // 일기 작성 폼 제출 핸들러
-  const handleFormSubmit = (content: string): void => {
-    addEntry(content);
+  const handleFormSubmit = (formData: any) => {
+    // DiaryEntry의 create 메서드를 사용하여 새 일기 생성
+    const newEntry = DiaryEntry.create({
+      user_seq: 1, // 기본 유저 ID
+      title: formData.title || '',
+      content: formData.content || '',
+      tags: formData.tags || [],
+      is_public: formData.isPublic ? 'Y' : 'N',
+    });
+
+    // 새 일기 추가
+    setEntries((prev) => [...prev, newEntry]);
+
+    // 폼 닫기
     setShowForm(false);
   };
 
@@ -61,6 +158,9 @@ const Universe: React.FC = () => {
     console.log('일기생성! 위치는 ---> ', event.point);
     // 여기에 일기 추가 로직 구현 (임시로 공간에 더블 클릭 시 별 생성되게 해 둠)
   };
+
+  // 새로 생성된 일기의 ID를 저장하는 상태 추가
+  const [newStarId, setNewStarId] = useState<number | null>(null);
 
   //          호버된 일기 항목          //
   const [hoveredEntry, setHoveredEntry] = useState<DiaryEntry | null>(null);
@@ -83,9 +183,16 @@ const Universe: React.FC = () => {
     // 일기 수정 로직 구현..?
   };
 
+  // 일기 삭제 핸들러
+  const handleDelete = (entry: DiaryEntry) => {
+    setEntries((prev) => prev.filter((e) => e.diary_seq !== entry.diary_seq));
+    setSelectedEntry(null);
+    setSelectedPosition(null);
+  };
+
   return (
     <div className="universe-container">
-      {/* 3D 우주 공간 */}
+      {/* -------------------------------3D 우주 공간--------------------------- */}
       <div
         className="space-scene-container"
         style={{
@@ -95,7 +202,9 @@ const Universe: React.FC = () => {
           zIndex: 0, // 배경처럼 설정
         }}>
         <Canvas
-          camera={{ position: [0, 0, cameraDistance], fov: 90 }}
+          // camera={{ position: [0, 0, cameraDistance], fov: 90 }}
+          // 구 내부에서 별들을 바라보는 느낌
+          camera={{ position: [0, 0, 30], fov: 75 }}
           style={{
             background: 'black',
             width: '100vw',
@@ -116,11 +225,11 @@ const Universe: React.FC = () => {
             />
           </mesh>
 
-          {/* 별 배경 컴포넌트 */}
+          {/*-------------- 별 배경 컴포넌트 -------------------*/}
           <StarField />
 
           {/* 카메라 컨트롤 */}
-          <OrbitControls
+          {/* <OrbitControls
             ref={controlsRef}
             enableZoom={true}
             enablePan={false}
@@ -130,6 +239,18 @@ const Universe: React.FC = () => {
             rotateSpeed={0.5}
             minDistance={5}
             maxDistance={200}
+          /> */}
+          <OrbitControls
+            ref={controlsRef}
+            enableZoom={true}
+            enablePan={false}
+            enableDamping={true}
+            dampingFactor={0.05}
+            autoRotate={false}
+            rotateSpeed={0.5}
+            minDistance={5} // 너무 가까이 가지 않도록
+            maxDistance={50} // 너무 멀리 가지 않도록 (구 반경보다 작게)
+            target={[0, 0, 0]} // 항상 구의 중심을 바라보도록
           />
 
           {/* 주변 조명 */}
@@ -143,11 +264,11 @@ const Universe: React.FC = () => {
             decay={2}
           />
 
-          {/* 일기 항목들을 별로 표현 */}
+          {/* ------------------일기 항목들을 별로 표현-------------------------- */}
           <group>
             {entries.map((entry) => (
               <DiaryStar
-                key={entry.id}
+                key={entry.diary_seq}
                 entry={entry}
                 onClick={(entry, position) => {
                   setSelectedEntry(entry);
@@ -157,27 +278,44 @@ const Universe: React.FC = () => {
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
+                isNew={entry.diary_seq === newStarId} // 새 별 여부 전달
               />
             ))}
           </group>
         </Canvas>
       </div>
-
-      {/* 일기 작성 폼 (조건부 렌더링) */}
+      {/* ----------------------일기 작성 폼 (조건부 렌더링)----------------------- */}
       {showForm && (
-        <div className="form-overlay">
-          <div className="form-container">
-            <DiaryForm onSubmit={handleFormSubmit} />
-            <button
-              className="cancel-button"
-              onClick={() => setShowForm(false)}>
-              취소
-            </button>
-          </div>
-        </div>
-      )}
+        <DiaryComponent
+          onClose={(newDiary) => {
+            setShowForm(false);
+            if (newDiary) {
+              // 새로운 일기 생성
+              const newEntry = DiaryEntry.create({
+                user_seq: 1, // 기본 유저 ID
+                title: newDiary.title || '',
+                content: newDiary.content || '',
+                tags: newDiary.tags || [],
+                is_public: newDiary.isPublic ? 'Y' : 'N',
+              });
 
-      {/* 별 클릭 시 StarHoverMenu 보임 */}
+              // 새 일기 추가
+              setEntries((prev) => [...prev, newEntry]);
+
+              // 새 별 ID 설정 (하이라이트 효과를 위해)
+              setNewStarId(newEntry.diary_seq);
+
+              // 일정 시간 후 하이라이트 효과 제거
+              setTimeout(() => {
+                setNewStarId(null);
+              }, 10000); // 10초 동안 하이라이트 효과 유지
+            }
+          }}
+          isEditing={false}
+        />
+      )}
+      ~~
+      {/* --------------------별 클릭 시 StarHoverMenu 보임--------------------- */}
       {selectedEntry && selectedPosition && (
         <div
           className="absolute z-20"
@@ -190,7 +328,7 @@ const Universe: React.FC = () => {
             onEdit={() => console.log('수정하기 클릭')}
             onDelete={() => {
               console.log('삭제하기 클릭');
-              removeEntry(selectedEntry.id);
+              handleDelete(selectedEntry);
             }}
             onView={() => {
               console.log('일기보기 클릭');
@@ -198,8 +336,7 @@ const Universe: React.FC = () => {
           />
         </div>
       )}
-
-      {/* 호버된 일기 미리보기 */}
+      {/* ---------------------호버된 일기 미리보기------------------------ */}
       {hoveredEntry && hoveredPosition && (
         <div
           className="absolute z-10"
@@ -208,9 +345,14 @@ const Universe: React.FC = () => {
             top: `${hoveredPosition.y}px`,
           }}>
           <DiaryPreview
-            title={hoveredEntry.date.toLocaleDateString()}
+            title={hoveredEntry.title}
             content={hoveredEntry.content}
-            tags={[{ id: '1', name: '일기' }]}
+            tags={
+              hoveredEntry.tags?.map((tag, index) => ({
+                id: index.toString(),
+                name: tag,
+              })) || []
+            }
           />
         </div>
       )}

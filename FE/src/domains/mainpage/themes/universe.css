@@ -13,14 +13,14 @@
   z-index: 0;
 }
 
-.controls-container {
+/* .controls-container {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 10;
-}
+} */
 
-.create-diary-button {
+/* .create-diary-button {
   padding: 12px 20px;
   background-color: rgba(255, 255, 255, 0.2);
   color: #fff;
@@ -30,8 +30,8 @@
   font-size: 16px;
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
-}
-
+} */
+/* 
 .create-diary-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -60,14 +60,14 @@
   max-width: 500px;
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-}
+} */
 
-.diary-form h2 {
+/* .diary-form h2 {
   text-align: center;
   margin-bottom: 20px;
   color: #fff;
-}
-
+} */
+/* 
 .diary-form textarea {
   width: 100%;
   padding: 15px;
@@ -84,9 +84,9 @@
 .diary-form textarea:focus {
   outline: none;
   border-color: rgba(100, 150, 255, 0.6);
-}
+} */
 
-.submit-button,
+/* .submit-button,
 .cancel-button,
 .delete-button {
   padding: 10px 20px;
@@ -213,4 +213,4 @@
 
 .zoom-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
-}
+} */
