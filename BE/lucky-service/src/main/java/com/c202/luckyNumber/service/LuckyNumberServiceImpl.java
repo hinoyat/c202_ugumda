@@ -1,6 +1,6 @@
 package com.c202.luckyNumber.service;
 
-import com.c202.luckyNumber.exception.LuckyNumberAlreadyExistsException;
+import com.c202.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,7 +22,7 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
         List<Integer> luckyNumbers = generateLuckyNumbers();
 
         if (redisTemplate.opsForHash().hasKey("lucky_number:" + userSeq, "number1")) {
-            throw new LuckyNumberAlreadyExistsException();
+            throw new CustomException("이미 생성된 행운 번호가 있습니다");
         }
 
         for (int i = 0; i < luckyNumbers.size(); i++) {

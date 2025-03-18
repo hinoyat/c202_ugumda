@@ -23,7 +23,6 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            System.out.println(token);
 
             return true;
         } catch (ExpiredJwtException e) {

@@ -1,5 +1,6 @@
 package com.c202.luckyNumber.controller;
 
+import com.c202.dto.ResponseDto;
 import com.c202.luckyNumber.service.LuckyNumberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,13 @@ public class LuckyNumberController {
     private final LuckyNumberService luckyNumberService;
 
     @PostMapping
-    public ResponseEntity<String> generateLuckyNumber(@RequestHeader("X-User-Seq") int userSeq){
+    public ResponseEntity<ResponseDto<Object>> generateLuckyNumber(@RequestHeader("X-User-Seq") int userSeq){
         luckyNumberService.createLuckyNumber(userSeq);
-        return ResponseEntity.ok("생성 완료"); // TODO : Common Response
+        return ResponseEntity.ok(ResponseDto.success(201, "행운 번호 생성 성공"));
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> getLuckyNumbers(@RequestHeader("X-User-Seq") int userSeq){
-        return ResponseEntity.ok(luckyNumberService.getLuckyNumber(userSeq)); // TODO : Common Response
+    public ResponseEntity<ResponseDto<List<String>>> getLuckyNumbers(@RequestHeader("X-User-Seq") int userSeq){
+        return ResponseEntity.ok(ResponseDto.success(200,"행운 번호 조회 성공", luckyNumberService.getLuckyNumber(userSeq)));
     }
 }

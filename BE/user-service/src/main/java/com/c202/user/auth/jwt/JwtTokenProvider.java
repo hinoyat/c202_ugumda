@@ -1,6 +1,5 @@
 package com.c202.user.auth.jwt;
 
-//import com.c202.userservice.global.auth.blacklist.AccessTokenBlacklistService;
 import com.c202.user.auth.jwt.refreshtoken.RefreshToken;
 import com.c202.user.auth.jwt.refreshtoken.RefreshTokenRepository;
 import com.c202.user.global.exception.ServiceException;
@@ -27,26 +26,18 @@ import java.util.Optional;
 @Slf4j
 public class JwtTokenProvider {
 
-    // JWT 시크릿 키 (application.properties에서 설정)
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    // 액세스 토큰 유효 시간 (application.properties에서 설정)
     @Value("${jwt.access-token-validity-in-ms}")
     private long accessTokenValidity;
 
-    // 리프레시 토큰 유효 시간 (application.properties에서 설정)
     @Value("${jwt.refresh-token-validity-in-ms}")
     private long refreshTokenValidity;
 
-    // JWT 서명에 사용할 키
     private Key key;
 
-    // 날짜 포맷터
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-//    // 사용자 상세 정보 서비스
-//    private final UserDetailsService userDetailsService;
 
     // 리프레시 토큰 저장소
     private final RefreshTokenRepository refreshTokenRepository;
@@ -54,7 +45,6 @@ public class JwtTokenProvider {
     // 토큰 블랙리스트
 //    private final AccessTokenBlacklistService accessTokenBlacklistService;
 
-    // 초기화 메소드 - 애플리케이션 시작 시 실행
     @PostConstruct
     public void init() {
         // 시크릿 키를 Base64로 인코딩하여 JWT 서명용 키 생성
@@ -62,7 +52,6 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 액세스 토큰 생성 메소드
     public String createAccessToken(String username, int userSeq) {
         // JWT 클레임 설정 - 사용자 식별자와 권한 정보 담기
         Claims claims = Jwts.claims().setSubject(username);
@@ -82,7 +71,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // 리프레시 토큰 생성 메소드
     public String createRefreshToken(String username, int userSeq) {
         // JWT 클레임 설정
         Claims claims = Jwts.claims().setSubject(username);
@@ -159,14 +147,6 @@ public class JwtTokenProvider {
 
         response.addCookie(cookie);
     }
-
-//    // JWT 토큰으로부터 인증 객체 생성
-//    public Authentication getAuthentication(String token) {
-//        // 토큰에서 사용자명 추출
-//        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-//        // Spring Security 인증 객체 생성 및 반환
-//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//    }
 
     // 토큰에서 사용자명 추출
     public String getUsername(String token) {
