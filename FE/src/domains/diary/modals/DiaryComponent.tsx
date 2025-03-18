@@ -18,7 +18,7 @@ interface DiaryData {
 }
 
 interface DiaryProps {
-  onClose?: () => void;
+  onClose?: (diaryData?: DiaryData) => void; // 일기 데이터 전달
   isEditing?: boolean;
   diaryData?: DiaryData;
 }
@@ -117,18 +117,20 @@ const DiaryComponent: React.FC<DiaryProps> = ({
 
       // 성공 후 상세 페이지로 이동 또는 모달 닫기
       if (onClose) {
-        console.log('onClose 함수 호출');
-        onClose();
-      } else {
-        navigate(`/diary/${diaryToSave.id}`);
+        onClose(diaryToSave); // 새 일기 데이터 전달
+        // } else {
+        //   navigate(`/diary/${diaryToSave.id}`);
       }
     } else {
       console.log('일기 생성:', diaryToSave);
       // 생성 API 호출
       // api.createDiary(diaryToSave).then(newDiary => { ... })
 
-      // 성공 후 메인 페이지 또는 상세 페이지로 이동
-      navigate('/');
+      if (onClose) {
+        onClose(diaryToSave); // 새 일기 데이터 전달
+      } else {
+        navigate('/');
+      }
     }
   };
 
@@ -136,12 +138,25 @@ const DiaryComponent: React.FC<DiaryProps> = ({
   const handleCreateVideo = () => {
     console.log('등록 후 동영상 생성하기');
     // 동영상 생성 API 호출
+
+    const diaryToSave = {
+      // ... 일기 데이터
+      dream_video: 'Y', // 동영상 생성 요청 표시
+    };
+
+    if (onClose) {
+      onClose(diaryToSave);
+    } else {
+      navigate('/');
+    }
   };
 
   const Count = 3; // 동영상 생성 가능 횟수
 
   return (
-    <div className="absolute inset-0">
+    <div
+      className="absolute inset-0"
+      onClick={handleClose}>
       {isEditing ? (
         // 수정 모드일 때는 위치 지정 스타일 제거
         <div
