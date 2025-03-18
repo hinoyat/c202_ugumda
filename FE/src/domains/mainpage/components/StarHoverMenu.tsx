@@ -70,16 +70,16 @@ const StarHoverMenu = ({
 
   //          버튼위치          //
   const buttonLayout = [
-    { top: '5px', left: '-40px' }, // 편집 버튼 위치 (좌측)
-    { top: '-10px', left: '-10px' }, // 삭제 버튼 위치 (중앙)
-    { top: '5px', left: '20px' }, // 일기보기 버튼 위치 (우측)
+    { top: '5px', left: '-42px' }, // 편집 버튼 위치 (좌측)
+    { top: '-15px', left: '-12px' }, // 삭제 버튼 위치 (중앙)
+    { top: '5px', left: '18px' }, // 일기보기 버튼 위치 (우측)
   ];
 
   //          툴팁관련          //
   const tooltipLayout = [
-    { top: '-43px', left: '-34px' }, // 편집 버튼 툴팁
-    { top: '-55px', left: '-3px' }, // 삭제 버튼 툴팁
-    { top: '-43px', left: '28px' }, // 일기보기 버튼 툴팁
+    { top: '-20px', left: '-45px' }, // 편집 버튼 툴팁
+    { top: '-40px', left: '-12px' }, // 삭제 버튼 툴팁
+    { top: '-20px', left: '21px' }, // 일기보기 버튼 툴팁
   ];
 
   return (
@@ -155,7 +155,7 @@ const StarHoverMenu = ({
               onClick={onEdit}
               onMouseEnter={() => setHoveredButton('edit')}
               onMouseLeave={() => setHoveredButton(null)}
-              className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center transition-transform hover:scale-110 group relative">
+              className="w-7 h-7 bg-gray-700 rounded-full flex items-center justify-center transition-transform hover:scale-110 group relative">
               {/* 원 부분: 원 자체는 항상 반투명 */}
               <div className="w-full h-full bg-gray-700 rounded-full opacity-50 absolute top-0 left-0"></div>
 
@@ -163,7 +163,7 @@ const StarHoverMenu = ({
               <img
                 src={hover_edit}
                 alt="edit"
-                className="w-4 h-4 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-5 h-5 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               />
             </button>
           </div>
@@ -181,7 +181,7 @@ const StarHoverMenu = ({
               onClick={onDelete}
               onMouseEnter={() => setHoveredButton('delete')}
               onMouseLeave={() => setHoveredButton(null)}
-              className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center transition-transform hover:scale-110 group relative">
+              className="w-7 h-7 bg-gray-700 rounded-full flex items-center justify-center transition-transform hover:scale-110 group relative">
               {/* 원 부분: 원 자체는 항상 반투명 */}
               <div className="w-full h-full bg-gray-700 rounded-full opacity-50 absolute top-0 left-0"></div>
 
@@ -189,7 +189,7 @@ const StarHoverMenu = ({
               <img
                 src={hover_delete}
                 alt="delete"
-                className="w-3 h-3 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-4 h-4 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               />
             </button>
           </div>
@@ -207,7 +207,7 @@ const StarHoverMenu = ({
               onClick={onView}
               onMouseEnter={() => setHoveredButton('view')}
               onMouseLeave={() => setHoveredButton(null)}
-              className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center transition-transform hover:scale-110 group relative">
+              className="w-7 h-7 bg-gray-700 rounded-full flex items-center justify-center transition-transform hover:scale-110 group relative">
               {/* 원 부분: 원 자체는 항상 반투명 */}
               <div className="w-full h-full bg-gray-700 rounded-full opacity-50 absolute top-0 left-0"></div>
 
@@ -215,7 +215,7 @@ const StarHoverMenu = ({
               <img
                 src={hover_diary}
                 alt="view"
-                className="w-4 h-4 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-5 h-5 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               />
             </button>
           </div>
