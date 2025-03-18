@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import '../../themes/universe.css';
-import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 import DiaryEntry, { Position } from '@/domains/mainpage/models/DiaryEntry';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
@@ -17,9 +16,6 @@ import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
-
-  // 일기 항목 관리 훅 사용
-  const { entries: hookEntries, addEntry, removeEntry } = useDiaryEntries();
 
   // 목데이터로 초기화된 일기 항목 상태
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
@@ -59,49 +55,6 @@ const Universe: React.FC = () => {
     setEntries(diaryEntries);
   }, []);
 
-  // 새로 추가된 일기 위치로 카메라 이동 함수
-  const moveCameraToNewEntry = (entry: DiaryEntry) => {
-    if (controlsRef.current) {
-      // 카메라를 별을 바라보는 위치로 이동
-      const { x, y, z } = entry.position;
-
-      // 별을 타겟으로 설정
-      controlsRef.current.target.set(x, y, z);
-
-      // 별로부터 적당한 거리에 카메라 위치
-      const distance = 20;
-      const scaleFactor = 0.7;
-
-      // 카메라 위치 계산 (별 방향에서 약간 떨어진 위치)
-      const cameraX = x * scaleFactor;
-      const cameraY = y * scaleFactor;
-      const cameraZ = z * scaleFactor + distance;
-
-      // 카메라 위치 설정
-      controlsRef.current.object.position.set(cameraX, cameraY, cameraZ);
-
-      // 카메라 거리 설정
-      setCameraDistance(Math.sqrt(x * x + y * y + z * z) * 0.3);
-
-      // 컨트롤 업데이트
-      controlsRef.current.update();
-
-      // 사용자가 다음에 마우스/컨트롤을 움직이면 자유롭게 탐색 가능하도록
-      // 사용자 상호작용 감지를 위한 리스너 추가
-      const handleUserInteraction = () => {
-        // 사용자가 상호작용하면 리스너 제거
-        controlsRef.current.removeEventListener(
-          'change',
-          handleUserInteraction
-        );
-        // 여기서 추가 설정을 할 수 있음 (필요하다면)
-      };
-
-      // 컨트롤이 변경될 때(사용자가 움직일 때) 이벤트 감지
-      controlsRef.current.addEventListener('change', handleUserInteraction);
-    }
-  };
-
   // 선택된 일기 항목
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
 
@@ -113,51 +66,6 @@ const Universe: React.FC = () => {
 
   // 카메라 컨트롤 참조
   const controlsRef = useRef<any>(null);
-
-  // 별 선택 핸들러 - 클릭 시 메뉴 보임
-  const handleSelectEntry = (
-    entry: DiaryEntry,
-    position: { x: number; y: number }
-  ): void => {
-    // 이미 선택된 별을 다시 클릭하면 선택 해제
-    if (selectedEntry && selectedEntry.diary_seq === entry.diary_seq) {
-      setSelectedEntry(null);
-      setSelectedPosition(null);
-    } else {
-      // 새로운 별 선택
-      setSelectedEntry(entry);
-      setSelectedPosition(position);
-    }
-  };
-
-  // 선택 해제 핸들러
-  const handleClearSelection = (): void => {
-    setSelectedEntry(null);
-  };
-
-  // 일기 작성 폼 제출 핸들러
-  const handleFormSubmit = (formData: any) => {
-    // DiaryEntry의 create 메서드를 사용하여 새 일기 생성
-    const newEntry = DiaryEntry.create({
-      user_seq: 1, // 기본 유저 ID
-      title: formData.title || '',
-      content: formData.content || '',
-      tags: formData.tags || [],
-      is_public: formData.isPublic ? 'Y' : 'N',
-    });
-
-    // 새 일기 추가
-    setEntries((prev) => [...prev, newEntry]);
-
-    // 폼 닫기
-    setShowForm(false);
-  };
-
-  //          우주공간 더블 클릭 시 일기 생성          //
-  const handleCanvasDoubleClick = (event: any) => {
-    console.log('일기생성! 위치는 ---> ', event.point);
-    // 여기에 일기 추가 로직 구현 (임시로 공간에 더블 클릭 시 별 생성되게 해 둠)
-  };
 
   // 새로 생성된 일기의 ID를 저장하는 상태 추가
   const [newStarId, setNewStarId] = useState<number | null>(null);
@@ -177,18 +85,17 @@ const Universe: React.FC = () => {
     y: number;
   } | null>(null);
 
-  //          별 클릭 시 StarHoverMenu 보임          //
-  const handleEdit = () => {
-    console.log('일기 수정??');
-    // 일기 수정 로직 구현..?
-  };
-
   // 일기 삭제 핸들러
   const handleDelete = (entry: DiaryEntry) => {
     setEntries((prev) => prev.filter((e) => e.diary_seq !== entry.diary_seq));
     setSelectedEntry(null);
     setSelectedPosition(null);
   };
+
+  // 새로운 일기 생성 위치를 저장
+  const [newEntryPosition, setNewEntryPosition] = useState<Position | null>(
+    null
+  );
 
   return (
     <div className="universe-container">
@@ -216,6 +123,12 @@ const Universe: React.FC = () => {
             onDoubleClick={(e) => {
               console.log('일기생성! 위치는 --->', e.point);
               e.stopPropagation();
+              setNewEntryPosition({
+                x: e.point.x,
+                y: e.point.y,
+                z: e.point.z,
+              }); // 클릭 위치 저장
+
               setShowForm(true); // 일기 작성 모달 표시
             }}>
             <planeGeometry args={[2000, 2000]} />
@@ -289,6 +202,7 @@ const Universe: React.FC = () => {
         <DiaryComponent
           onClose={(newDiary) => {
             setShowForm(false);
+            // 일기데이터가 있을 때만 새 일기 생성
             if (newDiary) {
               // 새로운 일기 생성
               const newEntry = DiaryEntry.create({
@@ -297,6 +211,9 @@ const Universe: React.FC = () => {
                 content: newDiary.content || '',
                 tags: newDiary.tags || [],
                 is_public: newDiary.isPublic ? 'Y' : 'N',
+                position:
+                  newEntryPosition ||
+                  DiaryEntry.generateRandomSpherePosition(100),
               });
 
               // 새 일기 추가
