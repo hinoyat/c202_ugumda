@@ -1,4 +1,6 @@
 // 별에 호버했을 때 메뉴 세 개 뜨는 거 컴포넌트
+// 였는데 별을 '클릭' 했을 때 메뉴 세 개 뜨는 컴포넌트
+
 import React, { useState, useRef, useEffect } from 'react';
 
 //          이미지 import          //
