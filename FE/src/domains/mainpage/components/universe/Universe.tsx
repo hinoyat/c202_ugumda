@@ -111,7 +111,7 @@ const Universe: React.FC = () => {
         <Canvas
           // camera={{ position: [0, 0, cameraDistance], fov: 90 }}
           // 구 내부에서 별들을 바라보는 느낌
-          camera={{ position: [0, 0, -30], fov: 75 }}
+          camera={{ position: [0, 0, -30], fov: 90, far: 5000 }}
           style={{
             background: 'black',
             width: '100vw',
@@ -162,7 +162,7 @@ const Universe: React.FC = () => {
             autoRotate={false}
             rotateSpeed={0.5}
             minDistance={5} // 너무 가까이 가지 않도록
-            maxDistance={50} // 너무 멀리 가지 않도록 (구 반경보다 작게)
+            maxDistance={200}
             target={[0, 0, 0]} // 항상 구의 중심을 바라보도록
           />
 
