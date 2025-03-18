@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  # 핵심 서비스
+  config-service:
+    build:
+      context: ./BE/config-service
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - backend-network
+
+  eureka-service:
+    build:
+      context: ./BE/eureka-service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-service
+    networks:
+      - backend-network
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+
+  gateway-service:
+    build:
+      context: ./BE/gateway-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - config-service
+      - eureka-service
+    networks:
+      - backend-network
+      - frontend-network
+    environment:
+      - SPRING_CONFIG_IMPORT=configserver:http://config-service:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=false
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka/
+
+  # 프론트엔드 서비스
+  frontend:
+    build:
+      context: ./FE
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway-service
+    networks:
+      - frontend-network
+
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
