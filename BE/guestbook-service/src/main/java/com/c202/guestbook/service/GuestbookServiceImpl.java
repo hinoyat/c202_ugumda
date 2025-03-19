@@ -4,6 +4,7 @@ import com.c202.exception.CustomException;
 import com.c202.guestbook.entity.Guestbook;
 import com.c202.guestbook.model.GuestbookDto;
 import com.c202.guestbook.repository.GuestbookRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class GuestbookServiceImpl implements GuestbookService {
     private GuestbookRepository guestbookRepository;
 
     @Override
+    @Transactional
     public GuestbookDto createGuestbook(int ownerSeq, int writerSeq, GuestbookDto guestbookDTO) {
         if(ownerSeq == writerSeq){
             throw new CustomException("본인 방명록에는 작성할 수 없습니다.");
@@ -72,6 +74,7 @@ public class GuestbookServiceImpl implements GuestbookService {
     }
 
     @Override
+    @Transactional
     public void deleteGuestbook(int userSeq, int guestbookSeq) {
         // 1. 방명록이 없을 때
         Guestbook guestbook = guestbookRepository.findByGuestbookSeq(guestbookSeq);
