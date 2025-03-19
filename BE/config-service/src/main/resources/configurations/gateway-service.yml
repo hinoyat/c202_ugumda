@@ -48,6 +48,13 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: guestbook-service
+          uri: lb://guestbook-service
+          predicates:
+            - Path=/api/guestbook/**
+          filters:
+            - name: JwtAuthFilter
+
 server:
   port: 80
 
