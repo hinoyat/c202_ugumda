@@ -141,3 +141,40 @@
 - 기능명세서 및 작업 일정 업데이트
 
 </details>
+
+<details>
+<summary>2025-03-12</summary>
+# 📌 오늘의 작업
+
+## 📝 AI 로직수정 + 전문가 멘토링 ppt 및 질문 정리 + 테스트 모델 찾기
+
+
+</details>
+
+
+<details>
+<summary>2025-03-13</summary>
+
+# 오늘의 
+## 테스트 모델 찾기
+
+# 📌 오늘의 공부
+
+## 📝 LoRA
+
+
+
+
+
+</details>
+
+
+<details>
+<summary>2025-03-14</summary>
+# 📌 오늘의 작업
+
+## 📝 AI 구현 대안책 계획
+
+
+
+</details>
