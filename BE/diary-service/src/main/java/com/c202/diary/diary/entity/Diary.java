@@ -12,10 +12,10 @@ import lombok.*;
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int diarySeq;
+    private Integer diarySeq;
 
     @Column(nullable = false)
-    private Long userSeq;
+    private Integer userSeq;
 
     @Column(nullable = false, length = 50)
     private String title;

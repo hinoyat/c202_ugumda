@@ -6,6 +6,7 @@ import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
 import com.c202.diary.diary.model.response.DiaryDetailResponseDto;
 import com.c202.diary.diary.model.response.DiaryListResponseDto;
 import com.c202.diary.diary.repository.DiaryRepository;
+import com.c202.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Transactional
     @Override
-    public DiaryDetailResponseDto createDiary(Long userSeq, DiaryCreateRequestDto request) {
+    public DiaryDetailResponseDto createDiary(int userSeq, DiaryCreateRequestDto request) {
 
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
 
@@ -49,7 +50,8 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public DiaryDetailResponseDto updateDiary(int diarySeq, DiaryUpdateRequestDto request) {
         // 다이어리 조회
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq);
+        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         // 업데이트
@@ -68,24 +70,23 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public void deleteDiary(int diarySeq) {
 
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq);
-
+        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
         diary.deleteDiary();
     }
 
     // 전체 조회(유저 연동 되면 분기해서 조회)
     @Transactional
     @Override
-    public List<DiaryListResponseDto> getMyDiaries(Long userSeq) {
+    public List<DiaryListResponseDto> getMyDiaries(int userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
-
         return DiaryListResponseDto.toDto(diaries);
     }
 
     @Transactional
     @Override
     // 전체 조회(유저 연동 되면 분기해서 조회)
-    public List<DiaryListResponseDto> getUserDiaries(Long userSeq) {
+    public List<DiaryListResponseDto> getUserDiaries(int userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
         return DiaryListResponseDto.toDto(diaries);
     }
@@ -94,17 +95,18 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public DiaryDetailResponseDto getDiary(int diarySeq) {
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq);
+        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
         return DiaryDetailResponseDto.toDto(diary);
     }
     
     @Transactional
     @Override
     public String toggleDiaryIsPublic(int diarySeq) {
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq);
+        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
         String result;
-
         String isPublic = diary.getIsPublic();
 
         if (isPublic.equals("Y")) {

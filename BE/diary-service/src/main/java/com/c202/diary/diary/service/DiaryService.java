@@ -9,19 +9,18 @@ import java.util.List;
 
 public interface DiaryService {
 
-    DiaryDetailResponseDto createDiary(Long userSeq, DiaryCreateRequestDto request);
+    DiaryDetailResponseDto createDiary(int userSeq, DiaryCreateRequestDto request);
 
     DiaryDetailResponseDto updateDiary(int diarySeq, DiaryUpdateRequestDto request);
 
     void deleteDiary(int diaryId);
 
-    List<DiaryListResponseDto> getMyDiaries(Long userSeq);
+    List<DiaryListResponseDto> getMyDiaries(int userSeq);
 
-    List<DiaryListResponseDto> getUserDiaries(Long userSeq);
+    List<DiaryListResponseDto> getUserDiaries(int userSeq);
 
     DiaryDetailResponseDto getDiary(int diarySeq);
 
     String toggleDiaryIsPublic(int diarySeq);
 
-//    boolean toggleDiaryLike(String userId, Long diaryId);
 }
