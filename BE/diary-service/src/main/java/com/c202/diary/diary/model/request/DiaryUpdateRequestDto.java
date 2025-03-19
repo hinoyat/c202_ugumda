@@ -2,8 +2,9 @@ package com.c202.diary.diary.model.request;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class DiaryUpdateRequestDto {
 

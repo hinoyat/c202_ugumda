@@ -5,7 +5,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -46,4 +45,12 @@ public class Diary {
 
     public void deleteDiary() { this.isDeleted = "Y"; }
 
+    public void setPublic(String isPublic) { this.isPublic = isPublic; }
+
+    public void update(String title, String content, String dreamDate, String updatedAt) {
+        this.title = title;
+        this.content = content;
+        this.dreamDate = dreamDate;
+        this.updatedAt = updatedAt;
+    }
 }

@@ -58,10 +58,12 @@ public class DiaryServiceImpl implements DiaryService {
         }
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         // 업데이트
-        diary.setTitle(request.getTitle());
-        diary.setContent(request.getContent());
-        diary.setDreamDate(request.getDreamDate());
-        diary.setUpdatedAt(now);
+        diary.update(
+                request.getTitle(),
+                request.getContent(),
+                request.getDreamDate(),
+                now
+        );
 
         // 저장
         diaryRepository.save(diary);
@@ -80,17 +82,15 @@ public class DiaryServiceImpl implements DiaryService {
         diary.deleteDiary();
     }
 
-    // 전체 조회(유저 연동 되면 분기해서 조회)
     @Transactional
     @Override
     public List<DiaryListResponseDto> getMyDiaries(int userSeq) {
-        List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
+        List<Diary> diaries = diaryRepository.findByUserSeqAndIsDeleted(userSeq, "N");
         return DiaryListResponseDto.toDto(diaries);
     }
 
     @Transactional
     @Override
-    // 전체 조회(유저 연동 되면 분기해서 조회)
     public List<DiaryListResponseDto> getUserDiaries(int userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeqAndIsPublicAndIsDeleted(userSeq, "Y", "N");
         return DiaryListResponseDto.toDto(diaries);
@@ -119,10 +119,10 @@ public class DiaryServiceImpl implements DiaryService {
         String isPublic = diary.getIsPublic();
 
         if (isPublic.equals("Y")) {
-            diary.setIsPublic("N");
+            diary.setPublic("N");
             result = "비공개 설정 완료";
         } else {
-            diary.setIsPublic("Y");
+            diary.setPublic("Y");
             result = "공개 설정 완료";
         }
         diaryRepository.save(diary);

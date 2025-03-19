@@ -3,8 +3,9 @@ package com.c202.diary.diary.model.response;
 import com.c202.diary.diary.entity.Diary;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class DiaryDetailResponseDto {
 
