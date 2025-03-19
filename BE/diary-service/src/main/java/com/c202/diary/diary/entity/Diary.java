@@ -1,7 +1,11 @@
 package com.c202.diary.diary.entity;
 
+import com.c202.diary.tag.entity.DiaryTag;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +47,11 @@ public class Diary {
     @Column(nullable = false, length = 1)
     private String isPublic;
 
+    // DiaryTag와 연결
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<DiaryTag> diaryTags = new ArrayList<>();
+    
     public void deleteDiary() { this.isDeleted = "Y"; }
 
     public void setPublic(String isPublic) { this.isPublic = isPublic; }
