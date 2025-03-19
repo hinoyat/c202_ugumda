@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GuestbookRepository extends JpaRepository<Guestbook, Integer> {
-    Guestbook findByGuestbookSeq(Integer guestbookSeq);
+    Optional<Guestbook> findByGuestbookSeq(Integer guestbookSeq);
     List<Guestbook> findByOwnerSeqAndIsDeleted(Integer ownerSeq, String isDeleted);
 }

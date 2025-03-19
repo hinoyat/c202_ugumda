@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,10 +78,8 @@ public class GuestbookServiceImpl implements GuestbookService {
     @Transactional
     public void deleteGuestbook(int userSeq, int guestbookSeq) {
         // 1. 방명록이 없을 때
-        Guestbook guestbook = guestbookRepository.findByGuestbookSeq(guestbookSeq);
-        if (guestbook == null) {
-            throw new CustomException("해당 방명록을 찾을 수 없습니다.");
-        }
+        Guestbook guestbook = guestbookRepository.findByGuestbookSeq(guestbookSeq)
+                .orElseThrow(() -> new CustomException("해당 방명록을 찾을 수 없습니다."));
 
         // 2. 방명록이 이미 삭제된 상태인 경우
         if ("Y".equals(guestbook.getIsDeleted())) {
