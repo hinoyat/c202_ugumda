@@ -641,3 +641,23 @@ https://claude.ai/chat/004eee28-fa0d-4e4b-b6ee-8ea80145d0f8
 ```
 
 </details>
+
+<details>
+  <summary>2025-03-19</summary>
+
+# 1. 젠킨스 자동화 설정
+
+![alt text](images/jenkins-logs.png)
+![alt text](images/jenkins-home.png)
+
+# 2. 젠킨스 결과 mm 통보
+
+![alt text](images/jenkins-result.png)
+
+# 3. Grafana 모니터링
+
+![alt text](images/grafana-node.png)
+![alt text](images/grafana-docker.png)
+![alt text](images/grafana-logs.png)
+
+</details>
