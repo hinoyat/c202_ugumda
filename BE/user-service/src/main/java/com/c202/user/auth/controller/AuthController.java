@@ -58,14 +58,10 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @RequestHeader("X-User-Seq") int userSeq,
+            HttpServletRequest request,
             HttpServletResponse response) {
 
-        System.out.println("요청이 들어왔다");
-
-        authService.logout(userSeq);
-
-        // 리프레시 토큰 쿠키 삭제
-        jwtTokenProvider.deleteRefreshTokenCookie(response);
+        authService.logout(request, response, userSeq);
 
         return ResponseEntity.ok(ApiResponse.success(null, "로그아웃이 성공했습니다."));
     }
