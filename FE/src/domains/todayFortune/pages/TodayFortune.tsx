@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import '../style/TodayFortune.css';
-import card from "@/assets/images/fortune_card.svg"
-import space_bg from "@/assets/images/space_bg.svg"
+import card from '@/assets/images/fortune_card.svg';
+import space_bg from '@/assets/images/space_bg.svg';
+import StarField from '@/domains/mainpage/components/universe/StarField';
+import { Canvas } from '@react-three/fiber';
 
 const TodayFortune = () => {
   const nav = useNavigate();
@@ -21,6 +23,16 @@ const TodayFortune = () => {
     },
   ];
 
+  // 별배경
+  useEffect(() => {
+    setTimeout(() => {
+      setIsAnimated(true);
+      setTimeout(() => {
+        setInitialAnimationComplete(true);
+      }, 1500);
+    }, 100);
+  }, []);
+
   // 컴포넌트가 마운트되면 입장 애니메이션 시작
   useEffect(() => {
     setTimeout(() => {
@@ -34,11 +46,25 @@ const TodayFortune = () => {
 
   return (
     <div className="w-screen h-screen relative">
-      <img
+      {/* <img
         src={space_bg}
         alt="space background"
         className="w-full h-full object-cover"
-      />
+      /> */}
+
+      <Canvas
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'black',
+        }}
+        camera={{ position: [0, 0, 5] }}>
+        <StarField />
+      </Canvas>
+
       <div className="absolute top-3 right-4 text-2xl text-white">
         <button
           onClick={onClickHome}
@@ -53,7 +79,7 @@ const TodayFortune = () => {
           <img
             src={card}
             alt="fortune card"
-            className="w-80"
+            className="w-65"
           />
 
           {/* 카드 내용 (텍스트) */}
