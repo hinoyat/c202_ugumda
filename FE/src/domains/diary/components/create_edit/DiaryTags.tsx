@@ -1,5 +1,12 @@
-import React, { useState, FC, ChangeEvent, KeyboardEvent, useRef, useEffect } from 'react';
-import history_image from "@/assets/images/diary_history.svg";
+import React, {
+  useState,
+  FC,
+  ChangeEvent,
+  KeyboardEvent,
+  useRef,
+  useEffect,
+} from 'react';
+import history_image from '@/assets/images/diary_history.svg';
 
 interface DiaryTagsProps {
   initialTags?: string[]; // 수정 시 기존 태그 전달
@@ -61,11 +68,11 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
         setDropdownWidth(inputContainerRef.current.offsetWidth);
       }
     };
-    
+
     // 초기 로드 및 리사이징 시 너비 업데이트
     updateWidth();
     window.addEventListener('resize', updateWidth);
-    
+
     return () => {
       window.removeEventListener('resize', updateWidth);
     };
@@ -113,28 +120,27 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
   // 검색어를 강조하는 함수 - 인라인 스타일 사용
   const highlightSearchTerm = (text: string) => {
     if (!searchTerm) return text;
-    
+
     const regex = new RegExp(`(${searchTerm})`, 'gi');
     const matches = text.match(regex);
-    
+
     if (!matches) return text;
-    
+
     const parts = text.split(regex);
-    
+
     return (
       <>
         {parts.map((part, i) => {
           // 검색어와 일치하는 부분인지 확인
           if (part.toLowerCase() === searchTerm.toLowerCase()) {
             return (
-              <span 
-                key={i} 
-                style={{ 
+              <span
+                key={i}
+                style={{
                   color: '#FFFFFF', // 흰색
-                  fontSize: '16px',  // 글씨 크기
-                  fontWeight: 'bold' // 굵은 글씨
-                }}
-              >
+                  fontSize: '16px', // 글씨 크기
+                  fontWeight: 'bold', // 굵은 글씨
+                }}>
                 {part}
               </span>
             );
@@ -159,11 +165,12 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
           {tags.map((tag) => (
             <div
               key={tag}
-              className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl flex items-center gap-1"
-            >
+              className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl flex items-center gap-1">
               <div className="flex items-center justify-center gap-1 text-sm">
                 <p>{tag}</p>
-                <button onClick={() => removeTag(tag)} className="text-white">
+                <button
+                  onClick={() => removeTag(tag)}
+                  className="text-white">
                   x
                 </button>
               </div>
@@ -172,40 +179,45 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
         </div>
 
         {/* 입력창 컨테이너 - 고정 너비 유지 */}
-        <div 
+        <div
           ref={inputContainerRef}
-          className="relative w-full"
-        >
+          className="relative w-full">
           <input
             type="text"
             className="bg-transparent outline-none text-white w-full"
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder={canAddMoreTags ? "태그를 입력하세요 (최대 5글자)" : "태그는 최대 3개까지 입력 가능합니다"}
+            placeholder={
+              canAddMoreTags
+                ? '태그를 입력하세요 (최대 5글자)'
+                : '태그는 최대 3개까지 입력 가능합니다'
+            }
             disabled={!canAddMoreTags}
           />
-          
+
           {/* 입력된 글자 수 표시 */}
           {inputValue && (
             <div className="absolute right-0 top-0 text-xs text-gray-400">
               {inputValue.length}/{MAX_TAG_LENGTH}
             </div>
           )}
-          
+
           {/* 고정된 너비의 드롭다운 */}
           {inputValue && filteredOptions.length > 0 && canAddMoreTags && (
-            <ul 
+            <ul
               className="absolute top-full left-0 bg-[rgba(0,0,0,0.48)] text-[rgba(255,255,255,0.6)] border border-gray-300 overflow-y-scroll backdrop-blur-2xl z-10 mt-1 max-h-40"
-              style={{ width: `${dropdownWidth}px` }}
-            >
+              style={{ width: `${dropdownWidth}px` }}>
               {filteredOptions.map((option) => (
                 <li
                   key={option}
                   className="cursor-pointer p-2 hover:bg-[rgba(151,151,151,0.24)] flex items-center gap-5"
-                  onClick={() => handleOptionClick(option)}
-                >
-                  <img src={history_image} alt="" className="w-5" />
+                  onClick={() => handleOptionClick(option)}>
+                  <img
+                    src={history_image}
+                    alt=""
+                    className="w-5"
+                  />
                   <p>{highlightSearchTerm(option)}</p>
                 </li>
               ))}
@@ -220,8 +232,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
           <p
             key={index}
             className={`cursor-pointer hover:underline ${!canAddMoreTags ? 'opacity-50' : ''}`}
-            onClick={() => canAddMoreTags && handleHistoryTagClick(tag)}
-          >
+            onClick={() => canAddMoreTags && handleHistoryTagClick(tag)}>
             {tag}
           </p>
         ))}

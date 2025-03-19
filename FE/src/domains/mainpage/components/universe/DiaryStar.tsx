@@ -42,6 +42,9 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const [hovered, setHovered] = useState<boolean>(false); // 마우스 호버 상태
   const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
 
+  // 별 색상을 빨간색으로 설정(임시- 잘 보이게 하려고!)
+  const starColor = new THREE.Color('#ff3333');
+
   // 새 별을 위한 상태 추가
   const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
 
@@ -56,11 +59,11 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         const elapsed = Date.now() - startTime;
         if (elapsed < duration) {
           // 깜빡임 효과 (사인 파동)
-          const intensity = 5 + 3 * Math.sin(elapsed / 300);
+          const intensity = 8 + 7 * Math.sin(elapsed / 300);
           setHighlightIntensity(intensity);
           requestAnimationFrame(animateNewStar);
         } else {
-          // 10초 후 일반 별로 변환
+          // 20초 후 일반 별로 변환
           setHighlightIntensity(3);
         }
       };
@@ -75,11 +78,11 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     if (meshRef.current) {
       // 별의 확대/축소 효과 (펄스 애니메이션)
       const pulseFactor = isNew ? 0.1 : 0.05; // 새 별은 더 큰 펄스 효과
-      const pulseSpeed = isNew ? 2 : 1.5; // 새 별은 더 빠른 펄스
+      const pulseSpeed = isNew ? 3 : 1.5; // 새 별은 더 빠른 펄스
       const scale =
         1 + pulseFactor * Math.sin(state.clock.elapsedTime * pulseSpeed);
 
-      const baseScale = hovered ? 1.2 : 1.0; // 호버 상태에 따른 기본 크기
+      const baseScale = hovered ? 1.3 : 1.0; // 호버 상태에 따른 기본 크기
 
       // 별의 크기 조정
       meshRef.current.scale.set(
@@ -121,11 +124,20 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         <sphereGeometry args={[(entry.size / 2) * 2, 16, 16]} />
         {/* 별의 색과 발광 효과 */}
         <meshStandardMaterial
-          color={entry.color}
-          emissive={entry.color}
+          color={starColor}
+          emissive={starColor}
           emissiveIntensity={hovered ? 5 : highlightIntensity} // 하이라이트 강도 사용
         />
       </mesh>
+      {/* 새 별이라면 빛나는 효과 추가 */}
+      {isNew && (
+        <pointLight
+          color={starColor}
+          intensity={1.5}
+          distance={10}
+          decay={2}
+        />
+      )}
     </group>
   );
 };
