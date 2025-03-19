@@ -11,6 +11,7 @@ const TodayFortune = () => {
   const [isAnimated, setIsAnimated] = useState(false);
   const [initialAnimationComplete, setInitialAnimationComplete] =
     useState(false);
+  const [isGlowing, setIsGlowing] = useState(false);
 
   const onClickHome = () => {
     nav('/spaceship');
@@ -23,24 +24,23 @@ const TodayFortune = () => {
     },
   ];
 
-  // 별배경
+  // 단일 useEffect로 통합
   useEffect(() => {
     setTimeout(() => {
       setIsAnimated(true);
-      setTimeout(() => {
-        setInitialAnimationComplete(true);
-      }, 1500);
-    }, 100);
-  }, []);
 
-  // 컴포넌트가 마운트되면 입장 애니메이션 시작
-  useEffect(() => {
-    setTimeout(() => {
-      setIsAnimated(true);
-      // 초기 애니메이션 완료 후 호버 효과 활성화
+      // 애니메이션 완료 상태 설정
       setTimeout(() => {
         setInitialAnimationComplete(true);
-      }, 1500);
+
+        // 빛나는 효과 시작
+        setIsGlowing(true);
+
+        // 2초 후 빛나는 효과 제거
+        setTimeout(() => {
+          setIsGlowing(false);
+        }, 1000); // 빛나는 효과 지속 시간
+      }, 1000); // 카드 등장 후 빛나는 효과가 시작되는 시간
     }, 100);
   }, []);
 
@@ -73,9 +73,14 @@ const TodayFortune = () => {
         </button>
       </div>
 
+      {/* 카드 */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div
-          className={`card-container ${isAnimated ? 'animated' : ''} ${initialAnimationComplete ? 'animation-complete' : ''}`}>
+          className={`card-container 
+          ${isAnimated ? 'animated' : ''} 
+          ${initialAnimationComplete ? 'animation-complete' : ''} 
+          ${isGlowing ? 'temp-glow' : ''}
+          `}>
           <img
             src={card}
             alt="fortune card"
@@ -84,7 +89,7 @@ const TodayFortune = () => {
 
           {/* 카드 내용 (텍스트) */}
           {isAnimated && (
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center p-4 fortune-text">
+            <div className="maru-font text-[14px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center p-4 fortune-text">
               <p>{mockdata[0].content}</p>
             </div>
           )}
