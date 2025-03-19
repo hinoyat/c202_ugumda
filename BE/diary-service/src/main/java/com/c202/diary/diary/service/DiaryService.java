@@ -11,9 +11,9 @@ public interface DiaryService {
 
     DiaryDetailResponseDto createDiary(int userSeq, DiaryCreateRequestDto request);
 
-    DiaryDetailResponseDto updateDiary(int diarySeq, DiaryUpdateRequestDto request);
+    DiaryDetailResponseDto updateDiary(int diarySeq, int userSeq, DiaryUpdateRequestDto request);
 
-    void deleteDiary(int diaryId);
+    void deleteDiary(int diaryId, int userSeq);
 
     List<DiaryListResponseDto> getMyDiaries(int userSeq);
 
@@ -21,6 +21,6 @@ public interface DiaryService {
 
     DiaryDetailResponseDto getDiary(int diarySeq);
 
-    String toggleDiaryIsPublic(int diarySeq);
+    String toggleDiaryIsPublic(int diarySeq, int userSeq);
 
 }

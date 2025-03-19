@@ -33,20 +33,22 @@ public class DiaryController {
     // 일기 수정
     @PutMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> updateDiary(
+            @RequestHeader("X-User-Seq") Integer userSeq,
             @RequestBody DiaryUpdateRequestDto dto,
             @PathVariable Integer diarySeq
     ) {
         if (diarySeq == null) { throw new CustomException("diarySeq 값을 다시 확인해 주세요"); }
-        return ResponseEntity.ok(ResponseDto.success(200, "일기 수정 완료", diaryService.updateDiary(diarySeq, dto)));
+        return ResponseEntity.ok(ResponseDto.success(200, "일기 수정 완료", diaryService.updateDiary(diarySeq, userSeq, dto)));
     }
 
     // 일기 삭제
     @DeleteMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<Objects>> deleteDiary(
+            @RequestHeader("X-User-Seq") Integer userSeq,
             @PathVariable Integer diarySeq
     ) {
         if (diarySeq == null) { throw new CustomException("diarySeq 값을 다시 확인해 주세요"); }
-        diaryService.deleteDiary(diarySeq);
+        diaryService.deleteDiary(diarySeq, userSeq);
         return ResponseEntity.ok(ResponseDto.success(204, "일기 삭제 완료"));
     }
 
@@ -79,10 +81,11 @@ public class DiaryController {
     // 공개 비공개 토글
     @PutMapping("/{diarySeq}/visibility")
     public ResponseEntity<ResponseDto<String>> toggleDiaryIsPublic(
+            @RequestHeader("X-User-Seq") Integer userSeq,
             @PathVariable Integer diarySeq
     ) {
         if (diarySeq == null) { throw new CustomException("diarySeq 값을 다시 확인해 주세요"); }
-        String result = diaryService.toggleDiaryIsPublic(diarySeq);
+        String result = diaryService.toggleDiaryIsPublic(diarySeq, userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "일기 공개 상태 변경 완료", result));
     }
 

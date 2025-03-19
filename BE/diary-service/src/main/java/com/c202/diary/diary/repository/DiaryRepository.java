@@ -12,5 +12,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer> {
 
     List<Diary> findByUserSeq(int userSeq);
 
-    List<Diary> findByUserSeqAndIsDeleted(int userSeq, Boolean isDeleted);
+    List<Diary> findByUserSeqAndIsDeleted(int userSeq, String isDeleted);
+
+    // 다른 유저 일기 조회 시 비공개 일기까지 필터링
+    List<Diary> findByUserSeqAndIsPublicAndIsDeleted(int userSeq, String isPublic, String isDeleted);
 }

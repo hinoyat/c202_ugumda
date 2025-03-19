@@ -48,11 +48,14 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Transactional
     @Override
-    public DiaryDetailResponseDto updateDiary(int diarySeq, DiaryUpdateRequestDto request) {
+    public DiaryDetailResponseDto updateDiary(int diarySeq, int userSeq, DiaryUpdateRequestDto request) {
         // 다이어리 조회
         Diary diary = diaryRepository.findByDiarySeq(diarySeq)
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
+        if (!diary.getUserSeq().equals(userSeq)) {
+            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
+        }
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         // 업데이트
         diary.setTitle(request.getTitle());
@@ -68,10 +71,12 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Transactional
     @Override
-    public void deleteDiary(int diarySeq) {
-
+    public void deleteDiary(int diarySeq, int userSeq) {
         Diary diary = diaryRepository.findByDiarySeq(diarySeq)
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+        if (!diary.getUserSeq().equals(userSeq)) {
+            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
+        }
         diary.deleteDiary();
     }
 
@@ -87,7 +92,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     // 전체 조회(유저 연동 되면 분기해서 조회)
     public List<DiaryListResponseDto> getUserDiaries(int userSeq) {
-        List<Diary> diaries = diaryRepository.findByUserSeq(userSeq);
+        List<Diary> diaries = diaryRepository.findByUserSeqAndIsPublicAndIsDeleted(userSeq, "Y", "N");
         return DiaryListResponseDto.toDto(diaries);
     }
     
@@ -102,9 +107,13 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Transactional
     @Override
-    public String toggleDiaryIsPublic(int diarySeq) {
+    public String toggleDiaryIsPublic(int diarySeq, int userSeq) {
         Diary diary = diaryRepository.findByDiarySeq(diarySeq)
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+
+        if (!diary.getUserSeq().equals(userSeq)) {
+            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
+        }
 
         String result;
         String isPublic = diary.getIsPublic();
