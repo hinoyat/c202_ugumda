@@ -115,6 +115,69 @@ public class GlobalExceptionHandler {
 ```
 - 에러를 세분화하여 좀 더 명확한 오류 메시지를 전달할 수 있도록 했다.
 
-# 2025-03-19 수수요일
+# 2025-03-19 수요일
 
-## 
+## 방명록 서비스 수정
+- eureka 등록
+- config 등록
+- gateway 등록
+
+## lombok
+- exclude 되어 있었던 pom.xml 수정
+
+## MSA 서비스 확장 관련 문서 정리
+- https://www.notion.so/1ba9ac6da02c80c4b986d2b7f003d626
+
+## api 명세서 수정
+![images/image-4.png](./images/image-4.png)
+
+
+# 2025-03-20 목요일
+
+## 1. MYSQL + 스케줄러 적용
+
+### 기존 방식 (Redis TTL)
+- 기존에는 행운 번호 생성시 12시까지 남은 시간을 계산하여 TTL로 설정하였다.
+- 매번 12시까지의 시간을 계산해야 하므로 불필요한 서버 자원을 사용하였다.
+
+### 개선된 방식 (MySQL + 스케줄러)
+- 모든 데이터를 MySQL에 저장하고, 스케줄러를 사용하여 매일 자정에 일괄 삭제하는 방식으로 변경하였다.
+- TTL을 계산할 필요 없어 서버 자원을 절약할 수 있고,
+- 스케줄러를 단 한번 실행하는 것으로 모든 데이터를 쉽게 정리가 가능한 장점이 있다.
+
+### 향후 개선 방향
+- 현재는 행운 번호 서비스만 적용되었지만, 오늘의 운세 서비스에도 동일한 방식으로 확장 가능하다.
+- 데이터가 백만 건 이상으로 증가할 경우 Spring Batch 적용을 고려할 수 있다.
+
+## 2. `@NotNull` 을 활용한 유효성 검사 개선
+
+### 기존 방식 (==null)
+- 컨트롤러와 서비스 레이어에서 `if (userSeq == null)` 같은 조건을 사용해 매번 유효성 검사를 진행했다.
+- 여러 곳에서 null 체크를 반복해야 해서 비효율적이고,
+- 직접적으로 CustomException을 던져야 하므로 코드가 복잡해진다.
+- 심지어 pathvariable로는 null값이 오지 않기 때문에 절대로 실행되지 않는 실효성 없는 코드였다.
+
+### 개선된 방식 (`@NotNull` + `@Validated`)
+```
+@PostMapping
+    public ResponseEntity<ResponseDto<Object>> generateLuckyNumber(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) { 
+        luckyNumberService.createLuckyNumber(userSeq);
+        return ResponseEntity.ok(ResponseDto.success(201, "행운 번호 생성 성공"));
+    }
+```
+- `NotNull`을 사용하면 Spring이 자동으로 유효성 검사를 수행하여 userSeq가 null이면 요청 자체를 차단한다.
+
+### 향후 개선 방향
+- `GlobalExceptionHandler`에서 `MethodArgumentNotValidException`을 처리하여 클라이언트가 이해하기 쉬운 메시지를 반환할 수 있다.
+- 이처럼 전역 예외 핸들러에서 메시지를 통합 관리할 수 있어 유지보수성이 증가한다.
+
+## 3. 구독 API
+### 기존 방식
+- 구독 생성/구독 해제 API 가 따로 존재하였다.
+- 클라이언트에서 요청을 다르게 처리해야 하는 문제가 있었다.
+
+### 개선된 방식
+- 팀원들의 코드리뷰를 받아 수정하였다.
+- 구독 상태 변경(PATCH) API로 변경하였다.
+- RESTful하고, API 단순화, 유지보수성이 증가하는 장점을 가지게 되었다.
