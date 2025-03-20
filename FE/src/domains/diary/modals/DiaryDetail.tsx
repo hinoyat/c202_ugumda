@@ -70,9 +70,10 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
   console.log('렌더링 전 현재 isEditing 상태:', isEditing);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-[full] h-full">
       {isEditing ? (
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[45%] h-[87%] z-50 bg-[rgba(110,110,110,0.47)]">
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] modal-back-color p-1 z-50">
+          {' '}
           <DiaryComponent
             onClose={handleCloseEdit}
             isEditing={true}
