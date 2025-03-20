@@ -70,7 +70,8 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
   console.log('렌더링 전 현재 isEditing 상태:', isEditing);
 
   return (
-    <div className="relative w-[full] h-full">
+    <div className="relative w-full h-full">
+      {/* // 일기 수정 */}
       {isEditing ? (
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] modal-back-color p-1 z-50">
           <DiaryComponent
@@ -86,14 +87,24 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
           />
         </div>
       ) : (
+        // 일기조회
         <>
           {console.log('상세보기 모달 렌더링')}
           {/* 모달 배경 시작 */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[45%] h-[87%] modal-back-color p-1 z-50">
+          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] bg-[#505050]/90 rounded-lg p-1 z-50">
+            {/* 닫기버튼 - 나중에 디자인 통일시켜야함..! */}
+            <button
+              onClick={handleClose}
+              className="absolute top-3 right-3 flex items-center justify-center"
+              aria-label="닫기">
+              <span className="text-white text-lg font-semibold leading-none">
+                ×
+              </span>
+            </button>
             {/* 모달 내용을 전체 감싸는 div태그 시작 */}
             <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
               <div className="pr-3 flex flex-col justify-between w-full h-full gap-3">
-                <div className="">
+                <div>
                   <DetailHeader
                     title={initialDiary.title}
                     created_at={initialDiary.created_at}
