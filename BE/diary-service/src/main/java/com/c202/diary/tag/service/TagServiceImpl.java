@@ -37,20 +37,7 @@ public class TagServiceImpl implements TagService {
                 .collect(Collectors.toList());
     }
 
-    private List<TagResponseDto> getRecommendedTags() {
 
-        List<String> recommendedTagNames = Arrays.asList("행복", "슬픔", "분노", "기쁨", "평화", "불안", "희망");
-
-        return recommendedTagNames.stream()
-                .map(name -> {
-                    Tag tag = tagRepository.findByName(name).orElse(null);
-                    return TagResponseDto.builder()
-                            .tagSeq(tag != null ? tag.getTagSeq() : null)
-                            .name(name)
-                            .build();
-                })
-                .collect(Collectors.toList());
-    }
 
     @Override
     @Transactional
@@ -66,9 +53,8 @@ public class TagServiceImpl implements TagService {
 
         List<TagResponseDto> tagDtos = new ArrayList<>();
         for (String tagName : tagNames) {
-            if (tagName.length() > 5) {
-                throw new CustomException("태그는 5글자까지 가능합니다");
-            }
+
+            ValidateTagName(tagName);
 
             Tag tag = createTagIfNotExists(tagName);
 
@@ -94,6 +80,30 @@ public class TagServiceImpl implements TagService {
                 .orElseGet(() -> tagRepository.save(Tag.builder()
                         .name(tagName)
                         .build()));
+    }
+
+    private void ValidateTagName(String tagName) {
+        if (tagName.length() > 5) {
+            throw new CustomException("태그는 5글자까지 가능합니다");
+        }
+        if (!tagName.matches("^[가-힣a-zA-Z0-9]+$")) {
+            throw new CustomException("태그는 한글, 영문, 숫자만 사용 가능합니다");
+        }
+    }
+
+    private List<TagResponseDto> getRecommendedTags() {
+
+        List<String> recommendedTagNames = Arrays.asList("행복", "슬픔", "분노", "기쁨", "평화", "불안", "희망");
+
+        return recommendedTagNames.stream()
+                .map(name -> {
+                    Tag tag = tagRepository.findByName(name).orElse(null);
+                    return TagResponseDto.builder()
+                            .tagSeq(tag != null ? tag.getTagSeq() : null)
+                            .name(name)
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
 }
