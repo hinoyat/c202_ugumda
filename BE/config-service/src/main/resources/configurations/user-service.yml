@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/user_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://user-db:3306/user_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: root
     password: 1234
 
@@ -15,7 +15,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
 
   logging:
@@ -39,3 +39,6 @@ server:
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${random.value}
+  client:
+    service-url:
+      defaultZone: http://eureka-service:8761/eureka/
