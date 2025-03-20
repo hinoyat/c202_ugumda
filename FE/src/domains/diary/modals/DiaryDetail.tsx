@@ -92,7 +92,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
           <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[45%] h-[87%] modal-back-color p-1 z-50">
             {/* 모달 내용을 전체 감싸는 div태그 시작 */}
             <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
-              <div className="pr-3 flex flex-col gap-3">
+              <div className="pr-3 flex flex-col justify-between w-full h-full gap-3">
                 <div className="">
                   <DetailHeader
                     title={initialDiary.title}

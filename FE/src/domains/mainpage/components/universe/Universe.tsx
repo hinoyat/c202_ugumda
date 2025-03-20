@@ -296,22 +296,18 @@ const Universe: React.FC = () => {
 
       {/* ---------------------일기 조회 모달------------------------ */}
       {viewingEntry && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-[45%] h-[87%] bg-[rgba(110,110,110,0.47)] rounded-lg overflow-hidden">
-            <DiaryDetail
-              initialDiary={{
-                id: viewingEntry.diary_seq,
-                title: viewingEntry.title,
-                content: viewingEntry.content,
-                tags: viewingEntry.tags,
-                created_at: viewingEntry.dream_date,
-                isPublic: viewingEntry.is_public === 'Y',
-                // 추가 정보가 필요하다면 여기에 추가
-              }}
-              onClose={handleCloseView}
-            />
-          </div>
-        </div>
+        <DiaryDetail
+          initialDiary={{
+            id: viewingEntry.diary_seq,
+            title: viewingEntry.title,
+            content: viewingEntry.content,
+            tags: viewingEntry.tags,
+            created_at: viewingEntry.dream_date,
+            isPublic: viewingEntry.is_public === 'Y',
+            // 추가 정보가 필요하다면 여기에 추가
+          }}
+          onClose={handleCloseView}
+        />
       )}
 
       {/* --------------------별 클릭 시 StarHoverMenu 보임--------------------- */}
