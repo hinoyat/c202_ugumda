@@ -21,45 +21,40 @@ interface DiaryDetailProps {
     tags: string[];
     created_at: string;
     isPublic: boolean;
-    dream_video?: string;
+    dream_video?: string | null;
   };
   onClose: () => void;
+  //  수정된 데이터를 부모 컴포넌트에 전달하는 콜백 함수
+  onUpdateDiary?: (updatedDiary: DiaryDetailProps['initialDiary']) => void;
 }
 
-const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
+const DiaryDetail: React.FC<DiaryDetailProps> = ({
+  initialDiary,
+  onClose,
+  onUpdateDiary,
+}) => {
+  // 수정 모드 상태와 폼 표시 상태 분리 (Universe 방식으로 통일)
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false); // 추가: 폼 표시 여부를 별도로 관리
+
+  // 현재 보여지는 일기 데이터를 상태로 관리하여 수정 후 반영할 수 있게 함
+  const [currentDiary, setCurrentDiary] = useState(initialDiary);
 
   // 컴포넌트 마운트/업데이트 시 로그
   useEffect(() => {
-    console.log('DiaryDetail useEffect 실행, isEditing:', isEditing);
-  }, [isEditing]);
+    console.log(
+      'DiaryDetail useEffect 실행, isEditing:',
+      isEditing,
+      'showForm:',
+      showForm
+    );
+  }, [isEditing, showForm]);
 
-  // 예시 데이터 (실제로는 ID를 기반으로 API에서 가져와야 함)
-  // const diarydata = {
-  //   id: parseInt(id || '1'),
-  //   title: '현호공쥬와 세계최강귀요미왕자의 결혼식',
-  //   created_at: '2025-03-14',
-  //   dream_video: '/loginVideo.mp4',
-  //   content:
-  //     'fdsfasdfjhsakfhjksdhfjkhsdjkfhnjksadfjkshdnfjkhsdjkfhsadjkfhjdskfhjksadhjkdsahjksdhfkjslahfjksdhfjksafhsdaj',
-  //   tags: ['행복', '결혼', '경사'],
-  //   likes_boolean: true,
-  //   likes: 22,
-  //   isPublic: true, // 공개 여부 추가
-  // };
-
-  // 문자열 앞뒤 공백 제거 후 비교
-  // const flag = diarydata.dream_video.trim() !== '';
-
-  // 수정 모드 활성화
+  // 수정 모드 활성화 함수 변경 (Universe 방식으로 통일)
   const handleEdit = () => {
+    console.log('수정 모드 활성화');
     setIsEditing(true);
-  };
-
-  // 수정 모드 종료
-  const handleCloseEdit = () => {
-    console.log('수정 모드 종료 함수 실행');
-    setIsEditing(false);
+    setShowForm(true); // 폼 표시 설정
   };
 
   // 일기 상세 페이지 닫기
@@ -67,91 +62,122 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({ initialDiary, onClose }) => {
     onClose();
   };
 
-  console.log('렌더링 전 현재 isEditing 상태:', isEditing);
+  console.log('렌더링 전 현재 상태:', { isEditing, showForm });
 
   return (
     <div className="relative w-full h-full">
-      {/* // 일기 수정 */}
-      {isEditing ? (
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] modal-back-color p-1 z-50">
-          <DiaryComponent
-            onClose={handleCloseEdit}
-            isEditing={true}
-            diaryData={{
-              id: initialDiary.id,
-              title: initialDiary.title,
-              content: initialDiary.content,
-              tags: initialDiary.tags,
-              isPublic: initialDiary.isPublic,
-            }}
-          />
-        </div>
-      ) : (
-        // 일기조회
-        <>
-          {console.log('상세보기 모달 렌더링')}
-          {/* 모달 배경 시작 */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] bg-[#505050]/90 rounded-lg p-1 z-50">
-            {/* 닫기버튼 - 나중에 디자인 통일시켜야함..! */}
-            <button
-              onClick={handleClose}
-              className="absolute top-3 right-3 flex items-center justify-center"
-              aria-label="닫기">
-              <span className="text-white text-lg font-semibold leading-none">
-                ×
-              </span>
-            </button>
-            {/* 모달 내용을 전체 감싸는 div태그 시작 */}
-            <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
-              <div className="pr-3 flex flex-col justify-between w-full h-full gap-3">
-                <div>
-                  <DetailHeader
-                    title={initialDiary.title}
-                    created_at={initialDiary.created_at}
-                  />
-                </div>
+      {/*수정: Universe 방식처럼 showForm으로 모달 표시 여부 제어  */}
+      {showForm && (
+        <DiaryComponent
+          onClose={(newDiaryData) => {
+            console.log('DiaryComponent onClose 호출됨', newDiaryData);
+            setShowForm(false);
 
-                {/* {flag && (
-                  <div className="">
-                    <DetailVideo dream_video={diarydata.dream_video} />
-                  </div>
-                )} */}
+            // 수정된 데이터가 있으면 현재 일기 데이터 업데이트
+            if (isEditing && newDiaryData) {
+              console.log('일기 데이터 업데이트', newDiaryData);
 
-                {initialDiary.dream_video && (
-                  <div className="">
-                    <DetailVideo dream_video={initialDiary.dream_video} />
-                  </div>
-                )}
+              // 현재 일기 데이터 업데이트
+              const updatedDiary = {
+                ...currentDiary,
+                title: newDiaryData.title || currentDiary.title,
+                content: newDiaryData.content || currentDiary.content,
+                tags: newDiaryData.tags || currentDiary.tags,
+                isPublic:
+                  newDiaryData.isPublic !== undefined
+                    ? newDiaryData.isPublic
+                    : currentDiary.isPublic,
+                // 동영상 관련 데이터도 있다면 업데이트
+                dream_video:
+                  newDiaryData.dream_video || currentDiary.dream_video,
+              };
 
-                <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words">
-                  <DetailContent content={initialDiary.content} />
-                </div>
+              setCurrentDiary(updatedDiary);
 
+              // 부모 컴포넌트에 수정된 데이터 전달
+              if (onUpdateDiary) {
+                console.log('부모 컴포넌트에 수정된 데이터 전달', updatedDiary);
+                onUpdateDiary(updatedDiary);
+              }
+            }
+
+            // 수정 모드 종료
+            setIsEditing(false);
+          }}
+          isEditing={isEditing}
+          diaryData={{
+            id: currentDiary.id,
+            title: currentDiary.title,
+            content: currentDiary.content,
+            tags: currentDiary.tags,
+            isPublic: currentDiary.isPublic,
+          }}
+        />
+      )}
+
+      {/* 일기 조회 UI (폼 표시 중이 아닐 때만 보임) */}
+      {!showForm && (
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] bg-[#505050]/90 rounded-lg p-1 z-50">
+          {/* 닫기버튼 */}
+          <button
+            onClick={handleClose}
+            className="absolute top-3 right-3 flex items-center justify-center"
+            aria-label="닫기">
+            <span className="text-white text-lg font-semibold leading-none">
+              ×
+            </span>
+          </button>
+
+          {/* 모달 내용을 전체 감싸는 div태그 시작 */}
+          <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
+            <div className="pr-3 flex flex-col justify-between w-full h-full gap-3">
+              <div>
+                <DetailHeader
+                  title={currentDiary.title}
+                  created_at={currentDiary.created_at}
+                />
+              </div>
+
+              {/* {currentDiary.dream_video && (
                 <div className="">
-                  <DetailTags
-                    initialTags={initialDiary.tags}
-                    isEditing={false}
-                  />
+                  <DetailVideo dream_video={currentDiary.dream_video} />
                 </div>
+              )} */}
 
-                <div className="h-10 flex items-center justify-end">
-                  <DetailLike
-                    likes={0} // 임시 값
-                    likes_boolean={false} // 임시 값
-                  />
-                </div>
+              <div>
+                <DetailVideo
+                  dream_video={currentDiary.dream_video || undefined}
+                />
+              </div>
 
-                <div className="">
-                  <DetailButtons
-                    onEdit={handleEdit}
-                    onClose={handleClose}
-                  />
-                </div>
+              <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words">
+                <DetailContent content={currentDiary.content} />
+              </div>
+
+              <div className="">
+                <DetailTags
+                  initialTags={currentDiary.tags}
+                  isEditing={false}
+                />
+              </div>
+
+              <div className="h-10 flex items-center justify-end">
+                <DetailLike
+                  likes={0} // 임시 값
+                  likes_boolean={false} // 임시 값
+                />
+              </div>
+
+              <div className="">
+                <DetailButtons
+                  onEdit={handleEdit}
+                  onClose={handleClose}
+                />
               </div>
             </div>
-            {/* 모달 내용을 전체 감싸는 div태그 끝 */}
           </div>
-        </>
+          {/* 모달 내용을 전체 감싸는 div태그 끝 */}
+        </div>
       )}
     </div>
   );
