@@ -74,12 +74,11 @@ public class DiaryController {
     }
 
     @PutMapping("/{diarySeq}/visibility")
-    public ResponseEntity<ResponseDto<String>> toggleDiaryIsPublic(
+    public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> toggleDiaryIsPublic(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
     ) {
-        String result = diaryService.toggleDiaryIsPublic(diarySeq, userSeq);
-        return ResponseEntity.ok(ResponseDto.success(200, "일기 공개 상태 변경 완료", result));
+        return ResponseEntity.ok(ResponseDto.success(200, "일기 공개 상태 변경 완료", diaryService.toggleDiaryIsPublic(diarySeq, userSeq)));
     }
 
 }

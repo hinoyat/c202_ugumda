@@ -21,6 +21,6 @@ public interface DiaryService {
 
     DiaryDetailResponseDto getDiary(Integer diarySeq);
 
-    String toggleDiaryIsPublic(Integer diarySeq, Integer userSeq);
+    DiaryDetailResponseDto toggleDiaryIsPublic(Integer diarySeq, Integer userSeq);
 
 }

@@ -60,12 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public DiaryDetailResponseDto updateDiary(Integer diarySeq, Integer userSeq, DiaryUpdateRequestDto request) {
-        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
-                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
-
-        if (!diary.getUserSeq().equals(userSeq)) {
-            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
-        }
+        Diary diary = validateDiary(diarySeq, userSeq);
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
 
         diary.update(
@@ -89,12 +84,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public void deleteDiary(Integer diarySeq, Integer userSeq) {
-        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
-                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
-
-        if (!diary.getUserSeq().equals(userSeq)) {
-            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
-        }
+        Diary diary = validateDiary(diarySeq, userSeq);
         diary.deleteDiary();
     }
 
@@ -118,38 +108,48 @@ public class DiaryServiceImpl implements DiaryService {
         Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
-        List<DiaryTag> diaryTags = diaryTagRepository.findByDiary(diary);
-
-        List<TagResponseDto> tagDtos = diaryTags.stream()
-                .map(diaryTag -> TagResponseDto.toDto(diaryTag.getTag()))
-                .collect(Collectors.toList());
+        List<TagResponseDto> tagDtos = getTagsForDiary(diary);
 
         return DiaryDetailResponseDto.toDto(diary, tagDtos);
     }
     
     @Transactional
     @Override
-    public String toggleDiaryIsPublic(Integer diarySeq, Integer userSeq) {
-        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
-                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+    public DiaryDetailResponseDto toggleDiaryIsPublic(Integer diarySeq, Integer userSeq) {
 
-        if (!diary.getUserSeq().equals(userSeq)) {
-            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
-        }
+        Diary diary = validateDiary(diarySeq, userSeq);
 
-        String result;
         String isPublic = diary.getIsPublic();
 
         if (isPublic.equals("Y")) {
             diary.setPublic("N");
-            result = "비공개 설정 완료";
         } else {
             diary.setPublic("Y");
-            result = "공개 설정 완료";
         }
         diaryRepository.save(diary);
 
-        return result;
+        List<TagResponseDto> tagDtos = getTagsForDiary(diary);
+
+        return DiaryDetailResponseDto.toDto(diary, tagDtos);
+
+    }
+
+    // 일기 유효성 검증
+    private Diary validateDiary(Integer diarySeq, Integer userSeq) {
+        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
+                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+        if (!diary.getUserSeq().equals(userSeq)) {
+            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
+        }
+        return diary;
+    }
+
+    // 태그 조회에 사용
+    private List<TagResponseDto> getTagsForDiary(Diary diary) {
+        List<DiaryTag> diaryTags = diaryTagRepository.findByDiary(diary);
+        return diaryTags.stream()
+                .map(diaryTag -> TagResponseDto.toDto(diaryTag.getTag()))
+                .collect(Collectors.toList());
     }
 
 }
