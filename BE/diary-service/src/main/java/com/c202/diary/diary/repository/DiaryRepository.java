@@ -8,12 +8,9 @@ import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Integer> {
 
-    Optional<Diary> findByDiarySeq(int diarySeq);
+    Optional<Diary> findByDiarySeq(Integer diarySeq);
 
-    List<Diary> findByUserSeq(int userSeq);
+    List<Diary> findByUserSeqAndIsDeleted(Integer userSeq, String isDeleted);
 
-    List<Diary> findByUserSeqAndIsDeleted(int userSeq, String isDeleted);
-
-    // 다른 유저 일기 조회 시 비공개 일기까지 필터링
-    List<Diary> findByUserSeqAndIsPublicAndIsDeleted(int userSeq, String isPublic, String isDeleted);
+    List<Diary> findByUserSeqAndIsPublicAndIsDeleted(Integer userSeq, String isPublic, String isDeleted);
 }

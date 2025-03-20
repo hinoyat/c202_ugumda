@@ -1,5 +1,7 @@
 package com.c202.diary.diary.controller;
 
+import com.c202.diary.tag.model.response.TagResponseDto;
+import com.c202.diary.tag.service.TagService;
 import com.c202.dto.ResponseDto;
 import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
 import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
@@ -20,8 +22,8 @@ import java.util.Objects;
 public class DiaryController {
 
     private final DiaryService diaryService;
-    
-    // 일기 생성
+    private final TagService tagService;
+
     @PostMapping("")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> createDiary(
             @RequestHeader("X-User-Seq") Integer userSeq,
@@ -30,7 +32,6 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(201, "일기 작성 완료", diaryService.createDiary(userSeq, dto)));
     }
 
-    // 일기 수정
     @PutMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> updateDiary(
             @RequestHeader("X-User-Seq") Integer userSeq,
@@ -41,7 +42,6 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "일기 수정 완료", diaryService.updateDiary(diarySeq, userSeq, dto)));
     }
 
-    // 일기 삭제
     @DeleteMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<Objects>> deleteDiary(
             @RequestHeader("X-User-Seq") Integer userSeq,
@@ -52,7 +52,6 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(204, "일기 삭제 완료"));
     }
 
-    // 내 일기 전체 조회
     @GetMapping("/me")
     public ResponseEntity<ResponseDto<List<DiaryListResponseDto>>> getMyDiaries(
             @RequestHeader("X-User-Seq") Integer userSeq
@@ -60,7 +59,6 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "내 일기 조회 완료", diaryService.getMyDiaries(userSeq)));
     }
 
-    // 다른 유저 일기 전체 조회
     @GetMapping("/users/{userSeq}")
     public ResponseEntity<ResponseDto<List<DiaryListResponseDto>>> getUserDiaries(
             @PathVariable Integer userSeq
@@ -69,7 +67,6 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "사용자 일기 조회 완료", diaryService.getUserDiaries(userSeq)));
     }
 
-    // 개별 조회
     @GetMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> getDiary(
             @PathVariable Integer diarySeq
@@ -78,7 +75,6 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "일기 상세 조회 완료", diaryService.getDiary(diarySeq)));
     }
 
-    // 공개 비공개 토글
     @PutMapping("/{diarySeq}/visibility")
     public ResponseEntity<ResponseDto<String>> toggleDiaryIsPublic(
             @RequestHeader("X-User-Seq") Integer userSeq,

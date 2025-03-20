@@ -47,8 +47,7 @@ public class Diary {
     @Column(nullable = false, length = 1)
     private String isPublic;
 
-    // DiaryTag와 연결
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true) // DiaryTag와 연결
     @Builder.Default
     private List<DiaryTag> diaryTags = new ArrayList<>();
     

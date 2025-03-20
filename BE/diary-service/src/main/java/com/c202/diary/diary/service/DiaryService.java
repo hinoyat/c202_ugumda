@@ -9,18 +9,18 @@ import java.util.List;
 
 public interface DiaryService {
 
-    DiaryDetailResponseDto createDiary(int userSeq, DiaryCreateRequestDto request);
+    DiaryDetailResponseDto createDiary(Integer userSeq, DiaryCreateRequestDto request);
 
-    DiaryDetailResponseDto updateDiary(int diarySeq, int userSeq, DiaryUpdateRequestDto request);
+    DiaryDetailResponseDto updateDiary(Integer diarySeq, Integer userSeq, DiaryUpdateRequestDto request);
 
-    void deleteDiary(int diaryId, int userSeq);
+    void deleteDiary(Integer diaryId, Integer userSeq);
 
-    List<DiaryListResponseDto> getMyDiaries(int userSeq);
+    List<DiaryListResponseDto> getMyDiaries(Integer userSeq);
 
-    List<DiaryListResponseDto> getUserDiaries(int userSeq);
+    List<DiaryListResponseDto> getUserDiaries(Integer userSeq);
 
-    DiaryDetailResponseDto getDiary(int diarySeq);
+    DiaryDetailResponseDto getDiary(Integer diarySeq);
 
-    String toggleDiaryIsPublic(int diarySeq, int userSeq);
+    String toggleDiaryIsPublic(Integer diarySeq, Integer userSeq);
 
 }
