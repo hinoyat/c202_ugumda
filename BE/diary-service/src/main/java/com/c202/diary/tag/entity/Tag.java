@@ -14,14 +14,13 @@ import java.util.List;
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tagSeq;
 
     @Column(nullable = false, length = 50, unique = true)
     private String name;
 
-    // DiaryTag와 연결
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(mappedBy = "tag")    // DiaryTag와 연결
     @Builder.Default
     private List<DiaryTag> diaryTags = new ArrayList<>();
 }

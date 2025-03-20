@@ -11,14 +11,17 @@ import lombok.*;
 @Builder
 public class DiaryTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer diaryTagSeq;
 
-    @Column(nullable = false)
-    private Integer diarySeq;
 
-    @Column(nullable = false)
-    private Integer tagSeq;
+    @ManyToOne(fetch = FetchType.LAZY)  // Diary와 매핑
+    @JoinColumn(name = "diarySeq")
+    private Diary diary;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // Tag와 매핑
+    @JoinColumn(name = "tagSeq")
+    private Tag tag;
 
     @Column(nullable = false, length = 15)
     private String createdAt;
@@ -26,13 +29,5 @@ public class DiaryTag {
     @Column(nullable = false, length = 15)
     private String updatedAt;
 
-    // Diary와 매핑
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diarySeq")
-    private Diary diary;
 
-    // Tag와 매핑
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tagSeq")
-    private Tag tag;
 }

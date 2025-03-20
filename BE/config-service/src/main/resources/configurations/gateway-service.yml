@@ -48,6 +48,12 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: tag-service
+          uri: lb://diary-service
+          predicates:
+            - Path=/api/tags/**
+          filters:
+            - name: JwtAuthFilter
 server:
   port: 80
 

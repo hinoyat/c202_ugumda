@@ -1,5 +1,6 @@
 package com.c202.diary.tag.service;
 
+import com.c202.diary.diary.entity.Diary;
 import com.c202.diary.tag.entity.DiaryTag;
 import com.c202.diary.tag.entity.Tag;
 import com.c202.diary.tag.model.response.TagResponseDto;
@@ -10,11 +11,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TagServiceImpl.java
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
@@ -23,12 +24,11 @@ public class TagServiceImpl implements TagService {
     private final DiaryTagRepository diaryTagRepository;
 
     @Override
-    public List<TagResponseDto> getRecentTags(Integer userSeq, int limit) {
-        // 최근 사용한 태그 조회
+    public List<TagResponseDto> getRecentTags(Integer userSeq, Integer limit) {
+
         List<Tag> recentTags = diaryTagRepository.findRecentTagsByUserSeq(userSeq, limit);
 
         if (recentTags.isEmpty()) {
-            // 최근 사용 태그가 없는 경우 추천 태그
             return getRecommendedTags();
         }
 
@@ -39,7 +39,6 @@ public class TagServiceImpl implements TagService {
 
     private List<TagResponseDto> getRecommendedTags() {
 
-        // 기본 추천 태그
         List<String> recommendedTagNames = Arrays.asList("행복", "슬픔", "분노", "기쁨", "평화", "불안", "희망");
 
         return recommendedTagNames.stream()
@@ -55,35 +54,46 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public Tag createTagIfNotExists(String tagName) {
+    public List<TagResponseDto> processTags(Diary diary, List<String> tagNames, String now) {
 
-        if (tagName == null || tagName.trim().isEmpty() || tagName.length() > 5) {
-            throw new CustomException("태그는 1~5자로 입력해주세요.");
+        if (tagNames == null || tagNames.isEmpty()) {
+            return new ArrayList<>();
         }
 
+        if (tagNames.size() > 3) {
+            throw new CustomException("태그는 3개까지 가능합니다");
+        }
+
+        List<TagResponseDto> tagDtos = new ArrayList<>();
+        for (String tagName : tagNames) {
+            if (tagName.length() > 5) {
+                throw new CustomException("태그는 5글자까지 가능합니다");
+            }
+
+            Tag tag = createTagIfNotExists(tagName);
+
+            DiaryTag diaryTag = DiaryTag.builder()
+                    .diary(diary)
+                    .tag(tag)
+                    .createdAt(now)
+                    .updatedAt(now)
+                    .build();
+            diaryTagRepository.save(diaryTag);
+
+            tagDtos.add(TagResponseDto.toDto(tag));
+        }
+
+        return tagDtos;
+    }
+
+
+    @Override
+    @Transactional
+    public Tag createTagIfNotExists(String tagName) {
         return tagRepository.findByName(tagName)
                 .orElseGet(() -> tagRepository.save(Tag.builder()
                         .name(tagName)
                         .build()));
     }
 
-    @Override
-    @Transactional
-    public void addTagsToDiary(Integer diarySeq, List<Integer> tagSeqs, String createdAt) {
-
-        if (tagSeqs.size() > 3) {
-            throw new CustomException("태그는 최대 3개까지 추가할 수 있습니다.");
-        }
-
-        tagSeqs.forEach(tagSeq -> {
-            DiaryTag diaryTag = DiaryTag.builder()
-                    .diarySeq(diarySeq)
-                    .tagSeq(tagSeq)
-                    .createdAt(createdAt)
-                    .updatedAt(createdAt)
-                    .build();
-
-            diaryTagRepository.save(diaryTag);
-        });
-    }
 }
