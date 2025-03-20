@@ -32,7 +32,6 @@ jwt:
   token-prefix: Bearer
   header-string: Authorization
 
-
 server:
   port: 0
 

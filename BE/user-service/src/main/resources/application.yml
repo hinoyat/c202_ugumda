@@ -3,8 +3,8 @@ spring:
     name: user-service
 
   config:
-    import: configserver:http://ubuntu-config-service-1:8888
+    import: configserver:http://config-service:8888
 
   cloud:
     config:
-      fail-fast: true
+      fail-fast: false
