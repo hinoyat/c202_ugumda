@@ -63,7 +63,7 @@ spring:
             - name: JwtAuthFilter
 
 server:
-  port: 80
+  port: 8081
 
 logging:
   charset:
