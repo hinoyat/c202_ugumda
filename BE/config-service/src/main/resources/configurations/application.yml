@@ -9,3 +9,18 @@ spring:
   cloud:
     config:
       override-system-properties: false   # Spring Cloud Config 가 시스템 프로퍼티 덮어쓰지 않도록 설정
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
