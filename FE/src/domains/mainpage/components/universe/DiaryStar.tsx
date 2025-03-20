@@ -42,18 +42,21 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const [hovered, setHovered] = useState<boolean>(false); // 마우스 호버 상태
   const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
 
-  // 별 색상을 빨간색으로 설정(임시- 잘 보이게 하려고!)
-  const starColor = new THREE.Color('#ff3333');
+  // 별 색상 - 새 별은 노란색, 기존 별은 빨간색
+  const starColor = new THREE.Color(isNew ? '#ffcc00' : '#ff3333');
 
   // 새 별을 위한 상태 추가
   const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
+
+  // 새 별 주변에 발광 효과를 위한 참조
+  const glowRef = useRef<THREE.Mesh>(null);
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
   useEffect(() => {
     if (isNew) {
       // 10초 동안 깜빡임 효과
       const startTime = Date.now();
-      const duration = 20000; // 10000 = 10초동안 반짝임!
+      const duration = 20000; // 20초동안 반짝임!
 
       const animateNewStar = () => {
         const elapsed = Date.now() - startTime;
@@ -77,7 +80,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   useFrame((state) => {
     if (meshRef.current) {
       // 별의 확대/축소 효과 (펄스 애니메이션)
-      const pulseFactor = isNew ? 0.1 : 0.05; // 새 별은 더 큰 펄스 효과
+      const pulseFactor = isNew ? 0.15 : 0.05; // 새 별은 더 큰 펄스 효과
       const pulseSpeed = isNew ? 3 : 1.5; // 새 별은 더 빠른 펄스
       const scale =
         1 + pulseFactor * Math.sin(state.clock.elapsedTime * pulseSpeed);
@@ -90,6 +93,12 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         baseScale * scale,
         baseScale * scale
       );
+    }
+
+    // 새 별의 경우 발광 효과 애니메이션
+    if (isNew && glowRef.current) {
+      const glowScale = 2.5 + 0.5 * Math.sin(state.clock.elapsedTime * 2);
+      glowRef.current.scale.set(glowScale, glowScale, glowScale);
     }
   });
 
@@ -109,6 +118,18 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
 
   return (
     <group position={[x, y, z]}>
+      {/* 새 별이라면 발광 효과 추가 */}
+      {isNew && (
+        <mesh ref={glowRef}>
+          <sphereGeometry args={[(entry.size / 2) * 6, 16, 16]} />
+          <meshBasicMaterial
+            color={starColor}
+            transparent={true}
+            opacity={0.2}
+          />
+        </mesh>
+      )}
+
       {/* 별 위치 설정 */}
       <mesh
         ref={meshRef} // 메쉬 참조 연결
@@ -121,7 +142,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}>
         {/* 별 모양의 지오메트리 /// size / ___ (반지름) */}
-        <sphereGeometry args={[(entry.size / 2) * 2, 16, 16]} />
+        <sphereGeometry args={[(entry.size / 2) * (isNew ? 2.5 : 2), 16, 16]} />
         {/* 별의 색과 발광 효과 */}
         <meshStandardMaterial
           color={starColor}
@@ -133,8 +154,8 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
       {isNew && (
         <pointLight
           color={starColor}
-          intensity={1.5}
-          distance={10}
+          intensity={2.5}
+          distance={15}
           decay={2}
         />
       )}

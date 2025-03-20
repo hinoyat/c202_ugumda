@@ -19,6 +19,24 @@
     format('woff2');
 }
 
+/* 둥근모 폰트(행운 번호에 사용) */
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 클로버 폰트 */
+@font-face {
+  font-family: 'YClover-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/YClover-Bold.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -61,6 +79,17 @@ body {
 
 .maru-font {
   font-family: 'MaruBuri', sans-serif;
+}
+
+/* 둥근모 */
+.dung-font {
+  font-family: 'DungGeunMo', sans-serif;
+}
+
+/* 클로버 */
+.clover-font {
+  font-family: 'YClover-Bold', sans-serif;
+  font-weight: 700;
 }
 
 .modal-back-color {

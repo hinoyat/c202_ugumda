@@ -125,8 +125,17 @@ const Universe: React.FC = () => {
     }
   };
 
+  // 화면 더블클릭
+  const handleDoubleClick = () => {
+    console.log(1111);
+    setShowForm(true);
+    setIsEditing(false);
+  };
+
   return (
-    <div className="universe-container">
+    <div
+      className="universe-container"
+      onDoubleClick={handleDoubleClick}>
       {/* -------------------------------3D 우주 공간--------------------------- */}
       <div
         className="space-scene-container"
@@ -145,42 +154,9 @@ const Universe: React.FC = () => {
             width: '100vw',
             height: '100vh',
           }}>
-          {/* ---------------------------- 정확한 위치 파악을 위해서 넓은 투명 네모 추가 */}
-          <mesh
-            position={[0, 0, -100]}
-            onDoubleClick={(e) => {
-              console.log('일기생성! 위치는 --->', e.point);
-              e.stopPropagation();
-              setNewEntryPosition({
-                x: e.point.x,
-                y: e.point.y,
-                z: e.point.z,
-              }); // 클릭 위치 저장
-
-              setShowForm(true); // 일기 작성 모달 표시
-            }}>
-            <planeGeometry args={[2000, 2000]} />
-            <meshBasicMaterial
-              transparent
-              opacity={0}
-            />
-          </mesh>
-
           {/*-------------- 별 배경 컴포넌트 -------------------*/}
           <StarField />
 
-          {/* 카메라 컨트롤 */}
-          {/* <OrbitControls
-            ref={controlsRef}
-            enableZoom={true}
-            enablePan={false}
-            enableDamping={true}
-            dampingFactor={0.05}
-            autoRotate={false}
-            rotateSpeed={0.5}
-            minDistance={5}
-            maxDistance={200}
-          /> */}
           <OrbitControls
             ref={controlsRef}
             enableZoom={true}
@@ -242,7 +218,7 @@ const Universe: React.FC = () => {
                         title: newDiary.title || entry.title,
                         content: newDiary.content || entry.content,
                         tags: newDiary.tags || entry.tags,
-                        is_public: newDiary.isPublic ? 'Y' : 'N', // 이 부분 주목
+                        is_public: newDiary.isPublic ? 'Y' : 'N',
                       }
                     : entry
                 )
@@ -261,9 +237,7 @@ const Universe: React.FC = () => {
                 content: newDiary.content || '',
                 tags: newDiary.tags || [],
                 is_public: newDiary.isPublic ? 'Y' : 'N',
-                position:
-                  newEntryPosition ||
-                  DiaryEntry.generateRandomSpherePosition(100),
+                position: DiaryEntry.generateRandomSpherePosition(100),
               });
 
               // 새 일기 추가
@@ -271,6 +245,27 @@ const Universe: React.FC = () => {
 
               // 새 별 ID 설정 (하이라이트 효과를 위해)
               setNewStarId(newEntry.diary_seq);
+
+              // 카메라를 새로운 별 위치로 이동
+              if (controlsRef.current) {
+                // 카메라가 바라볼 목표 위치 설정
+                controlsRef.current.target.set(
+                  newEntry.position.x,
+                  newEntry.position.y,
+                  newEntry.position.z
+                );
+
+                // 카메라 위치를 새로운 별 근처로 이동 (별에서 약간 떨어진 위치)
+                const distance = 20; // 별과의 거리
+                const cameraPos = {
+                  x: newEntry.position.x * 1.2,
+                  y: newEntry.position.y * 1.2,
+                  z: newEntry.position.z * 1.2,
+                };
+
+                // 카메라 업데이트
+                controlsRef.current.update();
+              }
 
               // 일정 시간 후 하이라이트 효과 제거
               setTimeout(() => {
@@ -296,22 +291,18 @@ const Universe: React.FC = () => {
 
       {/* ---------------------일기 조회 모달------------------------ */}
       {viewingEntry && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-[45%] h-[87%] bg-[rgba(110,110,110,0.47)] rounded-lg overflow-hidden">
-            <DiaryDetail
-              initialDiary={{
-                id: viewingEntry.diary_seq,
-                title: viewingEntry.title,
-                content: viewingEntry.content,
-                tags: viewingEntry.tags,
-                created_at: viewingEntry.dream_date,
-                isPublic: viewingEntry.is_public === 'Y',
-                // 추가 정보가 필요하다면 여기에 추가
-              }}
-              onClose={handleCloseView}
-            />
-          </div>
-        </div>
+        <DiaryDetail
+          initialDiary={{
+            id: viewingEntry.diary_seq,
+            title: viewingEntry.title,
+            content: viewingEntry.content,
+            tags: viewingEntry.tags,
+            created_at: viewingEntry.dream_date,
+            isPublic: viewingEntry.is_public === 'Y',
+            // 추가 정보가 필요하다면 여기에 추가
+          }}
+          onClose={handleCloseView}
+        />
       )}
 
       {/* --------------------별 클릭 시 StarHoverMenu 보임--------------------- */}

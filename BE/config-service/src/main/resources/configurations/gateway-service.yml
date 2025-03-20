@@ -48,6 +48,20 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: guestbook-service
+          uri: lb://guestbook-service
+          predicates:
+            - Path=/api/guestbook/**
+          filters:
+            - name: JwtAuthFilter
+
+        - id: subscribe-service
+          uri: lb://subscribe-service
+          predicates:
+            - Path=/api/subscription/**
+          filters:
+            - name: JwtAuthFilter
+
         - id: tag-service
           uri: lb://diary-service
           predicates:
