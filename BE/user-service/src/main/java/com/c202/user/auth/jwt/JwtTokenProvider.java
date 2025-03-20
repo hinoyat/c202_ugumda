@@ -1,5 +1,6 @@
 package com.c202.user.auth.jwt;
 
+import com.c202.user.auth.jwt.blacklist.TokenBlacklistService;
 import com.c202.user.auth.jwt.refreshtoken.RefreshToken;
 import com.c202.user.auth.jwt.refreshtoken.RefreshTokenRepository;
 import com.c202.user.global.exception.ServiceException;
@@ -39,16 +40,14 @@ public class JwtTokenProvider {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    // 리프레시 토큰 저장소
     private final RefreshTokenRepository refreshTokenRepository;
 
-    // 토큰 블랙리스트
-//    private final AccessTokenBlacklistService accessTokenBlacklistService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @PostConstruct
     public void init() {
         // 시크릿 키를 Base64로 인코딩하여 JWT 서명용 키 생성
-        byte[] keyBytes = Base64.getDecoder().decode(secretKey); // ✅ Base64 디코딩
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -165,14 +164,32 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token).getBody().get("type");
     }
 
+    // 토큰 만료 시간 추출
+    public Date getTokenExpiration(String token) {
+        return (Date) Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody().getExpiration();
+    }
+
+    // 블랙리스트 추가
+    public void blacklistToken(String token) {
+        try {
+            Date expirationDate = getTokenExpiration(token);
+
+            tokenBlacklistService.addToBlacklist(token, expirationDate);
+            log.info("Blacklisted token: " + token.substring(0, 10));
+
+        } catch ( Exception e ) {
+            log.error("토큰 추가 오류: {}", e.getMessage());
+        }
+    }
+
     // 토큰 유효성 검증
     public boolean validateToken(String token) {
         try {
-//            // 블랙리스트
-//            if (accessTokenBlacklistService.isBlacklisted(token)) {
-//                log.warn("블랙리스트에 등록된 토큰입니다: {}", token);
-//                return false;
-//            }
+            if (tokenBlacklistService.isBlacklisted(token)) {
+                log.warn("블랙리스트에 등록된 토큰입니다: {}", token.substring(0, 10));
+                return false;
+            }
 
             // 토큰 파싱 시도
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -203,6 +220,7 @@ public class JwtTokenProvider {
         }
     }
 
+
     // 리프레시 토큰으로 새 액세스 토큰 발급
     public String refreshAccessToken(String refreshToken) {
         // 리프레시 토큰 유효성 검증
@@ -230,29 +248,4 @@ public class JwtTokenProvider {
         return createAccessToken(username, userSeq);
     }
 
-//    // 로그아웃 처리 블랙리스트
-//    public void addToBlacklist(String accessToken) {
-//        log.debug("토큰 블랙리스트 추가 시작");
-//
-//        try {
-//            // 토큰 유효성 검사
-//            if (accessToken == null || accessToken.isEmpty()) {
-//                log.warn("블랙리스트에 추가할 토큰이 없습니다.");
-//                return;
-//            }
-//
-//            // 토큰에서 만료 시간 추출
-//            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-//            Date expiration = claims.getExpiration();
-//
-//            // 블랙리스트 서비스를 통해 블랙리스트에 추가
-//            accessTokenBlacklistService.addToBlacklist(accessToken, expiration);
-//            log.debug("액세스 토큰이 블랙리스트에 추가되었습니다. 만료 시간: {}", expiration);
-//        } catch (ExpiredJwtException e) {
-//            log.warn("이미 만료된 토큰이므로 블랙리스트에 추가하지 않습니다: {}", e.getMessage());
-//        } catch (Exception e) {
-//            log.error("액세스 토큰 블랙리스트 등록 실패: {}", e.getMessage(), e);
-//            // 로그만 남기고 예외를 다시 던지지 않음
-//        }
-//    }
 }
