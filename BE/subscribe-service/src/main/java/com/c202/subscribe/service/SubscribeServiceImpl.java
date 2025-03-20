@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,33 +23,32 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     @Transactional
     @Override
-    public void subscribe(Integer subscriberSeq, Integer subscribedSeq) {
+    public String toggleSubscription(Integer subscriberSeq, Integer subscribedSeq) {
         if (subscriberSeq == null || subscribedSeq == null) {
             throw new CustomException("subscriberSeq 또는 subscribedSeq 값이 null입니다.");
         }
+
         if (subscriberSeq.equals(subscribedSeq)) {
             throw new CustomException("본인을 구독할 수 없습니다.");
         }
-        if (subscribeRepository.existsBySubscriberSeqAndSubscribedSeq(subscriberSeq, subscribedSeq)) {
-            throw new CustomException("이미 구독 중입니다.");
-        }
-        Subscribe subscribe = Subscribe.builder()
-                .subscriberSeq(subscriberSeq)
-                .subscribedSeq(subscribedSeq)
-                .createdAt(LocalDateTime.now().format(FORMATTER))
-                .build();
-        subscribeRepository.save(subscribe);
-    }
 
-    @Transactional
-    @Override
-    public void unsubscribe(Integer subscriberSeq, Integer subscribedSeq) {
-        if (subscriberSeq == null || subscribedSeq == null) {
-            throw new CustomException("subscriberSeq 또는 subscribedSeq 값이 null입니다.");
+        Optional<Subscribe> existingSubscription =
+                subscribeRepository.findBySubscriberSeqAndSubscribedSeq(subscriberSeq, subscribedSeq);
+
+        if (existingSubscription.isPresent()) {
+            // 이미 구독 중이면 삭제 (구독 해제)
+            subscribeRepository.delete(existingSubscription.get());
+            return "구독 해제";
+        } else {
+            // 구독이 없으면 추가 (구독 등록)
+            Subscribe subscribeEntity = Subscribe.builder()
+                    .subscriberSeq(subscriberSeq)
+                    .subscribedSeq(subscribedSeq)
+                    .createdAt(LocalDateTime.now().format(FORMATTER))
+                    .build();
+            subscribeRepository.save(subscribeEntity);
+            return "구독 성공";
         }
-        Subscribe subscribe = subscribeRepository.findBySubscriberSeqAndSubscribedSeq(subscriberSeq, subscribedSeq)
-                .orElseThrow(() -> new CustomException("구독 정보가 없습니다."));
-        subscribeRepository.delete(subscribe);
     }
 
     @Override

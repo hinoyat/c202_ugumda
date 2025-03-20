@@ -15,18 +15,13 @@ public class SubscribeController {
 
     private final SubscribeService subscribeService;
 
-    // 구독할 사람의 userSeq를 path variable로 설정
-    @PostMapping("/{subscribedSeq}")
-    public ResponseEntity<ResponseDto<Void>> subscribe(@RequestHeader("X-User-Seq") Integer subscriberSeq, @PathVariable Integer subscribedSeq) {
-        subscribeService.subscribe(subscriberSeq, subscribedSeq);
-        return ResponseEntity.ok(ResponseDto.success(200, "구독 완료"));
-    }
+    @PatchMapping("/{subscribedSeq}")
+    public ResponseEntity<ResponseDto<String>> toggleSubscription(
+            @RequestHeader("X-User-Seq") Integer subscriberSeq,
+            @PathVariable Integer subscribedSeq) {
 
-    // 구독해제 사람의 userSeq를 path variable로 설정
-    @DeleteMapping("/{subscribedSeq}")
-    public ResponseEntity<ResponseDto<Void>> unsubscribe(@RequestHeader("X-User-Seq") Integer subscriberSeq, @PathVariable Integer subscribedSeq) {
-        subscribeService.unsubscribe(subscriberSeq, subscribedSeq);
-        return ResponseEntity.ok(ResponseDto.success(200, "구독 삭제 완료"));
+        String  subscriptionStatus  = subscribeService.toggleSubscription(subscriberSeq, subscribedSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "구독 상태 변경 완료", subscriptionStatus ));
     }
 
     @GetMapping
