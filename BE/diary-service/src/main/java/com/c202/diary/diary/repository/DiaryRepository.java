@@ -10,6 +10,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer> {
 
     Optional<Diary> findByDiarySeq(Integer diarySeq);
 
+    Optional<Diary> findByDiarySeqAndIsDeleted(Integer diarySeq, String isDeleted);
+
     List<Diary> findByUserSeqAndIsDeleted(Integer userSeq, String isDeleted);
 
     List<Diary> findByUserSeqAndIsPublicAndIsDeleted(Integer userSeq, String isPublic, String isDeleted);

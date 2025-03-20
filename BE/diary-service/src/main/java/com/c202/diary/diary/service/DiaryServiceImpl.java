@@ -60,7 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public DiaryDetailResponseDto updateDiary(Integer diarySeq, Integer userSeq, DiaryUpdateRequestDto request) {
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
         if (!diary.getUserSeq().equals(userSeq)) {
@@ -76,6 +76,7 @@ public class DiaryServiceImpl implements DiaryService {
         );
 
         List<TagResponseDto> tagDtos = new ArrayList<>();
+
         diaryTagRepository.deleteByDiary(diary);
 
         tagDtos = tagService.processTags(diary, request.getTags(), now);
@@ -88,8 +89,9 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public void deleteDiary(Integer diarySeq, Integer userSeq) {
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+
         if (!diary.getUserSeq().equals(userSeq)) {
             throw new CustomException("해당 일기에 대한 권한이 없습니다.");
         }
@@ -113,7 +115,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public DiaryDetailResponseDto getDiary(Integer diarySeq) {
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
         List<DiaryTag> diaryTags = diaryTagRepository.findByDiary(diary);
@@ -128,7 +130,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public String toggleDiaryIsPublic(Integer diarySeq, Integer userSeq) {
-        Diary diary = diaryRepository.findByDiarySeq(diarySeq)
+        Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
 
         if (!diary.getUserSeq().equals(userSeq)) {
