@@ -661,3 +661,22 @@ https://claude.ai/chat/004eee28-fa0d-4e4b-b6ee-8ea80145d0f8
 ![alt text](images/grafana-logs.png)
 
 </details>
+
+<details>
+  <summary>2025-03-20</summary>
+
+# 1. ec2 서버 오류 발생하여 해결 중입니다.!
+
+- 현재 config 서버는 배포가 완료 되었는데 gateway를통한 모든 백엔드 서버가 배포되지 않는 현상을 겪고 있습니다.
+
+## 시도 1
+
+- 문제 발견: 현재 백엔드 프로젝트가 localhost로 하드코딩 되어있어서 서버이름으로 바꾸는 작업을 진행하였습니다. -> 실패
+
+## 시도 2
+
+- 현재 pom.xl 에 build 관련된 로직이 없어서 build 로직을 추가하였습니다. -> 실패
+
+지금 이 작업을 10시간 넘게 진행 중이며 현상을 처리하기 위해 계속 빌드해서 돌리고 있습니다..
+
+</details>
