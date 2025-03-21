@@ -10,10 +10,11 @@ import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
 
-// 목데이터 import - 이미 존재하는 목데이터를 가져옵니다
+// 목데이터 import - 초기 데이터 로드용
 import { dummyDiaries } from '@/data/dummyDiaries';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import DiaryDetail from '@/domains/diary/modals/DiaryDetail';
+import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
@@ -21,43 +22,41 @@ const Universe: React.FC = () => {
   // 수정 모드를 위한 상태 추가
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  // 목데이터로 초기화된 일기 항목 상태
-  const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  // 변경: useDiaryEntries 훅 사용하여 일기 관리
+  const { entries, addEntry, editEntry, removeEntry } = useDiaryEntries();
 
   // ------------------목데이터로 일기 별 뿌려두기----------------------- //
+  // 변경: useDiaryEntries 훅이 이미 로컬 스토리지에서 데이터를 불러오므로,
+  // 데이터가 없을 때만 목데이터를 추가합니다.
   useEffect(() => {
-    // 더미 데이터를 DiaryEntry 객체로 변환
-    const diaryEntries = dummyDiaries.map((dummy, index) => {
-      // 각 더미 데이터의 dream_date를 Date 객체로 변환 (YYYYMMDD 형식에서)
-      const year = parseInt(dummy.dream_date.substring(0, 4));
-      const month = parseInt(dummy.dream_date.substring(4, 6)) - 1; // JS의 월은 0부터 시작
-      const day = parseInt(dummy.dream_date.substring(6, 8));
+    // 초기 데이터가 없을 경우에만 목데이터 추가
+    if (entries.length === 0) {
+      // 더미 데이터를 DiaryEntry 객체로 변환
+      dummyDiaries.forEach((dummy, index) => {
+        // 각 더미 데이터의 dream_date를 Date 객체로 변환 (YYYYMMDD 형식에서)
+        const year = parseInt(dummy.dream_date.substring(0, 4));
+        const month = parseInt(dummy.dream_date.substring(4, 6)) - 1; // JS의 월은 0부터 시작
+        const day = parseInt(dummy.dream_date.substring(6, 8));
 
-      // 3D 공간에서의 랜덤 위치 생성
-      const position: Position = DiaryEntry.generateRandomSpherePosition(100);
+        // 3D 공간에서의 랜덤 위치 생성
+        const position: Position = DiaryEntry.generateRandomSpherePosition(100);
 
-      // DiaryEntry 객체 생성
-      const entry = DiaryEntry.create({
-        user_seq: dummy.user_seq,
-        title: dummy.title,
-        content: dummy.content,
-        video_url: dummy.video_url,
-        dream_date: dummy.dream_date,
-        is_public: dummy.is_public as 'Y' | 'N',
-        position: position,
-        tags: [], // 더미 데이터에 태그가 없다면 빈 배열로 초기화
+        // 새 일기 추가
+        const newEntry = addEntry({
+          title: dummy.title,
+          content: dummy.content,
+          tags: [],
+          isPublic: dummy.is_public === 'Y',
+          video_url: dummy.video_url || undefined,
+          dream_date: dummy.dream_date,
+        });
+
+        // 임시: 목데이터에 임의로 ID 할당 (추후 API 연동 시 제거)
+        newEntry.diary_seq = 1000 + index;
+        newEntry.position = position;
       });
-
-      // diary_seq를 명시적으로 설정 (인덱스에 1000을 더해 충분히 큰 고유값 생성)
-      // date.now()일 때의 키 중복 방지용
-      // api 연결 후 지울부분
-      entry.diary_seq = 1000 + index;
-
-      return entry;
-    });
-
-    setEntries(diaryEntries);
-  }, []);
+    }
+  }, [entries.length, addEntry]);
 
   // 선택된 일기 항목
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
@@ -80,9 +79,6 @@ const Universe: React.FC = () => {
 
   // 폼 표시 여부
   const [showForm, setShowForm] = useState<boolean>(false);
-
-  // 카메라 거리
-  const [cameraDistance, setCameraDistance] = useState<number>(30);
 
   // 카메라 컨트롤 참조
   const controlsRef = useRef<any>(null);
@@ -107,15 +103,10 @@ const Universe: React.FC = () => {
 
   // 일기 삭제 핸들러
   const handleDelete = (entry: DiaryEntry) => {
-    setEntries((prev) => prev.filter((e) => e.diary_seq !== entry.diary_seq));
+    removeEntry(entry.diary_seq);
     setSelectedEntry(null);
     setSelectedPosition(null);
   };
-
-  // 새로운 일기 생성 위치를 저장
-  const [newEntryPosition, setNewEntryPosition] = useState<Position | null>(
-    null
-  );
 
   // 일기 수정 핸들러
   const handleEdit = () => {
@@ -125,11 +116,12 @@ const Universe: React.FC = () => {
     }
   };
 
-  // 화면 더블클릭
+  // 화면 더블클릭 - 새 일기 생성 모드
   const handleDoubleClick = () => {
-    console.log(1111);
+    console.log('새 일기 생성 모드 시작');
     setShowForm(true);
     setIsEditing(false);
+    setSelectedEntry(null);
   };
 
   return (
@@ -146,7 +138,6 @@ const Universe: React.FC = () => {
           zIndex: 0, // 배경처럼 설정
         }}>
         <Canvas
-          // camera={{ position: [0, 0, cameraDistance], fov: 90 }}
           // 구 내부에서 별들을 바라보는 느낌
           camera={{ position: [0, 0, -30], fov: 90, far: 5000 }}
           style={{
@@ -204,44 +195,19 @@ const Universe: React.FC = () => {
       {/* ----------------------일기 작성/수정 폼 (조건부 렌더링)----------------------- */}
       {showForm && (
         <DiaryComponent
-          onClose={(newDiary) => {
+          onClose={(newDiaryData) => {
             setShowForm(false);
-            setIsEditing(false);
 
-            // 수정 모드일 때
-            if (isEditing && newDiary && selectedEntry) {
-              setEntries((prev) =>
-                prev.map((entry) =>
-                  entry.diary_seq === selectedEntry.diary_seq
-                    ? {
-                        ...entry,
-                        title: newDiary.title || entry.title,
-                        content: newDiary.content || entry.content,
-                        tags: newDiary.tags || entry.tags,
-                        is_public: newDiary.isPublic ? 'Y' : 'N',
-                      }
-                    : entry
-                )
-              );
-
-              // 선택된 항목 초기화
-              setSelectedEntry(null);
-              setSelectedPosition(null);
-            }
-
-            // 새로운 일기 생성
-            if (!isEditing && newDiary) {
-              const newEntry = DiaryEntry.create({
-                user_seq: 1, // 기본 유저 ID
-                title: newDiary.title || '',
-                content: newDiary.content || '',
-                tags: newDiary.tags || [],
-                is_public: newDiary.isPublic ? 'Y' : 'N',
-                position: DiaryEntry.generateRandomSpherePosition(100),
+            // 새 일기 작성 완료
+            if (!isEditing && newDiaryData) {
+              // 변경: 일기 추가 로직을 커스텀 훅 사용으로 대체
+              const newEntry = addEntry({
+                title: newDiaryData.title || '',
+                content: newDiaryData.content || '',
+                tags: newDiaryData.tags || [],
+                isPublic: newDiaryData.isPublic || false,
+                video_url: newDiaryData.dream_video,
               });
-
-              // 새 일기 추가
-              setEntries((prev) => [...prev, newEntry]);
 
               // 새 별 ID 설정 (하이라이트 효과를 위해)
               setNewStarId(newEntry.diary_seq);
@@ -272,17 +238,49 @@ const Universe: React.FC = () => {
                 setNewStarId(null);
               }, 10000); // 10초 동안 하이라이트 효과 유지
             }
+
+            // 일기 수정 완료
+            else if (isEditing && newDiaryData && selectedEntry) {
+              // 변경: 일기 수정 로직을 커스텀 훅 사용으로 대체
+              editEntry(selectedEntry.diary_seq, {
+                title: newDiaryData.title,
+                content: newDiaryData.content,
+                tags: newDiaryData.tags,
+                isPublic: newDiaryData.isPublic,
+                video_url: newDiaryData.dream_video,
+              });
+
+              // 수정된 selectedEntry를 viewingEntry로 설정하여 조회 화면 표시
+              const updatedEntry = { ...selectedEntry };
+              updatedEntry.title = newDiaryData.title || selectedEntry.title;
+              updatedEntry.content =
+                newDiaryData.content || selectedEntry.content;
+              updatedEntry.tags = newDiaryData.tags || selectedEntry.tags;
+              updatedEntry.is_public = newDiaryData.isPublic ? 'Y' : 'N';
+
+              // video_url은 있는 경우에만 업데이트
+              if (newDiaryData.dream_video !== undefined) {
+                updatedEntry.video_url = newDiaryData.dream_video;
+              }
+
+              // 선택된 항목 초기화
+              setSelectedEntry(null);
+              setSelectedPosition(null);
+            }
+
+            // 수정 모드 종료
+            setIsEditing(false);
           }}
           // 수정 모드 및 현재 선택된 일기 데이터 전달
           isEditing={isEditing}
           diaryData={
-            isEditing
+            isEditing && selectedEntry
               ? {
-                  id: selectedEntry?.diary_seq,
-                  title: selectedEntry?.title,
-                  content: selectedEntry?.content,
-                  tags: selectedEntry?.tags,
-                  isPublic: selectedEntry?.is_public === 'Y',
+                  id: selectedEntry.diary_seq,
+                  title: selectedEntry.title,
+                  content: selectedEntry.content,
+                  tags: selectedEntry.tags,
+                  isPublic: selectedEntry.is_public === 'Y', // 변경: 'Y'/'N'을 불리언으로 변환
                 }
               : undefined
           }
@@ -298,10 +296,52 @@ const Universe: React.FC = () => {
             content: viewingEntry.content,
             tags: viewingEntry.tags,
             created_at: viewingEntry.dream_date,
-            isPublic: viewingEntry.is_public === 'Y',
+            isPublic: viewingEntry.is_public === 'Y', // 변경: 'Y'/'N'을 불리언으로 변환
             // 추가 정보가 필요하다면 여기에 추가
+            dream_video: viewingEntry.video_url,
           }}
           onClose={handleCloseView}
+          onUpdateDiary={(updatedDiary) => {
+            console.log('Universe: 일기 업데이트 수신', updatedDiary);
+
+            // 현재 보고 있는 일기 항목 업데이트
+            if (viewingEntry) {
+              // 타입 호환성을 위한 변수 생성
+              const modelUpdate = {
+                title: updatedDiary.title,
+                content: updatedDiary.content,
+                tags: updatedDiary.tags,
+                isPublic: updatedDiary.isPublic,
+              };
+
+              // video_url이 있는 경우에만 추가 (선택적 속성)
+              if (updatedDiary.dream_video !== undefined) {
+                // TypeScript에게 이것이 안전한 타입 변환임을 알려줌
+                (modelUpdate as any).video_url =
+                  updatedDiary.dream_video || null;
+              }
+
+              // editEntry 함수 호출하여 데이터 업데이트
+              editEntry(viewingEntry.diary_seq, modelUpdate);
+
+              // 현재 보고 있는 항목 복사
+              const updatedViewingEntry = { ...viewingEntry };
+
+              // 필요한 필드만 개별적으로 업데이트
+              updatedViewingEntry.title = updatedDiary.title;
+              updatedViewingEntry.content = updatedDiary.content;
+              updatedViewingEntry.tags = updatedDiary.tags;
+              updatedViewingEntry.is_public = updatedDiary.isPublic ? 'Y' : 'N';
+
+              // video_url이 있는 경우에만 업데이트
+              if (updatedDiary.dream_video !== undefined) {
+                updatedViewingEntry.video_url = updatedDiary.dream_video;
+              }
+
+              // 상태 업데이트
+              setViewingEntry(updatedViewingEntry as DiaryEntry);
+            }
+          }}
         />
       )}
 
