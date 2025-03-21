@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface LuckyNumberRepository extends JpaRepository<LuckyNumber, Long> {
+public interface LuckyNumberRepository extends JpaRepository<LuckyNumber, Integer> {
 
-    Optional<LuckyNumber> findByUserSeq(int userSeq);
+    Optional<LuckyNumber> findByUserSeq(Integer userSeq);
 }
