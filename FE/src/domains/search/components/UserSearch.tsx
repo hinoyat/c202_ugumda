@@ -1,7 +1,6 @@
 import '../styles/DiarySearch.css';
 import UserList from './UserList';
-import exampleProfile from "@/assets/images/exampleProfile.svg"
-
+import exampleProfile from '@/assets/images/exampleProfile.svg';
 
 const UserSearch = () => {
   const UserData = [
@@ -53,8 +52,9 @@ const UserSearch = () => {
           검색{' '}
         </button>
       </div>
+
       {/*체크 박스 시작 */}
-      <div className="flex gap-4 w-full justify-start pl-30">
+      <div className="flex gap-4 w-full justify-start pl-30 text-[15px]">
         <div className="flex gap-1.5 items-center">
           <label className="cont">
             <input
@@ -92,7 +92,7 @@ const UserSearch = () => {
         </div>
       </div>
       {/*체크 박스 끝 */}
-      <div className="w-full h-[410px] overflow-y-auto pr-4 custom-scrollbar">
+      <div className="w-full h-[350px] overflow-y-auto pr-4 custom-scrollbar">
         <UserList data={UserData} />
       </div>
     </div>

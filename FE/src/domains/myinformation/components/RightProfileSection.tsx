@@ -1,11 +1,10 @@
 import '../styles/MyInformationContent.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import close from "@/assets/images/closeEye.svg";
-import open from "@/assets/images/openEye.svg";
-import check from "@/assets/images/pixcelCheck.svg";
-import docs from "@/assets/images/pixcelDoc.svg";
-
+import close from '@/assets/images/closeEye.svg';
+import open from '@/assets/images/openEye.svg';
+import check from '@/assets/images/pixcelCheck.svg';
+import docs from '@/assets/images/pixcelDoc.svg';
 
 interface LeftProfileSectionProps {
   mockdata: {

@@ -1,8 +1,8 @@
 import { AiOutlineEnter } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
-import passwordFrame from "@/assets/images/passwordFrame.svg";
-import enter from "@/assets/images/enter.svg";
+import passwordFrame from '@/assets/images/passwordFrame.svg';
+import enter from '@/assets/images/enter.svg';
 
 const PasswordCheckModal = () => {
   const glowingTextStyle = {
@@ -39,7 +39,7 @@ const PasswordCheckModal = () => {
       <img
         src={passwordFrame}
         alt=""
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-200 animate-pulse"
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30  animate-pulse"
       />
       <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 z-50 tracking-widest animate-pulse flex flex-col items-center gap-5">
         <h1
