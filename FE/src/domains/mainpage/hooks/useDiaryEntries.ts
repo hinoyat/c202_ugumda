@@ -12,20 +12,23 @@ export interface Position {
   z: number;
 }
 
+// 일기 데이터 인터페이스 - 프론트엔드에서는 불리언으로 관리
+interface DiaryData {
+  title: string;
+  content: string;
+  tags: string[];
+  isPublic: boolean; // 변경: 'Y'/'N' 대신 불리언 사용
+  video_url?: string;
+  dream_date?: string;
+}
+
 // 일기 목록, 일기 추가 및 삭제 메서드의 타입
 interface UseDiaryEntriesReturn {
   entries: DiaryEntry[];
-  addEntry: (
-    newEntry:
-      | DiaryEntry
-      | {
-          title: string;
-          content: string;
-          tags: string[];
-          is_public: 'Y' | 'N';
-        }
-  ) => void;
+  addEntry: (newEntry: DiaryData) => DiaryEntry; // 변경: 반환 타입 추가
+  editEntry: (id: number, updatedData: Partial<DiaryData>) => DiaryEntry | null; // 추가: 수정 메서드
   removeEntry: (id: number) => void;
+  getEntryById: (id: number) => DiaryEntry | undefined; // 추가: ID로 일기 항목 조회
 }
 
 export const useDiaryEntries = (): UseDiaryEntriesReturn => {
@@ -42,20 +45,26 @@ export const useDiaryEntries = (): UseDiaryEntriesReturn => {
         const parsedData = JSON.parse(storedEntries);
         const parsedEntries = parsedData.map((entry: any) => {
           // 태그를 문자열 배열로 확실히 변환
-          // 아직 ERD 수정 중. 태그가 int로 되어있기 때문에 문자로 변환해야함
           const tags = Array.isArray(entry.tags)
             ? entry.tags.map((tag: any) => String(tag))
             : [];
 
-          return DiaryEntry.create({
+          // 객체 생성
+          const diaryEntry = DiaryEntry.create({
             user_seq: entry.user_seq || 1, // 기본값 설정. 추후 currentUserId
             title: entry.title,
             content: entry.content,
             tags: tags,
-            is_public: entry.is_public ? 'Y' : 'N', // boolean을 'Y'/'N'으로 변환
+            is_public: entry.is_public, // DiaryEntry 내부에서 변환 처리
             video_url: entry.video_url || null,
             dream_date: entry.dream_date,
           });
+          // diary_seq 명시적 설정 (필요한 경우)
+          if (entry.diary_seq) {
+            diaryEntry.diary_seq = entry.diary_seq;
+          }
+
+          return diaryEntry;
         });
         setEntries(parsedEntries);
       } catch (error) {
@@ -75,34 +84,54 @@ export const useDiaryEntries = (): UseDiaryEntriesReturn => {
     }
   }, [entries]);
 
-  //------------------------일기 수정 / 생성 -------------------------------//
-  // DiaryEntry 객체 또는 일기 데이터 객체를 받아 entries 상태에 추가
-  const addEntry = (
-    newEntry:
-      | DiaryEntry
-      | {
-          title: string;
-          content: string;
-          tags: string[];
-          is_public: 'Y' | 'N';
-        }
-  ): void => {
-    //      DiaryEntry 객체인 경우 그대로 추가(일기수정)     //
-    if (newEntry instanceof DiaryEntry) {
-      setEntries((prevEntries) => [...prevEntries, newEntry]);
-    }
+  // ID로 일기 항목 조회
+  const getEntryById = (id: number): DiaryEntry | undefined => {
+    return entries.find((entry) => entry.diary_seq === id);
+  };
 
-    //      객체 리터럴인 경우 DiaryEntry로 변환 후 추가(일기생성)     //
-    else {
-      const entry = DiaryEntry.create({
-        user_seq: 1,
-        title: newEntry.title,
-        content: newEntry.content,
-        tags: newEntry.tags,
-        is_public: newEntry.is_public,
-      });
-      setEntries((prevEntries) => [...prevEntries, entry]);
-    }
+  //------------------------일기 생성 -------------------------------//
+  const addEntry = (newEntryData: DiaryData): DiaryEntry => {
+    const newEntry = DiaryEntry.create({
+      user_seq: 1, // 현재 사용자 ID
+      title: newEntryData.title,
+      content: newEntryData.content,
+      tags: newEntryData.tags,
+      is_public: newEntryData.isPublic, // 불리언 전달 (내부에서 'Y'/'N'으로 변환)
+      video_url: newEntryData.video_url,
+      dream_date: newEntryData.dream_date,
+      position: DiaryEntry.generateRandomSpherePosition(100), // 랜덤 위치 생성
+    });
+
+    setEntries((prevEntries) => [...prevEntries, newEntry]);
+    return newEntry;
+  };
+
+  //------------------------일기 수정------------------------//
+  const editEntry = (
+    id: number,
+    updatedData: Partial<DiaryData>
+  ): DiaryEntry | null => {
+    // 일기 찾기
+    const entryIndex = entries.findIndex((entry) => entry.diary_seq === id);
+    if (entryIndex === -1) return null;
+
+    // 기존 항목의 복사본 생성
+    const updatedEntries = [...entries];
+    const entryToUpdate = updatedEntries[entryIndex];
+
+    // DiaryEntry의 update 메서드 사용하여 업데이트
+    entryToUpdate.update({
+      title: updatedData.title,
+      content: updatedData.content,
+      tags: updatedData.tags,
+      is_public: updatedData.isPublic, // 불리언 전달 (내부에서 'Y'/'N'으로 변환)
+      video_url: updatedData.video_url,
+      dream_date: updatedData.dream_date,
+    });
+
+    // 상태 업데이트
+    setEntries(updatedEntries);
+    return entryToUpdate;
   };
 
   //----------------일기 삭제 메서드------------------------//
@@ -115,6 +144,8 @@ export const useDiaryEntries = (): UseDiaryEntriesReturn => {
   return {
     entries,
     addEntry,
+    editEntry,
     removeEntry,
+    getEntryById,
   };
 };
