@@ -108,11 +108,13 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     const x = event.clientX + 20; // 오른쪽으로 20만큼 이동
     const y = event.clientY + 20; // 아래로 20만큼 이동
     onHover(entry, { x, y });
+    document.body.style.cursor = 'pointer';
   };
 
   const handlePointerOut = (): void => {
     setHovered(false);
     onHover(null, null);
+    document.body.style.cursor = 'auto';
   };
 
   return (
