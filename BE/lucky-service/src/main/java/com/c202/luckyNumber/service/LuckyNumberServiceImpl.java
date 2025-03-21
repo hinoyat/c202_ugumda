@@ -1,44 +1,57 @@
 package com.c202.luckyNumber.service;
 
 import com.c202.exception.CustomException;
+import com.c202.luckyNumber.entity.LuckyNumber;
+import com.c202.luckyNumber.repository.LuckyNumberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class LuckyNumberServiceImpl implements LuckyNumberService {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final LuckyNumberRepository luckyNumberRepository;
 
     @Override
-    public void createLuckyNumber(int userSeq) {
+    @Transactional
+    public void createLuckyNumber(Integer userSeq) {
+        if (luckyNumberRepository.findByUserSeq(userSeq).isPresent()) {
+            throw new CustomException("오늘은 이미 생성된 행운 번호가 있습니다");
+        }
+
         List<Integer> luckyNumbers = generateLuckyNumbers();
 
-        if (redisTemplate.opsForHash().hasKey("lucky_number:" + userSeq, "number1")) {
-            throw new CustomException("이미 생성된 행운 번호가 있습니다");
-        }
+        LuckyNumber luckyNumber = LuckyNumber.builder()
+                .userSeq(userSeq)
+                .number1(luckyNumbers.get(0))
+                .number2(luckyNumbers.get(1))
+                .number3(luckyNumbers.get(2))
+                .number4(luckyNumbers.get(3))
+                .number5(luckyNumbers.get(4))
+                .number6(luckyNumbers.get(5))
+                .build();
 
-        for (int i = 0; i < luckyNumbers.size(); i++) {
-            redisTemplate.opsForHash().put("lucky_number:" + userSeq, "number" + (i + 1), luckyNumbers.get(i).toString());
-        }
-
-        redisTemplate.expire("lucky_number:" + userSeq,  calculateTimeToMidnight(), TimeUnit.SECONDS);
+        luckyNumberRepository.save(luckyNumber);
     }
 
     @Override
-    public List<String> getLuckyNumber(int userSeq) {
-        List<Object> luckyNumbers = redisTemplate.opsForHash().values("lucky_number:" + userSeq);
-
-        return luckyNumbers.stream()
-                .map(String::valueOf)
-                .collect(Collectors.toList());
+    public List<Integer> getLuckyNumber(Integer userSeq) {
+        return luckyNumberRepository.findByUserSeq(userSeq)
+                .map(luckyNumber -> List.of(
+                        luckyNumber.getNumber1(),
+                        luckyNumber.getNumber2(),
+                        luckyNumber.getNumber3(),
+                        luckyNumber.getNumber4(),
+                        luckyNumber.getNumber5(),
+                        luckyNumber.getNumber6()
+                ))
+                .orElse(List.of());
     }
 
     private List<Integer> generateLuckyNumbers() {
@@ -47,13 +60,5 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
                 .limit(6)
                 .boxed()
                 .collect(Collectors.toList());
-    }
-
-    private long calculateTimeToMidnight() {
-        long currentTimeMillis = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(9); // 9시간을 더함
-
-        long midnightMillis = (currentTimeMillis / 86400000) * 86400000 + 86400000;
-
-        return (midnightMillis - currentTimeMillis) / 1000;
     }
 }
