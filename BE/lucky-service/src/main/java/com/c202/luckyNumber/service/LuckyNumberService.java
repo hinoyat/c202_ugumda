@@ -3,7 +3,7 @@ package com.c202.luckyNumber.service;
 import java.util.List;
 
 public interface LuckyNumberService {
-    void createLuckyNumber(int userSeq);
+    void createLuckyNumber(Integer userSeq);
 
-    List<String> getLuckyNumber(int userSeq);
+    List<Integer> getLuckyNumber(Integer userSeq);
 }

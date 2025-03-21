@@ -68,7 +68,6 @@ spring:
             - Path=/api/tags/**
           filters:
             - name: JwtAuthFilter
-
 server:
   port: 8080
 
@@ -91,3 +90,4 @@ jwt:
   refresh-token-validity-in-ms: 2592000000
   token-prefix: Bearer
   header-string: Authorization
+
