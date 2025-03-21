@@ -8,13 +8,14 @@ import DiaryCreateButton from '../components/create_edit/DiaryCreateButton';
 import DetailTags from '../components/details/DetailTags';
 import MainPage from '@/domains/mainpage/pages/MainPage';
 
+// 변경: 인터페이스에서 일관되게 불리언 사용
 interface DiaryData {
   id?: number;
   title?: string;
   content?: string;
   tags?: string[];
   dream_video?: string;
-  isPublic?: boolean;
+  isPublic?: boolean; // 변경: 'Y'/'N' 대신 불리언 사용
 }
 
 interface DiaryProps {
@@ -107,7 +108,7 @@ const DiaryComponent: React.FC<DiaryProps> = ({
       title,
       content,
       tags,
-      isPublic,
+      isPublic, // 변경: 'Y'/'N' 대신 불리언 그대로 전달
     };
 
     if (isEditing) {
@@ -117,9 +118,7 @@ const DiaryComponent: React.FC<DiaryProps> = ({
 
       // 성공 후 상세 페이지로 이동 또는 모달 닫기
       if (onClose) {
-        onClose(diaryToSave); // 새 일기 데이터 전달
-        // } else {
-        //   navigate(`/diary/${diaryToSave.id}`);
+        onClose(diaryToSave); // 수정된 일기 데이터 전달
       }
     } else {
       console.log('일기 생성:', diaryToSave);
@@ -140,7 +139,11 @@ const DiaryComponent: React.FC<DiaryProps> = ({
     // 동영상 생성 API 호출
 
     const diaryToSave = {
-      // ... 일기 데이터
+      id: isEditing ? diaryData?.id || parseInt(id || '0') : undefined,
+      title,
+      content,
+      tags,
+      isPublic,
       dream_video: 'Y', // 동영상 생성 요청 표시
     };
 
@@ -157,101 +160,52 @@ const DiaryComponent: React.FC<DiaryProps> = ({
     <div
       className="absolute inset-0"
       onClick={handleClose}>
-      {isEditing ? (
-        // 수정 모드일 때는 위치 지정 스타일 제거
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[rgba(110,110,110,0.47)]"
-          onClick={stopPropagation}>
-          <div className="pr-3 flex flex-col gap-5">
-            <div>
-              <DiaryHeader
-                onClose={handleClose}
-                isEditing={isEditing}
-              />
-            </div>
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[27%] h-[75%] py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[#505050]/90 rounded-lg"
+        onClick={stopPropagation}>
+        <div className="pr-3 flex flex-col gap-5">
+          <div>
+            <DiaryHeader
+              onClose={handleClose}
+              isEditing={isEditing}
+            />
+          </div>
 
-            <div>
-              <DiaryInput
-                title={title}
-                content={content}
-                onTitleChange={setTitle}
-                onContentChange={setContent}
-              />
-            </div>
+          <div>
+            <DiaryInput
+              title={title}
+              content={content}
+              onTitleChange={setTitle}
+              onContentChange={setContent}
+            />
+          </div>
 
-            <div>
-              <DetailTags
-                initialTags={diaryData?.tags || []}
-                isEditing={true}
-                onTagsChange={setTags}
-              />
-            </div>
+          <div>
+            <DetailTags
+              initialTags={diaryData?.tags || []}
+              isEditing={true}
+              onTagsChange={setTags}
+            />
+          </div>
 
-            <div>
-              <DiaryDisclose
-                isPublic={isPublic}
-                onToggle={setIsPublic}
-              />
-            </div>
+          <div>
+            <DiaryDisclose
+              isPublic={isPublic}
+              onToggle={setIsPublic}
+            />
+          </div>
 
-            <div>
-              <DiaryCreateButton
-                onCreate={handleSave}
-                onCreateVideo={handleCreateVideo}
-                Count={Count}
-                isEditing={isEditing}
-              />
-            </div>
+          <div>
+            <DiaryCreateButton
+              onCreate={handleSave}
+              onCreateVideo={handleCreateVideo}
+              Count={Count}
+              isEditing={isEditing}
+              onClose={handleClose}
+            />
           </div>
         </div>
-      ) : (
-        // 생성 모드일 때는 중앙 정렬 위치 지정
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[27%] h-[75%] py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[rgba(110,110,110,0.47)]"
-          onClick={stopPropagation}>
-          <div className="pr-3 flex flex-col gap-5">
-            <div>
-              <DiaryHeader
-                onClose={handleClose}
-                isEditing={isEditing}
-              />
-            </div>
-
-            <div>
-              <DiaryInput
-                title={title}
-                content={content}
-                onTitleChange={setTitle}
-                onContentChange={setContent}
-              />
-            </div>
-
-            <div>
-              <DetailTags
-                initialTags={diaryData?.tags || []}
-                isEditing={true}
-                onTagsChange={setTags}
-              />
-            </div>
-
-            <div>
-              <DiaryDisclose
-                isPublic={isPublic}
-                onToggle={setIsPublic}
-              />
-            </div>
-
-            <div>
-              <DiaryCreateButton
-                onCreate={handleSave}
-                onCreateVideo={handleCreateVideo}
-                Count={Count}
-                isEditing={isEditing}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };

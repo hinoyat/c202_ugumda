@@ -1,3 +1,5 @@
+// 검색 모달. 탭 전환
+
 import React, { useState } from 'react';
 import DiarySearch from '../components/DiarySearch';
 import UserSearch from '../components/UserSearch';
@@ -16,23 +18,23 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="absolute inset-0">
       <div className="absolute inset-0 z-10 backdrop-blur-[2px]"></div>
-      <div
-        className="absolute w-[80%] h-[85%] py-10 px-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#6E6E6E]/47 z-11 flex flex-col items-center">
+      {/* 모달 배경 */}
+      <div className="absolute w-[70%] h-[80%] rounded-lg py-10 px-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#6E6E6E]/90 z-25 flex flex-col items-center">
+        {/* 닫기버튼 */}
         <div
           className="absolute z-40 top-[2%] right-[1%] cursor-pointer"
-          onClick={onClose}
-        >
-          <IoClose className="text-white text-4xl" />
+          onClick={onClose}>
+          <IoClose className="text-white text-3xl" />
         </div>
-        <div className="flex gap-10 text-white text-3xl">
+        {/* 검색탭 */}
+        <div className="flex gap-10 text-white text-xl">
           <button
             onClick={() => setActiveTab('diary')}
             className={`${
               activeTab === 'diary'
                 ? 'font-bold underline underline-offset-6'
                 : 'hover:font-bold hover:underline hover:underline-offset-5'
-            } cursor-pointer`}
-          >
+            } cursor-pointer`}>
             일기검색
           </button>
           <p>|</p>
@@ -42,8 +44,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
               activeTab === 'user'
                 ? 'font-bold underline underline-offset-6'
                 : 'hover:font-bold hover:underline hover:underline-offset-5'
-            } cursor-pointer`}
-          >
+            } cursor-pointer`}>
             유저검색
           </button>
         </div>
