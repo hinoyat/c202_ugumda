@@ -1,17 +1,15 @@
 // 일기 조회 컴포넌트
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import MainPage from '@/domains/mainpage/pages/MainPage';
-import DetailHeader from '../components/details/DetailHeader';
-import DetailVideo from '../components/details/DetailVideo';
-import DetailContent from '../components/details/DetailContent';
-import DetailTags from '../components/details/DetailTags';
-import DetailLike from '../components/details/DetailLike';
-import DetailButtons from '../components/details/DetailButtons';
-import DiaryComponent from './DiaryComponent';
+import DetailHeader from '@/domains/diary/components/details/DetailHeader';
+import DetailVideo from '@/domains/diary/components/details/DetailVideo';
+import DetailContent from '@/domains/diary/components/details/DetailContent';
+import DetailTags from '@/domains/diary/components/details/DetailTags';
+import DetailLike from '@/domains/diary/components/details/DetailLike';
+import DetailButtons from '@/domains/diary/components/details/DetailButtons';
+import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
 
-import '../../search/styles/DiarySearch.css';
+import '@/domains/search/styles/DiarySearch.css';
 
 interface DiaryDetailProps {
   initialDiary: {
@@ -66,7 +64,10 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
   return (
     <div className="relative w-full h-full">
-      {/*수정: Universe 방식처럼 showForm으로 모달 표시 여부 제어  */}
+      <div
+        className="inset-0 absolute"
+        onClick={handleClose}></div>
+      {/* Universe 방식처럼 showForm으로 모달 표시 여부 제어  */}
       {showForm && (
         <DiaryComponent
           onClose={(newDiaryData) => {
@@ -98,6 +99,8 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
               if (onUpdateDiary) {
                 console.log('부모 컴포넌트에 수정된 데이터 전달', updatedDiary);
                 onUpdateDiary(updatedDiary);
+
+                onClose();
               }
             }
 
