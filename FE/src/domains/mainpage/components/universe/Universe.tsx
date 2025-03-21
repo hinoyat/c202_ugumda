@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Line } from '@react-three/drei';
 import '../../themes/universe.css';
 import DiaryEntry, { Position } from '@/domains/mainpage/models/DiaryEntry';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
@@ -16,6 +16,37 @@ import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import DiaryDetail from '@/domains/diary/modals/DiaryDetail';
 import { useDiaryEntries } from '@/domains/mainpage/hooks/useDiaryEntries';
 
+// 거리 계산 유틸리티 함수
+function calculateDistance(pos1: Position, pos2: Position) {
+  return Math.sqrt(
+    Math.pow(pos1.x - pos2.x, 2) +
+      Math.pow(pos1.y - pos2.y, 2) +
+      Math.pow(pos1.z - pos2.z, 2)
+  );
+}
+
+// 가장 가까운 N개의 일기를 연결하는 함수
+function connectNearestDiaries(entries: DiaryEntry[], connectionsPerEntry = 2) {
+  return entries
+    .map((entry, index) => {
+      // 현재 엔트리를 제외한 다른 엔트리들을 거리순으로 정렬
+      const nearestEntries = entries
+        .filter((_, i) => i !== index)
+        .sort(
+          (a, b) =>
+            calculateDistance(entry.position, a.position) -
+            calculateDistance(entry.position, b.position)
+        )
+        .slice(0, connectionsPerEntry); // 가장 가까운 N개 선택
+
+      return nearestEntries.map((nearEntry) => ({
+        from: entry.position,
+        to: nearEntry.position,
+      }));
+    })
+    .flat();
+}
+
 const Universe: React.FC = () => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
 
@@ -26,8 +57,6 @@ const Universe: React.FC = () => {
   const { entries, addEntry, editEntry, removeEntry } = useDiaryEntries();
 
   // ------------------목데이터로 일기 별 뿌려두기----------------------- //
-  // 변경: useDiaryEntries 훅이 이미 로컬 스토리지에서 데이터를 불러오므로,
-  // 데이터가 없을 때만 목데이터를 추가합니다.
   useEffect(() => {
     // 초기 데이터가 없을 경우에만 목데이터 추가
     if (entries.length === 0) {
@@ -189,9 +218,25 @@ const Universe: React.FC = () => {
                 isNew={entry.diary_seq === newStarId} // 새 별 여부 전달
               />
             ))}
+
+            {/* 일기 연결선 추가 */}
+            <group>
+              {connectNearestDiaries(entries).map((connection, index) => (
+                <Line
+                  key={index}
+                  points={[
+                    [connection.from.x, connection.from.y, connection.from.z],
+                    [connection.to.x, connection.to.y, connection.to.z],
+                  ]}
+                  color="rgba(255, 255, 255, 0.2)"
+                  lineWidth={1}
+                />
+              ))}
+            </group>
           </group>
         </Canvas>
       </div>
+
       {/* ----------------------일기 작성/수정 폼 (조건부 렌더링)----------------------- */}
       {showForm && (
         <DiaryComponent
@@ -249,19 +294,6 @@ const Universe: React.FC = () => {
                 isPublic: newDiaryData.isPublic,
                 video_url: newDiaryData.dream_video,
               });
-
-              // 수정된 selectedEntry를 viewingEntry로 설정하여 조회 화면 표시
-              const updatedEntry = { ...selectedEntry };
-              updatedEntry.title = newDiaryData.title || selectedEntry.title;
-              updatedEntry.content =
-                newDiaryData.content || selectedEntry.content;
-              updatedEntry.tags = newDiaryData.tags || selectedEntry.tags;
-              updatedEntry.is_public = newDiaryData.isPublic ? 'Y' : 'N';
-
-              // video_url은 있는 경우에만 업데이트
-              if (newDiaryData.dream_video !== undefined) {
-                updatedEntry.video_url = newDiaryData.dream_video;
-              }
 
               // 선택된 항목 초기화
               setSelectedEntry(null);
