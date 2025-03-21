@@ -41,15 +41,15 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
     }
 
     @Override
-    public List<String> getLuckyNumber(Integer userSeq) {
+    public List<Integer> getLuckyNumber(Integer userSeq) {
         return luckyNumberRepository.findByUserSeq(userSeq)
                 .map(luckyNumber -> List.of(
-                        String.valueOf(luckyNumber.getNumber1()),
-                        String.valueOf(luckyNumber.getNumber2()),
-                        String.valueOf(luckyNumber.getNumber3()),
-                        String.valueOf(luckyNumber.getNumber4()),
-                        String.valueOf(luckyNumber.getNumber5()),
-                        String.valueOf(luckyNumber.getNumber6())
+                        luckyNumber.getNumber1(),
+                        luckyNumber.getNumber2(),
+                        luckyNumber.getNumber3(),
+                        luckyNumber.getNumber4(),
+                        luckyNumber.getNumber5(),
+                        luckyNumber.getNumber6()
                 ))
                 .orElse(List.of());
     }

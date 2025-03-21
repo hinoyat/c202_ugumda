@@ -25,7 +25,7 @@ public class LuckyNumberController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto<List<String>>> getLuckyNumbers(@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
+    public ResponseEntity<ResponseDto<List<Integer>>> getLuckyNumbers(@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
         return ResponseEntity.ok(ResponseDto.success(200,"행운 번호 조회 성공", luckyNumberService.getLuckyNumber(userSeq)));
     }
 }

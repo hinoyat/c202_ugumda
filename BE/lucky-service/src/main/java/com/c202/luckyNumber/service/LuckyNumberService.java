@@ -5,5 +5,5 @@ import java.util.List;
 public interface LuckyNumberService {
     void createLuckyNumber(Integer userSeq);
 
-    List<String> getLuckyNumber(Integer userSeq);
+    List<Integer> getLuckyNumber(Integer userSeq);
 }
