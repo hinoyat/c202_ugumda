@@ -37,7 +37,7 @@ class DiaryEntry {
       video_url?: string | null;
       dream_date?: string;
       tags?: string[];
-      is_public?: 'Y' | 'N'; // 공개여부. 기본값 'Y'
+      is_public?: 'Y' | 'N' | boolean; // 변경: boolean 타입도 허용하도록 수정
       position?: Position; // 지정하지 않으면 랜덤 생성
       size?: number; // 별 크기
       color?: string; // 별 색상
@@ -66,7 +66,13 @@ class DiaryEntry {
     this.updated_at = formattedNow;
     this.deleted_at = null;
     this.is_deleted = 'N';
-    this.is_public = params.is_public ?? 'Y';
+
+    // 변경: 불리언을 'Y'/'N'으로 변환하는 로직 추가
+    if (typeof params.is_public === 'boolean') {
+      this.is_public = params.is_public ? 'Y' : 'N';
+    } else {
+      this.is_public = params.is_public ?? 'Y';
+    }
 
     // UI 관련 속성
     this.tags = params.tags || [];
@@ -110,7 +116,7 @@ class DiaryEntry {
     content?: string;
     video_url?: string | null;
     dream_date?: string;
-    is_public?: 'Y' | 'N';
+    is_public?: 'Y' | 'N' | boolean; // 변경: boolean 타입도 허용하도록 수정
     tags?: string[];
     size?: number;
     color?: string;
@@ -119,9 +125,17 @@ class DiaryEntry {
     if (params.content !== undefined) this.content = params.content;
     if (params.video_url !== undefined) this.video_url = params.video_url;
     if (params.dream_date !== undefined) this.dream_date = params.dream_date;
-    if (params.is_public !== undefined) this.is_public = params.is_public;
     if (params.tags !== undefined) this.tags = params.tags;
     if (params.size !== undefined) this.size = params.size;
+
+    // 변경: is_public이 불리언인 경우 'Y'/'N'으로 변환
+    if (params.is_public !== undefined) {
+      if (typeof params.is_public === 'boolean') {
+        this.is_public = params.is_public ? 'Y' : 'N';
+      } else {
+        this.is_public = params.is_public;
+      }
+    }
 
     // 수정 시간 업데이트
     const now = new Date();
@@ -138,7 +152,7 @@ class DiaryEntry {
     video_url?: string | null;
     dream_date?: string;
     tags?: string[];
-    is_public?: 'Y' | 'N';
+    is_public?: 'Y' | 'N' | boolean; // 변경: boolean 타입도 허용하도록 수정
     position?: Position;
     size?: number;
     color?: string;
@@ -165,6 +179,12 @@ class DiaryEntry {
     entry.is_deleted = dummyData.is_deleted || entry.is_deleted;
 
     return entry;
+  }
+
+  // 추가: 불리언 형태로 is_public 값을 가져오는 getter 메서드
+  // 이렇게 하면 컴포넌트에서 일관되게 불리언 값으로 작업할 수 있습니다
+  get isPublic(): boolean {
+    return this.is_public === 'Y';
   }
 }
 
