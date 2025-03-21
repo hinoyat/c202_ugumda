@@ -18,14 +18,14 @@ public class LuckyNumber {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int luckyNumberSeq;
+    private Integer luckyNumberSeq;
 
-    private int userSeq;
+    private Integer userSeq;
 
-    private int number1;
-    private int number2;
-    private int number3;
-    private int number4;
-    private int number5;
-    private int number6;
+    private Integer number1;
+    private Integer number2;
+    private Integer number3;
+    private Integer number4;
+    private Integer number5;
+    private Integer number6;
 }
