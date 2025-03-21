@@ -2,7 +2,6 @@ server:
   port: 8888
 
 spring:
-  # ???? ?? ?? ?? ??
   profiles:
     active: native
 
@@ -13,10 +12,27 @@ spring:
     config:
       server:
         native:
-          #   configurations ?????? ????
           search-locations: classpath:/configurations
+      override-system-properties: false
 
-#logging:
-#  level:
-#    org.springframework.cloud.config: DEBUG
-#    org.springframework.boot: DEBUG
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://eureka-service:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
