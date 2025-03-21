@@ -12,7 +12,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { extend, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
-import { Html } from '@react-three/drei';
 
 // THREE.js 메쉬 및 재질 확장
 extend({
@@ -43,7 +42,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
 
   // 별 색상 - 새 별은 노란색, 기존 별은 빨간색
-  const starColor = new THREE.Color(isNew ? '#ffcc00' : '#ff3333');
+  const starColor = new THREE.Color(isNew ? '#ff3333' : '#ffcc00');
 
   // 새 별을 위한 상태 추가
   const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
@@ -109,11 +108,13 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     const x = event.clientX + 20; // 오른쪽으로 20만큼 이동
     const y = event.clientY + 20; // 아래로 20만큼 이동
     onHover(entry, { x, y });
+    document.body.style.cursor = 'pointer';
   };
 
   const handlePointerOut = (): void => {
     setHovered(false);
     onHover(null, null);
+    document.body.style.cursor = 'auto';
   };
 
   return (
