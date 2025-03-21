@@ -7,6 +7,7 @@ interface DiaryCreateButtonProps {
   onCreateVideo: () => void;
   Count: number;
   isEditing?: boolean; // 수정 모드 여부 추가
+  onClose: () => void;
 }
 
 const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
@@ -14,12 +15,13 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
   onCreateVideo,
   Count,
   isEditing = false,
+  onClose,
 }) => {
   return (
     <div className="w-full flex flex-col gap-3">
       {isEditing ? (
         <button
-          onClick={onCreate}
+          onClick={onClose}
           className="text-[#3A3A3A] cursor-pointer w-full bg-[rgba(255,255,255,0.7)] py-2 rounded text-lg font-bold hover:bg-neutral-500 hover:text-white">
           수정완료
         </button>
