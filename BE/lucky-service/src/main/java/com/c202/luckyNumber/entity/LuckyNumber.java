@@ -1,9 +1,6 @@
 package com.c202.luckyNumber.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,4 +25,7 @@ public class LuckyNumber {
     private Integer number4;
     private Integer number5;
     private Integer number6;
+
+    @Column(nullable = false, length = 15)
+    private String createdAt;
 }
