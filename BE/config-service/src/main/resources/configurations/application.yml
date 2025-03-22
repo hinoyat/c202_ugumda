@@ -3,12 +3,18 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
 
 spring:
   cloud:
     config:
-      override-system-properties: false   # Spring Cloud Config 가 시스템 프로퍼티 덮어쓰지 않도록 설정
+      override-system-properties: false
+      fail-fast: ${SPRING_CLOUD_CONFIG_FAIL_FAST:true}
+      retry:
+        initial-interval: 1500
+        max-attempts: 10
+        max-interval: 10000
+        multiplier: 1.5
 
 management:
   endpoints:

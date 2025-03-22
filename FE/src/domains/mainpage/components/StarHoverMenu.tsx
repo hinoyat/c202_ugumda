@@ -165,7 +165,7 @@ const StarHoverMenu = ({
               <img
                 src={hover_edit}
                 alt="edit"
-                className="w-5 h-5 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-5 h-5 opacity-90 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               />
             </button>
           </div>
@@ -191,7 +191,7 @@ const StarHoverMenu = ({
               <img
                 src={hover_delete}
                 alt="delete"
-                className="w-4 h-4 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-4 h-4 opacity-80 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               />
             </button>
           </div>
@@ -217,7 +217,7 @@ const StarHoverMenu = ({
               <img
                 src={hover_diary}
                 alt="view"
-                className="w-5 h-5 opacity-50 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-5 h-5 opacity-90 transition-opacity group-hover:opacity-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               />
             </button>
           </div>

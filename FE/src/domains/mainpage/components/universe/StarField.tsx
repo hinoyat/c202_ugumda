@@ -68,14 +68,20 @@ const StarField = () => {
   );
 };
 
-// 별 레이어 생성 헬퍼 함수
-function createStarLayer(count: number, spread: number) {
+// 별 레이어 생성 헬퍼 함수 - 구형 분포로 수정
+function createStarLayer(count: number, radius: number) {
   const positions = new Float32Array(count * 3);
 
   for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * spread;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * spread;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * spread;
+    // 구면 좌표계 사용
+    const theta = Math.random() * 2 * Math.PI; // 방위각 (0~2π)
+    const phi = Math.acos(2 * Math.random() - 1); // 고도각 (0~π)
+    const r = radius * Math.cbrt(Math.random()); // 반지름 (균일 분포를 위해 세제곱근 사용)
+
+    // 구면 좌표를 직교 좌표로 변환
+    positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i * 3 + 2] = r * Math.cos(phi);
   }
 
   return { positions };

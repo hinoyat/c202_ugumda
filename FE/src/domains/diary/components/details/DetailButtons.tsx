@@ -5,7 +5,7 @@ interface DetailButtonsProps {
   onClose?: () => void;
 }
 
-const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit }) => {
+const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit, onClose }) => {
   // 버튼 직접 클릭 핸들러
   const handleEditClick = () => {
     console.log('수정 버튼 직접 클릭');

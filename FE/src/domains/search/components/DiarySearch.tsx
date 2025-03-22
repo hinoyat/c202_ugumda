@@ -1,6 +1,8 @@
+// 일기 태그
+
 import '../styles/DiarySearch.css';
 import DiaryList from './DiaryList';
-import exampleProfile from "@/assets/images/exampleProfile.svg"
+import exampleProfile from '@/assets/images/exampleProfile.svg';
 
 const DiarySearch = () => {
   const sampleData = [
@@ -38,14 +40,14 @@ const DiarySearch = () => {
         <input
           type="text"
           placeholder="내용을 입력해 주세요"
-          className="border-b border-white p-1 basis-63/100  placeholder:text-[#FFFFFF]/70"
+          className="text-[16px] border-b border-white p-1 basis-63/100  placeholder:text-[#FFFFFF]/70"
         />
-        <button className="bg-[#545454] text-white rounded px-3 w-20">
+        <button className="bg-[#545454] text-white rounded px-3 w-20 text-base">
           검색{' '}
         </button>
       </div>
       {/*체크 박스 시작 */}
-      <div className="flex gap-4 w-full justify-start pl-30">
+      <div className="flex gap-4 w-full justify-start pl-30 text-[15px] ">
         <div className="flex gap-1.5 items-center">
           <label className="cont">
             <input
@@ -95,7 +97,8 @@ const DiarySearch = () => {
         </div>
       </div>
       {/*체크 박스 끝 */}
-      <div className="w-full h-[410px] overflow-y-auto pr-4 custom-scrollbar">
+      {/* 검색 결과 보이는 부분 */}
+      <div className="w-full h-[350px] overflow-y-auto pr-4 custom-scrollbar">
         <DiaryList data={sampleData} />
       </div>
     </div>
