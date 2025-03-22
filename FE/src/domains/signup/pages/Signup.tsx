@@ -1,32 +1,36 @@
-import SignupForm from "../components/SignupForm";
-import signupVideo from "@/assets/video/signupVideo.mp4"
-import signup_image from "@/assets/images/signup_image.svg"
+import SignupForm from '@/domains/signup/components/SignupForm';
+import StarField from '@/domains/mainpage/components/universe/StarField';
+import { Canvas } from '@react-three/fiber';
 
-const Signup =() => {
+const Signup = () => {
+  return (
+    <div className="relative h-screen w-screen">
+      {/* 우주배경 */}
+      <div className="absolute inset-0">
+        <Canvas
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'black',
+            zIndex: 0,
+          }}
+          camera={{ position: [0, 0, 5] }}>
+          {' '}
+          {/* 카메라 위치 조정 */}
+          <StarField />
+        </Canvas>
+      </div>
 
-    return (
-        <div className="relative h-screen w-screen">
-          <video
-            src={signupVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover absolute"
-          />
-    
-          <div className="absolute inset-0 flex items-center justify-center">
-            
-            {/* 왼쪽 이미지 */}
-            <div className="h-[75vh]">
-              <img src={signup_image} alt="loginImage" className="object-contain h-full rounded" />
-            </div>
+      {/* 회원가입 폼을 중앙에 배치하기 위한 컨테이너 */}
+      <div className="absolute inset-0 flex items-center justify-center z-10">
+        {/* 회원가입 폼 컴포넌트 */}
+        <SignupForm />
+      </div>
+    </div>
+  );
+};
 
-            <SignupForm/>
-
-            
-          </div>
-        </div>
-      );
-    };
 export default Signup;
