@@ -231,7 +231,7 @@ public class JwtTokenProvider {
         // 토큰 타입 확인
         String tokenType = getTokenType(refreshToken);
         if (!"refresh".equals(tokenType)) {
-            throw new CustomException("유효한 리프레시 토큰이 아닙니다.");
+            throw new CustomException("리프레시 토큰이 아닙니다.");
         }
 
         // DB에 저장된 리프레시 토큰 확인
