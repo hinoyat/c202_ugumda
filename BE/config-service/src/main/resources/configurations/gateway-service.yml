@@ -1,3 +1,7 @@
+server:
+  port: ${GATEWAY_SERVICE_PORT}
+
+
 spring:
   application:
     name: gateway-service
@@ -5,8 +9,8 @@ spring:
   # user-service와 같은 redis 설정을 통해 블랙리스트 공유
   data:
     redis:
-      host: ${SPRING_DATA_REDIS_HOST:localhost}
-      port: ${SPRING_DATA_REDIS_PORT:6379}
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: ${SPRING_DATA_REDIS_PORT}
 
   # 게이트웨이 설정
   cloud:
@@ -68,26 +72,23 @@ spring:
             - Path=/api/tags/**
           filters:
             - name: JwtAuthFilter
-server:
-  port: 8080
-
 logging:
   charset:
-    console: 'UTF-8'
-    file: 'UTF-8'
+    console: ${LOG_CHARSET_CONSOLE}
+    file: ${LOG_CHARSET_FILE}
 
   file:
-    name: ./log/${spring.application.name}.log
+    name: ${LOG_FILE_PATH}/${spring.application.name}.log
 
   level:
-    com.netflix.eureka: DEBUG
-    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.eureka: ${LOG_LEVEL_EUREKA}
+    org.springframework.cloud.netflix.eureka: ${LOG_LEVEL_EUREKA_SPRING}
 
 
 jwt:
-  secret: yourVerySecretKeyHereItShouldBeAtLeast32CharactersLong
-  access-token-validity-in-ms: 3600000
-  refresh-token-validity-in-ms: 2592000000
-  token-prefix: Bearer
-  header-string: Authorization
+  secret: ${JWT_SECRET}
+  access-token-validity-in-ms: ${JWT_ACCESS_TOKEN_VALIDITY}
+  refresh-token-validity-in-ms: ${JWT_REFRESH_TOKEN_VALIDITY}
+  token-prefix: ${JWT_TOKEN_PREFIX}
+  header-string: ${JWT_HEADER_STRING}
 
