@@ -2,24 +2,25 @@ package com.c202.user.user.model.response;
 
 import com.c202.user.user.entity.User;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class UserResponseDto {
 
-    private int userSeq;
+    private Integer userSeq;
     private String username;
     private String nickname;
     private String birthDate;
+    private String introduction;
     
-    // Dto 변환
     public static UserResponseDto toDto(User user) {
         return UserResponseDto.builder()
                 .userSeq(user.getUserSeq())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .birthDate(user.getBirthDate())
+                .introduction(user.getIntroduction())
                 .build();
     }
 }

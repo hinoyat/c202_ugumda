@@ -1,5 +1,6 @@
 package com.c202.user.auth.service;
 
+import com.c202.exception.CustomException;
 import com.c202.user.user.entity.User;
 import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
@@ -8,14 +9,11 @@ import com.c202.user.user.repository.UserRepository;
 import com.c202.user.auth.jwt.JwtTokenProvider;
 import com.c202.user.auth.jwt.TokenDto;
 import com.c202.user.auth.jwt.refreshtoken.RefreshTokenRepository;
-import com.c202.user.global.exception.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,11 +40,11 @@ public class AuthServiceImpl implements AuthService {
     public UserResponseDto register(SignupRequestDto request) {
         // 중복 검사
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new ServiceException.UsernameAlreadyExistsException("이미 사용 중인 아이디입니다.");
+            throw new CustomException("이미 사용 중인 아이디입니다.");
         }
 
         if (userRepository.existsByNickname(request.getNickname())) {
-            throw new ServiceException.UsernameAlreadyExistsException("이미 사용 중인 닉네임입니다.");
+            throw new CustomException("이미 사용 중인 닉네임입니다.");
         }
 
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
@@ -71,14 +69,14 @@ public class AuthServiceImpl implements AuthService {
     public TokenDto.TokenResponseDto login(LoginRequestDto request) {
         // 삭제된 계정인지 확인
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다."));
 
         // 비밀번호 체크 (passwordEncoder.matches() 사용)
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new ServiceException.AuthenticationException("잘못된 비밀번호입니다.");
+            throw new CustomException("잘못된 비밀번호입니다.");
         }
         if ("Y".equals(user.getIsDeleted())) {
-            throw new ServiceException.ResourceNotFoundException("탈퇴한 계정입니다.");
+            throw new CustomException("탈퇴한 계정입니다.");
         }
 
         // 액세스 토큰과 리프레시 토큰 생성
@@ -95,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
     // 로그아웃
     @Override
     @Transactional
-    public void logout(HttpServletRequest request, HttpServletResponse response, int userSeq) {
+    public void logout(HttpServletRequest request, HttpServletResponse response, Integer userSeq) {
         log.debug("사용자 ID={}의 로그아웃 처리 시작", userSeq);
 
         try {

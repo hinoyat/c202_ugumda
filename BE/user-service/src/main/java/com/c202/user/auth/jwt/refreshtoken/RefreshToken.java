@@ -20,7 +20,7 @@ public class RefreshToken {
 
     // 사용자 ID와 매핑
     @Column(nullable = false)
-    private int userSeq;
+    private Integer userSeq;
 
     // 토큰 값 저장
     @Column(nullable = false, unique = true, length = 255)

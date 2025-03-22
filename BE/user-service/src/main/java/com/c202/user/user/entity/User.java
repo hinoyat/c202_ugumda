@@ -7,7 +7,6 @@ import lombok.*;
 @Entity
 @Table(name = "users")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userSeq;
+    private Integer userSeq;
 
     @Column(unique = true, nullable = false, length = 50)
     private String username;
@@ -65,4 +64,5 @@ public class User {
 
     public void updateIntroduction(String introduction) {this.introduction = introduction;}
 
+    public void updateDeletedAt(String deletedAt) {this.deletedAt = deletedAt;}
 }

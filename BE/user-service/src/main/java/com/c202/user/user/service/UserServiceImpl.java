@@ -1,10 +1,11 @@
 package com.c202.user.user.service;
 
+import com.c202.exception.CustomException;
 import com.c202.user.user.entity.User;
+import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.repository.UserRepository;
-import com.c202.user.global.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,30 +30,24 @@ public class UserServiceImpl implements UserService {
 
     // 사용자 정보 조회
     @Override
-    public UserResponseDto getUserInfo(int userSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
-                .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
-        if ("Y".equals(user.getIsDeleted())) {
-            throw new ServiceException.ResourceNotFoundException("탈퇴한 계정입니다.");
-        }
+    public UserResponseDto getUserInfo(Integer userSeq) {
+
+        User user = validateUser(userSeq);
+
         return UserResponseDto.toDto(user);
     }
 
     // 사용자 정보 수정
     @Override
     @Transactional
-    public UserResponseDto updateUser(int userSeq, UpdateUserRequestDto request) {
-        User user = userRepository.findByUserSeq(userSeq)
-                .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+    public UserResponseDto updateUser(Integer userSeq, UpdateUserRequestDto request) {
 
-        if ("Y".equals(user.getIsDeleted())) {
-            throw new ServiceException.ResourceNotFoundException("탈퇴한 계정입니다.");
-        }
+        User user = validateUser(userSeq);
 
         // 닉네임 변경 시 중복 체크
         if (request.getNickname() != null && !request.getNickname().equals(user.getNickname())) {
             if (userRepository.existsByNickname(request.getNickname())) {
-                throw new ServiceException.UsernameAlreadyExistsException("이미 사용 중인 닉네임입니다.");
+                throw new CustomException("이미 사용 중인 닉네임입니다.");
             }
             user.updateNickname(request.getNickname());
         }
@@ -78,19 +73,37 @@ public class UserServiceImpl implements UserService {
     // 회원 탈퇴
     @Override
     @Transactional
-    public void deleteUser(int userSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
-                .orElseThrow(() -> new ServiceException.ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+    public void deleteUser(Integer userSeq) {
+        User user = validateUser(userSeq);
 
-        if ("Y".equals(user.getIsDeleted())) {
-            throw new ServiceException.ResourceNotFoundException("이미 탈퇴한 계정입니다.");
-        }
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
 
-        user.setDeletedAt(now);
+        user.updateDeletedAt(now);
         // 물리적 삭제가 아닌 논리적 삭제 처리
         user.deleteUser();
     }
 
+    @Override
+    @Transactional
+    public UserResponseDto updateIntroduction(Integer userSeq, UpdateIntroductionDto request) {
+        User user = validateUser(userSeq);
+
+        user.updateIntroduction(request.getIntroduction());
+
+        userRepository.save(user);
+
+        return UserResponseDto.toDto(user);
+    }
+
+    private User validateUser(Integer userSeq) {
+        User user = userRepository.findByUserSeq(userSeq)
+                .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다."));
+
+        if ("Y".equals(user.getIsDeleted())) {
+            throw new CustomException("이미 탈퇴한 계정입니다.");
+        }
+
+        return user;
+    }
 
 }

@@ -1,9 +1,9 @@
 package com.c202.user.auth.jwt;
 
+import com.c202.exception.CustomException;
 import com.c202.user.auth.jwt.blacklist.TokenBlacklistService;
 import com.c202.user.auth.jwt.refreshtoken.RefreshToken;
 import com.c202.user.auth.jwt.refreshtoken.RefreshTokenRepository;
-import com.c202.user.global.exception.ServiceException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -225,19 +225,19 @@ public class JwtTokenProvider {
     public String refreshAccessToken(String refreshToken) {
         // 리프레시 토큰 유효성 검증
         if (!validateToken(refreshToken)) {
-            throw new ServiceException.AuthenticationException("유효하지 않은 리프레시 토큰입니다.");
+            throw new CustomException("유효하지 않은 리프레시 토큰입니다.");
         }
 
         // 토큰 타입 확인
         String tokenType = getTokenType(refreshToken);
         if (!"refresh".equals(tokenType)) {
-            throw new ServiceException.AuthenticationException("유효한 리프레시 토큰이 아닙니다.");
+            throw new CustomException("리프레시 토큰이 아닙니다.");
         }
 
         // DB에 저장된 리프레시 토큰 확인
         Optional<RefreshToken> savedToken = refreshTokenRepository.findByToken(refreshToken);
         if (savedToken.isEmpty()) {
-            throw new ServiceException.AuthenticationException("저장된 리프레시 토큰을 찾을 수 없습니다.");
+            throw new CustomException("저장된 리프레시 토큰을 찾을 수 없습니다.");
         }
 
         // 토큰에서 사용자 정보 추출

@@ -13,7 +13,7 @@ public interface AuthService {
 
     TokenDto.TokenResponseDto login(LoginRequestDto request);
 
-    void logout(HttpServletRequest request, HttpServletResponse response, int userSeq);
+    void logout(HttpServletRequest request, HttpServletResponse response, Integer userSeq);
 
 
     boolean isUsernameAvailable(String username);
