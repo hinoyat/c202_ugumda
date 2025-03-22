@@ -1,3 +1,5 @@
+// enter password 부분!
+
 import { AiOutlineEnter } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
@@ -39,26 +41,28 @@ const PasswordCheckModal = () => {
       <img
         src={passwordFrame}
         alt=""
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30  animate-pulse"
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30  animate-pulse w-[600px]"
       />
-      <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 z-50 tracking-widest animate-pulse flex flex-col items-center gap-5">
+      <div className="absolute top-[43%] left-1/2 transform -translate-x-1/2 z-50 tracking-widest animate-pulse flex flex-col items-center gap-5">
         <h1
-          className="text-white text-3xl press-start-2p-regular"
+          className="text-white text-xl press-font "
           style={glowingTextStyle}>
           ENTER PASSWORD!!!
         </h1>
 
-        <div className="flex items-center justify-center gap-5 ml-10">
+        {/* 비밀번호 동그라미, 엔터 아이콘 */}
+        <div className="flex items-center justify-center">
           <input
             type="password"
-            className="text-cyan-300 text-[90px] w-120 h-20"
+            className="text-cyan-300 text-[50px] w-110 h-15 focus:outline-none "
           />
           <button
             onClick={onClickGoMyInfomation}
             className="cursor-pointer">
             <img
               src={enter}
-              alt=""
+              alt="enter"
+              className="w-6"
             />
           </button>
         </div>
