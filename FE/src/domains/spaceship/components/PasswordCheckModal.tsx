@@ -29,6 +29,13 @@ const PasswordCheckModal = () => {
     nav('/spaceship');
   };
 
+  // 엔터 키 입력 이벤트
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onClickGoMyInfomation();
+    }
+  };
+
   return (
     <div className="absolute inset-0">
       <div
@@ -54,7 +61,8 @@ const PasswordCheckModal = () => {
         <div className="flex items-center justify-center">
           <input
             type="password"
-            className="text-cyan-300 text-[50px] w-110 h-15 focus:outline-none "
+            className="text-cyan-300 text-[50px] w-110 h-15 focus:outline-none"
+            onKeyDown={handleKeyDown}
           />
           <button
             onClick={onClickGoMyInfomation}
