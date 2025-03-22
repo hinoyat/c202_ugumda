@@ -10,6 +10,7 @@ import com.c202.user.auth.jwt.JwtTokenProvider;
 import com.c202.user.auth.jwt.TokenDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -52,7 +53,7 @@ public class AuthController {
     // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<ResponseDto<Void>> logout(
-            @RequestHeader("X-User-Seq") int userSeq,
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             HttpServletRequest request,
             HttpServletResponse response) {
 
@@ -69,7 +70,8 @@ public class AuthController {
     }
 
     @GetMapping("/check-nickname/{nickname}")
-    public ResponseEntity<ResponseDto<Map<String, Boolean>>> checkNicknameAvailability(@PathVariable String nickname) {
+    public ResponseEntity<ResponseDto<Map<String, Boolean>>> checkNicknameAvailability(
+            @PathVariable String nickname) {
         boolean isAvailable = authService.isNicknameAvailable(nickname);
         return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다."));
     }
