@@ -12,10 +12,10 @@ spring:
       override-system-properties: false
       fail-fast: ${SPRING_CLOUD_CONFIG_FAIL_FAST}
       retry:
-        initial-interval: ${CONFIG_RETRY_INITIAL_INTERVAL}
-        max-attempts: ${CONFIG_RETRY_MAX_ATTEMPTS}
-        max-interval: ${CONFIG_RETRY_MAX_INTERVAL}
-        multiplier: ${CONFIG_RETRY_MULTIPLIER}
+        initial-interval: ${CONFIG_RETRY_INITIAL_INTERVAL:1500}
+        max-attempts: ${CONFIG_RETRY_MAX_ATTEMPTS:10}
+        max-interval: ${CONFIG_RETRY_MAX_INTERVAL:10000}
+        multiplier: ${CONFIG_RETRY_MULTIPLIER:1.5}
 
 management:
   endpoints:
