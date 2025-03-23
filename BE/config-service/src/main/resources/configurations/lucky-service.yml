@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LUCKY_DB_URL}?${DB_PARAMS}
+    url: ${LUCKY_DB_URL}${DB_PARAMS}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
@@ -13,9 +13,12 @@ spring:
       ddl-auto: ${JPA_HIBERNATE_DDL_AUTO}
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
-  port: ${SERVER_PORT}
+  port: 0
 
 eureka:
   instance:

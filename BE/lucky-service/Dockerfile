@@ -2,5 +2,8 @@ FROM openjdk:21
 WORKDIR /app
 COPY target/*.jar lucky-service.jar
 EXPOSE 8080
-# 나중에 필요시 MySQL 연결 환경변수 추가할 수 있음
+# 환경변수 설정으로 Docker 내부 통신 지원
+ENV SPRING_DATASOURCE_URL=jdbc:mysql://lucky-db:3306/lucky_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+ENV SPRING_DATASOURCE_USERNAME=root
+ENV SPRING_DATASOURCE_PASSWORD=1234
 ENTRYPOINT ["java", "-jar", "lucky-service.jar"]
