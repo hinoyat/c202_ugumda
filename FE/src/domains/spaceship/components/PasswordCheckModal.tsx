@@ -61,7 +61,7 @@ const PasswordCheckModal = () => {
         <div className="flex items-center justify-center">
           <input
             type="password"
-            className="text-cyan-300 text-[50px] w-110 h-15 focus:outline-none"
+            className="text-cyan-300 text-[40px] w-110 h-15 focus:outline-none"
             onKeyDown={handleKeyDown}
           />
           <button
