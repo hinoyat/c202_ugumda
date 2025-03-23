@@ -3,30 +3,31 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
 
 spring:
   cloud:
     config:
+      uri: ${SPRING_CLOUD_CONFIG_URI}
       override-system-properties: false
-      fail-fast: ${SPRING_CLOUD_CONFIG_FAIL_FAST:true}
+      fail-fast: ${SPRING_CLOUD_CONFIG_FAIL_FAST}
       retry:
-        initial-interval: 1500
-        max-attempts: 10
-        max-interval: 10000
-        multiplier: 1.5
+        initial-interval: ${CONFIG_RETRY_INITIAL_INTERVAL}
+        max-attempts: ${CONFIG_RETRY_MAX_ATTEMPTS}
+        max-interval: ${CONFIG_RETRY_MAX_INTERVAL}
+        multiplier: ${CONFIG_RETRY_MULTIPLIER}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: ${MANAGEMENT_ENDPOINTS_INCLUDE}
   metrics:
     export:
       prometheus:
-        enabled: true
+        enabled: ${PROMETHEUS_ENABLED}
   endpoint:
     prometheus:
-      enabled: true
+      enabled: ${PROMETHEUS_ENDPOINT_ENABLED}
     health:
-      show-details: always
+      show-details: ${HEALTH_DETAILS}

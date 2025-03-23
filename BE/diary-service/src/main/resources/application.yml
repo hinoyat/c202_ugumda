@@ -3,8 +3,8 @@ spring:
     name: diary-service
 
   config:
-    import: configserver:http://config-service:8888/
+    import: configserver:${SPRING_CLOUD_CONFIG_URI}
 
   cloud:
     config:
-      fail-fast: true
+      fail-fast: ${SPRING_CLOUD_CONFIG_FAIL_FAST}
