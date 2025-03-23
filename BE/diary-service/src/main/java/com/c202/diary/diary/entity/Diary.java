@@ -48,13 +48,16 @@ public class Diary {
     private String isPublic;
 
     @Column(nullable = true)
-    private String x;
+    private Double x;
 
     @Column(nullable = true)
-    private String y;
+    private Double y;
 
     @Column(nullable = true)
-    private String z;
+    private Double z;
+
+    @Column(nullable = true)
+    private Integer emotionSeq;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true) // DiaryTag와 연결
     @Builder.Default
@@ -69,5 +72,12 @@ public class Diary {
         this.content = content;
         this.dreamDate = dreamDate;
         this.updatedAt = updatedAt;
+    }
+
+    public void setCoordinates(Double x, Double y, Double z, Integer emotionSeq) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.emotionSeq = emotionSeq;
     }
 }
