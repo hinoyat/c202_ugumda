@@ -1,3 +1,5 @@
+// 프로필 부분
+
 import DreamSolveLine from './DreamSolveLine';
 import DreamMeaningLog from './DreamMeaningLog';
 import DreamHistory from './DreamHistory';

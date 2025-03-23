@@ -1,3 +1,5 @@
+// 꿈 내용 적는 곳
+
 import React from 'react';
 
 interface DreamContentProps {

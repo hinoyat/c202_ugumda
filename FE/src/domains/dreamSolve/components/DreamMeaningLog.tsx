@@ -1,3 +1,4 @@
+// 최근 꿈 해몽 기록 (5개)
 const DreamMeaningLog = () => {
   const meaningData = [
     { id: 1, title: '차를 타고 가는 꿈은 변화의 신호...' },
