@@ -14,8 +14,8 @@ const LeftDreamSection = () => {
           alt="임시 프로필 사진"
           className="w-20 h-20 mt-3 rounded-full"
         />
-        <p className="text-neutral-500 text-[17px]">2002.04.23</p>
-        <h1 className="text-white text-[15px]">어린왕자</h1>
+        <p className="text-gray-200/70 text-[14px]">2002.04.23</p>
+        <h1 className="text-white/90 text-[16px]">어린왕자</h1>
       </div>
 
       <div className="flex items-center justify-center">

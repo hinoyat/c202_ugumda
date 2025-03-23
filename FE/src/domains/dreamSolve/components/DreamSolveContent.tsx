@@ -1,4 +1,5 @@
 // 꿈 해몽 분석 컴포넌트
+import GlowFrame from '@/domains/dreamSolve/components/GlowFrame';
 import React from 'react';
 
 interface DreamSolveContentProps {
@@ -13,13 +14,13 @@ const DreamSolveContent: React.FC<DreamSolveContentProps> = ({
   return (
     <div className="flex flex-col w-full h-full items-center justify-evenly">
       <div>
-        <h1 className="text-xl font-bold text-[#6C4D2C]">🔮 꿈 해몽</h1>
+        <h1 className="text-[20px] font-bold text-white/90">[ 꿈 해 몽 ]</h1>
       </div>
       <div className="w-full h-[60%] flex items-center justify-center">
         {analysis ? (
-          <div className="text-white p-4 bg-[#6C4D2C] rounded-md">
-            {analysis}
-          </div>
+          <GlowFrame>
+            <div className="text-[15px] font-normal">{analysis}</div>
+          </GlowFrame>
         ) : (
           <button
             onClick={onAnalyze}

@@ -18,7 +18,7 @@ const DreamContent: React.FC<DreamContentProps> = ({ text, setText }) => {
     <div className="flex flex-col w-full h-full items-center justify-evenly gap-1 relative">
       {/* 제목 */}
       <div className="mt-6">
-        <h1 className="text-xl font-bold text-[#6C4D2C]">📜 꿈 내용</h1>
+        <h1 className="text-[20px] font-bold text-white/90">[ 꿈 내 용 ]</h1>
       </div>
 
       {/* textarea 영역 */}

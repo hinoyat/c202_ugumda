@@ -24,10 +24,11 @@ const RightDreamSection = () => {
   return (
     <div className="basis-2/3">
       <div className="w-full h-full relative">
-        <img
+        {/* <img
           src={dreamFrame}
           className="w-full h-full object-fill"
-        />
+        /> */}
+
         <div className="absolute w-[85%] h-[85%] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-3">
           <div className="flex flex-col items-center justify-around h-full">
             <div className="w-full h-[50%] flex flex-col items-center justify-center">
@@ -36,6 +37,8 @@ const RightDreamSection = () => {
                 setText={setText}
               />
             </div>
+
+            {/* 꿈 해몽 분석 */}
             <div className="w-full h-[50%] flex flex-col items-center justify-center">
               <DreamSolveContent
                 analysis={analysis}
