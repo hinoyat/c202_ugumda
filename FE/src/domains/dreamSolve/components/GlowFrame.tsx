@@ -22,7 +22,7 @@ const StyledWrapper = styled.div`
   .card {
     --background: linear-gradient(to right, #13b37f 0%, #11a3c8 100%);
     width: 650px;
-    height: 140px;
+    height: 190px;
     padding: 0.9px;
     border-radius: 0.7rem;
     overflow: visible;

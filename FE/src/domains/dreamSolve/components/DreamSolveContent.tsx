@@ -14,7 +14,7 @@ const DreamSolveContent: React.FC<DreamSolveContentProps> = ({
   return (
     <div className="flex flex-col w-full h-full items-center justify-evenly">
       <div>
-        <h1 className="text-[20px] font-bold text-white/90">[ 꿈 해 몽 ]</h1>
+        <h1 className="text-[23px] dung-font text-white/90">[ 꿈 해 몽 ]</h1>
       </div>
       <div className="w-full h-[60%] flex items-center justify-center">
         {analysis ? (
@@ -24,7 +24,7 @@ const DreamSolveContent: React.FC<DreamSolveContentProps> = ({
         ) : (
           <button
             onClick={onAnalyze}
-            className="px-4 py-1 bg-[#6C4D2C] w-40 h-10 rounded text-white font-bold cursor-pointer hover:bg-amber-900 mb-20">
+            className="px-4 py-1 bg-gradient-to-r from-[#13b37f]/80 to-[#11a3c8]/80 w-40 h-10 rounded text-white/90 font-bold cursor-pointer hover:from-[#13b37f]/60 hover:to-[#11a3c8]/60 transition-colors duration-200 mb-20 shadow-md">
             분석하기
           </button>
         )}

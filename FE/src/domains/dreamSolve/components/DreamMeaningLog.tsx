@@ -10,9 +10,11 @@ const DreamMeaningLog = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="font-bold text-[#6C4D2C] ml-10">DREAM MEANING LOG</h1>
+      <h1 className="text-[24px] text-[#13b37f]/90 ml-13 dung-font">
+        DREAM MEANING LOG
+      </h1>
 
-      <div className="flex flex-col gap-1 ml-10 px-2">
+      <div className="flex flex-col gap-2 ml-13 px-2">
         {meaningData.map((item) => (
           <div
             key={item.id}

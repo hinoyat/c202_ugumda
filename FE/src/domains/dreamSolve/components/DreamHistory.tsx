@@ -49,20 +49,22 @@ const DreamHistory: React.FC = () => {
   // 3) JSX 렌더링
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="font-bold text-[#6C4D2C] ml-10">MY DREAM HISTORY</h1>
+      <h1 className=" text-[#13b37f]/90 ml-13 dung-font text-[24px]">
+        MY DREAM HISTORY
+      </h1>
 
       {/* 히스토리 목록 */}
       {/*이거 created_at 호버 효과 나중에 해야함 진짜 나중에 글씨 진해지게 */}
-      <div className="flex flex-col gap-1 mx-10 px-2">
+      <div className="flex flex-col gap-2 mx-10 px-2 ml-13">
         {displayedData.map((item) => (
           <div
             key={item.id}
             className="text-[12px]">
             <div className="flex justify-between">
-              <h2 className="text-white hover:underline cursor-pointer">
+              <h2 className="text-white/90 hover:underline cursor-pointer">
                 {item.title}
               </h2>
-              <p className="text-[#6C4D2C]">{item.created_at}</p>
+              <p className="text-white/60">{item.created_at}</p>
             </div>
           </div>
         ))}
@@ -74,7 +76,7 @@ const DreamHistory: React.FC = () => {
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className="text-[#6C4D2C] text-xl disabled:opacity-50">
+          className="text-[#11a3c8] text-xl disabled:opacity-50">
           &laquo;
         </button>
 
@@ -84,7 +86,11 @@ const DreamHistory: React.FC = () => {
             key={page}
             onClick={() => handlePageChange(page)}
             className={`w-8 h-8 rounded-md flex items-center justify-center text-white text-sm cursor-pointer
-              ${page === currentPage ? 'bg-[#6C4D2C]' : 'bg-[#8B4513]'}`}>
+      ${
+        page === currentPage
+          ? 'bg-gradient-to-r from-[#13b37f]/70 to-[#11a3c8]/70 shadow-md'
+          : 'bg-gradient-to-r from-[#13b37f]/20 to-[#11a3c8]/20 hover:from-[#13b37f]/40 hover:to-[#11a3c8]/40'
+      }`}>
             {page}
           </button>
         ))}
@@ -93,7 +99,7 @@ const DreamHistory: React.FC = () => {
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="text-[#6C4D2C] text-xl disabled:opacity-50">
+          className="text-[#11a3c8] text-xl disabled:opacity-50">
           &raquo;
         </button>
       </div>
