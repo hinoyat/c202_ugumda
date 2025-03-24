@@ -17,6 +17,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        model: gpt-3.5-turbo
+
 server:
   port: 0
 

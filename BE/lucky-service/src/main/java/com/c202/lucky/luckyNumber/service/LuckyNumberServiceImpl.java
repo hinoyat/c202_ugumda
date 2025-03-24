@@ -1,13 +1,15 @@
-package com.c202.luckyNumber.service;
+package com.c202.lucky.luckyNumber.service;
 
 import com.c202.exception.CustomException;
-import com.c202.luckyNumber.entity.LuckyNumber;
-import com.c202.luckyNumber.repository.LuckyNumberRepository;
+import com.c202.lucky.luckyNumber.repository.LuckyNumberRepository;
+import com.c202.lucky.luckyNumber.entity.LuckyNumber;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class LuckyNumberServiceImpl implements LuckyNumberService {
     private final LuckyNumberRepository luckyNumberRepository;
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
     @Override
     @Transactional
     public void createLuckyNumber(Integer userSeq) {
@@ -35,6 +38,7 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
                 .number4(luckyNumbers.get(3))
                 .number5(luckyNumbers.get(4))
                 .number6(luckyNumbers.get(5))
+                .createdAt(LocalDateTime.now().format(FORMATTER))
                 .build();
 
         luckyNumberRepository.save(luckyNumber);

@@ -1,7 +1,7 @@
-package com.c202.luckyNumber.controller;
+package com.c202.lucky.luckyNumber.controller;
 
 import com.c202.dto.ResponseDto;
-import com.c202.luckyNumber.service.LuckyNumberService;
+import com.c202.lucky.luckyNumber.service.LuckyNumberService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

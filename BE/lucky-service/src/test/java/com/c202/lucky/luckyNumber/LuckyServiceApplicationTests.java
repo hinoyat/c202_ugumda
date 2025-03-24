@@ -1,4 +1,4 @@
-package com.c202.luckyNumber;
+package com.c202.lucky.luckyNumber;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
