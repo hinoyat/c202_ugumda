@@ -71,7 +71,8 @@ body {
   font-style: normal;
 }
 
-.press-start-2p-regular {
+/* press-start-2p-regular */
+.press-font {
   font-family: 'Press Start 2P', system-ui;
   font-weight: 400;
   font-style: normal;

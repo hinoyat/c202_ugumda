@@ -4,9 +4,8 @@ import '../styles/MyInformationContent.css';
 import LeftProfileSection from './LeftProfileSection';
 import RightProfileSection from './RightProfileSection';
 import { IoClose } from 'react-icons/io5';
-import exampleProfile from "@/assets/images/exampleProfile.svg";
-import information_bg from "@/assets/images/information_bg.svg";
-
+import exampleProfile from '@/assets/images/exampleProfile.svg';
+import information_bg from '@/assets/images/information_bg.svg';
 
 const MyInformationContent: React.FC = () => {
   const glowingTextStyle: React.CSSProperties = {
@@ -33,17 +32,17 @@ const MyInformationContent: React.FC = () => {
       <img
         src={information_bg}
         alt=""
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-320 animate-pulse"
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-300 animate-pulse"
       />
-      <div className="absolute z-31 top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/6">
+      <div className="absolute z-31 top-1/5 left-1/2 transform -translate-x-1/2 -translate-y-1/5">
         <h1
-          className="text-white text-[33px]  press-start-2p-regular"
+          className="text-white text-[28px]  press-font"
           style={glowingTextStyle}>
           Update Profile
         </h1>
       </div>
       {/* LeftProfileSection과 RightProfileSection이 들어갈 자리 */}
-      <div className="flex absolute z-32 top-19/32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-290 h-115 items-center">
+      <div className="flex absolute z-32 top-19/32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-250 h-100 items-center">
         <LeftProfileSection mockdata={mockdata} />
         <RightProfileSection mockdata={mockdata} />
 

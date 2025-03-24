@@ -4,22 +4,22 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/diary_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: root
-    password: 1234
+    url: ${DIARY_DB_URL}${DB_PARAMS}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO}
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
   logging:
     level:
-      root: INFO
-      com.c202.userservice: DEBUG
-      org.springframework.security: DEBUG
-      org.springframework.data.redis: DEBUG
+      root: ${LOG_LEVEL_ROOT}
+      com.c202.userservice: ${LOG_LEVEL_SERVICE}
+      org.springframework.security: ${LOG_LEVEL_SECURITY}
+      org.springframework.data.redis: ${LOG_LEVEL_REDIS}
 
 server:
   port: 0

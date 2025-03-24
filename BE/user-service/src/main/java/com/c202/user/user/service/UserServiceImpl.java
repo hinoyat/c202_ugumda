@@ -106,4 +106,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public String getUserBirthDate(Integer userSeq){
+        User user = userRepository.findByUserSeq(userSeq)
+                    .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다."));
+
+        if ("Y".equals(user.getIsDeleted())) {
+                throw new CustomException("이미 탈퇴한 계정입니다.");
+        }
+
+        return user.getBirthDate();
+    }
 }

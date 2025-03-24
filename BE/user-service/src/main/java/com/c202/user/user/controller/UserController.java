@@ -53,4 +53,9 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.success(201, "자기소개 수정 완료", userService.updateIntroduction(userSeq, requestDto)));
     }
 
+    @GetMapping("/birthdate")
+    public String getUserBirthDate(@RequestHeader("X-User-Seq") Integer userSeq){
+        return userService.getUserBirthDate(userSeq);
+    }
+
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: ${CONFIG_SERVICE_PORT}
 
 spring:
   profiles:
@@ -20,19 +20,19 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://eureka-service:8761/eureka
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: ${MANAGEMENT_ENDPOINTS_INCLUDE}
   metrics:
     export:
       prometheus:
-        enabled: true
+        enabled: ${PROMETHEUS_ENABLED}
   endpoint:
     prometheus:
-      enabled: true
+      enabled: ${PROMETHEUS_ENDPOINT_ENABLED}
     health:
-      show-details: always
+      show-details: ${HEALTH_DETAILS}
