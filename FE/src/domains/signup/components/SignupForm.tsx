@@ -6,10 +6,20 @@ import exampleProfile from '@/assets/images/exampleProfile.svg';
 import '@/domains/login/themes/SpaceLoginForm.css';
 import '@/domains/signup/themes/BoxButton.css';
 import BoxButton from '@/domains/signup/components/BoxButton';
+import ProfileIconSelector from '@/domains/signup/components/ProfileIconSelector';
 
+// 프로필 아이콘 이미지 추가
 const SignupForm = () => {
   const nav = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  // 랜덤 프로필 아이콘
+  const [selectedIcon, setSelectedIcon] = useState<{
+    src: string;
+    index: number;
+  }>({
+    src: '',
+    index: 0,
+  });
 
   const onClickGoToHome = () => {
     nav('/');
@@ -19,14 +29,23 @@ const SignupForm = () => {
     nav('/login');
   };
 
+  // 아이콘 선택 핸들러
+  const handleIconSelect = (iconSrc: string, iconIndex: number): void => {
+    setSelectedIcon({ src: iconSrc, index: iconIndex });
+    // 필요하다면 여기서 폼 데이터에 아이콘 정보 추가
+    console.log('선택된 아이콘:', iconSrc, '인덱스:', iconIndex);
+  };
+
   return (
     <div className="flex flex-col items-center">
       <form
         className="form"
         style={{ width: '750px', maxWidth: '95vw' }}>
         {/* 폼 타이틀 부분 */}
-        <div className="form-title">
-          <span className="dung-font tracking-wider">create your</span>
+        <div
+          className="form-title"
+          style={{ marginBottom: '3px' }}>
+          <span className="dung-font tracking-wider ">create your</span>
         </div>
         <div className="title-2">
           <span>ACCOUNT</span>
@@ -47,7 +66,7 @@ const SignupForm = () => {
             flexDirection: 'row',
             gap: '45px',
             marginTop: '25px',
-            marginBottom: '35px',
+            marginBottom: '23px',
           }}>
           {/* 왼쪽 칼럼: 아이디, 비밀번호, 비밀번호 확인 */}
           <div style={{ flex: 1 }}>
@@ -56,31 +75,49 @@ const SignupForm = () => {
               className="input-container"
               style={{
                 display: 'flex',
-                gap: '8px',
+                flexDirection: 'column', // 세로 방향으로 변경
                 width: '100%',
                 marginTop: '20px',
-                marginBottom: '20px',
               }}>
-              <input
-                className="input-mail"
-                type="text"
-                placeholder="아이디를 입력하세요"
-                style={{ flex: 3, width: 'auto' }}
-              />
+              <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                <input
+                  className="input-mail"
+                  type="text"
+                  placeholder="아이디를 입력하세요"
+                  style={{ flex: 3, width: 'auto' }}
+                />
 
-              <BoxButton text="중복확인" />
+                <BoxButton text="중복확인" />
+              </div>
+
+              {/* 유효성 검사 메시지 */}
+              <p
+                className="validation-message dung-font"
+                style={{
+                  color: '#ff6b6b', // 오류 메시지 색상
+                  fontSize: '0.7rem',
+                  marginTop: '4px',
+                  marginLeft: '4px',
+                  height: '16px', // 고정 높이로 공간 확보
+                }}>
+                아이디는 5자에서 12자 사이로 입력해주세요.
+              </p>
             </div>
 
             {/* 비밀번호 입력 부분 */}
             <div
               className="input-container"
-              style={{ width: '100%' }}>
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
               <div style={{ position: 'relative' }}>
                 <input
                   className="input-mail"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="비밀번호를 입력하세요"
-                  style={{ width: '100%', marginBottom: '20px' }}
+                  style={{ width: '100%' }}
                 />
                 {/* 비밀번호 보이고 안보이게 하는거 */}
                 <button
@@ -104,12 +141,28 @@ const SignupForm = () => {
                   )}
                 </button>
               </div>
+
+              <p
+                className="validation-message dung-font"
+                style={{
+                  color: '#ff6b6b',
+                  fontSize: '0.7rem',
+                  marginTop: '4px',
+                  marginLeft: '4px',
+                  height: '16px',
+                }}>
+                비밀번호는 8자 이상, 영문, 숫자, 특수문자를 포함해야 합니다.
+              </p>
             </div>
 
             {/* 비밀번호 확인 입력 부분 */}
             <div
               className="input-container"
-              style={{ width: '100%' }}>
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
               <div style={{ position: 'relative' }}>
                 <input
                   className="input-mail"
@@ -139,69 +192,32 @@ const SignupForm = () => {
                   )}
                 </button>
               </div>
+
+              <p
+                className="validation-message dung-font"
+                style={{
+                  color: '#4ade80', // 성공 메시지는 초록색으로 (파란색으로 할까?)
+                  fontSize: '0.7rem',
+                  marginTop: '4px',
+                  marginLeft: '4px',
+                  height: '16px',
+                }}>
+                비밀번호가 일치합니다.
+              </p>
             </div>
           </div>
 
           {/* 오른쪽 칼럼: 프로필 아이콘, 닉네임, 생년월일 */}
           <div style={{ flex: 1 }}>
             {/* 프로필 이미지 부분 */}
+
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: '20px',
-                marginBottom: '20px',
+                marginBottom: '15px',
                 marginLeft: '23px',
-                marginTop: '11.5px',
+                marginTop: '10.5px',
               }}>
-              {/* 이미지와 버튼을 감싸는 컨테이너를 relative로 설정 */}
-              <div
-                style={{ position: 'relative', width: '60px', height: '60px' }}>
-                <img
-                  src={exampleProfile}
-                  alt=""
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    borderRadius: '50%',
-                    border: '2px solid white',
-                  }}
-                />
-                <button
-                  type="button"
-                  style={{
-                    position: 'absolute',
-                    top: '31px',
-                    left: '40px',
-                    zIndex: 5,
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
-                  }}>
-                  <GrPowerCycle
-                    className="text-white/90 bg-blue-700 rounded-full cursor-pointer border border-white hover:brightness-80 transition-all duration-300"
-                    size={22}
-                    style={{
-                      background: 'linear-gradient(145deg, #1e3a8a, #3b82f6)',
-                      borderRadius: '50%',
-                      border: '1px solid white',
-                      padding: '3px',
-                    }}
-                  />
-                </button>
-              </div>
-
-              {/* 안내 문구 */}
-              <p
-                className="dung-font"
-                style={{
-                  color: '#d1d5db',
-                  fontSize: '0.75rem',
-                }}>
-                프로필 아이콘을 선택해주세요
-              </p>
+              <ProfileIconSelector onSelectIcon={handleIconSelect} />
             </div>
 
             {/* 닉네임 입력 부분 */}
@@ -209,17 +225,36 @@ const SignupForm = () => {
               className="input-container"
               style={{
                 display: 'flex',
-                gap: '8px',
+                flexDirection: 'column',
                 width: '100%',
-                marginBottom: '20px',
+                marginTop: '26.5px',
               }}>
-              <input
-                className="input-mail"
-                type="text"
-                placeholder="닉네임을 입력하세요"
-                style={{ flex: 3, width: 'auto' }}
-              />
-              <BoxButton text="중복확인" />
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '8px',
+                  width: '100%',
+                }}>
+                <input
+                  className="input-mail"
+                  type="text"
+                  placeholder="닉네임을 입력하세요"
+                  style={{ flex: 3, width: 'auto' }}
+                />
+                <BoxButton text="중복확인" />
+              </div>
+
+              <p
+                className="validation-message dung-font"
+                style={{
+                  color: '#ff6b6b',
+                  fontSize: '0.7rem',
+                  marginTop: '4px',
+                  marginLeft: '4px',
+                  height: '16px',
+                }}>
+                닉네임은 2자에서 10자 사이로 입력해주세요.
+              </p>
             </div>
 
             {/* 생년월일 입력 부분 */}
