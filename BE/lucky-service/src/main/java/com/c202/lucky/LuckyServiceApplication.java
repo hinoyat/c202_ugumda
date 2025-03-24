@@ -1,4 +1,4 @@
-package com.c202.luckyNumber;
+package com.c202.lucky;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

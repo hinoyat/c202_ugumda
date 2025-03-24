@@ -1,4 +1,4 @@
-package com.c202.luckyNumber.entity;
+package com.c202.lucky.luckyNumber.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

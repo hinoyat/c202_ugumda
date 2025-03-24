@@ -1,6 +1,6 @@
-package com.c202.luckyNumber.repository;
+package com.c202.lucky.luckyNumber.repository;
 
-import com.c202.luckyNumber.entity.LuckyNumber;
+import com.c202.lucky.luckyNumber.entity.LuckyNumber;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,8 +1,8 @@
-package com.c202.luckyNumber.service;
+package com.c202.lucky.luckyNumber.service;
 
 import com.c202.exception.CustomException;
-import com.c202.luckyNumber.entity.LuckyNumber;
-import com.c202.luckyNumber.repository.LuckyNumberRepository;
+import com.c202.lucky.luckyNumber.repository.LuckyNumberRepository;
+import com.c202.lucky.luckyNumber.entity.LuckyNumber;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

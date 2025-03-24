@@ -1,4 +1,4 @@
-package com.c202.luckyNumber.service;
+package com.c202.lucky.luckyNumber.service;
 
 import java.util.List;
 
