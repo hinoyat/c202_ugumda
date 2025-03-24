@@ -1,4 +1,4 @@
-package com.c202.scheduler;
+package com.c202.lucky.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
