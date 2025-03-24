@@ -18,7 +18,6 @@ const Signup = () => {
             zIndex: 0,
           }}
           camera={{ position: [0, 0, 5] }}>
-          {' '}
           {/* 카메라 위치 조정 */}
           <StarField />
         </Canvas>

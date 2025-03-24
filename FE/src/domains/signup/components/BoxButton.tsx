@@ -1,7 +1,7 @@
 // 중복확인 버튼
 
 import React from 'react';
-import '@/domains/signup/style/BoxButton.css';
+import '@/domains/signup/themes/BoxButton.css';
 
 interface BoxButtonProps {
   text: string;
@@ -27,7 +27,7 @@ const BoxButton: React.FC<BoxButtonProps> = ({
         borderColor: borderColor,
       }}>
       <div className="button">
-        <span>{text}</span>
+        <span className="dung-font">{text}</span>
       </div>
     </div>
   );

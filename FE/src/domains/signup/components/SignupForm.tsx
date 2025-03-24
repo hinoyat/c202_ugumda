@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { GrPowerCycle } from 'react-icons/gr';
 import exampleProfile from '@/assets/images/exampleProfile.svg';
-import '@/domains/login/style/SpaceLoginForm.css';
-import '@/domains/signup/style/BoxButton.css';
+import '@/domains/login/themes/SpaceLoginForm.css';
+import '@/domains/signup/themes/BoxButton.css';
 import BoxButton from '@/domains/signup/components/BoxButton';
 
 const SignupForm = () => {
@@ -26,7 +26,7 @@ const SignupForm = () => {
         style={{ width: '750px', maxWidth: '95vw' }}>
         {/* 폼 타이틀 부분 */}
         <div className="form-title">
-          <span>create your</span>
+          <span className="dung-font tracking-wider">create your</span>
         </div>
         <div className="title-2">
           <span>ACCOUNT</span>
@@ -46,7 +46,8 @@ const SignupForm = () => {
             display: 'flex',
             flexDirection: 'row',
             gap: '45px',
-            marginTop: '20px',
+            marginTop: '25px',
+            marginBottom: '35px',
           }}>
           {/* 왼쪽 칼럼: 아이디, 비밀번호, 비밀번호 확인 */}
           <div style={{ flex: 1 }}>
@@ -57,7 +58,8 @@ const SignupForm = () => {
                 display: 'flex',
                 gap: '8px',
                 width: '100%',
-                marginTop: '36px',
+                marginTop: '20px',
+                marginBottom: '20px',
               }}>
               <input
                 className="input-mail"
@@ -78,7 +80,7 @@ const SignupForm = () => {
                   className="input-mail"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="비밀번호를 입력하세요"
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', marginBottom: '20px' }}
                 />
                 {/* 비밀번호 보이고 안보이게 하는거 */}
                 <button
@@ -146,9 +148,12 @@ const SignupForm = () => {
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 alignItems: 'center',
-                marginBottom: '15px',
+                gap: '20px',
+                marginBottom: '20px',
+                marginLeft: '23px',
+                marginTop: '11.5px',
               }}>
               {/* 이미지와 버튼을 감싸는 컨테이너를 relative로 설정 */}
               <div
@@ -168,21 +173,21 @@ const SignupForm = () => {
                   type="button"
                   style={{
                     position: 'absolute',
-                    top: '32px',
-                    left: '36px',
+                    top: '31px',
+                    left: '40px',
                     zIndex: 5,
                     background: 'none',
                     border: 'none',
                     padding: 0,
                   }}>
                   <GrPowerCycle
-                    className="text-white bg-blue-700 rounded-full cursor-pointer border border-white hover:bg-blue-500"
-                    size={20}
+                    className="text-white/90 bg-blue-700 rounded-full cursor-pointer border border-white hover:brightness-80 transition-all duration-300"
+                    size={22}
                     style={{
-                      background: '#2563eb',
+                      background: 'linear-gradient(145deg, #1e3a8a, #3b82f6)',
                       borderRadius: '50%',
                       border: '1px solid white',
-                      padding: '2px',
+                      padding: '3px',
                     }}
                   />
                 </button>
@@ -190,10 +195,10 @@ const SignupForm = () => {
 
               {/* 안내 문구 */}
               <p
+                className="dung-font"
                 style={{
                   color: '#d1d5db',
                   fontSize: '0.75rem',
-                  marginTop: '5px',
                 }}>
                 프로필 아이콘을 선택해주세요
               </p>
@@ -206,6 +211,7 @@ const SignupForm = () => {
                 display: 'flex',
                 gap: '8px',
                 width: '100%',
+                marginBottom: '20px',
               }}>
               <input
                 className="input-mail"

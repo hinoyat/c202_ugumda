@@ -13,11 +13,11 @@
 .button {
   background-color: #dddddd;
   border: 4px solid #fff;
-  padding: 3px 8px;
+  padding: 1px 8px;
 }
 
 .button span {
-  font-size: 1.2em;
+  font-size: 13px;
   letter-spacing: 1px;
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import '@/domains/login/style/SpaceLoginForm.css';
+import '@/domains/login/themes/SpaceLoginForm.css';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +19,7 @@ const LoginForm = () => {
       <form className="form">
         {/* 폼 타이틀 부분 */}
         <div className="form-title">
-          <span>sign in to your</span>
+          <span className="dung-font">sign in to your</span>
         </div>
         <div className="title-2">
           <span>SPACE</span>
@@ -29,7 +29,7 @@ const LoginForm = () => {
         {/* 이메일 입력 부분 - placeholder 한국어로 유지 */}
         <div className="input-container">
           <input
-            className="input-mail "
+            className="input-mail"
             type="text"
             placeholder="아이디를 입력하세요"
           />
