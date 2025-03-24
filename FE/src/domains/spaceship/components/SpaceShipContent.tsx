@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import '../themes/SpaceShip.css';
 import { IoClose } from 'react-icons/io5';
+import EditProfileButton from '@/domains/spaceship/components/EditProfileButton';
 
 const SpaceShipContent = () => {
   const nav = useNavigate();
@@ -31,7 +32,7 @@ const SpaceShipContent = () => {
       </div>
 
       {/* 메뉴 버튼들 */}
-      <div className="absolute top-[44%] w-full flex justify-center items-center gap-x-65 z-20">
+      <div className="absolute dung-font top-[44%] w-full flex justify-center items-center gap-x-65 z-20">
         {/* 행운번호 뽑기 버튼 */}
         <button
           onClick={onClickLucky}
@@ -55,12 +56,10 @@ const SpaceShipContent = () => {
       </div>
 
       {/* 회원정보수정 버튼 */}
-      <div className="absolute z-20 top-[80%] left-1/2 transform -translate-x-1/2">
-        <button
-          onClick={onClickEditMyInformation}
-          className="shadow__btn text-base text-white cursor-pointer hover:scale-105 transition-transform">
+      <div className="absolute dung-font z-20 top-[75%] left-1/2 transform -translate-x-1/2">
+        <EditProfileButton onClick={onClickEditMyInformation}>
           회원정보수정
-        </button>
+        </EditProfileButton>
       </div>
     </div>
   );
