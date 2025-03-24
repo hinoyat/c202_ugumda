@@ -26,7 +26,7 @@ const LoginForm = () => {
         </div>
 
         {/* 로그인 입력 폼 피그마 그대로 했는데 아이디랑 비밀번호 border-b gray-200 했더니 그냥 안보여서 400으로 up */}
-        {/* 이메일 입력 부분 - placeholder 한국어로 유지 */}
+        {/* 아이디 입력 부분 - placeholder 한국어로 유지 */}
         <div className="input-container">
           <input
             className="input-mail"
