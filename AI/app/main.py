@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-import uvicorn
+from .models.request.generate_chat_request_dto import GenerateChatRequestDto
+from app.core.chat_gpt_service import chat_gpt
+
 
 # main.py가 있는 디렉토리에서 아래 명령어 실행
 # uvicorn main:app --reload --port=8000
@@ -18,6 +20,20 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "채현채현"}
 
-# 바로 post로 endpoint해서 영상 생성 하기
+
+'''
+1. chat api 가져와서 프롬프트 생성 (키워드추출, 필터링)
+2. video 생성
+'''
+
+@app.post("/ai/create-video")
+async def create_image(generate_chat_request_dto:GenerateChatRequestDto):
+    task_result = chat_gpt(
+        prompt_text=generate_chat_request_dto.content
+    )
+    return {
+        "status": task_result.status,
+        "message": task_result
+    }
