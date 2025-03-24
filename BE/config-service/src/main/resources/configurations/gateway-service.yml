@@ -52,6 +52,13 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: daily-fortune-service
+          uri: lb://lucky-service
+          predicates:
+            - Path=/api/daily-fortune/**
+          filters:
+            - name: JwtAuthFilter
+
         - id: guestbook-service
           uri: lb://guestbook-service
           predicates:
