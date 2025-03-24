@@ -1,6 +1,6 @@
-package com.c202.dailyFortune.controller;
+package com.c202.lucky.dailyFortune.controller;
 
-import com.c202.dailyFortune.service.DailyFortuneService;
+import com.c202.lucky.dailyFortune.service.DailyFortuneService;
 import com.c202.dto.ResponseDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class DailyFortuneController {
     private final DailyFortuneService dailyFortuneService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Void>> generateDailyFortune (@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
+    public ResponseEntity<ResponseDto<String>> generateDailyFortune (@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
         dailyFortuneService.createDailyFortune(userSeq);
         return ResponseEntity.ok(ResponseDto.success(201, "오늘의 운세 생성 성공"));
     }

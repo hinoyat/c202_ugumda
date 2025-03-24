@@ -1,4 +1,4 @@
-package com.c202.dailyFortune.service;
+package com.c202.lucky.dailyFortune.service;
 
 public interface DailyFortuneService {
     void createDailyFortune(Integer userSeq);
