@@ -1,9 +1,13 @@
-# API KEY를 환경변수로 관리하기 위한 설정 파일
-from dotenv import load_dotenv
-
-# API KEY 정보로드
-load_dotenv()
+import app.core.chains as chain
 
 
-def chat_gpt():
-    api
+def chat_gpt(content:str):
+    '''
+    :param content: 사용자가 입력한 꿈일기 텍스트
+    :return prompt: chatgpt가 만든 키워드 번역 프롬프트
+    '''
+    prompt = chain.prompt_chain.invoke(content)
+    # log 찍기
+    return prompt
+
+
