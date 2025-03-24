@@ -13,4 +13,6 @@ public interface UserService {
     void deleteUser(Integer userSeq);
 
     UserResponseDto updateIntroduction(Integer userSeq, UpdateIntroductionDto introduction);
+
+    String getUserBirthDate(Integer useSeq);
 }
