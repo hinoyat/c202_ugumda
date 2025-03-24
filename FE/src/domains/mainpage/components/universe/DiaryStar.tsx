@@ -41,8 +41,13 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const [hovered, setHovered] = useState<boolean>(false); // 마우스 호버 상태
   const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
 
-  // 별 색상 - 새 별은 노란색, 기존 별은 빨간색
-  const starColor = new THREE.Color(isNew ? '#ff3333' : '#ffcc00');
+  // 별 색상 - 새 별은 노란색, 기존 별은 파란색
+  const starColor = new THREE.Color(
+    entry.created_at &&
+    Date.now() - new Date(entry.created_at).getTime() < 30 * 60 * 1000
+      ? '#ffcc00' // 30분 이내 생성: 노란색
+      : '#00ffe0' // 30분 지남: 파란색
+  );
 
   // 새 별을 위한 상태 추가
   const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
@@ -143,7 +148,9 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}>
         {/* 별 모양의 지오메트리 /// size / ___ (반지름) */}
-        <sphereGeometry args={[(entry.size / 2) * (isNew ? 2.5 : 2), 16, 16]} />
+        <sphereGeometry
+          args={[(entry.size / 2) * (isNew ? 2.5 : 1.3), 16, 16]}
+        />
         {/* 별의 색과 발광 효과 */}
         <meshStandardMaterial
           color={starColor}

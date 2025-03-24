@@ -228,8 +228,12 @@ const Universe: React.FC = () => {
                     [connection.from.x, connection.from.y, connection.from.z],
                     [connection.to.x, connection.to.y, connection.to.z],
                   ]}
-                  color="rgba(255, 255, 255, 0.2)"
-                  lineWidth={1}
+                  color="rgba(220, 230, 255, 0.1)" // 연한 푸른 빛 흰색, 투명도 낮춤
+                  lineWidth={0.5} // 선 두께 감소
+                  dashed // 점선 효과 추가
+                  dashSize={0.8} // 점선 크기
+                  dashScale={10} // 점선 간격 조정
+                  dashOffset={0} // 점선 시작 위치
                 />
               ))}
             </group>
