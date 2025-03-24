@@ -1,4 +1,4 @@
-package com.c202.dailyFortune.entity;
+package com.c202.lucky.dailyFortune.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,8 @@ public class DailyFortune {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer fortuneSeq;
     private Integer userSeq;
+
+    @Column(length = 1000)
     private String content;
 
     @Column(nullable = false, length = 15)
