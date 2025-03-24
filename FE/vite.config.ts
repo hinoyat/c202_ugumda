@@ -7,7 +7,16 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), svgr(), tailwindcss()],
-  server: { port: 3000 },
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://j12c202.p.ssafy.io',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
