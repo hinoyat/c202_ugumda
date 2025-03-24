@@ -2,8 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import '@/domains/login/themes/SpaceLoginForm.css';
+import { useAppDispatch } from '@/hooks/hooks';
+import { loginUser } from '@/stores/auth/authThunks';
 
 const LoginForm = () => {
+  const dispatch = useAppDispatch();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async (event: any) => {
+    event.preventDefault();
+    await dispatch(loginUser({ username, password }));
+  };
+
   const [showPassword, setShowPassword] = useState(false);
   const nav = useNavigate();
 
@@ -32,6 +43,8 @@ const LoginForm = () => {
             className="input-mail"
             type="text"
             placeholder="아이디를 입력하세요"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <span> </span>
         </div>
@@ -51,6 +64,8 @@ const LoginForm = () => {
               className="input-pwd"
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호를 입력하세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             {/* 비밀번호 보이고 안보이게 하는거 */}
             <button
@@ -73,7 +88,8 @@ const LoginForm = () => {
 
         {/* 로그인 버튼 */}
         <button
-          type="submit"
+          onClick={handleLogin}
+          // type="submit"
           className="submit">
           <span className="sign-text dung-font">Login</span>
         </button>
