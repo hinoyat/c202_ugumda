@@ -9,14 +9,14 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const nav = useNavigate();
 
   const handleLogin = async (event: any) => {
     event.preventDefault();
     await dispatch(loginUser({ username, password }));
+    await nav('/', { replace: true });
   };
-
-  const [showPassword, setShowPassword] = useState(false);
-  const nav = useNavigate();
 
   const onClickGoToSignup = () => {
     nav('/signup');
