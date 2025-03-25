@@ -5,6 +5,10 @@ import { Canvas } from '@react-three/fiber';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import LuckyDrawButton from '@/domains/luckyNumber/components/LuckyDrawButton';
 
+// Redux 상태에서 필요한 데이터 불러오기 위해 import
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/stores/auth/authSelectors';
+
 const LuckyNumber = () => {
   const [visibleStars, setVisibleStars] = useState<number[]>([]);
   const [visibleLines, setVisibleLines] = useState<number[][]>([]);
@@ -13,6 +17,10 @@ const LuckyNumber = () => {
   const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]);
   const [showButton, setShowButton] = useState(true);
   const [animationStage, setAnimationStage] = useState(0);
+
+  // selectUser 불러오기
+  const user = useSelector(selectUser);
+  console.log('유저가 불러와지는지 보자', user);
 
   const nav = useNavigate();
   const onClickHome = () => {
