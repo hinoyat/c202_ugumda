@@ -58,9 +58,9 @@ input[type='checkbox']:checked::after {
   opacity: 100%;
 }
 
-span {
+/* span {
   font-size: 2rem;
-}
+} */
 
 /* Firefox 전용 */
 .custom-scrollbar {

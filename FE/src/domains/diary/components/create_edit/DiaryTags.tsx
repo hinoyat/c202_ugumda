@@ -33,17 +33,17 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
     '테스트1',
     '테스트2',
   ];
-  const historyTags: string[] = [
-    '#태그1',
-    '#태그2',
-    '#태그3',
-    '#태그4',
-    '#태그5',
-    '#태그6',
-    '#태그7',
-    '#태그8',
-    '#태그9',
-  ];
+  // const historyTags: string[] = [
+  //   '#태그1',
+  //   '#태그2',
+  //   '#태그3',
+  //   '#태그4',
+  //   '#태그5',
+  //   '#태그6',
+  //   '#태그7',
+  //   '#태그8',
+  //   '#태그9',
+  // ];
 
   // 부모 컴포넌트에 태그 변경 알림
   useEffect(() => {
@@ -166,7 +166,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
             <div
               key={tag}
               className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl flex items-center gap-1">
-              <div className="flex items-center justify-center gap-1 text-sm">
+              <div className="flex items-center justify-center gap-1 text-[10px]">
                 <p>{tag}</p>
                 <button
                   onClick={() => removeTag(tag)}
@@ -227,7 +227,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
       </div>
 
       {/* history 태그 - 최대 7개만 표시 */}
-      <div className="flex gap-3 text-white italic mt-2">
+      {/* <div className="flex gap-3 text-white italic mt-2">
         {historyTags.slice(0, MAX_HISTORY_TAGS).map((tag, index) => (
           <p
             key={index}
@@ -236,7 +236,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({ initialTags = [], onTagsChange }) => {
             {tag}
           </p>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
