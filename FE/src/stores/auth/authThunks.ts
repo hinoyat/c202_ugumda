@@ -9,7 +9,6 @@ import {
   User,
   LoginResponseData,
 } from './authTypes';
-import { jwtDecode } from 'jwt-decode';
 
 // 로그인 API 호출
 export const loginUser = createAsyncThunk<
@@ -33,7 +32,6 @@ export const loginUser = createAsyncThunk<
 
     const userData = await api.get('/users/me');
     localStorage.setItem('User', JSON.stringify(userData.data.data));
-    console.log('thunks의 userdata', userData.data.data);
 
     return {
       accessToken: response.data.data.accessToken,
@@ -52,10 +50,10 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await api.post('/auth/logout');
+      console.log('로그아웃!! 성공✅✅✅✅✅✅✅✅✅✅✅✅✅');
 
-      // 쿠키 삭제
+      // access token 삭제
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       return rejectWithValue(
