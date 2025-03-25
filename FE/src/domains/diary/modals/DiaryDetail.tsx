@@ -63,7 +63,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   console.log('렌더링 전 현재 상태:', { isEditing, showForm });
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full backdrop-blur-[4px] bg-black/50">
       <div
         className="inset-0 absolute"
         onClick={handleClose}></div>
