@@ -117,7 +117,7 @@ public class JwtTokenProvider {
         Cookie cookie = new Cookie("refresh_token", refreshToken);
         cookie.setHttpOnly(true);  // JavaScript에서 접근 불가능하게 설정
         cookie.setSecure(true);    // HTTPS에서만 전송 (운영 환경에서 활성화)
-        cookie.setPath("/api/auth");  // 쿠키 경로 설정
+        cookie.setPath("/");  // 쿠키 경로 설정
         cookie.setMaxAge((int) (refreshTokenValidity / 1000));  // 초 단위로 변환
 
         response.addCookie(cookie);
@@ -141,7 +141,7 @@ public class JwtTokenProvider {
         Cookie cookie = new Cookie("refresh_token", null);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
-        cookie.setPath("/api/auth");
+        cookie.setPath("/");
         cookie.setMaxAge(0);  // 즉시 만료
 
         response.addCookie(cookie);
