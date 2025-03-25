@@ -1,3 +1,5 @@
+// 조회 쪽 버튼
+
 import React from 'react';
 
 interface DetailButtonsProps {
@@ -25,17 +27,17 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit, onClose }) => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="flex w-full flex-col gap-3 ">
       <button
-        className="bg-[#545454] hover:bg-cyan-400 text-white rounded cursor-pointer h-10 text-lg font-bold"
-        onClick={handleEditClick}>
-        수정하기
+        className="text-white/90 cursor-pointer w-full bg-[#323232]/90 hover:bg-[#282828]/90 py-2 rounded text-sm font-bold"
+        onClick={handleDreamInterpretation}>
+        꿈 해몽 하러가기
       </button>
 
       <button
-        className="bg-[rgba(255,255,255,0.7)] hover:bg-indigo-700 text-black rounded cursor-pointer h-10 text-lg font-bold"
-        onClick={handleDreamInterpretation}>
-        꿈 해몽 하러가기
+        className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold"
+        onClick={handleEditClick}>
+        수정하기
       </button>
     </div>
   );
