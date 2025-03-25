@@ -21,66 +21,21 @@ const LuckyNumber = () => {
   const [luckyNumbers, setLuckyNumbers] = useState<number[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false); // API 데이터 로딩 상태 추적
 
-  // 무한 렌더링 디버깅을 위한 참조 변수
-  const renderCount = useRef(0);
-  
-  // API 요청 디버깅을 위한 참조 변수
-  const apiRequestRef = useRef({
-    getUrl: '',
-    postUrl: '',
-    lastGetResponse: null as any,
-    lastPostResponse: null as any
-  });
-
-  // selectUser 불러오기
   const user = useSelector(selectUser);
-  // 렌더링 횟수 증가 및 로깅
-  renderCount.current += 1;
-  console.log(`렌더링 횟수: ${renderCount.current}`, '유저 정보:', user);
-  
-  // 초기 API 엔드포인트 로깅
-  useEffect(() => {
-    const baseUrl = api.defaults.baseURL || '';
-    const getUrl = `${baseUrl}/lucky-numbers`;
-    const postUrl = `${baseUrl}/lucky-numbers`;
-    apiRequestRef.current.getUrl = getUrl;
-    apiRequestRef.current.postUrl = postUrl;
-    
-    console.log('API 엔드포인트 정보:', {
-      baseUrl,
-      getUrl,
-      postUrl,
-      headers: api.defaults.headers
-    });
-  }, []);
-  
+
+
   useEffect(() => {
     const fetchLuckyNumbers = async () => {
       try {
-        console.log('GET 요청 시작:', apiRequestRef.current.getUrl);
-        const response = await api.get("/lucky-numbers");
-        
-        console.log("행운의 번호 GET 응답:", {
-          status: response.status,
-          statusText: response.statusText,
-          headers: response.headers,
-          데이터: response.data,
-          전체응답: response
-        });
-        
-        apiRequestRef.current.lastGetResponse = response;
-        
+        const response = await api.get("/lucky-numbers"); 
         // 응답 데이터에서 번호 배열 가져오기
         // response.data.data가 있는지 먼저 확인
         let numbers;
         if (response.data && response.data.data && Array.isArray(response.data.data)) {
           numbers = response.data.data;
-          console.log("응답에서 추출한 번호(data.data):", numbers);
         } else if (response.data && Array.isArray(response.data)) {
           numbers = response.data;
-          console.log("응답에서 추출한 번호(data):", numbers);
         } else {
-          console.warn("응답에서 번호 배열을 찾을 수 없습니다:", response.data);
           numbers = [];
         }
         
@@ -88,7 +43,6 @@ const LuckyNumber = () => {
         
         // 번호가 있으면 바로 별자리 화면을 보여줌
         if (numbers && numbers.length > 0) {
-          console.log("행운의 번호로 UI 상태 업데이트 시작");
           setShowButton(false); // 번호가 있으면 버튼 숨기기
           setShowText(true);
           setTypingText('오늘의 행운의 번호는'); // 타이핑 애니메이션 없이 바로 텍스트 설정
@@ -102,7 +56,6 @@ const LuckyNumber = () => {
                 updatedStars[index].id = num;
               }
             });
-            console.log("업데이트된 별 배열:", updatedStars);
             setStars(updatedStars);
             
             // 별과 연결선 즉시 표시
@@ -120,7 +73,6 @@ const LuckyNumber = () => {
             setAnimationStage(4);
           }
         } else {
-          console.log("행운의 번호가 없거나 빈 배열입니다. 버튼 표시");
           setShowButton(true); // 번호가 없으면 버튼 표시
         }
         
@@ -180,19 +132,7 @@ const LuckyNumber = () => {
     
     try {
       // 버튼 클릭 시 새로운 행운의 번호 생성 API 호출
-      console.log('POST 요청 시작:', apiRequestRef.current.postUrl);
       const response = await api.post("/lucky-numbers");
-      
-      console.log("행운의 번호 POST 응답:", {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers,
-        데이터: response.data,
-        전체응답: response
-      });
-      
-      apiRequestRef.current.lastPostResponse = response;
-      
       // 응답 구조 확인
       let numbersFromResponse;
       if (response.data && response.data.data && Array.isArray(response.data.data)) {
