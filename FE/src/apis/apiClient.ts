@@ -8,12 +8,17 @@ const api = axios.create({
   baseURL: '/api',
 });
 
+interface JwtPayload {
+  userSeq: number;
+}
+
 // 요청 인터셉터 - Authorization 헤더 자동 추가
 api.interceptors.request.use((config) => {
-  const token: string | null = localStorage.getItem('accessToken');
-  const jwtTMP = jwtDecode(token);
+  console.log('api interceptors', config);
 
-  console.log('인터셉터', jwtTMP);
+  const token: string = localStorage.getItem('accessToken') || '';
+  const jwtTMP: JwtPayload = jwtDecode(token);
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
     config.headers['X-User-Seq'] = jwtTMP.userSeq;
