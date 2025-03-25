@@ -47,7 +47,11 @@ function connectNearestDiaries(entries: DiaryEntry[], connectionsPerEntry = 2) {
     .flat();
 }
 
-const Universe: React.FC = () => {
+interface UniverseProps {
+  isMySpace?: boolean;
+}
+
+const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
 
   // 수정 모드를 위한 상태 추가
@@ -210,6 +214,11 @@ const Universe: React.FC = () => {
                 onClick={(entry, position) => {
                   setSelectedEntry(entry);
                   setSelectedPosition(position);
+
+                  // 다른 사람의 우주라면 바로 일기 조회 모달 열기
+                  if (!isMySpace) {
+                    setViewingEntry(entry);
+                  }
                 }}
                 onHover={(entry, position) => {
                   setHoveredEntry(entry);
@@ -381,8 +390,8 @@ const Universe: React.FC = () => {
         />
       )}
 
-      {/* --------------------별 클릭 시 StarHoverMenu 보임--------------------- */}
-      {selectedEntry && selectedPosition && (
+      {/* ----------별 클릭 시 StarHoverMenu 보임 - 내 우주에서만---------- */}
+      {isMySpace && selectedEntry && selectedPosition && (
         <div
           className="absolute z-20"
           style={{
