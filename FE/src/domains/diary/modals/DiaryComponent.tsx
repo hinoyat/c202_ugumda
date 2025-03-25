@@ -7,6 +7,7 @@ import DiaryDisclose from '../components/create_edit/DiaryDisclose';
 import DiaryCreateButton from '../components/create_edit/DiaryCreateButton';
 import DetailTags from '../components/details/DetailTags';
 import MainPage from '@/domains/mainpage/pages/MainPage';
+import StarTag from '@/domains/diary/components/create_edit/StarTag';
 
 // 변경: 인터페이스에서 일관되게 불리언 사용
 interface DiaryData {
@@ -16,6 +17,7 @@ interface DiaryData {
   tags?: string[];
   dream_video?: string;
   isPublic?: boolean; // 변경: 'Y'/'N' 대신 불리언 사용
+  emotion?: string;
 }
 
 interface DiaryProps {
@@ -39,6 +41,7 @@ const DiaryComponent: React.FC<DiaryProps> = ({
   const [content, setContent] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
   const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [emotion, setEmotion] = useState<string>(''); // 감정태그
 
   // 데이터 초기화 (props 또는 API에서 가져오기)
   useEffect(() => {
@@ -109,6 +112,7 @@ const DiaryComponent: React.FC<DiaryProps> = ({
       content,
       tags,
       isPublic, // 변경: 'Y'/'N' 대신 불리언 그대로 전달
+      emotion,
     };
 
     if (isEditing) {
@@ -158,7 +162,7 @@ const DiaryComponent: React.FC<DiaryProps> = ({
 
   return (
     <div
-      className="absolute inset-0"
+      className="absolute inset-0 backdrop-blur-[4px] bg-black/50"
       onClick={handleClose}>
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[27%] h-[75%] py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[#505050]/90 rounded-lg"
@@ -180,7 +184,18 @@ const DiaryComponent: React.FC<DiaryProps> = ({
             />
           </div>
 
-          <div>
+          {/* 별자리를 이어줄 감정태그 */}
+          <div className="mt-3">
+            <h2 className="text-white text-base font-semibold mb-1">
+              감정 태그
+            </h2>
+            <StarTag
+              onSelect={setEmotion}
+              initialEmotion={diaryData?.emotion || ''}
+            />
+          </div>
+
+          <div className="mt-3">
             <DetailTags
               initialTags={diaryData?.tags || []}
               isEditing={true}
