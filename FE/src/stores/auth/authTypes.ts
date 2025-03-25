@@ -1,13 +1,15 @@
 // 사용자 정보 타입
 export interface User {
-  id: string;
-  email: string;
-  name: string;
+  birthDate: string;
+  introduction: string | null;
+  nickname: string;
+  userSeq: number;
+  username: string;
 }
 
 // 인증 상태 타입
 export interface AuthState {
-  // user: User | null;
+  user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
 }
@@ -20,6 +22,10 @@ export interface LoginCredentials {
 
 // 로그인 응답 데이터 타입
 export interface LoginResponse {
+  data: LoginResponseData;
+}
+
+export interface LoginResponseData {
   user: User;
   accessToken: string;
   // refreshToken: string;
