@@ -9,6 +9,9 @@ import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
+import BlackHoles from '@/domains/mainpage/components/universe/BlackHoles';
+
+
 
 // 목데이터 import - 초기 데이터 로드용
 import { dummyDiaries } from '@/data/dummyDiaries';
@@ -206,6 +209,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           />
 
           {/* ------------------일기 항목들을 별로 표현-------------------------- */}
+          <BlackHoles/>
           <group>
             {entries.map((entry) => (
               <DiaryStar
