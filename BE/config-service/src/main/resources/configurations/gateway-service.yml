@@ -33,6 +33,13 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: auth-refresh-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/refresh
+          filters:
+            - name: JwtAuthFilter
+
         - id: auth-service-other
           uri: lb://user-service
           predicates:
