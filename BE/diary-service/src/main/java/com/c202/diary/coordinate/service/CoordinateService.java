@@ -4,6 +4,7 @@ import com.c202.diary.coordinate.model.CoordinateDto;
 import com.c202.diary.diary.entity.Diary;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CoordinateService {
 
