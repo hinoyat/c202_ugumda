@@ -1,11 +1,13 @@
-import time, base64
+import time
 from runwayml import RunwayML
+import logging
+from app.log_config import logging_check
 
+logging_check()
 
 def runway(image_base64:str, prompt:str):
 
     client = RunwayML()
-
 
     # Create a new image-to-video task using the "gen3a_turbo" model
     task = client.image_to_video.create(
@@ -22,5 +24,7 @@ def runway(image_base64:str, prompt:str):
     while task.status not in ['SUCCEEDED', 'FAILED']:
       time.sleep(10)  # Wait for ten seconds before polling
       task = client.tasks.retrieve(task_id)
-    # log 찍기
+
+    logging.info(task.output[0])
+
     return task.output[0]

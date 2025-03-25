@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
+import logging
+from app.log_config import logging_check
 import requests
 import os
 
-from openai import api_key
-
+logging_check()
 load_dotenv()
 
 def stability(prompt:str):
@@ -22,9 +23,11 @@ def stability(prompt:str):
         },
     )
 
-    # log 찍기
+    logging.info("이미지 생성완료")
 
     if response.status_code == 200:
+        img_length = len(response.content)
+        logging.info(f"이미지64 길이:{img_length}")
         return response.content
     else:
         raise Exception(str(response.json()))

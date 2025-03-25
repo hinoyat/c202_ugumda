@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.models.request.generate_chat_request_dto import GenerateChatRequestDto
 from app.core.generate_video import generate_video
+import logging
 
 
 # main.py가 있는 디렉토리에서 아래 명령어 실행
@@ -40,6 +41,8 @@ async def create_video(generate_chat_request_dto:GenerateChatRequestDto):
     return {
         "message": result
     }
+
+
 
 
 '''
