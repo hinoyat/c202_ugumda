@@ -2,7 +2,7 @@
 // [닉네임님의 페이지 입니다.] + 로그아웃/구독취소 버튼
 
 interface UserSpaceHeaderProps {
-  nickname: string; // 닉네임 ( 내 닉네임 or 다른 사람 닉네임)
+  nickname: string | undefined; // 닉네임 ( 내 닉네임 or 다른 사람 닉네임)
   onButtonClick: () => void; // 버튼 클릭 이벤트 (로그아웃 or 구독취소)
   buttonLabel: string;
 }
