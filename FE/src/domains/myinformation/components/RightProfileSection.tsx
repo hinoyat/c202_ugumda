@@ -7,12 +7,13 @@ import check from '@/assets/images/pixcelCheck.svg';
 import docs from '@/assets/images/pixcelDoc.svg';
 
 interface LeftProfileSectionProps {
-  mockdata: {
-    id: number;
-    profile: string;
-    nickname: string;
-    birth: string;
-  };
+  userData: {
+    birthDate:string,
+    introduction:string|null
+    nickname:string,
+    userSeq:number,
+    username:string
+  } | null
 }
 
 interface ApiResponse {
@@ -22,7 +23,7 @@ interface ApiResponse {
 }
 
 const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
-  mockdata,
+  userData,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPw_Check, setShowPassword_Check] = useState(false);
@@ -53,7 +54,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         {/* 닉네임 행 */}
         <div className="flex items-center gap-4 text-xl w-full dung-font">
           <p className="w-1/4">nickname</p>
-          <p className="flex-1">{mockdata.nickname}</p>
+          <p className="flex-1">{userData?.nickname}</p>
           <img
             src={check}
             alt="닉네임 확인"
@@ -126,7 +127,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         {/* 생년월일 행 */}
         <div className="flex items-center gap-4 text-xl w-full">
           <p className="w-1/4 dung-font">birth</p>
-          <p className="flex-1 dung-font">{mockdata.birth}</p>
+          <p className="flex-1 dung-font">{userData?.birthDate}</p>
           <img
             src={docs}
             alt="생년월일 확인"

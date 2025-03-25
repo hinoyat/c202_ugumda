@@ -1,17 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import profileFrame from '@/assets/images/profileFrame.svg';
+import exampleProfile from "@/assets/images/exampleProfile.svg"
 
 interface LeftProfileSectionProps {
-  mockdata: {
-    id: number;
-    profile: string;
-    nickname: string;
-    birth: string;
-  };
+  userData: {
+    birthDate: string,
+    introduction: string | null
+    nickname: string,
+    userSeq: number,
+    username: string
+  } | null
 }
 
 const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
-  mockdata,
+  userData,
 }) => {
   return (
     <div className="text-white flex-1">
@@ -24,13 +26,13 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
           />
           {/* 여기에 mockdata.profile 값을 이미지로 표시 */}
           <img
-            src={mockdata.profile}
+            src={exampleProfile}
             alt="프로필 이미지"
             className="w-20 object-cover rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           />
         </div>
         <div className="flex flex-col items-center justify-center text-[20px] tracking-wide dung-font">
-          <p>Hello, {mockdata.nickname} !!!</p>
+          <p>Hello, {userData?.nickname || "Guest"} !!!</p>
           <p>버튼을 눌러 아이콘을 수정하세요</p>
         </div>
         <div className="box-button">
