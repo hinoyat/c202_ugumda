@@ -10,8 +10,10 @@ const DetailHeader: React.FC<DetailHeaderProps> = ({ title, created_at }) => {
   return (
     <div className="flex flex-nowrap w-full items-center justify-between">
       <div className="flex flex-col">
-        <h1 className="text-white text-[20px]">{title}</h1>
-        <p className="text-[rgb(255,255,255,0.7)] text-[16px]">{created_at}</p>
+        {/* 제목 */}
+        <h1 className="text-white text-lg font-semibold">{title}</h1>
+        {/* 날짜 */}
+        <p className="text-[#FFFFFF]70 text-sm">{created_at}</p>
       </div>
 
       {/* 부모 컨테이너에 relative와 크기 지정 */}

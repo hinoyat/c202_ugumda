@@ -29,13 +29,13 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit, onClose }) => {
   return (
     <div className="flex w-full flex-col gap-3 ">
       <button
-        className="text-white/90 cursor-pointer w-full bg-[#323232]/90 hover:bg-[#282828]/90 py-2 rounded text-sm font-bold"
+        className="text-white/90 mt-3 cursor-pointer w-full bg-[#323232]/90 hover:bg-[#282828]/90 py-2 rounded text-sm font-bold"
         onClick={handleDreamInterpretation}>
         꿈 해몽 하러가기
       </button>
 
       <button
-        className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold"
+        className="text-white/90 mb-6 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold"
         onClick={handleEditClick}>
         수정하기
       </button>

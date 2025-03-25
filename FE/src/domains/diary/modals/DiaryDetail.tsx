@@ -153,7 +153,8 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 />
               </div>
 
-              <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words">
+              {/* contents 칸 크기수정 여기서 */}
+              <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words flex-glow min-h-[150px]">
                 <DetailContent content={currentDiary.content} />
               </div>
 
