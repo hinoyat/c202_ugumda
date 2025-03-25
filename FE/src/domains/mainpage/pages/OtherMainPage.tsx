@@ -29,7 +29,7 @@ const OtherMainPage = () => {
   return (
     <div className="flex flex-col items-start min-h-screen bg-black text-white relative">
       {/* 우주영역 */}
-      <Universe />
+      <Universe isMySpace={false} />
 
       {/* 닉네임님의 우주입니다 & 버튼 */}
       <div className="absolute top-5 left-5">

@@ -26,8 +26,8 @@ const DiaryDisclose: React.FC<DiaryDiscloseProps> = ({
   };
 
   return (
-    <div className="flex flex-col my-10">
-      <h1 className="text-white text-base">공개 범위</h1>
+    <div className="flex flex-col my-4">
+      <h1 className="text-white text-base font-semibold">공개 범위</h1>
       <div className="flex justify-around text-sm">
         <label className="radio-button">
           <input

@@ -1,4 +1,4 @@
-// 일기 작성 버튼 컴포넌트
+// 일기 생성/ 수정 버튼
 
 import React from 'react';
 
@@ -22,19 +22,19 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
       {isEditing ? (
         <button
           onClick={onClose}
-          className="text-[#3A3A3A] cursor-pointer w-full bg-[rgba(255,255,255,0.7)] py-2 rounded text-lg font-bold hover:bg-neutral-500 hover:text-white">
+          className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold">
           수정완료
         </button>
       ) : (
         <>
           <button
             onClick={onCreate}
-            className="text-white cursor-pointer w-full bg-[rgba(84,84,84,1)] py-2 rounded text-sm font-bold">
+            className="text-white/90 cursor-pointer w-full bg-[#323232]/90 hover:bg-[#282828]/90 py-2 rounded text-sm font-bold">
             꿈 일기 등록하기
           </button>
           <button
             onClick={onCreateVideo}
-            className="text-white cursor-pointer w-full bg-[rgba(189,189,189,0.7)] py-2 rounded text-sm font-bold">
+            className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold">
             등록 후 영상 생성하기({Count}/3)
           </button>
         </>

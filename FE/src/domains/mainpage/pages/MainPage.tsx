@@ -42,7 +42,7 @@ const MainPage = () => {
   return (
     <div className="flex flex-col items-start text-white relative w-screen h-screen overflow-hidden">
       {/* 우주영역 */}
-      <Universe />
+      <Universe isMySpace={true} />
 
       {/* 닉네임님의 우주입니다 & 버튼 */}
       <div className="absolute top-5 left-5">

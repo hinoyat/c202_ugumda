@@ -5,6 +5,7 @@ import { VscSearch } from 'react-icons/vsc';
 import { FaRegBell } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import SearchModal from '../search/modal/SearchModal'; // 모달 임포트
+import { Tooltip } from 'react-tooltip';
 
 const Navbar = () => {
   // 모달 열림 여부
@@ -21,23 +22,57 @@ const Navbar = () => {
         {/* home */}
         <Link
           to="/"
-          className="hover:text-white">
+          className="hover:text-white"
+          data-tooltip-id="home-tooltip"
+          data-tooltip-content="홈으로 이동">
           <MdHomeFilled />
         </Link>
+
         {/* Rocket */}
         <Link
           to="/spaceship"
-          className="hover:text-white">
+          className="hover:text-white"
+          data-tooltip-id="spaceship-tooltip"
+          data-tooltip-content="우주선으로 이동">
           <BsFillRocketTakeoffFill className="w-5 h-5" />
         </Link>
+
         {/* search (클릭하면 모달 열림) */}
         <VscSearch
           onClick={openModal}
           className="hover:text-white cursor-pointer w-5 h-5"
+          data-tooltip-id="search-tooltip"
+          data-tooltip-content="검색하기"
         />
+
         {/* bell */}
-        <FaRegBell className="hover:text-white cursor-pointer w-5 h-5" />
+        <FaRegBell
+          className="hover:text-white cursor-pointer w-5 h-5"
+          data-tooltip-id="notification-tooltip"
+          data-tooltip-content="알림"
+        />
       </nav>
+      {/* 툴팁 컴포넌트들 */}
+      <Tooltip
+        id="home-tooltip"
+        place="bottom"
+        style={{ zIndex: 9999 }}
+      />
+      <Tooltip
+        id="spaceship-tooltip"
+        place="bottom"
+        style={{ zIndex: 9999 }}
+      />
+      <Tooltip
+        id="search-tooltip"
+        place="bottom"
+        style={{ zIndex: 9999 }}
+      />
+      <Tooltip
+        id="notification-tooltip"
+        place="bottom"
+        style={{ zIndex: 9999 }}
+      />
 
       {/* SearchModal 컴포넌트 */}
       <SearchModal

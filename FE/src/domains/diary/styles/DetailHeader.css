@@ -3,13 +3,13 @@
   position: absolute;
   top: 0;
   left: 0;
-  
+
   /* flexbox로 내부의 svg 중앙 정렬 */
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  background: #ff5b5b;
+
+  background: #898989;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -56,7 +56,7 @@
 }
 
 #inpLock:checked + label {
-  background: #20cca5;
+  background: #323232;
 }
 
 #inpLock:checked + label svg {
