@@ -27,11 +27,11 @@ def chat_gpt(content:str):
             prompt = ",".join(keywords)
             logging.info(f"추출된 prompt: {prompt}")
         else:
-            print("'영어번역:' 패턴을 찾을 수 없습니다.")
-            print("대신 다음 키워드를 사용합니다: 'dreamlike, mystery, fantasy, surreal'")
+            logging.info("'영어번역:' 패턴을 찾을 수 없습니다.")
+            logging.info("대신 다음 키워드를 사용합니다: 'dreamlike, mystery, fantasy, surreal'")
             prompt = "dreamlike, mystery, fantasy, surreal"
     except Exception as e:
-        print(f"오류 발생: {e}")
+        logging.info(f"오류 발생: {e}")
         prompt = "dreamlike, mystery, fantasy, surreal"  # 폴백 키워드
 
     logging.info(f"Generated prompt: {prompt}")
