@@ -2,13 +2,17 @@ import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from '../common/Layout'; // Layout 컴포넌트 import
 import OtherMainPage from '@/domains/mainpage/pages/OtherMainPage';
+import ProtectedRoute from '@/common/ProtectedRoute';
+import PublicRoute from '@/common/PublicRoute';
 
 const ErrorPage = lazy(() => import('../domains/error/ErrorPage'));
 const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
 const Login = lazy(() => import('../domains/login/pages/Login'));
 const Signup = lazy(() => import('../domains/signup/pages/Signup'));
 const GuestBook = lazy(() => import('../domains/guestbook/GuestBook'));
-const DiaryComponent = lazy(() => import('../domains/diary/modals/DiaryComponent'));
+const DiaryComponent = lazy(
+  () => import('../domains/diary/modals/DiaryComponent')
+);
 const DiaryDetail = lazy(() => import('../domains/diary/modals/DiaryDetail'));
 const SpaceShip = lazy(() => import('../domains/spaceship/pages/SpaceShip'));
 const PasswordCheck = lazy(
@@ -28,6 +32,7 @@ const TodayFortune = lazy(
   () => import('../domains/todayFortune/pages/TodayFortune')
 );
 const DreamSolve = lazy(() => import('../domains/dreamSolve/pages/DreamSolve'));
+const Intro = lazy(() => import('../domains/intro/pages/Intro'));
 
 const AppRouter = () => {
   return (
@@ -35,74 +40,86 @@ const AppRouter = () => {
       <Routes>
         {/* Layout이 필요한 라우트 */}
         <Route element={<Layout />}>
+          {/* 로그인 보호 필요 */}
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="/"
+              element={<MainPage />}
+            />
+            <Route
+              path="/othermain"
+              element={<OtherMainPage />}
+            />
+            <Route
+              path="/spaceship"
+              element={<SpaceShip />}
+            />
+            <Route
+              path="/luckynumber"
+              element={<LuckyNumber />}
+            />
+            <Route
+              path="/todayfortune"
+              element={<TodayFortune />}
+            />
+            <Route
+              path="/dreamsolve"
+              element={<DreamSolve />}
+            />
+            <Route
+              path="/diary/create"
+              element={<DiaryComponent />}
+            />
+            <Route
+              path="/diary/edit/:id"
+              element={<DiaryComponent isEditing={true} />}
+            />
+            <Route
+              path="/diary/:id"
+              element={<DiaryDetail />}
+            />
+          </Route>
+        </Route>
+
+        {/* Navbar 없이 로그인 보호받아야 할 곳*/}
+        <Route element={<ProtectedRoute />}>
           <Route
-            path="/"
-            element={<MainPage />}
+            path="/myinformation"
+            element={<MyInformation />}
           />
           <Route
-            path="/othermain"
-            element={<OtherMainPage />}
+            path="/passwordcheck"
+            element={<PasswordCheck />}
           />
           <Route
-            path="/spaceship"
-            element={<SpaceShip />}
+            path="/successedit"
+            element={<SuccessfulEdit />}
           />
           <Route
-            path="/luckynumber"
-            element={<LuckyNumber />}
-          />
-          <Route
-            path="/todayfortune"
-            element={<TodayFortune />}
-          />
-          <Route
-            path="/dreamsolve"
-            element={<DreamSolve />}
-          />
-          <Route
-            path="/diary/create"
-            element={<DiaryComponent />}
-          />
-          <Route
-            path="/diary/edit/:id"
-            element={<DiaryComponent isEditing={true} />}
-          />
-          <Route
-            path="/diary/:id"
-            element={<DiaryDetail />}
+            path="/failedit"
+            element={<FailEdit />}
           />
         </Route>
-        {/* 로그인 및 회원가입은 Navbar 없이 */}
-        <Route
-          path="/myinformation"
-          element={<MyInformation />}
-        />
 
-        <Route
-          path="/passwordcheck"
-          element={<PasswordCheck />}
-        />
-        <Route
-          path="/successedit"
-          element={<SuccessfulEdit />}
-        />
-        <Route
-          path="/failedit"
-          element={<FailEdit />}
-        />
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/signup"
-          element={<Signup />}
-        />
-        <Route
-          path="*"
-          element={<ErrorPage />}
-        />
+        {/* 비로그인 유저, navbar 없이 */}
+        <Route element={<PublicRoute />}>
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/intro"
+            element={<Intro />}
+          />
+          <Route
+            path="/signup"
+            element={<Signup />}
+          />
+          <Route
+            path="*"
+            element={<ErrorPage />}
+          />
+        </Route>
       </Routes>
     </Suspense>
   );
