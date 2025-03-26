@@ -25,22 +25,23 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
     @Override
     @Transactional
     public void createDailyFortune(Integer userSeq){
-        String birthDate = webClientBuilder
-                .baseUrl("http://user-service")
-                .build()
-                .get()
-                .uri("/api/users/birthdate")
-                .header("X-User-Seq", String.valueOf(userSeq))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block(); // 동기 방식으로 값 꺼냄
+//        String birthDate = webClientBuilder
+//                .baseUrl("http://user-service")
+//                .build()
+//                .get()
+//                .uri("/api/users/birthdate")
+//                .header("X-User-Seq", String.valueOf(userSeq))
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block(); // 동기 방식으로 값 꺼냄
+//
+//        String prompt = String.format(
+//                "생년월일이 %s인 사람을 위한 오늘의 운세를 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.", birthDate
+//        );
+//
+//        String content = chatModel.call(prompt);
 
-        String prompt = String.format(
-                "생년월일이 %s인 사람을 위한 오늘의 운세를 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.", birthDate
-        );
-
-        String content = chatModel.call(prompt);
-
+        String content = "주찬이의 연동을 위한 오늘의 운세, 주찬이는 클린코딩을 아주 잘 할 것 같아요";
         log.info("GPT 응답: {}", content);
 
         DailyFortune fortune = DailyFortune.builder()
