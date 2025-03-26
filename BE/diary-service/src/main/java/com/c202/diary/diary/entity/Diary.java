@@ -26,7 +26,7 @@ public class Diary {
     @Column(nullable = false, length = 255)
     private String content;
 
-    @Column(nullable = true, length = 100)
+    @Column(nullable = true, length = 255)
     private String videoUrl;
 
     @Column(nullable = false, length = 8)
@@ -80,4 +80,6 @@ public class Diary {
         this.z = z;
         this.emotionSeq = emotionSeq;
     }
+
+    public void setVideo(String videoUrl) { this.videoUrl = videoUrl; }
 }
