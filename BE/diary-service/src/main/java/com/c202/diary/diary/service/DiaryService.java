@@ -25,4 +25,6 @@ public interface DiaryService {
     DiaryDetailResponseDto toggleDiaryIsPublic(Integer diarySeq, Integer userSeq);
 
     UniverseDataResponseDto getUniverseData(Integer userSeq);
+
+    void uploadVideo(Integer diarySeq, Integer userSeq, String videoUrl);
 }
