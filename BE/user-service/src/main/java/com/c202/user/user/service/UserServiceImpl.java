@@ -62,6 +62,10 @@ public class UserServiceImpl implements UserService {
             user.updateBirthDate(request.getBirthDate());
         }
 
+        if (request.getIconSeq() != null) {
+            user.updateIconSeq(request.getIconSeq());
+        }
+
         // 수정 시간 업데이트
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         user.updateInfo(now);
