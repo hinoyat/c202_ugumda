@@ -15,6 +15,7 @@ def runway(image_base64:str, prompt:str):
       # Point this at your own image file
       prompt_image=f"data:image/png;base64,{image_base64}",
       prompt_text=f'{prompt}',
+      duration=5
     )
     task_id = task.id
 

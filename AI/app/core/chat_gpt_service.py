@@ -17,6 +17,7 @@ def chat_gpt(content:str):
     full_prompt = chain.prompt_chain.invoke(content)
     logging.info(f"전체 프롬프트: {full_prompt}")
 
+
     # 영어 번역 부분만 출력
     try:
         match = re.search(r"영어\s*번역:\s*\[([^\]]+)\]", full_prompt)
