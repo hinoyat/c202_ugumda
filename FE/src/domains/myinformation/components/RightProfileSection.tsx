@@ -303,7 +303,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
           {showDatePicker && (
             <div 
               ref={datePickerRef}
-              className="absolute right-0 top-10 z-10 bg-gray-800 p-2 rounded"
+              className="absolute left-103 top-0 z-10 bg-gray-800 p-2 rounded"
             >
               <DatePicker
                 selected={selectedDate}
