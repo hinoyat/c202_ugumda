@@ -5,23 +5,36 @@ import '@/domains/login/themes/SpaceLoginForm.css';
 import '@/domains/signup/themes/BoxButton.css';
 import BoxButton from '@/domains/signup/components/BoxButton';
 import ProfileIconSelector from '@/domains/signup/components/ProfileIconSelector';
+import { useAppDispatch } from '@/hooks/hooks';
+import { useSelector } from 'react-redux';
+import {
+  selectUsernameMessage,
+  selectUsernameStatus,
+  selectNickname,
+  selectNicknameMessage,
+  selectNicknameStatus,
+  selectPasswordMessage,
+  selectUsername,
+} from '../stores/signupSelectors';
+import { setUsername, setIconSeq, setNickname } from '../stores/signupSlice';
+import { checkUsername, checkNickname } from '../stores/signupThunks';
 
 // 프로필 아이콘 이미지 추가
 const SignupForm = () => {
+  const dispatch = useAppDispatch();
   const nav = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState('');
-  // 랜덤 프로필 아이콘
-  const [selectedIcon, setSelectedIcon] = useState<{
-    src: string;
-    index: number;
-  }>({
-    src: '',
-    index: 0,
-  });
+
+  const username = useSelector(selectUsername);
+  const usernameMessage = useSelector(selectUsernameMessage);
+  const IsUsernameDuplicate = useSelector(selectUsernameStatus);
+
+  const nickname = useSelector(selectNickname);
+  const nicknameMessage = useSelector(selectNicknameMessage);
+  const IsNicknameDuplicate = useSelector(selectNicknameStatus);
 
   const onClickGoToHome = () => {
-    nav('/');
+    nav('/intro');
   };
 
   const onClickGoToLogin = () => {
@@ -30,15 +43,32 @@ const SignupForm = () => {
 
   // 아이콘 선택 핸들러
   const handleIconSelect = (iconSrc: string, iconIndex: number): void => {
-    setSelectedIcon({ src: iconSrc, index: iconIndex });
-    // 필요하다면 여기서 폼 데이터에 아이콘 정보 추가
+    dispatch(setIconSeq(iconIndex));
     console.log('선택된 아이콘:', iconSrc, '인덱스:', iconIndex);
   };
 
+  // 아이디
   // 아이디 중복확인 핸들러
   const handleIDCheckDuplicate = () => {
-    // 여기서 redux action을 dispatch 하게 됩니다
+    dispatch(checkUsername(username));
     console.log('중복 확인할 아이디:', username);
+  };
+
+  // 아이디 유효성 검사
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setUsername(event.target.value));
+  };
+
+  // 닉네임
+  // 닉네임 중복확인 핸들러
+  const handleNicknameCheckDuplicate = () => {
+    dispatch(checkNickname(nickname));
+    console.log('중복 확인할 닉네임:', nickname);
+  };
+
+  // 닉네임 유효성 검사
+  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setNickname(event.target.value));
   };
 
   return (
@@ -91,12 +121,16 @@ const SignupForm = () => {
                   placeholder="아이디를 입력하세요"
                   style={{ flex: 3, width: 'auto' }}
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={handleUsernameChange}
                 />
 
                 <BoxButton
                   text="중복확인"
-                  onClick={handleIDCheckDuplicate}
+                  onClick={
+                    IsUsernameDuplicate != 'invalid'
+                      ? handleIDCheckDuplicate
+                      : () => {}
+                  }
                 />
               </div>
 
@@ -104,13 +138,14 @@ const SignupForm = () => {
               <p
                 className="validation-message dung-font"
                 style={{
-                  color: '#ff6b6b', // 오류 메시지 색상
+                  color:
+                    IsUsernameDuplicate != 'invalid' ? '#4ade80' : '#ff6b6b', // 중복 확인용 색상 골라야할 듯
                   fontSize: '0.7rem',
                   marginTop: '4px',
                   marginLeft: '4px',
                   height: '16px', // 고정 높이로 공간 확보
                 }}>
-                아이디는 5자에서 12자 사이로 입력해주세요.
+                {usernameMessage}
               </p>
             </div>
 
@@ -250,20 +285,30 @@ const SignupForm = () => {
                   type="text"
                   placeholder="닉네임을 입력하세요"
                   style={{ flex: 3, width: 'auto' }}
+                  value={nickname}
+                  onChange={handleNicknameChange}
                 />
-                <BoxButton text="중복확인" />
+                <BoxButton
+                  text="중복확인"
+                  onClick={
+                    IsNicknameDuplicate != 'invalid'
+                      ? handleNicknameCheckDuplicate
+                      : () => {}
+                  }
+                />
               </div>
 
               <p
                 className="validation-message dung-font"
                 style={{
-                  color: '#ff6b6b',
+                  color:
+                    IsNicknameDuplicate != 'invalid' ? '#4ade80' : '#ff6b6b',
                   fontSize: '0.7rem',
                   marginTop: '4px',
                   marginLeft: '4px',
                   height: '16px',
                 }}>
-                닉네임은 2자에서 10자 사이로 입력해주세요.
+                {nicknameMessage}
               </p>
             </div>
 
