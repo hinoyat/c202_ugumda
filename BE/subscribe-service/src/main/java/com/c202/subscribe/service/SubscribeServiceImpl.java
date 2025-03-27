@@ -1,6 +1,6 @@
 package com.c202.subscribe.service;
 
-import com.c202.exception.CustomException;
+import com.c202.exception.types.*;
 import com.c202.subscribe.entity.Subscribe;
 import com.c202.subscribe.repository.SubscribeRepository;
 import jakarta.transaction.Transactional;
@@ -25,11 +25,11 @@ public class SubscribeServiceImpl implements SubscribeService {
     @Override
     public String toggleSubscription(Integer subscriberSeq, Integer subscribedSeq) {
         if (subscriberSeq == null || subscribedSeq == null) {
-            throw new CustomException("subscriberSeq 또는 subscribedSeq 값이 null입니다.");
+            throw new BadRequestException("구독자 정보가 유효하지 않습니다.");
         }
 
         if (subscriberSeq.equals(subscribedSeq)) {
-            throw new CustomException("본인을 구독할 수 없습니다.");
+            throw new BadRequestException("본인을 구독할 수 없습니다.");
         }
 
         Optional<Subscribe> existingSubscription =
@@ -54,7 +54,7 @@ public class SubscribeServiceImpl implements SubscribeService {
     @Override
     public List<Integer> getSubscriptions(Integer subscriberSeq) {
         if (subscriberSeq == null) {
-            throw new CustomException("subscriberSeq 값이 null입니다.");
+            throw new BadRequestException("구독자 정보가 유효하지 않습니다.");
         }
         return subscribeRepository.findBySubscriberSeq(subscriberSeq)
                 .stream()
