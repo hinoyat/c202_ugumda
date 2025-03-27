@@ -21,7 +21,7 @@ public class LuckyNumberController {
     @PostMapping
     public ResponseEntity<ResponseDto<Void>> generateLuckyNumber(@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
         luckyNumberService.createLuckyNumber(userSeq);
-        return ResponseEntity.ok(ResponseDto.success(201, "행운 번호 생성 성공"));
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "행운 번호 생성 성공"));
     }
 
     @GetMapping
