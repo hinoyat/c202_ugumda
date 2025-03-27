@@ -2,6 +2,8 @@
 
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
+import DiaryDetail from '@/domains/diary/modals/DiaryDetail';
+import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import { OrbitControls } from '@react-three/drei';
@@ -36,10 +38,53 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     y: number;
   } | null>(null);
   const [viewingEntry, setViewingEntry] = useState<any | null>(null);
+  const [currentDiaryDetail, setCurrentDiaryDetail] = useState<any | null>(
+    null
+  );
 
-  // ------------------- 우주관련 ------------------------ //
+  // -----------------------
+  const [showDetail, setShowDetail] = useState<boolean>(false);
+
+  // -------------------------- 우주관련 -------------------------- //
   // 카메라 컨트롤 참조
   const controlsRef = useRef<any>(null);
+
+  // ------------------- 별 선택 시 메뉴 관련 ------------------- //
+  // 별의 범위를 벗어남 (선택된 별이 없는 상태)
+  const clearSelectedEntry = () => {
+    setSelectedEntry(null);
+    setSelectedPosition(null);
+  };
+
+  // 일기 수정 버튼 클릭
+  const handleEditClick = () => {
+    console.log('일기수정 클릭');
+  };
+
+  const handleDeleteClick = () => {
+    console.log('일기 삭제');
+  };
+
+  // 일기 보기 버튼 클릭
+  const handleViewClick = async () => {
+    console.log('일기보기 클릭 - 일기 ID : ', selectedEntry.diarySeq);
+
+    try {
+      const response = await diaryApi.getDiaryById(selectedEntry.diarySeq);
+      console.log('일기 상세데이터 로드됨!!! : ', response);
+
+      if (response && response.data && response.data.data) {
+        setCurrentDiaryDetail(response.data.data);
+        clearSelectedEntry();
+        setShowDetail(true);
+      }
+    } catch (error) {
+      console.error('일기 조회 중 오류 발생 : ', error);
+      alert(
+        '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요'
+      );
+    }
+  };
 
   // ------------------- 일기 생성 ------------------------ //
   // 화면을 더블클릭하면 일기가 생성됨
@@ -131,14 +176,10 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
                 onClick={(entry, position) => {
                   setSelectedEntry(entry);
                   setSelectedPosition(position);
-
-                  // 다른 사람의 우주라면 별 클릭 시 일기 조회 모달이 뜸
-                  if (!isMySpace) {
-                    setViewingEntry(entry);
-                  }
                 }}
                 // 호버 했을 때는 일기 미리보기
                 onHover={(entry, position) => {
+                  console.log('호버됨');
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
@@ -162,6 +203,34 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           />
         </Canvas>
       </div>
+
+      {/* ----- 일기 별 클릭 시 호버메뉴 뜸 (다른사람 페이지에서는 일기 조회가 뜸) ----- */}
+      {isMySpace && selectedEntry && selectedPosition && (
+        <div
+          className="absolute z-20"
+          style={{
+            left: `${selectedPosition.x}px`,
+            top: `${selectedPosition.y - 50}px`, // 별 위쪽에 표시
+          }}>
+          <StarHoverMenu
+            position={selectedPosition}
+            onEdit={handleEditClick}
+            onDelete={handleDeleteClick}
+            onView={handleViewClick}
+          />
+        </div>
+      )}
+
+      {/* -----------------------일기 조회 모달 열림------------------------- */}
+      {showDetail && currentDiaryDetail && (
+        <DiaryDetail
+          initialDiary={currentDiaryDetail}
+          onClose={() => {
+            setShowDetail(false);
+            setCurrentDiaryDetail(null);
+          }}
+        />
+      )}
 
       {/* -----------------------일기 작성 모달 열림------------------------- */}
       {showForm && (
