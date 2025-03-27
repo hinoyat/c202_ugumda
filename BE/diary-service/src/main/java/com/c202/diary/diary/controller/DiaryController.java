@@ -1,5 +1,6 @@
 package com.c202.diary.diary.controller;
 
+import com.c202.diary.diary.model.request.VideoRequestDto;
 import com.c202.diary.diary.model.response.UniverseDataResponseDto;
 import com.c202.diary.tag.service.TagService;
 import com.c202.dto.ResponseDto;
@@ -87,6 +88,16 @@ public class DiaryController {
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq
     ) {
         return ResponseEntity.ok(ResponseDto.success(200, "우주 데이터 조회 완료", diaryService.getUniverseData(userSeq)));
+    }
+
+    @PostMapping("/{diarySeq}/video")
+    public ResponseEntity<ResponseDto<String>> uploadVideo(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer diarySeq,
+            @RequestBody VideoRequestDto dto
+            ) {
+        diaryService.uploadVideo(diarySeq, userSeq, dto.getVideoUrl());
+        return ResponseEntity.ok(ResponseDto.success(200, "동영상 업로드 완료"));
     }
 
 }
