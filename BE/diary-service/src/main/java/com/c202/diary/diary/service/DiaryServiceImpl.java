@@ -13,6 +13,7 @@ import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.model.response.EmotionResponseDto;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.emotion.service.EmotionService;
+import com.c202.diary.s3.S3Service;
 import com.c202.diary.tag.entity.DiaryTag;
 import com.c202.diary.tag.model.response.TagResponseDto;
 import com.c202.diary.tag.repository.DiaryTagRepository;
@@ -40,6 +41,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final EmotionRepository emotionRepository;
     private final EmotionService emotionService;
     private final CoordinateService coordinateService;
+    private final S3Service s3Service;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Transactional
@@ -275,6 +277,19 @@ public class DiaryServiceImpl implements DiaryService {
                 .emotions(emotions)
                 .connections(connections)
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public void uploadVideo(Integer diarySeq, Integer userSeq, String videoUrl) {
+        Diary diary = validateDiary(diarySeq, userSeq);
+
+        String newUrl = s3Service.uploadVideoFromUrl(videoUrl);
+
+        diary.setVideo(newUrl);
+
+        diaryRepository.save(diary);
+
     }
 
 

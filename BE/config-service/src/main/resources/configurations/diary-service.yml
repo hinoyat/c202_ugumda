@@ -14,6 +14,18 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ${AWS_REGION}
+      stack:
+        auto: ${AWS_STACK_AUTO}
+      s3:
+        bucket: ${AWS_BUCKET}
+
   logging:
     level:
       root: ${LOG_LEVEL_ROOT}
