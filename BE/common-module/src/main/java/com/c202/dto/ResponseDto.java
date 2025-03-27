@@ -21,7 +21,14 @@ public class ResponseDto<T> {
                 .data(data)
                 .build();
     }
-
+    public static <T> ResponseDto<T> success(int status, String message, T data) {
+        return ResponseDto.<T>builder()
+                .timestamp(LocalDateTime.now())
+                .status(status)
+                .message(message)
+                .data(data)
+                .build();
+    }
     public static <T> ResponseDto<T> error(int status, String message) {
         return ResponseDto.<T>builder()
                 .timestamp(LocalDateTime.now())
