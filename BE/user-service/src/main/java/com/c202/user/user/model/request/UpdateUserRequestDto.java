@@ -10,5 +10,5 @@ public class UpdateUserRequestDto {
     private String nickname;
     private String password;
     private String birthDate;
-    // 아이콘
+    private Integer iconSeq;
 }

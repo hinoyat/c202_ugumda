@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
                 .createdAt(now)
                 .updatedAt(now)
                 .isDeleted("N")
+                .iconSeq(request.getIconSeq())
                 .build();
 
         User savedUser = userRepository.save(user);

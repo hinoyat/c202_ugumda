@@ -13,6 +13,7 @@ public class UserResponseDto {
     private String nickname;
     private String birthDate;
     private String introduction;
+    private Integer iconSeq;
     
     public static UserResponseDto toDto(User user) {
         return UserResponseDto.builder()
@@ -21,6 +22,7 @@ public class UserResponseDto {
                 .nickname(user.getNickname())
                 .birthDate(user.getBirthDate())
                 .introduction(user.getIntroduction())
+                .iconSeq(user.getIconSeq())
                 .build();
     }
 }

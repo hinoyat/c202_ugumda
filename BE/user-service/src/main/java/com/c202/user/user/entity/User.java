@@ -43,6 +43,9 @@ public class User {
     @Column(nullable = false, length = 1)
     private String isDeleted;
 
+    @Column(nullable = false)
+    private Integer iconSeq;
+
     // 엔티티 수정 메소드 추가
     public void updateNickname(String nickname) {
         this.nickname = nickname;
@@ -65,4 +68,6 @@ public class User {
     public void updateIntroduction(String introduction) {this.introduction = introduction;}
 
     public void updateDeletedAt(String deletedAt) {this.deletedAt = deletedAt;}
+
+    public void updateIconSeq(int iconSeq) {this.iconSeq = iconSeq;}
 }
