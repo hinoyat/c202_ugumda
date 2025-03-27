@@ -26,14 +26,13 @@ import java.util.Objects;
 public class DiaryController {
 
     private final DiaryService diaryService;
-    private final TagService tagService;
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> createDiary(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @RequestBody DiaryCreateRequestDto dto
     ) {
-        return ResponseEntity.ok(ResponseDto.success(201, "일기 작성 완료", diaryService.createDiary(userSeq, dto)));
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "일기 작성 완료", diaryService.createDiary(userSeq, dto)));
     }
 
     @PutMapping("/{diarySeq}")
@@ -51,7 +50,7 @@ public class DiaryController {
             @PathVariable Integer diarySeq
     ) {
         diaryService.deleteDiary(diarySeq, userSeq);
-        return ResponseEntity.ok(ResponseDto.success(204, "일기 삭제 완료"));
+        return ResponseEntity.ok(ResponseDto.success(200, "일기 삭제 완료", null));
     }
 
     @GetMapping("/me")

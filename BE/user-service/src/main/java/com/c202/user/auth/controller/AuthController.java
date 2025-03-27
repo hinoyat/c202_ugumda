@@ -1,7 +1,7 @@
 package com.c202.user.auth.controller;
 
 import com.c202.dto.ResponseDto;
-import com.c202.exception.CustomException;
+import com.c202.exception.types.UnauthorizedException;
 import com.c202.user.auth.service.AuthService;
 import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
@@ -31,7 +31,7 @@ public class AuthController {
     public ResponseEntity<ResponseDto<UserResponseDto>> register(
             @RequestBody SignupRequestDto requestDto) {
         UserResponseDto user = authService.register(requestDto);
-        return ResponseEntity.ok(ResponseDto.success(201, "회원가입 성공", user));
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "회원가입 성공", user));
     }
 
     // 로그인
@@ -85,7 +85,7 @@ public class AuthController {
         String refreshToken = jwtTokenProvider.extractRefreshTokenFromCookie(request);
 
         if (refreshToken == null) {
-            throw new CustomException("리프레시 토큰이 없습니다.");
+            throw new UnauthorizedException("리프레시 토큰이 없습니다.");
         }
 
         String newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);

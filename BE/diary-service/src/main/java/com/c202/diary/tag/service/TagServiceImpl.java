@@ -6,7 +6,7 @@ import com.c202.diary.tag.entity.Tag;
 import com.c202.diary.tag.model.response.TagResponseDto;
 import com.c202.diary.tag.repository.DiaryTagRepository;
 import com.c202.diary.tag.repository.TagRepository;
-import com.c202.exception.CustomException;
+import com.c202.exception.types.ValidationException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,13 +48,13 @@ public class TagServiceImpl implements TagService {
         }
 
         if (tagNames.size() > 3) {
-            throw new CustomException("태그는 3개까지 가능합니다");
+            throw new ValidationException("태그는 3개까지 가능합니다");
         }
 
         List<TagResponseDto> tagDtos = new ArrayList<>();
         for (String tagName : tagNames) {
 
-            ValidateTagName(tagName);
+            validateTagName(tagName);
 
             Tag tag = createTagIfNotExists(tagName);
 
@@ -82,12 +82,12 @@ public class TagServiceImpl implements TagService {
                         .build()));
     }
 
-    private void ValidateTagName(String tagName) {
+    private void validateTagName(String tagName) {
         if (tagName.length() > 5) {
-            throw new CustomException("태그는 5글자까지 가능합니다");
+            throw new ValidationException("태그는 5글자까지 가능합니다");
         }
         if (!tagName.matches("^[가-힣a-zA-Z0-9]+$")) {
-            throw new CustomException("태그는 한글, 영문, 숫자만 사용 가능합니다");
+            throw new ValidationException("태그는 한글, 영문, 숫자만 사용 가능합니다");
         }
     }
 
