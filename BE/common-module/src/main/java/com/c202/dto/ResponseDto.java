@@ -13,12 +13,12 @@ public class ResponseDto<T> {
     private final String message;
     private final T data;
 
-    public static <T> ResponseDto<T> success(T data) {
+    public static <T> ResponseDto<T> success(int status, String message) {
         return ResponseDto.<T>builder()
                 .timestamp(LocalDateTime.now())
-                .status(200)
-                .message("요청이 성공적으로 처리되었습니다.")
-                .data(data)
+                .status(status)
+                .message(message)
+                .data(null)
                 .build();
     }
     public static <T> ResponseDto<T> success(int status, String message, T data) {

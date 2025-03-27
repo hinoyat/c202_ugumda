@@ -59,21 +59,21 @@ public class AuthController {
 
         authService.logout(request, response, userSeq);
 
-        return ResponseEntity.ok(ResponseDto.success(200, "로그아웃이 성공했습니다.", null));
+        return ResponseEntity.ok(ResponseDto.success(200, "로그아웃이 성공했습니다."));
     }
 
     @GetMapping("/check-username/{username}")
     public ResponseEntity<ResponseDto<Map<String, Boolean>>> checkUsernameAvailability(
             @PathVariable String username) {
         boolean isAvailable = authService.isUsernameAvailable(username);
-        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다.", null));
+        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다."));
     }
 
     @GetMapping("/check-nickname/{nickname}")
     public ResponseEntity<ResponseDto<Map<String, Boolean>>> checkNicknameAvailability(
             @PathVariable String nickname) {
         boolean isAvailable = authService.isNicknameAvailable(nickname);
-        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다.", null));
+        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다."));
     }
 
     // 토큰 갱신
