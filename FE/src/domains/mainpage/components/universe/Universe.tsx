@@ -1,10 +1,12 @@
 // 메인 우주 컴포넌트
 
+import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
+import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // props의 타입 정의
 interface UniverseProps {
@@ -21,6 +23,19 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   // 별 관련 상태
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]); // 일기 목록
   const [newStarId, setNewStarId] = useState<number | null>(null); // 새로 생성된 별 ID - 최근 생성된 별을 찾아서 표시해줘야 하기 때문에 필요
+
+  // 별 미리보기 및 클릭 시 사용할 상태
+  const [hoveredEntry, setHoveredEntry] = useState<any | null>(null);
+  const [hoveredPosition, setHoveredPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [selectedEntry, setSelectedEntry] = useState<any | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [viewingEntry, setViewingEntry] = useState<any | null>(null);
 
   // ------------------- 우주관련 ------------------------ //
   // 카메라 컨트롤 참조
@@ -50,13 +65,38 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       controlsRef.current.update();
     }
 
-    // 일정 시간 후 하이라이트 효과 제거
+    // 20초 후 하이라이트 효과 제거
     setTimeout(() => {
       setNewStarId(null);
-    }, 10000);
+    }, 20000);
 
     setShowForm(false); // 모달 닫기
   };
+
+  // ------------------- 일기 목록 조회 (전체 별들) ------------------------ //
+  // 컴포넌트 마운트 시 초기 일기 데이터 로드
+  useEffect(() => {
+    // api에서 일기 데이터 가져오기
+    const fetchDiaries = async () => {
+      try {
+        const response = await diaryApi.getDiaries();
+        console.log('저장된 일기 데이터들 로드됨!! : ', response);
+
+        // api응답에서 일기 데이터 설정
+        if (response && response.data && response.data.data) {
+          setDiaryEntries(response.data.data);
+        }
+      } catch (error) {
+        console.error('일기 목록 데이터 로드 중 오류 발생 : ', error);
+      }
+    };
+
+    // 내 우주일 경우에만 데이터 로드
+    // 이 부분 다른 사람 메인페이지에서 다르게 해야 함!!! 🌟🌟🌟🌟
+    if (isMySpace) {
+      fetchDiaries();
+    }
+  }, [isMySpace]);
 
   return (
     <div
@@ -82,7 +122,32 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           {/* 별 배경 */}
           <StarField />
 
-          {/* 카메라 시선 */}
+          {/* 일기 별들 추가 */}
+          <group>
+            {diaryEntries.map((entry) => (
+              <DiaryStar
+                key={entry.diarySeq}
+                entry={entry}
+                onClick={(entry, position) => {
+                  setSelectedEntry(entry);
+                  setSelectedPosition(position);
+
+                  // 다른 사람의 우주라면 별 클릭 시 일기 조회 모달이 뜸
+                  if (!isMySpace) {
+                    setViewingEntry(entry);
+                  }
+                }}
+                // 호버 했을 때는 일기 미리보기
+                onHover={(entry, position) => {
+                  setHoveredEntry(entry);
+                  setHoveredPosition(position);
+                }}
+                isNew={entry.diarySeq === newStarId}
+              />
+            ))}
+          </group>
+
+          {/* 카메라 컨트롤 */}
           <OrbitControls
             ref={controlsRef}
             enableZoom={true}

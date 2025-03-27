@@ -28,8 +28,8 @@ interface DiaryData {
 // }
 
 interface DiaryComponentProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose: (diaryData?: DiaryData) => void;
   isEditing?: boolean;
   diaryData?: DiaryData;
   onDiaryCreated?: (responseData: any) => void;
