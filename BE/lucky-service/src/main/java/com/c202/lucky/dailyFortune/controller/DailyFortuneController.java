@@ -19,7 +19,7 @@ public class DailyFortuneController {
     @PostMapping
     public ResponseEntity<ResponseDto<String>> generateDailyFortune (@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
         dailyFortuneService.createDailyFortune(userSeq);
-        return ResponseEntity.ok(ResponseDto.success(201, "오늘의 운세 생성 성공"));
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "오늘의 운세 생성 성공"));
     }
 
     @GetMapping
