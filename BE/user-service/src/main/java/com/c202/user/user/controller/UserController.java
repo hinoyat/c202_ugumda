@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<Void>> deleteUser(
             @RequestHeader("X-User-Seq")  @NotNull Integer userSeq) {
         userService.deleteUser(userSeq);
-        return ResponseEntity.ok(ResponseDto.success(204, "회원 탈퇴 성공"));
+        return ResponseEntity.ok(ResponseDto.success(204, "회원 탈퇴 성공", null));
     }
 
     @PutMapping("/me/intro")

@@ -1,6 +1,6 @@
 package com.c202.user.user.service;
 
-import com.c202.exception.CustomException;
+import com.c202.exception.types.*;
 import com.c202.user.user.entity.User;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         // 닉네임 변경 시 중복 체크
         if (request.getNickname() != null && !request.getNickname().equals(user.getNickname())) {
             if (userRepository.existsByNickname(request.getNickname())) {
-                throw new CustomException("이미 사용 중인 닉네임입니다.");
+                throw new ConflictException("이미 사용 중인 닉네임입니다.");
             }
             user.updateNickname(request.getNickname());
         }
@@ -101,23 +101,17 @@ public class UserServiceImpl implements UserService {
 
     private User validateUser(Integer userSeq) {
         User user = userRepository.findByUserSeq(userSeq)
-                .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
         if ("Y".equals(user.getIsDeleted())) {
-            throw new CustomException("이미 탈퇴한 계정입니다.");
+            throw new BadRequestException("이미 탈퇴한 계정입니다.");
         }
 
         return user;
     }
 
     public String getUserBirthDate(Integer userSeq){
-        User user = userRepository.findByUserSeq(userSeq)
-                    .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다."));
-
-        if ("Y".equals(user.getIsDeleted())) {
-                throw new CustomException("이미 탈퇴한 계정입니다.");
-        }
-
+        User user = validateUser(userSeq);
         return user.getBirthDate();
     }
 }

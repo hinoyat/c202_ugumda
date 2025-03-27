@@ -1,7 +1,7 @@
 package com.c202.user.auth.controller;
 
 import com.c202.dto.ResponseDto;
-import com.c202.exception.CustomException;
+import com.c202.exception.types.UnauthorizedException;
 import com.c202.user.auth.service.AuthService;
 import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
@@ -59,21 +59,21 @@ public class AuthController {
 
         authService.logout(request, response, userSeq);
 
-        return ResponseEntity.ok(ResponseDto.success(200, "로그아웃이 성공했습니다."));
+        return ResponseEntity.ok(ResponseDto.success(200, "로그아웃이 성공했습니다.", null));
     }
 
     @GetMapping("/check-username/{username}")
     public ResponseEntity<ResponseDto<Map<String, Boolean>>> checkUsernameAvailability(
             @PathVariable String username) {
         boolean isAvailable = authService.isUsernameAvailable(username);
-        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다."));
+        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다.", null));
     }
 
     @GetMapping("/check-nickname/{nickname}")
     public ResponseEntity<ResponseDto<Map<String, Boolean>>> checkNicknameAvailability(
             @PathVariable String nickname) {
         boolean isAvailable = authService.isNicknameAvailable(nickname);
-        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다."));
+        return ResponseEntity.ok(ResponseDto.success(200, isAvailable ? "사용 가능한 닉네임입니다." : "이미 사용 중인 닉네임입니다.", null));
     }
 
     // 토큰 갱신
@@ -85,7 +85,7 @@ public class AuthController {
         String refreshToken = jwtTokenProvider.extractRefreshTokenFromCookie(request);
 
         if (refreshToken == null) {
-            throw new CustomException("리프레시 토큰이 없습니다.");
+            throw new UnauthorizedException("리프레시 토큰이 없습니다.");
         }
 
         String newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
