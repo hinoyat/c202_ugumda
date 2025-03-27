@@ -1,16 +1,15 @@
 /* LuckyNumber.css */
 .star {
   opacity: 0;
-  transform: scale(0);
-  transform-origin: center center;
-  transition:
-    opacity 0.8s ease,
-    transform 0.8s ease;
+  /* transform: scale(0); */
+  /* transform-origin: center center; */
+  transition: opacity 0.8s ease;
+  /* transform 0.8s ease; */
 }
 
 .star.visible {
   opacity: 1;
-  transform: scale(1);
+  /* transform: scale(1); */
 }
 
 /* 별이 빛나는 효과 */
@@ -55,15 +54,14 @@
 /* 행운의 번호 텍스트 효과 */
 .lucky-text {
   opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 1s ease,
-    transform 1s ease;
+  /* transform: translateY(20px); */
+  transition: opacity 1s ease;
+  /* transform 1s ease; */
 }
 
 .lucky-text.visible {
   opacity: 1;
-  transform: translateY(0);
+  /* transform: translateY(0); */
   color: #ffffff;
   text-shadow:
     0 0 5px #ffffff,
@@ -152,23 +150,24 @@
     0 0 5px rgba(224, 194, 96, 0.8),
     0 0 10px rgba(224, 194, 96, 0.7),
     0 0 15px rgba(224, 194, 96, 0.5);
-  animation:
+  /* 애니메이션 효과 주석 처리 */
+  /* animation:
     numberAppear 0.6s forwards,
-    numberGlow 3s infinite 0.6s;
+    numberGlow 3s infinite 0.6s; */
 }
 
 /* 번호가 나타나는 애니메이션 */
 @keyframes numberAppear {
   0% {
-    transform: scale(0.3) translateY(10px);
+    /* transform: scale(0.3); */
     opacity: 0;
   }
   70% {
-    transform: scale(1.2);
+    /* transform: scale(1.2); */
     opacity: 1;
   }
   100% {
-    transform: scale(1);
+    /* transform: scale(1); */
     opacity: 1;
   }
 }
@@ -179,20 +178,20 @@
     text-shadow:
       0 0 5px rgba(224, 194, 96, 0.7),
       0 0 10px rgba(224, 194, 96, 0.5);
-    transform: scale(1);
+    /* transform: scale(1); */
   }
   50% {
     text-shadow:
       0 0 10px rgba(224, 194, 96, 0.9),
       0 0 20px rgba(224, 194, 96, 0.7),
       0 0 30px rgba(224, 194, 96, 0.5);
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
   }
   100% {
     text-shadow:
       0 0 5px rgba(224, 194, 96, 0.7),
       0 0 10px rgba(224, 194, 96, 0.5);
-    transform: scale(1);
+    /* transform: scale(1); */
   }
 }
 
