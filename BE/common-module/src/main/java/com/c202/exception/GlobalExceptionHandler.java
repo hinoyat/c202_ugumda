@@ -3,6 +3,7 @@ package com.c202.exception;
 import com.c202.dto.ResponseDto;
 import com.c202.exception.types.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -42,6 +43,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ResponseDto<Void>> handleValidation(ValidationException ex) {
         return ResponseEntity.status(400).body(ResponseDto.error(400, ex.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseDto<Void>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .findFirst()
+                .orElse("잘못된 요청입니다.");
+        return ResponseEntity.status(400).body(ResponseDto.error(400, errorMessage));
     }
 
     @ExceptionHandler(CustomException.class)
