@@ -1,0 +1,52 @@
+package com.c202.lucky.dreamMeaning.controller;
+
+import com.c202.dto.ResponseDto;
+import com.c202.lucky.dreamMeaning.model.DreamMeaningDto;
+import com.c202.lucky.dreamMeaning.model.DreamMeaningRequestDto;
+import com.c202.lucky.dreamMeaning.service.DreamMeaningService;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/dream-meaning")
+@RequiredArgsConstructor
+@Validated
+public class DreamMeaningController {
+
+    private final DreamMeaningService dreamMeaningService;
+
+    @PostMapping
+    public ResponseEntity<ResponseDto<Void>> generateDreamMeaning(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @RequestBody DreamMeaningRequestDto dto) {
+        dreamMeaningService.createDreamMeaning(userSeq, dto);
+        return ResponseEntity.ok(ResponseDto.success(201, "꿈 해몽 생성 성공"));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<DreamMeaningDto>>> getDreamMeanings(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+        return ResponseEntity.ok(ResponseDto.success(200, "꿈 해몽 전체 조회 성공", dreamMeaningService.getAllDreamMeanings(userSeq)));
+    }
+
+    @GetMapping("/{dreamMeaningSeq}")
+    public ResponseEntity<ResponseDto<DreamMeaningDto>> getDreamMeaning(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer dreamMeaningSeq) {
+        return ResponseEntity.ok(ResponseDto.success(200, "꿈 해몽 조회 성공", dreamMeaningService.getDreamMeaning(userSeq, dreamMeaningSeq)));
+    }
+
+    // 삭제
+    @DeleteMapping("/{dreamMeaningSeq}")
+    public ResponseEntity<ResponseDto<Void>> delete(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer dreamMeaningSeq) {
+        dreamMeaningService.deleteDreamMeaning(userSeq, dreamMeaningSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "꿈 해몽 삭제 성공"));
+    }
+}
