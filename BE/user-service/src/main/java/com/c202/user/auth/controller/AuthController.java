@@ -31,7 +31,7 @@ public class AuthController {
     public ResponseEntity<ResponseDto<UserResponseDto>> register(
             @RequestBody SignupRequestDto requestDto) {
         UserResponseDto user = authService.register(requestDto);
-        return ResponseEntity.ok(ResponseDto.success(201, "회원가입 성공", user));
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "회원가입 성공", user));
     }
 
     // 로그인
