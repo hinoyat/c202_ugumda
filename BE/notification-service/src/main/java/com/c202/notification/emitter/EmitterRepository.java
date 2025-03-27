@@ -9,17 +9,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class EmitterRepository {
 
-    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<Integer, SseEmitter> emitters = new ConcurrentHashMap<>();
 
-    public void save(String userSeq, SseEmitter emitter) {
+    public void save(Integer userSeq, SseEmitter emitter) {
         emitters.put(userSeq, emitter);
     }
 
-    public SseEmitter remove(String userSeq) {
+    public SseEmitter remove(Integer userSeq) {
         return emitters.remove(userSeq);
     }
 
-    public SseEmitter getEmitter(String userSeq) {
+    public SseEmitter getEmitter(Integer userSeq) {
         return emitters.get(userSeq);
     }
 
