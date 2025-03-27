@@ -17,7 +17,7 @@ import com.c202.diary.tag.entity.DiaryTag;
 import com.c202.diary.tag.model.response.TagResponseDto;
 import com.c202.diary.tag.repository.DiaryTagRepository;
 import com.c202.diary.tag.service.TagService;
-import com.c202.exception.CustomException;
+import com.c202.exception.types.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         // 감정 검증
         Emotion emotion = emotionRepository.findByName(request.getMainEmotion())
-                .orElseThrow(() -> new CustomException("존재하지 않는 감정입니다: " + request.getMainEmotion()));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 감정입니다: " + request.getMainEmotion()));
 
         // 좌표 생성
         CoordinateDto coordinates = coordinateService.generateCoordinates(
@@ -98,7 +98,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         Integer oldEmotionSeq = diary.getEmotionSeq();
         Emotion newEmotion = emotionRepository.findByName(request.getMainEmotion())
-                .orElseThrow(() -> new CustomException("존재하지 않는 감정입니다: " + request.getMainEmotion()));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 감정입니다: " + request.getMainEmotion()));
 
         boolean emotionChanged = oldEmotionSeq == null || !oldEmotionSeq.equals(newEmotion.getEmotionSeq());
 
@@ -189,7 +189,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public DiaryDetailResponseDto getDiary(Integer diarySeq) {
         Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
-                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 일기를 찾을 수 없습니다."));
 
         List<TagResponseDto> tagDtos = getTagsForDiary(diary);
 
@@ -281,9 +281,9 @@ public class DiaryServiceImpl implements DiaryService {
     // 일기 유효성 검증
     private Diary validateDiary(Integer diarySeq, Integer userSeq) {
         Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
-                .orElseThrow(() -> new CustomException("해당 일기를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 일기를 찾을 수 없습니다."));
         if (!diary.getUserSeq().equals(userSeq)) {
-            throw new CustomException("해당 일기에 대한 권한이 없습니다.");
+            throw new UnauthorizedException("해당 일기에 대한 권한이 없습니다.");
         }
         return diary;
     }

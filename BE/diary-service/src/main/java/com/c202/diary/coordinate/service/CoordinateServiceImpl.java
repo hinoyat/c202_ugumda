@@ -7,10 +7,9 @@ import com.c202.diary.diary.repository.DiaryRepository;
 import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.tag.entity.DiaryTag;
-import com.c202.diary.tag.entity.Tag;
 import com.c202.diary.tag.repository.DiaryTagRepository;
 import com.c202.diary.tag.repository.TagRepository;
-import com.c202.exception.CustomException;
+import com.c202.exception.types.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ public class CoordinateServiceImpl implements CoordinateService {
     private final EmotionRepository emotionRepository;
     private final DiaryRepository diaryRepository;
     private final DiaryTagRepository diaryTagRepository;
-    private final TagRepository tagRepository;
 
     private final Random random = new Random();
 
@@ -41,7 +39,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     public CoordinateDto generateCoordinates(String mainEmotion, List<String> tags, Integer diarySeq) {
         // 1. 감정 영역 정보 가져오기
         Emotion emotion = emotionRepository.findByName(mainEmotion)
-                .orElseThrow(() -> new CustomException("존재하지 않는 감정입니다: " + mainEmotion));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 감정입니다: " + mainEmotion));
 
         // 2. 감정 영역 내 일기 목록 조회
         List<Diary> emotionDiaries = diaryRepository.findAll().stream()
@@ -96,7 +94,7 @@ public class CoordinateServiceImpl implements CoordinateService {
                 .orElse(null);
 
         Emotion targetEmotion = emotionRepository.findByName(mainEmotion)
-                .orElseThrow(() -> new CustomException("존재하지 않는 감정입니다: " + mainEmotion));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 감정입니다: " + mainEmotion));
 
         // 대표 감정이 변경되었거나 현재 감정이 없는 경우 새로 생성
         if (currentEmotion == null || !currentEmotion.getName().equals(mainEmotion)) {
@@ -196,7 +194,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     @Override
     public List<Integer> findSimilarDiaries(Integer diarySeq, int maxResults) {
         Diary diary = diaryRepository.findByDiarySeq(diarySeq)
-                .orElseThrow(() -> new CustomException("일기를 찾을 수 없습니다: " + diarySeq));
+                .orElseThrow(() -> new NotFoundException("일기를 찾을 수 없습니다: " + diarySeq));
 
         List<String> diaryTags = getDiaryTags(diary);
 
