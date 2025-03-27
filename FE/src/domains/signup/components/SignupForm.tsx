@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { GrPowerCycle } from 'react-icons/gr';
-import exampleProfile from '@/assets/images/exampleProfile.svg';
 import '@/domains/login/themes/SpaceLoginForm.css';
 import '@/domains/signup/themes/BoxButton.css';
 import BoxButton from '@/domains/signup/components/BoxButton';
@@ -12,6 +10,7 @@ import ProfileIconSelector from '@/domains/signup/components/ProfileIconSelector
 const SignupForm = () => {
   const nav = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState('');
   // 랜덤 프로필 아이콘
   const [selectedIcon, setSelectedIcon] = useState<{
     src: string;
@@ -34,6 +33,12 @@ const SignupForm = () => {
     setSelectedIcon({ src: iconSrc, index: iconIndex });
     // 필요하다면 여기서 폼 데이터에 아이콘 정보 추가
     console.log('선택된 아이콘:', iconSrc, '인덱스:', iconIndex);
+  };
+
+  // 아이디 중복확인 핸들러
+  const handleIDCheckDuplicate = () => {
+    // 여기서 redux action을 dispatch 하게 됩니다
+    console.log('중복 확인할 아이디:', username);
   };
 
   return (
@@ -85,9 +90,14 @@ const SignupForm = () => {
                   type="text"
                   placeholder="아이디를 입력하세요"
                   style={{ flex: 3, width: 'auto' }}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
 
-                <BoxButton text="중복확인" />
+                <BoxButton
+                  text="중복확인"
+                  onClick={handleIDCheckDuplicate}
+                />
               </div>
 
               {/* 유효성 검사 메시지 */}
