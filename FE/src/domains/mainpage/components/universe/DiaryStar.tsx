@@ -11,7 +11,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { extend, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
+// import DiaryEntry from '@/domains/mainpage/models/DiaryEntry';
 
 // THREE.js 메쉬 및 재질 확장
 extend({
@@ -21,39 +21,64 @@ extend({
 });
 
 interface DiaryStarProps {
-  entry: DiaryEntry; // 일기 데이터
-  onClick: (entry: DiaryEntry, position: { x: number; y: number }) => void; // 클릭했을 때 위치
+  entry: {
+    diarySeq: number;
+    title: string;
+    content: string;
+    tags: Array<{ tagSeq: number; name: string }>;
+    x: number;
+    y: number;
+    z: number;
+    isPublic: string;
+    createdAt: string; // API 형식: "20250324 172604"
+    emotionSeq?: number;
+    emotionName: string | null;
+    connectedDiaries: any | null;
+  };
+  onClick: (entry: any, position: { x: number; y: number }) => void;
   onHover: (
-    // 호버했을 때 위치
-    entry: DiaryEntry | null,
+    entry: any | null,
     position: { x: number; y: number } | null
   ) => void;
-  isNew?: boolean; // 새로 생성된 별인지 여부
+  isNew?: boolean;
 }
 
 const DiaryStar: React.FC<DiaryStarProps> = ({
-  entry,
-  onClick,
-  onHover,
-  isNew,
+  entry, // 일기 조회
+  onClick, // 호버 or 조회
+  onHover, // 미리보기
+  isNew, // 하이라이트 효과 적용
 }) => {
-  const { x, y, z } = entry.position; // 일기 위치
-  const [hovered, setHovered] = useState<boolean>(false); // 마우스 호버 상태
-  const meshRef = useRef<THREE.Mesh>(null); // 메쉬 참조
+  // 상태
+  const [hovered, setHovered] = useState<boolean>(false);
+  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
+
+  const { x, y, z } = entry;
+  const meshRef = useRef<THREE.Mesh>(null); // 직접 별을 클릭하기 위해
+  const glowRef = useRef<THREE.Mesh>(null); // 새 별 주변에 발광 효과를 위해
+
+  // 별 크기
+  const starSize = 2;
+
+  // 별 생성 시간 확인 함수 (하이라이트 효과를 위해)
+  const isWithin30Minutes = (dateString: string) => {
+    const year = parseInt(dateString.substring(0, 4));
+    const month = parseInt(dateString.substring(4, 6)) - 1; // 월은 0부터 시작
+    const day = parseInt(dateString.substring(6, 8));
+    const hour = parseInt(dateString.substring(9, 11));
+    const minute = parseInt(dateString.substring(11, 13));
+    const second = parseInt(dateString.substring(13, 15));
+
+    const date = new Date(year, month, day, hour, minute, second);
+    return Date.now() - date.getTime() < 30 * 60 * 1000;
+  };
 
   // 별 색상 - 새 별은 노란색, 기존 별은 파란색
   const starColor = new THREE.Color(
-    entry.created_at &&
-    Date.now() - new Date(entry.created_at).getTime() < 30 * 60 * 1000
+    entry.createdAt && isWithin30Minutes(entry.createdAt)
       ? '#ffcc00' // 30분 이내 생성: 노란색
       : '#00ffe0' // 30분 지남: 파란색
   );
-
-  // 새 별을 위한 상태 추가
-  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
-
-  // 새 별 주변에 발광 효과를 위한 참조
-  const glowRef = useRef<THREE.Mesh>(null);
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
   useEffect(() => {
@@ -127,7 +152,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
       {/* 새 별이라면 발광 효과 추가 */}
       {isNew && (
         <mesh ref={glowRef}>
-          <sphereGeometry args={[(entry.size / 2) * 6, 16, 16]} />
+          <sphereGeometry args={[(starSize / 2) * 6, 16, 16]} />
           <meshBasicMaterial
             color={starColor}
             transparent={true}
@@ -148,9 +173,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}>
         {/* 별 모양의 지오메트리 /// size / ___ (반지름) */}
-        <sphereGeometry
-          args={[(entry.size / 2) * (isNew ? 2.5 : 1.3), 16, 16]}
-        />
+        <sphereGeometry args={[(starSize / 2) * (isNew ? 2.5 : 1.3), 16, 16]} />
         {/* 별의 색과 발광 효과 */}
         <meshStandardMaterial
           color={starColor}
