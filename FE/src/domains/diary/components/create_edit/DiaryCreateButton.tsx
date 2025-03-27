@@ -3,11 +3,11 @@
 import React from 'react';
 
 interface DiaryCreateButtonProps {
-  onCreate: () => void;
-  onCreateVideo: () => void;
-  Count: number;
-  isEditing?: boolean; // 수정 모드 여부 추가
-  onClose: () => void;
+  onCreate?: () => void;
+  onCreateVideo?: () => void;
+  Count?: number;
+  isEditing: boolean;
+  onClose?: () => void;
 }
 
 const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
@@ -21,7 +21,7 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
     <div className="w-full flex flex-col gap-3">
       {isEditing ? (
         <button
-          onClick={onClose}
+          onClick={onClose} // 수정 기능 구현할 때 변경하기
           className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold">
           수정완료
         </button>
@@ -35,7 +35,8 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
           <button
             onClick={onCreateVideo}
             className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold">
-            등록 후 영상 생성하기({Count}/3)
+            등록 후 영상 생성하기
+            {/* ({Count}/3) */}
           </button>
         </>
       )}

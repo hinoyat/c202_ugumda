@@ -12,7 +12,7 @@ const StarTag: React.FC<StarTagProps> = ({ onSelect, initialEmotion }) => {
   const [selectedEmotion, setSelectedEmotion] = useState(initialEmotion || '');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const emotions = ['감정1', '감정2', '감정3', '감정4', '감정5', '감정6'];
+  const emotions = ['행복', '감정2', '감정3', '감정4', '감정5', '감정6'];
 
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
