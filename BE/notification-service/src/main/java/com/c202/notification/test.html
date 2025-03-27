@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE 알림 테스트</title>
+</head>
+<body>
+<h2>🔔 실시간 알림 수신 테스트</h2>
+<div id="log" style="white-space: pre-wrap;"></div>
+
+<script>
+    const userSeq = 123; // 원하는 유저 번호로 변경!
+    const eventSource = new EventSource(`http://localhost:8086/notifications/subscribe/${userSeq}`);
+
+    const logBox = document.getElementById("log");
+
+    eventSource.addEventListener("connect", (e) => {
+        logBox.innerText += `연결됨: ${e.data}\n`;
+    });
+
+    eventSource.addEventListener("alarm", (e) => {
+        const alarm = JSON.parse(e.data);
+        logBox.innerText += `알림 도착!\n내용: ${alarm.content}\n유형: ${alarm.type}\n\n`;
+    });
+
+    eventSource.onerror = (e) => {
+        logBox.innerText += `오류 발생!\n`;
+        console.error(e);
+    };
+</script>
+</body>
+</html>
