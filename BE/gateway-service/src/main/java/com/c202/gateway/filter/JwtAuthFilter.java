@@ -59,7 +59,7 @@ public class JwtAuthFilter  extends AbstractGatewayFilterFactory<JwtAuthFilter.C
 
     private String resolveToken(ServerWebExchange exchange) {
         String bearerToken = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+        if (bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
