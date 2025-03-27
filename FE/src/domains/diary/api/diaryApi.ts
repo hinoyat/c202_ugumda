@@ -20,15 +20,15 @@ export const diaryApi = {
     return await api.get('/diaries/me');
   },
 
+  // 일기 조회
+  getDiaryById: async (diarySeq: number) => {
+    return await api.get(`/diaries/${diarySeq}`);
+  },
+
   // 수정할 예정입니다,,,
   // // 일기 수정
   // updateDiary: async (diarySeq, diaryData) => {
   //   return await axios.put(`${API_BASE_URL}/diaries/${diarySeq}`, diaryData);
-  // },
-
-  // // 일기 조회
-  // getDiaryById: async (diarySeq) => {
-  //   return await axios.get(`${API_BASE_URL}/diaries/${diarySeq}`);
   // },
 
   // // 일기 삭제
