@@ -24,30 +24,20 @@ public class GuestbookController {
 
     @GetMapping("/users/{userSeq}")
     public ResponseEntity<ResponseDto<List<GuestbookDto>>> getUserGuestbooks(@PathVariable Integer userSeq) {
-        if (userSeq == null) {
-            throw new CustomException("userSeq 값을 다시 확인해주세요. (null)");
-        }
         List<GuestbookDto> guestbooks = guestbookService.getAllGuestbooks(userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "타인 방명록 조회 성공", guestbooks));
     }
 
     @PostMapping("/users/{ownerSeq}")
     public ResponseEntity<ResponseDto<Object>> createGuestbook(@RequestHeader("X-User-Seq") Integer writerSeq, @PathVariable Integer ownerSeq, @RequestBody GuestbookDto guestbookDto){
-        if (ownerSeq == null) {
-            throw new CustomException("ownerSeq 값을 다시 확인해주세요. (null)");
-        }
-
         GuestbookDto createdGuestbook = guestbookService.createGuestbook(ownerSeq, writerSeq, guestbookDto);
-        return ResponseEntity.ok(ResponseDto.success(201, "방명록 작성 완료", createdGuestbook));
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "방명록 작성 완료", createdGuestbook));
     }
 
     @DeleteMapping("/{guestbookSeq}")
     public ResponseEntity<ResponseDto<Object>> deleteGuestbook(
             @RequestHeader("X-User-Seq") Integer userSeq, @PathVariable Integer guestbookSeq) {
-        if (guestbookSeq == null) {
-            throw new CustomException("guestbookSeq 값을 다시 확인해주세요. (null)");
-        }
         guestbookService.deleteGuestbook(userSeq, guestbookSeq);
-        return ResponseEntity.ok(ResponseDto.success(204, "방명록 삭제 완료"));
+        return ResponseEntity.ok(ResponseDto.success(200, "방명록 삭제 완료"));
     }
 }
