@@ -15,14 +15,14 @@ const LoginForm = () => {
   const handleLogin = async (event: any) => {
     event.preventDefault();
     await dispatch(loginUser({ username, password }));
-    await nav('/', { replace: true });
+    await nav('/', { replace: true }); // 여기 `/${username}` 내 우주 주인장 닉네임 넣기
   };
 
   const onClickGoToSignup = () => {
     nav('/signup');
   };
   const onClickGoToHome = () => {
-    nav('/');
+    nav('/intro');
   };
 
   return (
