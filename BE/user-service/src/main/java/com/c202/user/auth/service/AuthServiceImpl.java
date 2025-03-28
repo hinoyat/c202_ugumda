@@ -1,6 +1,6 @@
 package com.c202.user.auth.service;
 
-import com.c202.exception.CustomException;
+import com.c202.exception.types.*;
 import com.c202.user.user.entity.User;
 import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
@@ -40,11 +40,11 @@ public class AuthServiceImpl implements AuthService {
     public UserResponseDto register(SignupRequestDto request) {
         // 중복 검사
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new CustomException("이미 사용 중인 아이디입니다.");
+            throw new ConflictException("이미 사용 중인 아이디입니다.");
         }
 
         if (userRepository.existsByNickname(request.getNickname())) {
-            throw new CustomException("이미 사용 중인 닉네임입니다.");
+            throw new ConflictException("이미 사용 중인 닉네임입니다.");
         }
 
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
@@ -70,14 +70,14 @@ public class AuthServiceImpl implements AuthService {
     public TokenDto.TokenResponseDto login(LoginRequestDto request) {
         // 삭제된 계정인지 확인
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
         // 비밀번호 체크 (passwordEncoder.matches() 사용)
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new CustomException("잘못된 비밀번호입니다.");
+            throw new UnauthorizedException("잘못된 비밀번호입니다.");
         }
         if ("Y".equals(user.getIsDeleted())) {
-            throw new CustomException("탈퇴한 계정입니다.");
+            throw new BadRequestException("탈퇴한 계정입니다.");
         }
 
         // 액세스 토큰과 리프레시 토큰 생성
