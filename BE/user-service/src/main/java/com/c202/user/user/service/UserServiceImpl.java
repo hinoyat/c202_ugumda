@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         User user = validateUser(userSeq);
 
         // 닉네임 변경 시 중복 체크
-        if (request.getNickname() != null && !request.getNickname().equals(user.getNickname())) {
+        if (request.getNickname() != null && !request.getNickname().trim().isEmpty() && !request.getNickname().equals(user.getNickname())) {
             if (userRepository.existsByNickname(request.getNickname())) {
                 throw new ConflictException("이미 사용 중인 닉네임입니다.");
             }
@@ -53,12 +53,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // 비밀번호 변경
-        if (request.getPassword() != null) {
+        if (request.getPassword() != null && !request.getPassword().trim().isEmpty()) {
             user.updatePassword(passwordEncoder.encode(request.getPassword()));
         }
 
         // 생일 변경
-        if (request.getBirthDate() != null) {
+        if (request.getBirthDate() != null && !request.getBirthDate().trim().isEmpty()) {
             user.updateBirthDate(request.getBirthDate());
         }
 
