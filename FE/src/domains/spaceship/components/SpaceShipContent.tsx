@@ -16,7 +16,7 @@ const SpaceShipContent = () => {
     nav('/todayfortune');
   };
   const onClickHome = () => {
-    nav('/');
+    nav('/'); // 지금 구경중인 우주 주인장 닉네임 넣기
   };
   const onClickEditMyInformation = () => {
     nav('/passwordcheck');
