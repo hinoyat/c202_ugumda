@@ -10,12 +10,14 @@ interface DetailTagsProps {
   initialTags: (Tag | string)[];
   isEditing?: boolean;
   onTagsChange?: (tags: string[]) => void;
+  emotionName: string;
 }
 
 const DetailTags: FC<DetailTagsProps> = ({
   initialTags,
   isEditing = false,
   onTagsChange,
+  emotionName,
 }) => {
   // string[] 배열을 Tag[] 형태로 변환
   // initialTags가 api에서 온 경우에는 Tag[]로, 사용자가 입력했을 경우에는 string[]으로 오기 때문에
@@ -66,6 +68,12 @@ const DetailTags: FC<DetailTagsProps> = ({
         <div className="flex flex-col border border-white p-2 rounded w-full relative">
           {/* 선택된 태그 영역 */}
           <div className="flex flex-wrap gap-1 mb-2">
+            <div className="text-white bg-[rgba(80,80,80,0.95)] px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
+              <div className="flex items-center justify-center gap-3 text-sm ">
+                <p>감정: {emotionName}</p>
+              </div>
+            </div>
+
             {tags.map((tag, index) => (
               <div
                 key={index}
@@ -143,15 +151,27 @@ const DetailTags: FC<DetailTagsProps> = ({
   // 읽기 전용 모드 (기존 디자인 유지)
   return (
     <div className="flex flex-wrap gap-3 mt-4">
-      {initialTags.map((tag) => (
-        <div
-          key={tag.tagSeq}
-          className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl">
-          <div className="flex items-center justify-center gap-1 text-sm w-15">
-            <p>{tag.name}</p>
-          </div>
+      <div className="text-white bg-[#292929]/90 px-2 py-1 rounded-4xl">
+        <div className="flex items-center justify-center gap-1 text-sm w-15">
+          <p>{emotionName}</p>
         </div>
-      ))}
+      </div>
+
+      {/* 기존 태그들 표시 */}
+      {initialTags.map((tag, index) => {
+        const tagName = typeof tag === 'string' ? tag : tag.name;
+        const tagSeq = typeof tag === 'string' ? index : tag.tagSeq;
+
+        return (
+          <div
+            key={tagSeq}
+            className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl">
+            <div className="flex items-center justify-center gap-1 text-sm w-15">
+              <p>{tagName}</p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
