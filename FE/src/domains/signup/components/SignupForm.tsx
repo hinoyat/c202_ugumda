@@ -23,6 +23,7 @@ import {
   selectConfirmPassword,
   selectConfirmPasswordMessage,
   selectConfirmPasswordStatus,
+  selectIconSeq,
 } from '../stores/signupSelectors';
 import {
   setUsername,
@@ -32,7 +33,12 @@ import {
   setPassword,
   setConfirmPassword,
 } from '../stores/signupSlice';
-import { checkUsername, checkNickname } from '../stores/signupThunks';
+import {
+  checkUsername,
+  checkNickname,
+  signupUser,
+} from '../stores/signupThunks';
+import { events } from '@react-three/fiber';
 
 // 프로필 아이콘 이미지 추가
 const SignupForm = () => {
@@ -59,6 +65,8 @@ const SignupForm = () => {
   const confirmPassword = useSelector(selectConfirmPassword);
   const confirmPasswordMessage = useSelector(selectConfirmPasswordMessage);
   const IsConfirmPassword = useSelector(selectConfirmPasswordStatus);
+
+  const iconSeq = useSelector(selectIconSeq);
 
   const onClickGoToHome = () => {
     nav('/intro');
@@ -114,6 +122,27 @@ const SignupForm = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     dispatch(setConfirmPassword(event.target.value));
+  };
+
+  // 회원가입
+  const validStates = {
+    IsUsernameDuplicate,
+    IsNicknameDuplicate,
+    IsBirthDate,
+    IsPassword,
+    IsConfirmPassword,
+  };
+
+  const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (Object.values(validStates).every((status) => status === 'available')) {
+      dispatch(
+        signupUser({ username, nickname, birthDate, password, iconSeq })
+      );
+      nav('/login');
+    } else {
+      alert('회원가입 실패!');
+    }
   };
 
   return (
@@ -394,7 +423,8 @@ const SignupForm = () => {
         <button
           type="submit"
           className="submit dung-font"
-          style={{ marginTop: '20px' }}>
+          style={{ marginTop: '20px' }}
+          onClick={handleSignup}>
           <span className="sign-text dung-font">CREATE ACCOUNT</span>
         </button>
 
