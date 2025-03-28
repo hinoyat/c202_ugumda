@@ -1,7 +1,6 @@
 package com.c202.lucky.dreamMeaning.service;
 
-import com.c202.exception.types.NotFoundException;
-import com.c202.exception.types.UnauthorizedException;
+import com.c202.exception.types.*;
 import com.c202.lucky.dreamMeaning.entity.DreamMeaning;
 import com.c202.lucky.dreamMeaning.model.DreamMeaningDto;
 import com.c202.lucky.dreamMeaning.model.DreamMeaningRequestDto;
@@ -16,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// TODO : 오류 세분화 - AI, (daily fortune 에도 추가)
+// TODO : 사용자에게 해당 유저의 해몽이 없을 경우 메시지
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,11 +27,17 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
 
     @Override
     public void createDreamMeaning(Integer userSeq, DreamMeaningRequestDto dto) {
-        String prompt = String.format(
-                dto.getInputContent() + "이에 대한 꿈 해몽을 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도."
-        );
+        String content;
+        try {
+            // 실제 사용 시에는 아래 주석 해제
+            // String prompt = String.format(dto.getInputContent() + " 이에 대한 꿈 해몽을 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.");
+            // content = chatModel.call(prompt);
+            content = "인프라 화이팅..!!";
+        } catch (Exception e) {
+            log.error("AI 해몽 생성 실패", e);
+            throw new AiCallFailedException("AI 해몽 생성 중 오류가 발생했습니다.");
+        }
 
-        String content = chatModel.call(prompt);
         log.info("GPT 응답: {}", content);
 
         DreamMeaning dreamMeaning = DreamMeaning.builder()
