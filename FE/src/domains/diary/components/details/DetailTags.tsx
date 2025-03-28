@@ -10,7 +10,7 @@ interface DetailTagsProps {
   initialTags: (Tag | string)[];
   isEditing?: boolean;
   onTagsChange?: (tags: string[]) => void;
-  emotionName: string;
+  emotionName?: string;
 }
 
 const DetailTags: FC<DetailTagsProps> = ({
@@ -68,11 +68,13 @@ const DetailTags: FC<DetailTagsProps> = ({
         <div className="flex flex-col border border-white p-2 rounded w-full relative">
           {/* 선택된 태그 영역 */}
           <div className="flex flex-wrap gap-1 mb-2">
-            <div className="text-white bg-[rgba(80,80,80,0.95)] px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
-              <div className="flex items-center justify-center gap-3 text-sm ">
-                <p>감정: {emotionName}</p>
+            {emotionName && ( // emotionName이 존재할 때만 렌더링
+              <div className="text-white bg-[rgba(80,80,80,0.95)] px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
+                <div className="flex items-center justify-center gap-1 text-sm w-15">
+                  <p>{emotionName}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {tags.map((tag, index) => (
               <div
