@@ -252,12 +252,13 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             />
           </div>
 
-          {/* 그냥 태그 */}
+          {/* 태그 */}
           <div className="mt-3">
             <DetailTags
               initialTags={diaryData?.tags || []}
               isEditing={true}
               onTagsChange={setTags}
+              emotionName={emotion}
             />
           </div>
 
