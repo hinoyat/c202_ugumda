@@ -43,7 +43,7 @@ public class DreamMeaningController {
 
     // 삭제
     @DeleteMapping("/{dreamMeaningSeq}")
-    public ResponseEntity<ResponseDto<Void>> delete(
+    public ResponseEntity<ResponseDto<Void>> deleteDreamMeaning(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer dreamMeaningSeq) {
         dreamMeaningService.deleteDreamMeaning(userSeq, dreamMeaningSeq);
