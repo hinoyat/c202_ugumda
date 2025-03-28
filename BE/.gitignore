@@ -4,3 +4,4 @@
 *.iml
 *.ipr
 .env
+docker-compose.yml
