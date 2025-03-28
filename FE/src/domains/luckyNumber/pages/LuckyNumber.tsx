@@ -388,21 +388,21 @@ const LuckyNumber = () => {
               const visible = visibleStars.includes(star.id);
               return (
                 <g
-                  key={`star-${star.id}`}
-                  className={`star ${visible ? 'visible' : ''}`}>
+                  key={`lucky-star-${star.id}`}
+                  className={`lucky-star ${visible ? 'visible' : ''}`}>
                   <circle
                     cx={star.x}
                     cy={star.y}
                     r={star.glowSize}
                     fill="rgba(255, 255, 255, 0.3)"
-                    className={`star-glow ${visible ? 'visible' : ''}`}
+                    className={`lucky-star-glow ${visible ? 'visible' : ''}`}
                   />
                   <circle
                     cx={star.x}
                     cy={star.y}
                     r={star.size}
                     fill="white"
-                    className={`star-center ${visible ? 'visible' : ''}`}
+                    className={`lucky-star-center ${visible ? 'visible' : ''}`}
                   />
                   <text
                     x={star.x}
