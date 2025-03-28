@@ -25,7 +25,7 @@ interface DiaryDetailProps {
     isPublic: string;
     videoUrl?: string | null;
     dreamDate?: string;
-    emotionName?: string;
+    emotionName: string;
   };
   onClose: () => void;
 }
@@ -85,33 +85,29 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
             <div>
               <DetailVideo dream_video={currentDiary.videoUrl || undefined} />
             </div>
-
-            {/* 감정 표시 추가 */}
+            {/* 감정 표시 추가
             {currentDiary.emotionName && (
               <div className="text-sm text-white mb-2">
                 감정: {currentDiary.emotionName}
               </div>
-            )}
-
+            )} */}
             {/* contents 칸 크기수정 여기서 */}
             <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words flex-glow min-h-[150px]">
               <DetailContent content={currentDiary.content} />
             </div>
-
             <div className="">
               <DetailTags
                 initialTags={currentDiary.tags}
                 isEditing={false}
+                emotionName={currentDiary.emotionName}
               />
             </div>
-
             <div className="h-10 flex items-center justify-end">
               <DetailLike
                 likes={0} // 임시 값
                 likes_boolean={false} // 임시 값
               />
             </div>
-
             <div className="">
               <DetailButtons onClose={handleClose} />
             </div>

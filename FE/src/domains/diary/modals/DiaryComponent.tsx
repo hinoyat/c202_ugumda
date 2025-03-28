@@ -12,12 +12,12 @@ import { diaryApi } from '@/domains/diary/api/diaryApi';
 
 // 일기 생성 인터페이스
 interface DiaryData {
-  diarySeq?: number;
-  title?: string;
-  content?: string;
-  dreamDate?: string;
-  isPublic?: string;
-  mainEmotion?: string;
+  diarySeq: number;
+  title: string;
+  content: string;
+  dreamDate: string;
+  isPublic: string;
+  mainEmotion: string;
   tags?: string[];
 }
 
@@ -29,7 +29,7 @@ interface DiaryData {
 
 interface DiaryComponentProps {
   isOpen?: boolean;
-  onClose: (diaryData?: DiaryData) => void;
+  onClose: () => void;
   isEditing?: boolean;
   diaryData?: DiaryData;
   onDiaryCreated?: (responseData: any) => void;
@@ -161,15 +161,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
   // -------------------- 일기 저장 -------------------- //
   const handleSave = async () => {
-    console.log('저장될 일기 내용', {
-      title,
-      content,
-      dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
-      isPublic: isPublic ? 'Y' : 'N',
-      mainEmotion: emotion,
-      tags,
-    });
-
+    console.log('저장될 감정 태그:', emotion);
     // 백에 넘길 데이터
     const diaryToSave = {
       title,
@@ -177,8 +169,10 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
       isPublic: isPublic ? 'Y' : 'N',
       mainEmotion: emotion,
-      tags,
+      tags: tags.map((tag) => (typeof tag === 'object' ? tag.name : tag)),
     };
+
+    console.log('저장될 일기 내용', diaryToSave);
 
     try {
       // api 호출
@@ -194,7 +188,18 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       onClose();
     } catch (error) {
       console.error('일기 생성 중에 발생한 오류 : ', error);
-      alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
+
+      // error 객체를 any로 타입 캐스팅하여 속성에 접근
+      const err = error as any;
+
+      // 에러 응답 확인
+      if (err.response && err.response.status === 400) {
+        // 400 에러인 경우 태그 관련 에러 메시지 표시
+        alert('태그는 한글, 영문, 숫자만 사용 가능합니다.');
+      } else {
+        // 기타 에러
+        alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
+      }
     }
   };
 
@@ -247,6 +252,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             />
           </div>
 
+          {/* 그냥 태그 */}
           <div className="mt-3">
             <DetailTags
               initialTags={diaryData?.tags || []}
