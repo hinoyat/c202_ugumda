@@ -15,8 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO : 오류 세분화 - AI, (daily fortune 에도 추가)
-// TODO : 사용자에게 해당 유저의 해몽이 없을 경우 메시지
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -68,8 +66,8 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     }
 
     @Override
-    public void deleteDreamMeaning(Integer dreamMeaningSeq, Integer userSeq) {
-        DreamMeaning entity = dreamMeaningRepository.findById(dreamMeaningSeq)
+    public void deleteDreamMeaning(Integer userSeq, Integer dreamMeaningSeq) {
+        DreamMeaning entity = dreamMeaningRepository.findByDreamMeaningSeq(dreamMeaningSeq)
                 .orElseThrow(() -> new NotFoundException("해당 꿈 해몽을 찾을 수 없습니다."));
 
         if (!entity.getUserSeq().equals(userSeq)) {
