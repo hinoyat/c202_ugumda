@@ -23,11 +23,20 @@ public class UserController {
 
     // 사용자 정보 조회
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
+    public ResponseEntity<ResponseDto<UserResponseDto>> getMyInfo(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
         UserResponseDto user = userService.getUserInfo(userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
     }
+
+    // 유저 조회 API
+    @GetMapping("/{userSeq}")
+    public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
+            @PathVariable Integer userSeq) {
+        UserResponseDto user = userService.getUserInfo(userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
+    }
+
 
     // 사용자 정보 수정
     @PutMapping("/me")
