@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(ResponseDto.error(400, ex.getMessage()));
     }
 
+    @ExceptionHandler(AiCallFailedException.class)
+    public ResponseEntity<ResponseDto<Void>> handleAiCallFailedException(AiCallFailedException ex) {
+        return ResponseEntity.status(500).body(ResponseDto.error(500, ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDto<Void>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
