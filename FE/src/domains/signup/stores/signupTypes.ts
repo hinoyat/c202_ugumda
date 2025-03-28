@@ -7,9 +7,14 @@ export interface SignupState {
   nicknameMessage: string;
   password: string;
   confirmPassword: string;
+  confirmPasswordMessage: string;
+  confirmPasswordStatus: 'checking' | 'available' | 'unavailable' | 'invalid';
+  passwordStatus: 'idle' | 'checking' | 'available' | 'unavailable' | 'invalid';
   passwordMessage: string;
   iconSeq: number;
   birthDate: string;
+  birthDateMessage: string;
+  birthDateStatus: 'checking' | 'available' | 'unavailable' | 'invalid';
 }
 
 export interface SignupForm {

@@ -11,9 +11,44 @@ const initialState: SignupState = {
   nicknameMessage: '닉네임을 입력하세요.',
   password: '',
   confirmPassword: '',
+  confirmPasswordMessage: '비밀번호를 확인해주세요.',
+  confirmPasswordStatus: 'invalid',
   passwordMessage: '비밀번호를 입력하세요.',
+  passwordStatus: 'invalid',
   iconSeq: 0,
   birthDate: '',
+  birthDateMessage: '생년월일을 입력하세요',
+  birthDateStatus: 'invalid',
+};
+
+const isValidBirthdate = (birthdate: string): boolean => {
+  // 기본 형식 검사 (YYYYMMDD)
+  const regex = /^(\d{4})(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+
+  if (!regex.test(birthdate)) {
+    return false;
+  }
+
+  // 년, 월, 일 추출
+  const year = parseInt(birthdate.substring(0, 4));
+  const month = parseInt(birthdate.substring(4, 6));
+  const day = parseInt(birthdate.substring(6, 8));
+
+  // 현재 년도 계산
+  const currentYear = new Date().getFullYear();
+
+  // 년도 범위 체크 (현재 년도 - 100 ~ 현재 년도)
+  if (year < currentYear - 100 || year > currentYear) {
+    return false;
+  }
+
+  // 월별 일수 체크
+  const daysInMonth = new Date(year, month, 0).getDate();
+  if (day > daysInMonth) {
+    return false;
+  }
+
+  return true;
 };
 
 const signupSlice = createSlice({
@@ -26,7 +61,7 @@ const signupSlice = createSlice({
       if (!action.payload) {
         state.usernameMessage = '아이디를 입력하세요.';
         state.usernameStatus = 'invalid';
-      } else if (!/^[a-zA-Z]{5,12}$/.test(action.payload)) {
+      } else if (!/^[a-zA-Z0-9]{5,12}$/.test(action.payload)) {
         state.usernameMessage = '아이디는 5자에서 12자 사이로 입력해주세요.';
         state.usernameStatus = 'invalid';
       } else {
@@ -51,6 +86,7 @@ const signupSlice = createSlice({
       state.password = action.payload;
       if (!action.payload) {
         state.passwordMessage = '비밀번호를 입력하세요.';
+        state.passwordStatus = 'invalid';
       } else if (
         !/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(
           action.payload
@@ -58,14 +94,23 @@ const signupSlice = createSlice({
       ) {
         state.passwordMessage =
           '비밀번호는 8자 이상, 영문, 숫자, 특수문자를 포함해야 합니다.';
+        state.passwordStatus = 'invalid';
       } else {
         state.passwordMessage = '사용 가능한 비밀번호 입니다.';
+        state.passwordStatus = 'available';
       }
     },
     setConfirmPassword: (state, action: PayloadAction<string>) => {
       state.confirmPassword = action.payload;
-      if (action.payload && action.payload === state.password) {
-        state.passwordMessage = '비밀번호가 일치합니다.';
+      if (!action.payload) {
+        state.confirmPasswordMessage = '비밀번호를 확인해주세요.';
+        state.confirmPasswordStatus = 'invalid';
+      } else if (action.payload && action.payload === state.password) {
+        state.confirmPasswordMessage = '비밀번호가 일치합니다.';
+        state.confirmPasswordStatus = 'available';
+      } else {
+        state.confirmPasswordMessage = '비밀번호가 일치하지 않습니다.';
+        state.confirmPasswordStatus = 'invalid';
       }
     },
     setIconSeq: (state, action: PayloadAction<number>) => {
@@ -73,6 +118,17 @@ const signupSlice = createSlice({
     },
     setBirthDate: (state, action: PayloadAction<string>) => {
       state.birthDate = action.payload;
+      // 유효성 검사
+      if (!action.payload) {
+        state.birthDateMessage = '생년월일을 입력하세요.';
+        state.birthDateStatus = 'invalid';
+      } else if (!isValidBirthdate(action.payload)) {
+        state.birthDateMessage = '유효하지 않는 생년월일 입니다.';
+        state.birthDateStatus = 'invalid';
+      } else {
+        state.birthDateMessage = '유효한 생년월일 입니다.';
+        state.birthDateStatus = 'available';
+      }
     },
   },
   extraReducers: (builder) => {

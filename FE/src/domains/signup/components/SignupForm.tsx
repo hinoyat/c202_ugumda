@@ -13,10 +13,25 @@ import {
   selectNickname,
   selectNicknameMessage,
   selectNicknameStatus,
-  selectPasswordMessage,
   selectUsername,
+  selectBirthDate,
+  selectBirthDateMessage,
+  selectBirthDateStatus,
+  selectPassword,
+  selectPasswordMessage,
+  selectPasswordStatus,
+  selectConfirmPassword,
+  selectConfirmPasswordMessage,
+  selectConfirmPasswordStatus,
 } from '../stores/signupSelectors';
-import { setUsername, setIconSeq, setNickname } from '../stores/signupSlice';
+import {
+  setUsername,
+  setIconSeq,
+  setNickname,
+  setBirthDate,
+  setPassword,
+  setConfirmPassword,
+} from '../stores/signupSlice';
 import { checkUsername, checkNickname } from '../stores/signupThunks';
 
 // 프로필 아이콘 이미지 추가
@@ -32,6 +47,18 @@ const SignupForm = () => {
   const nickname = useSelector(selectNickname);
   const nicknameMessage = useSelector(selectNicknameMessage);
   const IsNicknameDuplicate = useSelector(selectNicknameStatus);
+
+  const birthDate = useSelector(selectBirthDate);
+  const birthDateMessage = useSelector(selectBirthDateMessage);
+  const IsBirthDate = useSelector(selectBirthDateStatus);
+
+  const password = useSelector(selectPassword);
+  const passwordMessage = useSelector(selectPasswordMessage);
+  const IsPassword = useSelector(selectPasswordStatus);
+
+  const confirmPassword = useSelector(selectConfirmPassword);
+  const confirmPasswordMessage = useSelector(selectConfirmPasswordMessage);
+  const IsConfirmPassword = useSelector(selectConfirmPasswordStatus);
 
   const onClickGoToHome = () => {
     nav('/intro');
@@ -69,6 +96,24 @@ const SignupForm = () => {
   // 닉네임 유효성 검사
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setNickname(event.target.value));
+  };
+
+  // 생일
+  const handleBirthDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(setBirthDate(event.target.value));
+  };
+
+  // 비밀번호
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setPassword(event.target.value));
+  };
+
+  const handleConfirmPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(setConfirmPassword(event.target.value));
   };
 
   return (
@@ -163,6 +208,8 @@ const SignupForm = () => {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="비밀번호를 입력하세요"
                   style={{ width: '100%' }}
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
                 {/* 비밀번호 보이고 안보이게 하는거 */}
                 <button
@@ -190,13 +237,13 @@ const SignupForm = () => {
               <p
                 className="validation-message dung-font"
                 style={{
-                  color: '#ff6b6b',
+                  color: IsPassword != 'invalid' ? '#4ade80' : '#ff6b6b',
                   fontSize: '0.7rem',
                   marginTop: '4px',
                   marginLeft: '4px',
                   height: '16px',
                 }}>
-                비밀번호는 8자 이상, 영문, 숫자, 특수문자를 포함해야 합니다.
+                {passwordMessage}
               </p>
             </div>
 
@@ -212,8 +259,10 @@ const SignupForm = () => {
                 <input
                   className="input-mail"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="비밀번호를 한 번 더 입력하세요"
+                  placeholder="비밀번호를 한 번 더 입력하세요."
                   style={{ width: '100%' }}
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
                 />
                 {/* 비밀번호 보이고 안보이게 하는거 */}
                 <button
@@ -241,13 +290,13 @@ const SignupForm = () => {
               <p
                 className="validation-message dung-font"
                 style={{
-                  color: '#4ade80', // 성공 메시지는 초록색으로 (파란색으로 할까?)
+                  color: IsConfirmPassword != 'invalid' ? '#4ade80' : '#ff6b6b',
                   fontSize: '0.7rem',
                   marginTop: '4px',
                   marginLeft: '4px',
                   height: '16px',
                 }}>
-                비밀번호가 일치합니다.
+                {confirmPasswordMessage}
               </p>
             </div>
           </div>
@@ -319,9 +368,24 @@ const SignupForm = () => {
               <input
                 className="input-mail"
                 type="text"
-                placeholder="생년월일을 입력하세요(양력) (yyyy-mm-dd)"
+                placeholder="생년월일을 입력하세요(양력) (yyyymmdd)"
                 style={{ width: '100%' }}
+                value={birthDate}
+                onChange={handleBirthDateChange}
+                maxLength={8}
               />
+
+              <p
+                className="validation-message dung-font"
+                style={{
+                  color: IsBirthDate != 'invalid' ? '#4ade80' : '#ff6b6b', // 중복 확인용 색상 골라야할 듯
+                  fontSize: '0.7rem',
+                  marginTop: '4px',
+                  marginLeft: '4px',
+                  height: '16px', // 고정 높이로 공간 확보
+                }}>
+                {birthDateMessage}
+              </p>
             </div>
           </div>
         </div>
