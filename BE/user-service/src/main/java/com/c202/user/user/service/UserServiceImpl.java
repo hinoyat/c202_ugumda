@@ -4,6 +4,7 @@ import com.c202.exception.types.*;
 import com.c202.user.user.entity.User;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
+import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -113,5 +116,15 @@ public class UserServiceImpl implements UserService {
     public String getUserBirthDate(Integer userSeq){
         User user = validateUser(userSeq);
         return user.getBirthDate();
+    }
+
+    public List<UserProfileDto> getUserProfiles(List<Integer> userSeqList) {
+        return userRepository.findByUserSeqIn(userSeqList).stream()
+                .map(user -> UserProfileDto.builder()
+                        .userSeq(user.getUserSeq())
+                        .nickname(user.getNickname())
+                        .iconSeq(user.getIconSeq())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
