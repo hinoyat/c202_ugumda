@@ -330,6 +330,16 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             setShowDetail(false);
             setCurrentDiaryDetail(null);
           }}
+          onEdit={() => {
+            // 수정 모드로 전환
+            setIsEditing(true);
+            // 수정할 일기 데이터 설정
+            setSelectedEntry(currentDiaryDetail);
+            // 일기 조회 모달 닫기
+            setShowDetail(false);
+            // 작성/수정 폼 모달 열기
+            setShowForm(true);
+          }}
         />
       )}
 
@@ -339,6 +349,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           isOpen={showForm}
           onClose={() => setShowForm(false)}
           isEditing={isEditing}
+          diaryData={isEditing ? selectedEntry : undefined}
           onDiaryCreated={handleDiaryCreated}
         />
       )}

@@ -28,11 +28,13 @@ interface DiaryDetailProps {
     emotionName: string;
   };
   onClose: () => void;
+  onEdit?: () => void;
 }
 
 const DiaryDetail: React.FC<DiaryDetailProps> = ({
   initialDiary, // 일기 초기값
   onClose,
+  onEdit,
 }) => {
   // 현재 보여지는 일기 데이터를 상태로 관리
   const [currentDiary, setCurrentDiary] = useState(initialDiary);
@@ -109,7 +111,10 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
               />
             </div>
             <div className="">
-              <DetailButtons onClose={handleClose} />
+              <DetailButtons
+                onClose={handleClose}
+                onEdit={onEdit}
+              />
             </div>
           </div>
         </div>
