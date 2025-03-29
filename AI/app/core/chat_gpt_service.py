@@ -1,5 +1,3 @@
-from openai import api_key
-
 import app.core.chains as chain
 import logging
 import re
