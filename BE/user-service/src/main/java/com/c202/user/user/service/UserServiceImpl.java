@@ -99,6 +99,15 @@ public class UserServiceImpl implements UserService {
         return UserResponseDto.toDto(user);
     }
 
+    @Override
+    @Transactional
+    public UserResponseDto getRandomUser() {
+        User randomUser = userRepository.findRandomActiveUser()
+                .orElseThrow(() -> new NotFoundException("사용 가능한 사용자가 없습니다."));
+
+        return UserResponseDto.toDto(randomUser);
+    }
+
     private User validateUser(Integer userSeq) {
         User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));

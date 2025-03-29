@@ -15,4 +15,6 @@ public interface UserService {
     UserResponseDto updateIntroduction(Integer userSeq, UpdateIntroductionDto introduction);
 
     String getUserBirthDate(Integer useSeq);
+
+    UserResponseDto getRandomUser();
 }

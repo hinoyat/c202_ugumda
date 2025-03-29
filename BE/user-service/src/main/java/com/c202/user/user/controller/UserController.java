@@ -67,4 +67,10 @@ public class UserController {
         return userService.getUserBirthDate(userSeq);
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<ResponseDto<UserResponseDto>> getRandomUser() {
+        UserResponseDto randomUser = userService.getRandomUser();
+        return ResponseEntity.ok(ResponseDto.success(200, "랜덤 사용자 조회 성공", randomUser));
+    }
+
 }
