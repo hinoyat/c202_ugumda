@@ -160,8 +160,8 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public List<DiaryListResponseDto> getMyDiaries(Integer userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeqAndIsDeleted(userSeq, "N");
+        List<DiaryListResponseDto> result = new ArrayList<>();
 
-        List<String> emotionNames = new ArrayList<>();
         for (Diary diary : diaries) {
             String emotionName = "";
             if (diary.getEmotionSeq() != null) {
@@ -169,17 +169,21 @@ public class DiaryServiceImpl implements DiaryService {
                         .map(Emotion::getName)
                         .orElse("");
             }
-            emotionNames.add(emotionName);
+
+            List<TagResponseDto> tags = getTagsForDiary(diary);
+
+            result.add(DiaryListResponseDto.toDto(diary, emotionName, tags));
         }
 
-        return DiaryListResponseDto.toDto(diaries, emotionNames);
+        return result;
     }
 
     @Transactional
     @Override
     public List<DiaryListResponseDto> getUserDiaries(Integer userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeqAndIsPublicAndIsDeleted(userSeq, "Y", "N");
-        List<String> emotionNames = new ArrayList<>();
+        List<DiaryListResponseDto> result = new ArrayList<>();
+
         for (Diary diary : diaries) {
             String emotionName = "";
             if (diary.getEmotionSeq() != null) {
@@ -187,10 +191,13 @@ public class DiaryServiceImpl implements DiaryService {
                         .map(Emotion::getName)
                         .orElse("");
             }
-            emotionNames.add(emotionName);
+
+            List<TagResponseDto> tags = getTagsForDiary(diary);
+
+            result.add(DiaryListResponseDto.toDto(diary, emotionName, tags));
         }
 
-        return DiaryListResponseDto.toDto(diaries, emotionNames);
+        return result;
     }
 
     @Transactional
