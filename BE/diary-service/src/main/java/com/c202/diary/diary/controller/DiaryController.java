@@ -103,7 +103,7 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "동영상 업로드 완료"));
     }
 
-    @PostMapping("/{diarySeq}/likes")
+    @PostMapping("/{diarySeq}/like")
     public ResponseEntity<ResponseDto<DiaryLikeResponseDto>> addLike(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
@@ -111,7 +111,7 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "좋아요 추가 완료", diaryLikeService.addLike(diarySeq, userSeq)));
     }
 
-    @DeleteMapping("/{diarySeq}/likes")
+    @DeleteMapping("/{diarySeq}/like")
     public ResponseEntity<ResponseDto<Void>> removeLike(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
