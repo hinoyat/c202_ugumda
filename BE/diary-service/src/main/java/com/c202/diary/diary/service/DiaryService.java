@@ -20,7 +20,7 @@ public interface DiaryService {
 
     List<DiaryListResponseDto> getUserDiaries(Integer userSeq);
 
-    DiaryDetailResponseDto getDiary(Integer diarySeq);
+    DiaryDetailResponseDto getDiary(Integer diarySeq, Integer userSeq);
 
     DiaryDetailResponseDto toggleDiaryIsPublic(Integer diarySeq, Integer userSeq);
 

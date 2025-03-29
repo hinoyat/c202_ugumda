@@ -2,6 +2,8 @@ package com.c202.diary.diary.controller;
 
 import com.c202.diary.diary.model.request.VideoRequestDto;
 import com.c202.diary.diary.model.response.UniverseDataResponseDto;
+import com.c202.diary.like.model.response.DiaryLikeResponseDto;
+import com.c202.diary.like.service.DiaryLikeService;
 import com.c202.diary.tag.service.TagService;
 import com.c202.dto.ResponseDto;
 import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
@@ -26,6 +28,7 @@ import java.util.Objects;
 public class DiaryController {
 
     private final DiaryService diaryService;
+    private final DiaryLikeService diaryLikeService;
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> createDiary(
@@ -69,9 +72,10 @@ public class DiaryController {
 
     @GetMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> getDiary(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
     ) {
-        return ResponseEntity.ok(ResponseDto.success(200, "일기 상세 조회 완료", diaryService.getDiary(diarySeq)));
+        return ResponseEntity.ok(ResponseDto.success(200, "일기 상세 조회 완료", diaryService.getDiary(diarySeq, userSeq)));
     }
 
     @PutMapping("/{diarySeq}/visibility")
@@ -99,4 +103,20 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "동영상 업로드 완료"));
     }
 
+    @PostMapping("/{diarySeq}/likes")
+    public ResponseEntity<ResponseDto<DiaryLikeResponseDto>> addLike(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer diarySeq
+    ) {
+        return ResponseEntity.ok(ResponseDto.success(200, "좋아요 추가 완료", diaryLikeService.addLike(diarySeq, userSeq)));
+    }
+
+    @DeleteMapping("/{diarySeq}/likes")
+    public ResponseEntity<ResponseDto<Void>> removeLike(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer diarySeq
+    ) {
+        diaryLikeService.removeLike(diarySeq, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "좋아요 취소 완료", null));
+    }
 }
