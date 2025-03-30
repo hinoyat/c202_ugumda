@@ -58,7 +58,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const glowRef = useRef<THREE.Mesh>(null); // 새 별 주변에 발광 효과를 위해
 
   // 별 크기
-  const starSize = 2;
+  const starSize = 3;
 
   // 별 생성 시간 확인 함수 (하이라이트 효과를 위해)
   const isWithin30Minutes = (dateString: string) => {

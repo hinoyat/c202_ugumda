@@ -9,7 +9,7 @@ import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import { RootState } from '@/stores/store';
-import { OrbitControls } from '@react-three/drei';
+import { Line, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -251,6 +251,47 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     }
   }, [diaries]);
 
+  // ----------------------- 감정 태그가 같은 별끼리 연결 ----------------------- //
+  const connectDiariesByEmotion = (entries: any[]) => {
+    const connections: { from: any; to: any }[] = [];
+
+    // 감정 태그별로 일기 그룹화
+    const diariesByEmotion: Record<string, any[]> = {};
+
+    // 먼저 감정 태그별로 일기들을 분류
+    entries.forEach((entry) => {
+      const emotion = entry.emotionName || entry.mainEmotion;
+      if (!diariesByEmotion[emotion]) {
+        diariesByEmotion[emotion] = [];
+      }
+      diariesByEmotion[emotion].push(entry);
+    });
+
+    // 각 감정 태그 그룹 내에서 일기들을 연결
+    Object.values(diariesByEmotion).forEach((emotionGroup) => {
+      // 같은 감정을 가진 일기가 2개 이상일 때만 연결
+      if (emotionGroup.length >= 2) {
+        // 첫 번째 일기부터 마지막 일기까지 순차적으로 연결
+        for (let i = 0; i < emotionGroup.length - 1; i++) {
+          connections.push({
+            from: emotionGroup[i],
+            to: emotionGroup[i + 1],
+          });
+        }
+
+        // 마지막 일기와 첫 번째 일기도 연결
+        if (emotionGroup.length > 2) {
+          connections.push({
+            from: emotionGroup[emotionGroup.length - 1],
+            to: emotionGroup[0],
+          });
+        }
+      }
+    });
+
+    return connections;
+  };
+
   return (
     <div
       className="universe-container"
@@ -309,10 +350,30 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             dampingFactor={0.05}
             autoRotate={false}
             rotateSpeed={0.5}
-            minDistance={5} // 너무 가까이 가지 않도록
+            minDistance={5}
             maxDistance={200}
             target={[0, 0, 0]} // 항상 구의 중심을 바라보도록
+            zoomSpeed={3} // 스크롤 속도 증가
           />
+
+          {/* ---------------- 일기를 별자리처럼 연결 ---------------- */}
+          <group>
+            {connectDiariesByEmotion(diaryEntries).map((connection, index) => (
+              <Line
+                key={index}
+                points={[
+                  [connection.from.x, connection.from.y, connection.from.z],
+                  [connection.to.x, connection.to.y, connection.to.z],
+                ]}
+                color={0xdce6ff} // 연한 푸른 빛 흰색, 투명도 낮춤
+                lineWidth={0.5} // 선 두께 감소
+                dashed // 점선 효과 추가
+                dashSize={0.8} // 점선 크기
+                dashScale={10} // 점선 간격 조정
+                dashOffset={0} // 점선 시작 위치
+              />
+            ))}
+          </group>
         </Canvas>
       </div>
 
