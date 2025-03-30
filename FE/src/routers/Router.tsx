@@ -43,7 +43,7 @@ const AppRouter = () => {
           {/* 로그인 보호 필요 */}
           <Route element={<ProtectedRoute />}>
             <Route
-              path="/:nickname"
+              path="/:username"
               element={<MainPage />}
             />
             {/* <Route
