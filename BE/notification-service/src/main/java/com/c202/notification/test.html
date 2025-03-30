@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>실시간 알림 수신 테스트</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* 헤더 영역 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        /* 알림 로그 영역 */
+        #log {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            height: 350px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 로그 항목 스타일 */
+        .log-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .alarm-log {
+            border-left: 4px solid #4CAF50;
+            background-color: #f1f8e9;
+        }
+
+        .error-log {
+            border-left: 4px solid #F44336;
+            background-color: #ffebee;
+        }
+
+        .info-log {
+            border-left: 4px solid #2196F3;
+            background-color: #e3f2fd;
+        }
+
+        .log-timestamp {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        /* 컨트롤 영역 */
+        .control-panel {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* 버튼 스타일 */
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .danger-btn {
+            background-color: #f44336;
+        }
+
+        .danger-btn:hover {
+            background-color: #e53935;
+        }
+
+        .info-btn {
+            background-color: #2196F3;
+        }
+
+        .info-btn:hover {
+            background-color: #1e88e5;
+        }
+
+        /* 입력 필드 스타일 */
+        input[type="number"], input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 100px;
+        }
+
+        /* 상태 배지 */
+        #statusBadge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .connected {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .disconnected {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .connecting {
+            background-color: #FFC107;
+            color: black;
+        }
+
+        /* 읽지 않은 알림 카운터 */
+        #unreadCount {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+
+        /* 알림 탭 */
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            flex-grow: 1;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            border-bottom-color: #4CAF50;
+            background-color: #f1f8e9;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h2>🔔 실시간 알림 수신 테스트</h2>
+    <span id="statusBadge" class="disconnected">연결 안됨</span>
+</div>
+
+<div class="control-panel">
+    <div class="control-group">
+        <input type="number" id="userIdInput" value="1" min="1" placeholder="사용자 ID">
+        <button id="connectButton">연결</button>
+        <button id="disconnectButton" disabled>연결 끊기</button>
+        <button id="clearButton" class="info-btn">로그 지우기</button>
+    </div>
+    <div class="control-group">
+        <button id="pingButton" disabled>Ping 테스트</button>
+        <button id="markAllReadButton" disabled>모두 읽음 처리</button>
+        <button id="deleteAllButton" class="danger-btn" disabled>모든 알림 삭제</button>
+    </div>
+</div>
+
+<div id="unreadCount">읽지 않은 알림: 0개</div>
+
+<div class="tabs">
+    <div class="tab active" data-tab="log">실시간 로그</div>
+    <div class="tab" data-tab="notifications">알림 목록</div>
+</div>
+
+<div id="log"></div>
+<div id="notificationsList" style="display: none;"></div>
+
+<script>
+    // 전역 변수
+    let eventSource = null;
+    let userId = 1;
+    let retryCount = 0;
+    let maxRetry = 5;
+    let retryInterval = 3000; // 3초
+    let reconnectTimeout = null;
+    let activeTab = 'log';
+
+    // API 기본 URL - 환경에 따라 변경
+    const API_BASE_URL = 'http://localhost:8085/notifications';
+
+    // DOM 요소
+    const logBox = document.getElementById("log");
+    const notificationsListBox = document.getElementById("notificationsList");
+    const userIdInput = document.getElementById("userIdInput");
+    const connectButton = document.getElementById("connectButton");
+    const disconnectButton = document.getElementById("disconnectButton");
+    const clearButton = document.getElementById("clearButton");
+    const pingButton = document.getElementById("pingButton");
+    const markAllReadButton = document.getElementById("markAllReadButton");
+    const deleteAllButton = document.getElementById("deleteAllButton");
+    const statusBadge = document.getElementById("statusBadge");
+    const unreadCountDiv = document.getElementById("unreadCount");
+    const tabs = document.querySelectorAll('.tab');
+
+    // 탭 전환 이벤트 리스너
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            activeTab = tab.dataset.tab;
+
+            if (activeTab === 'log') {
+                logBox.style.display = 'block';
+                notificationsListBox.style.display = 'none';
+            } else {
+                logBox.style.display = 'none';
+                notificationsListBox.style.display = 'block';
+                loadNotifications();
+            }
+        });
+    });
+
+    /**
+     * 연결 상태 UI 업데이트
+     */
+    function updateStatus(status) {
+        statusBadge.className = status;
+        switch(status) {
+            case 'connected':
+                statusBadge.textContent = '연결됨';
+                connectButton.disabled = true;
+                disconnectButton.disabled = false;
+                pingButton.disabled = false;
+                markAllReadButton.disabled = false;
+                deleteAllButton.disabled = false;
+                break;
+            case 'disconnected':
+                statusBadge.textContent = '연결 안됨';
+                connectButton.disabled = false;
+                disconnectButton.disabled = true;
+                pingButton.disabled = true;
+                markAllReadButton.disabled = true;
+                deleteAllButton.disabled = true;
+                break;
+            case 'connecting':
+                statusBadge.textContent = '연결 중...';
+                connectButton.disabled = true;
+                disconnectButton.disabled = true;
+                pingButton.disabled = true;
+                markAllReadButton.disabled = true;
+                deleteAllButton.disabled = true;
+                break;
+        }
+    }
+
+    /**
+     * 로그 항목 추가
+     */
+    function addLog(message, type = 'info') {
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-item ${type}-log`;
+
+        const timestamp = document.createElement('div');
+        timestamp.className = 'log-timestamp';
+        timestamp.textContent = new Date().toLocaleTimeString();
+
+        const content = document.createElement('div');
+        content.innerHTML = message;
+
+        logEntry.appendChild(timestamp);
+        logEntry.appendChild(content);
+        logBox.appendChild(logEntry);
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    /**
+     * SSE 연결 설정
+     */
+    function connect() {
+        // 기존 연결 종료
+        if (eventSource) {
+            eventSource.close();
+            eventSource = null;
+        }
+
+        // 연결 중 상태로 변경
+        updateStatus('connecting');
+
+        userId = parseInt(userIdInput.value);
+        if (isNaN(userId) || userId <= 0) {
+            addLog('유효한 사용자 ID를 입력하세요.', 'error');
+            updateStatus('disconnected');
+            return;
+        }
+
+        addLog(`사용자 ID ${userId}로 SSE 연결 시도...`);
+
+        try {
+            // 캐시 방지를 위한 타임스탬프 추가
+            const timestamp = new Date().getTime();
+            eventSource = new EventSource(`${API_BASE_URL}/subscribe/${userId}?t=${timestamp}`);
+
+            // 이벤트 핸들러 등록
+            registerEventHandlers();
+
+        } catch (error) {
+            addLog(`연결 시도 중 오류 발생: ${error.message}`, 'error');
+            updateStatus('disconnected');
+        }
+    }
+
+    /**
+     * SSE 이벤트 핸들러 등록
+     */
+    function registerEventHandlers() {
+        // 연결 이벤트
+        eventSource.addEventListener("connect", (e) => {
+            const data = JSON.parse(e.data);
+            updateStatus('connected');
+            retryCount = 0; // 연결 성공 시 재시도 카운트 초기화
+
+            addLog(`🔌 연결 성공! 액티브 사용자: ${data.activeUsers}명`);
+        });
+
+        // 알림 이벤트
+        eventSource.addEventListener("alarm", (e) => {
+            const alarm = JSON.parse(e.data);
+            const formattedTime = new Date(alarm.timestamp).toLocaleTimeString();
+            addLog(`🔔 <strong>알림 도착!</strong><br>
+                        시간: ${formattedTime}<br>
+                        내용: ${alarm.content}<br>
+                        유형: ${alarm.type || '기본'}`, 'alarm');
+
+            // 알림 탭이 보이는 경우 목록 갱신
+            if (activeTab === 'notifications') {
+                loadNotifications();
+            }
+        });
+
+        // 읽지 않은 알림 카운트 이벤트
+        eventSource.addEventListener("unread", (e) => {
+            const data = JSON.parse(e.data);
+            unreadCountDiv.textContent = `읽지 않은 알림: ${data.count}개`;
+        });
+
+        // 최근 알림 이벤트
+        eventSource.addEventListener("recent-alarms", (e) => {
+            const alarms = JSON.parse(e.data);
+            if (alarms.length > 0) {
+                addLog(`📋 최근 알림 ${alarms.length}개 로드됨`, 'info');
+                // 알림 탭이 보이는 경우 목록 갱신
+                if (activeTab === 'notifications') {
+                    loadNotifications();
+                }
+            }
+        });
+
+        // 알림 삭제 이벤트
+        eventSource.addEventListener("alarm-deleted", (e) => {
+            const data = JSON.parse(e.data);
+            addLog(`🗑️ 알림 ${data.alarmId} 삭제됨`, 'info');
+            unreadCountDiv.textContent = `읽지 않은 알림: ${data.unreadCount}개`;
+
+            // 알림 탭이 보이는 경우 목록 갱신
+            if (activeTab === 'notifications') {
+                loadNotifications();
+            }
+        });
+
+        // 모든 알림 삭제 이벤트
+        eventSource.addEventListener("all-alarms-deleted", (e) => {
+            addLog(`🗑️ 모든 알림이 삭제되었습니다.`, 'info');
+            unreadCountDiv.textContent = `읽지 않은 알림: 0개`;
+
+            // 알림 탭이 보이는 경우 목록 갱신
+            if (activeTab === 'notifications') {
+                loadNotifications();
+            }
+        });
+
+        // 핑-퐁 이벤트
+        eventSource.addEventListener("ping", (e) => {
+            addLog(`🏓 Ping-Pong`, 'info');
+        });
+
+        // 하트비트 이벤트 - 로그에 표시하지 않고 내부적으로만 처리
+        eventSource.addEventListener("heartbeat", (e) => {
+            console.log("❤️ Heartbeat received");
+        });
+
+        // 일반 메시지 이벤트 (open 이벤트)
+        eventSource.onopen = () => {
+            addLog(`📡 SSE 스트림 열림`);
+        };
+
+        // 오류 이벤트
+        eventSource.onerror = (e) => {
+            addLog(`❌ 오류 발생! 재연결 시도...`, 'error');
+            updateStatus('disconnected');
+
+            // 연결 끊김 처리 및 재연결 로직
+            eventSource.close();
+
+            // 재시도 횟수 제한 확인
+            if (retryCount < maxRetry) {
+                retryCount++;
+                const timeout = retryInterval * retryCount;
+
+                addLog(`${timeout / 1000}초 후 재연결 시도 (${retryCount}/${maxRetry})...`, 'info');
+
+                // 이전 타임아웃 취소
+                if (reconnectTimeout) {
+                    clearTimeout(reconnectTimeout);
+                }
+
+                // 지수 백오프로 재시도
+                reconnectTimeout = setTimeout(() => {
+                    connect();
+                }, timeout);
+            } else {
+                addLog(`재시도 횟수 초과. 수동으로 재연결 해주세요.`, 'error');
+            }
+        };
+    }
+
+    /**
+     * 연결 종료
+     */
+    function disconnect() {
+        if (eventSource) {
+            addLog(`SSE 연결 종료`, 'info');
+            eventSource.close();
+            eventSource = null;
+            updateStatus('disconnected');
+
+            // 재연결 타임아웃 취소
+            if (reconnectTimeout) {
+                clearTimeout(reconnectTimeout);
+                reconnectTimeout = null;
+            }
+        }
+    }
+
+    /**
+     * 로그 지우기
+     */
+    function clearLog() {
+        logBox.innerHTML = '';
+        addLog('로그가 지워졌습니다.');
+    }
+
+    /**
+     * 연결 상태 확인 (Ping)
+     */
+    function pingConnection() {
+        fetch(`${API_BASE_URL}/ping/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                addLog(`Ping 결과: ${data.message}`, 'info');
+            })
+            .catch(error => {
+                addLog(`Ping 실패: ${error.message}`, 'error');
+            });
+    }
+
+    /**
+     * 모든 알림 읽음 처리
+     */
+    function markAllAsRead() {
+        fetch(`${API_BASE_URL}/read-all/${userId}`, { method: 'PUT' })
+            .then(response => {
+                if (response.ok) {
+                    addLog('모든 알림을 읽음 처리했습니다.', 'info');
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error || '알림 읽음 처리 실패');
+                    });
+                }
+            })
+            .catch(error => {
+                addLog(`오류: ${error.message}`, 'error');
+            });
+    }
+
+    /**
+     * 모든 알림 삭제
+     */
+    function deleteAllAlarms() {
+        if (!confirm('모든 알림을 삭제하시겠습니까?')) {
+            return;
+        }
+
+        fetch(`${API_BASE_URL}/all/${userId}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    addLog('모든 알림이 삭제되었습니다.', 'info');
+                    notificationsListBox.innerHTML = '알림이 없습니다.';
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error || '알림 삭제 실패');
+                    });
+                }
+            })
+            .catch(error => {
+                addLog(`오류: ${error.message}`, 'error');
+            });
+    }
+
+    /**
+     * 알림 목록 로드
+     */
+    function loadNotifications() {
+        notificationsListBox.innerHTML = '<div class="log-item info-log">알림 목록 로드 중...</div>';
+
+        fetch(`${API_BASE_URL}/list/${userId}`)
+            .then(response => response.json())
+            .then(alarms => {
+                displayNotifications(alarms);
+            })
+            .catch(error => {
+                notificationsListBox.innerHTML = `<div class="log-item error-log">알림 목록 로드 실패: ${error.message}</div>`;
+            });
+    }
+
+    /**
+     * 알림 목록 표시
+     */
+    function displayNotifications(alarms) {
+        if (!alarms || alarms.length === 0) {
+            notificationsListBox.innerHTML = '<div class="log-item info-log">알림이 없습니다.</div>';
+            return;
+        }
+
+        notificationsListBox.innerHTML = '';
+
+        alarms.forEach(alarm => {
+            const alarmItem = document.createElement('div');
+            alarmItem.className = `log-item ${alarm.isRead === 'Y' ? 'info-log' : 'alarm-log'}`;
+
+            const timestamp = new Date(alarm.createdAt).toLocaleString();
+
+            alarmItem.innerHTML = `
+                    <div class="log-timestamp">${timestamp}</div>
+                    <div><strong>${alarm.type || '알림'}</strong></div>
+                    <div>${alarm.content}</div>
+                    <div style="margin-top:10px">
+                        <button class="small-btn" onclick="markAlarmAsRead(${alarm.alarmSeq})" ${alarm.isRead === 'Y' ? 'disabled' : ''}>
+                            ${alarm.isRead === 'Y' ? '읽음' : '읽음 처리'}
+                        </button>
+                        <button class="small-btn danger-btn" onclick="deleteAlarm(${alarm.alarmSeq})">삭제</button>
+                    </div>
+                `;
+
+            notificationsListBox.appendChild(alarmItem);
+        });
+    }
+
+    /**
+     * 특정 알림 읽음 처리
+     */
+    function markAlarmAsRead(alarmId) {
+        fetch(`${API_BASE_URL}/read/${alarmId}`, { method: 'PUT' })
+            .then(response => {
+                if (response.ok) {
+                    loadNotifications();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error || '알림 읽음 처리 실패');
+                    });
+                }
+            })
+            .catch(error => {
+                addLog(`오류: ${error.message}`, 'error');
+            });
+    }
+
+    /**
+     * 특정 알림 삭제
+     */
+    function deleteAlarm(alarmId) {
+        fetch(`${API_BASE_URL}/${alarmId}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    loadNotifications();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error || '알림 삭제 실패');
+                    });
+                }
+            })
+            .catch(error => {
+                addLog(`오류: ${error.message}`, 'error');
+            });
+    }
+
+    // 이벤트 리스너 등록
+    connectButton.addEventListener('click', connect);
+    disconnectButton.addEventListener('click', disconnect);
+    clearButton.addEventListener('click', clearLog);
+    pingButton.addEventListener('click', pingConnection);
+    markAllReadButton.addEventListener('click', markAllAsRead);
+    deleteAllButton.addEventListener('click', deleteAllAlarms);
+
+    // 엔터키로 연결
+    userIdInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            connect();
+        }
+    });
+
+    // 전역 함수 노출 (알림 조작용)
+    window.markAlarmAsRead = markAlarmAsRead;
+    window.deleteAlarm = deleteAlarm;
+
+    // 초기 상태 설정
+    updateStatus('disconnected');
+</script>
