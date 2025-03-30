@@ -59,19 +59,19 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
 
   // ------------------- 별 선택 시 메뉴 관련 ------------------- //
   // 별의 범위를 벗어남 (선택된 별이 없는 상태)
-  const clearSelectedEntry = () => {
-    setSelectedEntry(null);
-    setSelectedPosition(null);
-  };
+  // const clearSelectedEntry = () => {
+  //   setSelectedEntry(null);
+  //   setSelectedPosition(null);
+  // };
 
-  // 일기 수정 버튼 클릭
-  const handleEditClick = () => {
-    console.log('일기수정 클릭');
-  };
+  // // 일기 수정 버튼 클릭
+  // const handleEditClick = () => {
+  //   console.log('일기수정 클릭');
+  // };
 
-  const handleDeleteClick = () => {
-    console.log('일기 삭제');
-  };
+  // const handleDeleteClick = () => {
+  //   console.log('일기 삭제');
+  // };
 
   // ------------------------- 일기 조회 ----------------------------//
 
@@ -158,7 +158,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   //   }
   // };
 
-  // ------------------- 일기 생성 ------------------------ //
+  // ------------------- 일기 생성 (작성/수정) ------------------------ //
   // 화면을 더블클릭하면 일기가 생성됨
   const handleDoubleClick = () => {
     console.log('새 일기 생성을 위한 클릭 이벤트!');
@@ -188,6 +188,35 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     }, 20000);
 
     setShowForm(false); // 모달 닫기
+  };
+
+  // ----------------------- 일기 삭제 ---------------------------- //
+  const handleDeleteDiary = async () => {
+    if (!currentDiaryDetail || !currentDiaryDetail.diarySeq) return;
+
+    try {
+      await diaryApi.deleteDiary(currentDiaryDetail.diarySeq);
+
+      // 성공 시 로컬 상태 업데이트
+      setDiaryEntries((prevEntries) =>
+        prevEntries.filter(
+          (entry) => entry.diarySeq !== currentDiaryDetail.diarySeq
+        )
+      );
+
+      // 리덕스 스토어에서도 제거
+      // dispatch(removeDiary(currentDiaryDetail.diarySeq));
+
+      // 모달 닫기
+      setShowDetail(false);
+      setCurrentDiaryDetail(null);
+
+      // 성공 메시지 표시
+      alert('일기가 삭제되었습니다.');
+    } catch (error) {
+      console.error('일기 삭제 중 오류 발생:', error);
+      alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   // ------------------- 일기 목록 조회 (전체 별들) ------------------------ //
@@ -340,6 +369,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             // 작성/수정 폼 모달 열기
             setShowForm(true);
           }}
+          onDelete={handleDeleteDiary}
         />
       )}
 

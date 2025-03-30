@@ -42,10 +42,8 @@ export const diaryApi = {
     return await api.put(`/diaries/${diarySeq}`, diaryData);
   },
 
-  // 수정할 예정입니다,,,
-
-  // // 일기 삭제
-  // deleteDiary: async (diarySeq) => {
-  //   return await axios.delete(`${API_BASE_URL}/diaries/${diarySeq}`);
-  // },
+  // 일기 삭제
+  deleteDiary: async (diarySeq: number) => {
+    return await api.delete(`/diaries/${diarySeq}`);
+  },
 };
