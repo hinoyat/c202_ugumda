@@ -1,4 +1,4 @@
-package com.c202.diary.s3;
+package com.c202.diary.util.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;

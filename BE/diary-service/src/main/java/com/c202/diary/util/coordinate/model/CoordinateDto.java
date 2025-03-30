@@ -1,4 +1,4 @@
-package com.c202.diary.coordinate.model;
+package com.c202.diary.util.coordinate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
