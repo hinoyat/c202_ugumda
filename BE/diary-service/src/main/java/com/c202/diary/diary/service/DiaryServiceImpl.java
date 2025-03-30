@@ -1,7 +1,7 @@
 package com.c202.diary.diary.service;
 
-import com.c202.diary.coordinate.model.CoordinateDto;
-import com.c202.diary.coordinate.service.CoordinateService;
+import com.c202.diary.util.coordinate.model.CoordinateDto;
+import com.c202.diary.util.coordinate.service.CoordinateService;
 import com.c202.diary.diary.entity.Diary;
 import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
 import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
@@ -13,7 +13,8 @@ import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.model.response.EmotionResponseDto;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.emotion.service.EmotionService;
-import com.c202.diary.s3.S3Service;
+import com.c202.diary.util.rabbitmq.AlarmService;
+import com.c202.diary.util.s3.S3Service;
 import com.c202.diary.tag.entity.DiaryTag;
 import com.c202.diary.tag.model.response.TagResponseDto;
 import com.c202.diary.tag.repository.DiaryTagRepository;
@@ -42,6 +43,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final EmotionService emotionService;
     private final CoordinateService coordinateService;
     private final S3Service s3Service;
+    private final AlarmService alarmService;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Transactional
@@ -76,6 +78,11 @@ public class DiaryServiceImpl implements DiaryService {
         emotionService.incrementDiaryCount(emotion.getEmotionSeq());
 
         diaryRepository.save(diary);
+
+        alarmService.sendDiaryCreatedAlarm(
+                diary.getUserSeq(),
+                diary.getTitle()
+        );
 
         List<TagResponseDto> tagDtos = new ArrayList<>();
         if (request.getTags() != null && !request.getTags().isEmpty()) {
