@@ -32,7 +32,7 @@ interface DiaryStarProps {
     isPublic: string;
     createdAt: string; // API 형식: "20250324 172604"
     emotionSeq?: number;
-    emotionName: string | null;
+    emotionName: string;
     connectedDiaries: any | null;
   };
   onClick: (entry: any, position: { x: number; y: number }) => void;
@@ -137,6 +137,9 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     // 마우스 포인터 위치 가져오기
     const x = event.clientX + 20; // 오른쪽으로 20만큼 이동
     const y = event.clientY + 20; // 아래로 20만큼 이동
+
+    console.log('호버된 entry 데이터:', entry);
+
     onHover(entry, { x, y });
     document.body.style.cursor = 'pointer';
   };

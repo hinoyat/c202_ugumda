@@ -3,12 +3,16 @@
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
 import DiaryDetail from '@/domains/diary/modals/DiaryDetail';
+import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
+import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
+import { RootState } from '@/stores/store';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // props의 타입 정의
 interface UniverseProps {
@@ -17,6 +21,10 @@ interface UniverseProps {
 
 const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
+
+  // 리덕스 설정
+  const dispatch = useDispatch();
+  const { diaries } = useSelector((state: RootState) => state.diary);
 
   // ------------------- 상태관리 ------------------- //
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -42,7 +50,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     null
   );
 
-  // -----------------------
+  //
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   // -------------------------- 우주관련 -------------------------- //
@@ -65,26 +73,90 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     console.log('일기 삭제');
   };
 
-  // 일기 보기 버튼 클릭
-  const handleViewClick = async () => {
-    console.log('일기보기 클릭 - 일기 ID : ', selectedEntry.diarySeq);
+  // ------------------------- 일기 조회 ----------------------------//
 
+  // 일기 상세 정보 로드 함수 추가 (이 함수를 컴포넌트 내부에 추가)
+  const loadDiaryDetail = async (diarySeq: number) => {
     try {
-      const response = await diaryApi.getDiaryById(selectedEntry.diarySeq);
+      const response = await diaryApi.getDiaryById(diarySeq);
       console.log('일기 상세데이터 로드됨!!! : ', response);
 
       if (response && response.data && response.data.data) {
         setCurrentDiaryDetail(response.data.data);
-        clearSelectedEntry();
         setShowDetail(true);
       }
     } catch (error) {
       console.error('일기 조회 중 오류 발생 : ', error);
-      alert(
-        '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요'
-      );
+
+      // 에러 응답 확인
+      const err = error as any;
+
+      if (err.response && err.response.status === 400) {
+        // 400 에러일 경우 특정 메시지 처리
+        if (
+          err.response.data &&
+          err.response.data.message === '해당 일기를 찾을 수 없습니다.'
+        ) {
+          alert('해당 일기를 찾을 수 없습니다.');
+        } else {
+          alert('일기 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        }
+      } else if (err.response && err.response.status === 401) {
+        // 401 권한 오류 처리
+        alert(
+          '로그인이 필요하거나 세션이 만료되었습니다. 다시 로그인해주세요.'
+        );
+      } else {
+        // 기타 오류
+        alert(
+          '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+        );
+      }
     }
   };
+
+  // // 일기 보기 버튼 클릭
+  // const handleViewClick = async () => {
+  //   console.log('일기보기 클릭 - 일기 ID : ', selectedEntry.diarySeq);
+
+  //   try {
+  //     const response = await diaryApi.getDiaryById(selectedEntry.diarySeq);
+  //     console.log('일기 상세데이터 로드됨!!! : ', response);
+
+  //     if (response && response.data && response.data.data) {
+  //       setCurrentDiaryDetail(response.data.data);
+  //       clearSelectedEntry();
+  //       setShowDetail(true);
+  //     }
+  //   } catch (error) {
+  //     console.error('일기 조회 중 오류 발생 : ', error);
+
+  //     // 에러 응답 확인
+  //     const err = error as any;
+
+  //     if (err.response && err.response.status === 400) {
+  //       // 400 에러일 경우 특정 메시지 처리
+  //       if (
+  //         err.response.data &&
+  //         err.response.data.message === '해당 일기를 찾을 수 없습니다.'
+  //       ) {
+  //         alert('해당 일기를 찾을 수 없습니다.');
+  //       } else {
+  //         alert('일기 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  //       }
+  //     } else if (err.response && err.response.status === 401) {
+  //       // 401 권한 오류 처리
+  //       alert(
+  //         '로그인이 필요하거나 세션이 만료되었습니다. 다시 로그인해주세요.'
+  //       );
+  //     } else {
+  //       // 기타 오류
+  //       alert(
+  //         '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+  //       );
+  //     }
+  //   }
+  // };
 
   // ------------------- 일기 생성 ------------------------ //
   // 화면을 더블클릭하면 일기가 생성됨
@@ -143,6 +215,13 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     }
   }, [isMySpace]);
 
+  // 리덕스 스토어의 일기 데이터가 변경되면 로컬 상태 업데이트
+  useEffect(() => {
+    if (diaries.length > 0) {
+      setDiaryEntries(diaries);
+    }
+  }, [diaries]);
+
   return (
     <div
       className="universe-container"
@@ -166,6 +245,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           }}>
           {/* 별 배경 */}
           <StarField />
+          {/* 3D블랙홀 */}
+          <BlackHole />
 
           {/* 일기 별들 추가 */}
           <group>
@@ -176,10 +257,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
                 onClick={(entry, position) => {
                   setSelectedEntry(entry);
                   setSelectedPosition(position);
+
+                  loadDiaryDetail(entry.diarySeq);
                 }}
                 // 호버 했을 때는 일기 미리보기
                 onHover={(entry, position) => {
-                  console.log('호버됨');
+                  console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
@@ -204,8 +287,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
         </Canvas>
       </div>
 
-      {/* ----- 일기 별 클릭 시 호버메뉴 뜸 (다른사람 페이지에서는 일기 조회가 뜸) ----- */}
-      {isMySpace && selectedEntry && selectedPosition && (
+      {/* ----- 일기 별 클릭 시 메뉴 뜸 (다른사람 페이지에서는 일기 조회가 뜸) ----- */}
+      {/* {isMySpace && selectedEntry && selectedPosition && (
         <div
           className="absolute z-20"
           style={{
@@ -219,6 +302,24 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             onView={handleViewClick}
           />
         </div>
+      )} */}
+
+      {/* -------------------- 일기별 호버 시 미리보기 뜸 -------------------- */}
+      {hoveredEntry && hoveredPosition && (
+        <div
+          className="absolute z-50"
+          style={{
+            left: `${hoveredPosition.x}px`,
+            top: `${hoveredPosition.y - 150}px`, // 별 위에 표시
+          }}>
+          {/* {console.log('DiaryPreview에 전달되는 데이터:', hoveredEntry)} */}
+          <DiaryPreview
+            title={hoveredEntry.title}
+            content={hoveredEntry.content}
+            tags={hoveredEntry.tags || []}
+            emotion={hoveredEntry.emotionName}
+          />
+        </div>
       )}
 
       {/* -----------------------일기 조회 모달 열림------------------------- */}
@@ -229,6 +330,16 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             setShowDetail(false);
             setCurrentDiaryDetail(null);
           }}
+          onEdit={() => {
+            // 수정 모드로 전환
+            setIsEditing(true);
+            // 수정할 일기 데이터 설정
+            setSelectedEntry(currentDiaryDetail);
+            // 일기 조회 모달 닫기
+            setShowDetail(false);
+            // 작성/수정 폼 모달 열기
+            setShowForm(true);
+          }}
         />
       )}
 
@@ -238,6 +349,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           isOpen={showForm}
           onClose={() => setShowForm(false)}
           isEditing={isEditing}
+          diaryData={isEditing ? selectedEntry : undefined}
           onDiaryCreated={handleDiaryCreated}
         />
       )}

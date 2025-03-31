@@ -4,6 +4,7 @@ import com.c202.exception.types.*;
 import com.c202.user.user.entity.User;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
+import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,9 +33,20 @@ public class UserServiceImpl implements UserService {
 
     // 사용자 정보 조회
     @Override
-    public UserResponseDto getUserInfo(Integer userSeq) {
+    public UserResponseDto getUserByUserSeq(Integer userSeq) {
 
         User user = validateUser(userSeq);
+
+        return UserResponseDto.toDto(user);
+    }
+
+
+    // 사용자 정보 조회
+    @Override
+    public UserResponseDto getUserByUsername(String username) {
+
+        User user = userRepository.findByUsernameAndIsDeleted(username, "N")
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
         return UserResponseDto.toDto(user);
     }
@@ -122,5 +136,15 @@ public class UserServiceImpl implements UserService {
     public String getUserBirthDate(Integer userSeq){
         User user = validateUser(userSeq);
         return user.getBirthDate();
+    }
+
+    public List<UserProfileDto> getUserProfiles(List<Integer> userSeqList) {
+        return userRepository.findByUserSeqInAndIsDeleted(userSeqList, "N").stream()
+                .map(user -> UserProfileDto.builder()
+                        .userSeq(user.getUserSeq())
+                        .nickname(user.getNickname())
+                        .iconSeq(user.getIconSeq())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

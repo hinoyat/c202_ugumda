@@ -34,8 +34,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  
-  
+
   const datePickerRef = useRef<HTMLDivElement>(null);
 
   const nav = useNavigate();
@@ -48,7 +47,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
     if (userData) {
       setNickname(userData.nickname);
       setBirthDate(formatDateInput(userData.birthDate));
-      
+
       // birthDate가 유효한 형식이면 Date 객체로 변환
       if (userData.birthDate) {
         const formattedDate = formatDateString(userData.birthDate);
@@ -62,7 +61,10 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   useEffect(() => {
     // 날짜 선택기 외부 클릭 시 닫기
     const handleClickOutside = (event: MouseEvent) => {
-      if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+      if (
+        datePickerRef.current &&
+        !datePickerRef.current.contains(event.target as Node)
+      ) {
         setShowDatePicker(false);
       }
     };
@@ -77,14 +79,14 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const formatDateString = (dateStr: string): string | null => {
     // 숫자만 추출
     const numbers = dateStr.replace(/\D/g, '');
-    
+
     if (numbers.length === 8) {
       const year = numbers.substring(0, 4);
       const month = numbers.substring(4, 6);
       const day = numbers.substring(6, 8);
       return `${year}-${month}-${day}`;
     }
-    
+
     return null;
   };
 
@@ -97,12 +99,12 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setBirthDate(value);
-    
+
     // 자동 포맷팅 적용
     if (value.length === 8 && /^\d+$/.test(value)) {
       const formattedDate = formatDateInput(value);
       setBirthDate(formattedDate);
-      
+
       // Date 객체도 업데이트
       const year = parseInt(value.substring(0, 4));
       const month = parseInt(value.substring(4, 6)) - 1; // JS의 월은 0부터 시작
@@ -113,13 +115,13 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
-    
+
     // YYYY-MM-DD 형식으로 변환
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     setBirthDate(`${year}-${month}-${day}`);
-    
+
     setShowDatePicker(false);
   };
 
@@ -176,7 +178,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
     try {
       // 백엔드에 전송할 때는 하이픈을 제거한 형식으로 변환
       const birthDateFormatted = birthDate.replace(/-/g, '');
-      
+
       const response = await api.put('/users/me', {
         nickname,
         password,
@@ -277,14 +279,14 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
             </button>
           </div>
         </div>
-        
+
         {/* 생년월일 행 */}
         <div className="flex items-center gap-8 text-xl w-full relative">
           <div className="w-1/4 dung-font">
             <p>birth</p>
           </div>
-         <div className="flex items-center gap-2 w-3/4 overflow-visible">
-          <input
+          <div className="flex items-center gap-2 w-3/4 overflow-visible">
+            <input
               type="text"
               onChange={handleBirthDateChange}
               className="flex-1 bg-transparent focus:outline-none dung-font pl-8"
@@ -297,14 +299,13 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
               className="w-6 h-6 cursor-pointer absolute right-0"
               onClick={toggleDatePicker}
             />
-         </div>
-          
+          </div>
+
           {/* 날짜 선택기 */}
           {showDatePicker && (
-            <div 
+            <div
               ref={datePickerRef}
-              className="absolute left-103 top-0 z-10 bg-gray-800 p-2 rounded"
-            >
+              className="absolute left-103 top-0 z-10 bg-gray-800 p-2 rounded">
               <DatePicker
                 selected={selectedDate}
                 onChange={handleDateSelect}
@@ -324,14 +325,14 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
           <div className="box-button">
             <button
               onClick={onClickCancle}
-              className="button">
+              className="infor-button">
               취소
             </button>
           </div>
           <div className="box-button">
             <button
               onClick={handleSubmit}
-              className="button">
+              className="infor-button">
               수정
             </button>
           </div>

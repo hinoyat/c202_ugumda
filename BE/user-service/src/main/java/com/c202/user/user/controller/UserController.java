@@ -3,6 +3,7 @@ package com.c202.user.user.controller;
 import com.c202.dto.ResponseDto;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
+import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.service.UserService;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,18 +28,25 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<ResponseDto<UserResponseDto>> getMyInfo(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
-        UserResponseDto user = userService.getUserInfo(userSeq);
+        UserResponseDto user = userService.getUserByUserSeq(userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
     }
 
     // 유저 조회 API
-    @GetMapping("/{userSeq}")
-    public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
+    @GetMapping("/seq/{userSeq}")
+    public ResponseEntity<ResponseDto<UserResponseDto>> getUserByUserSeq(
             @PathVariable Integer userSeq) {
-        UserResponseDto user = userService.getUserInfo(userSeq);
+        UserResponseDto user = userService.getUserByUserSeq(userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
     }
 
+    // 유저 조회 API
+    @GetMapping("/name/{username}")
+    public ResponseEntity<ResponseDto<UserResponseDto>> getUserByUsername(
+            @PathVariable String username) {
+        UserResponseDto user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
+    }
 
     // 사용자 정보 수정
     @PutMapping("/me")
@@ -65,6 +75,12 @@ public class UserController {
     @GetMapping("/birthdate")
     public String getUserBirthDate(@RequestHeader("X-User-Seq") Integer userSeq){
         return userService.getUserBirthDate(userSeq);
+    }
+
+    @PostMapping("/profiles")
+    public ResponseEntity<ResponseDto<List<UserProfileDto>>> getUserProfiles(@RequestBody List<Integer> userSeqList) {
+        List<UserProfileDto> profiles = userService.getUserProfiles(userSeqList);
+        return ResponseEntity.ok(ResponseDto.success(200, "유저 프로필 목록 조회 성공", profiles));
     }
 
     @GetMapping("/random")

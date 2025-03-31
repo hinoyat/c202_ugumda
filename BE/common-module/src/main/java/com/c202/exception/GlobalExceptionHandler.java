@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(ResponseDto.error(400, ex.getMessage()));
     }
 
+    @ExceptionHandler(AiCallFailedException.class)
+    public ResponseEntity<ResponseDto<Void>> handleAiCallFailedException(AiCallFailedException ex) {
+        return ResponseEntity.status(500).body(ResponseDto.error(500, ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDto<Void>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
@@ -62,5 +67,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDto<Void>> handleGenericException(Exception e) {
         return ResponseEntity.status(500).body(ResponseDto.error(500, "서버 오류가 발생했습니다."));
+    }
+
+    @ExceptionHandler(WebClientCommunicationException.class)
+    public ResponseEntity<ResponseDto<Void>> handleWebClientCommunication(WebClientCommunicationException ex){
+        return ResponseEntity.status(502).body(ResponseDto.error(502, ex.getMessage()));
     }
 }

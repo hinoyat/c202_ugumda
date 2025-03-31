@@ -21,7 +21,7 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
     <div className="w-full flex flex-col gap-3">
       {isEditing ? (
         <button
-          onClick={onClose} // 수정 기능 구현할 때 변경하기
+          onClick={onCreate}
           className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold">
           수정완료
         </button>
