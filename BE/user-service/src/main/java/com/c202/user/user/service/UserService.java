@@ -2,7 +2,10 @@ package com.c202.user.user.service;
 
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
+import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -15,4 +18,6 @@ public interface UserService {
     UserResponseDto updateIntroduction(Integer userSeq, UpdateIntroductionDto introduction);
 
     String getUserBirthDate(Integer useSeq);
+
+    List<UserProfileDto> getUserProfiles(List<Integer> userSeqList);
 }

@@ -13,6 +13,10 @@ public class GuestbookDto {
 
     @Setter
     private Integer writerSeq; // 작성자의 아이디
+
+    private String writerNickname;
+    private Integer writerIconSeq;
+
     private String content;
     private String createdAt;
     private String updatedAt;
