@@ -1,8 +1,10 @@
-from app.log_config import logging_check
+import os
 import logging
 import requests
+from app.log_config import logging_check
 
 logging_check()
+API_BASE_URL = os.environ.get("API_BASE_URL")
 
 def save_video_to_backend(diary_pk:int, video_url:str, token:str):
     logging.info("백엔드 전송 시작")
@@ -16,12 +18,12 @@ def save_video_to_backend(diary_pk:int, video_url:str, token:str):
 
         # 요청 전에 정보 로깅
         logging.info(f"토큰 앞부분: {token[:10]}..." if token else "토큰 없음")
-        logging.info(f"요청 URL: https://j12c202.p.ssafy.io/api/diaries/{diary_pk}/video")
+        logging.info(f"요청 URL: {API_BASE_URL}/diaries/{diary_pk}/video")
         logging.info(f"요청 헤더: {headers}")
         logging.info(f"요청 페이로드: {payload}")
         logging.info(f"사용된 diary_pk: {diary_pk}")
 
-        response = requests.post(f'https://j12c202.p.ssafy.io/api/diaries/{diary_pk}/video', json=payload, headers=headers)
+        response = requests.post(f'{API_BASE_URL}/diaries/{diary_pk}/video', json=payload, headers=headers)
         logging.info(f"요청 보내는 중")
 
 
