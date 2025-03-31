@@ -3,20 +3,35 @@
 import React from 'react';
 
 interface DetailButtonsProps {
-  onEdit?: () => void; // 수정 버튼 클릭 핸들러 추가
+  onEdit?: () => void;
   onClose?: () => void;
+  onDelete?: () => void;
 }
 
-const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit, onClose }) => {
-  // 버튼 직접 클릭 핸들러
+const DetailButtons: React.FC<DetailButtonsProps> = ({
+  onEdit,
+  onClose,
+  onDelete,
+}) => {
+  // 수정 버튼 클릭 핸들러
   const handleEditClick = () => {
-    console.log('수정 버튼 직접 클릭');
     if (onEdit) {
-      console.log('onEdit 함수 존재함, 호출 전');
       onEdit();
-      console.log('onEdit 함수 호출 후');
     } else {
-      console.log('onEdit이 undefined임');
+    }
+  };
+
+  // 삭제 버튼 클릭 핸들러
+  const handleDeleteClick = () => {
+    console.log('삭제 버튼 직접 클릭');
+    if (onDelete) {
+      if (window.confirm('정말로 이 일기를 삭제하시겠습니까?')) {
+        onDelete();
+      } else {
+        console.log('삭제 취소됨');
+      }
+    } else {
+      console.log('onDelete가 undefined임');
     }
   };
 
@@ -38,6 +53,12 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({ onEdit, onClose }) => {
         className="text-white/90 mb-6 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold"
         onClick={handleEditClick}>
         수정하기
+      </button>
+
+      <button
+        className="text-white/90 mb-6 cursor-pointer w-full bg-[#ff5757]/90 hover:bg-[#e74c4c]/90 py-2 rounded text-sm font-bold"
+        onClick={handleDeleteClick}>
+        삭제하기
       </button>
     </div>
   );

@@ -55,6 +55,14 @@ const diarySlice = createSlice({
         state.diaries[index] = action.payload;
       }
     },
+
+    // 일기 삭제
+    removeDiary: (state, action: PayloadAction<number>) => {
+      state.diaries = state.diaries.filter(
+        (diary) => diary.diarySeq !== action.payload
+      );
+    },
+
     // 로딩 상태 설정
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -72,6 +80,7 @@ export const {
   addDiary,
   setCurrentDiary,
   updateDiary,
+  removeDiary,
   setLoading,
   setError,
 } = diarySlice.actions;
