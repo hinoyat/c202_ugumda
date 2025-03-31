@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface UserService {
 
-    UserResponseDto getUserInfo(Integer userSeq);
+    UserResponseDto getUserByUserSeq(Integer userSeq);
+
+    UserResponseDto getUserByUsername(String username);
 
     UserResponseDto updateUser(Integer userSeq, UpdateUserRequestDto request);
 
@@ -20,4 +22,6 @@ public interface UserService {
     String getUserBirthDate(Integer useSeq);
 
     List<UserProfileDto> getUserProfiles(List<Integer> userSeqList);
+
+    UserResponseDto getRandomUser();
 }
