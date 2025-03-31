@@ -16,6 +16,9 @@ public class UserResponseDto {
     private Integer iconSeq;
     
     public static UserResponseDto toDto(User user) {
+        if (user == null) {
+            return empty();
+        }
         return UserResponseDto.builder()
                 .userSeq(user.getUserSeq())
                 .username(user.getUsername())
@@ -23,6 +26,17 @@ public class UserResponseDto {
                 .birthDate(user.getBirthDate())
                 .introduction(user.getIntroduction())
                 .iconSeq(user.getIconSeq())
+                .build();
+    }
+
+    public static UserResponseDto empty() {
+        return UserResponseDto.builder()
+                .userSeq(null)
+                .username(null)
+                .nickname(null)
+                .birthDate(null)
+                .introduction(null)
+                .iconSeq(null)
                 .build();
     }
 }

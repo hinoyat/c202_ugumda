@@ -13,6 +13,7 @@ import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.model.response.EmotionResponseDto;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.emotion.service.EmotionService;
+import com.c202.diary.like.service.DiaryLikeService;
 import com.c202.diary.util.rabbitmq.AlarmService;
 import com.c202.diary.util.s3.S3Service;
 import com.c202.diary.tag.entity.DiaryTag;
@@ -37,12 +38,13 @@ import java.util.stream.Collectors;
 public class DiaryServiceImpl implements DiaryService {
 
     private final TagService tagService;
+    private final DiaryLikeService diaryLikeService;
+    private final S3Service s3Service;
     private final DiaryRepository diaryRepository;
     private final DiaryTagRepository diaryTagRepository;
     private final EmotionRepository emotionRepository;
     private final EmotionService emotionService;
     private final CoordinateService coordinateService;
-    private final S3Service s3Service;
     private final AlarmService alarmService;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
@@ -101,6 +103,7 @@ public class DiaryServiceImpl implements DiaryService {
         diary.update(
                 request.getTitle(),
                 request.getContent(),
+                request.getIsPublic(),
                 request.getDreamDate(),
                 now
         );
@@ -143,7 +146,11 @@ public class DiaryServiceImpl implements DiaryService {
 
         List<Integer> connectedDiaries = coordinateService.findSimilarDiaries(diary.getDiarySeq(), 5);
 
-        return DiaryDetailResponseDto.toDto(diary, tagDtos, newEmotion.getName(), connectedDiaries);
+        Integer likeCount = diaryLikeService.getLikeCount(diarySeq);
+        boolean hasLiked = diaryLikeService.hasUserLiked(diarySeq, userSeq);
+
+
+        return DiaryDetailResponseDto.toDto(diary, tagDtos, newEmotion.getName(), connectedDiaries, likeCount, hasLiked);
     }
 
     @Transactional
@@ -161,8 +168,8 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public List<DiaryListResponseDto> getMyDiaries(Integer userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeqAndIsDeleted(userSeq, "N");
+        List<DiaryListResponseDto> result = new ArrayList<>();
 
-        List<String> emotionNames = new ArrayList<>();
         for (Diary diary : diaries) {
             String emotionName = "";
             if (diary.getEmotionSeq() != null) {
@@ -170,17 +177,21 @@ public class DiaryServiceImpl implements DiaryService {
                         .map(Emotion::getName)
                         .orElse("");
             }
-            emotionNames.add(emotionName);
+
+            List<TagResponseDto> tags = getTagsForDiary(diary);
+
+            result.add(DiaryListResponseDto.toDto(diary, emotionName, tags));
         }
 
-        return DiaryListResponseDto.toDto(diaries, emotionNames);
+        return result;
     }
 
     @Transactional
     @Override
     public List<DiaryListResponseDto> getUserDiaries(Integer userSeq) {
         List<Diary> diaries = diaryRepository.findByUserSeqAndIsPublicAndIsDeleted(userSeq, "Y", "N");
-        List<String> emotionNames = new ArrayList<>();
+        List<DiaryListResponseDto> result = new ArrayList<>();
+
         for (Diary diary : diaries) {
             String emotionName = "";
             if (diary.getEmotionSeq() != null) {
@@ -188,15 +199,18 @@ public class DiaryServiceImpl implements DiaryService {
                         .map(Emotion::getName)
                         .orElse("");
             }
-            emotionNames.add(emotionName);
+
+            List<TagResponseDto> tags = getTagsForDiary(diary);
+
+            result.add(DiaryListResponseDto.toDto(diary, emotionName, tags));
         }
 
-        return DiaryListResponseDto.toDto(diaries, emotionNames);
+        return result;
     }
 
     @Transactional
     @Override
-    public DiaryDetailResponseDto getDiary(Integer diarySeq) {
+    public DiaryDetailResponseDto getDiary(Integer diarySeq, Integer userSeq) {
         Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new NotFoundException("해당 일기를 찾을 수 없습니다."));
 
@@ -211,8 +225,10 @@ public class DiaryServiceImpl implements DiaryService {
 
         // 연결된 일기 목록 찾기
         List<Integer> connectedDiaries = coordinateService.findSimilarDiaries(diary.getDiarySeq(), 5);
+        Integer likeCount = diaryLikeService.getLikeCount(diarySeq);
+        boolean hasLiked = diaryLikeService.hasUserLiked(diarySeq, userSeq);
 
-        return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName, connectedDiaries);
+        return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName, connectedDiaries, likeCount, hasLiked);
     }
     
     @Transactional
@@ -240,10 +256,13 @@ public class DiaryServiceImpl implements DiaryService {
                     .orElse("");
         }
 
-        // 연결된 일기 목록 찾기
         List<Integer> connectedDiaries = coordinateService.findSimilarDiaries(diary.getDiarySeq(), 5);
 
-        return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName, connectedDiaries);
+        Integer likeCount = diaryLikeService.getLikeCount(diarySeq);
+        boolean hasLiked = diaryLikeService.hasUserLiked(diarySeq, userSeq);
+
+
+        return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName, connectedDiaries, likeCount, hasLiked);
     }
 
     @Transactional

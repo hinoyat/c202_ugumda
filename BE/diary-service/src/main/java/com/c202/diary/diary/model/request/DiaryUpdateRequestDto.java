@@ -15,6 +15,8 @@ public class DiaryUpdateRequestDto {
 
     private String dreamDate;
 
+    private String isPublic;
+
     private List<String> tags;
 
     private String mainEmotion;

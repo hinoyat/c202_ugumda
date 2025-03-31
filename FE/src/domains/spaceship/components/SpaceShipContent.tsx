@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import '../themes/SpaceShip.css';
 import { IoClose } from 'react-icons/io5';
 import EditProfileButton from '@/domains/spaceship/components/EditProfileButton';
+import { useSelector } from 'react-redux';
+import { selectVisitUser } from '@/domains/mainpage/stores/userSelectors';
 
 const SpaceShipContent = () => {
   const nav = useNavigate();
+  const visitUser = useSelector(selectVisitUser);
+
   const onClickLucky = () => {
     nav('/luckynumber');
   };
@@ -16,7 +20,7 @@ const SpaceShipContent = () => {
     nav('/todayfortune');
   };
   const onClickHome = () => {
-    nav('/');
+    nav(`/${visitUser.username}`); // 지금 구경중인 우주 주인장 닉네임 넣기
   };
   const onClickEditMyInformation = () => {
     nav('/passwordcheck');

@@ -1,23 +1,26 @@
 package com.c202.guestbook.controller;
 import com.c202.dto.ResponseDto;
-import com.c202.exception.CustomException;
+import jakarta.validation.constraints.NotNull;
 import com.c202.guestbook.model.GuestbookDto;
 import com.c202.guestbook.service.GuestbookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
+@Validated
 @RequestMapping("/api/guestbook")
 public class GuestbookController {
 
-    @Autowired
-    private GuestbookService guestbookService;
+    private final GuestbookService guestbookService;
 
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<List<GuestbookDto>>> getMyGuestbooks(@RequestHeader("X-User-Seq") Integer userSeq) {
+    public ResponseEntity<ResponseDto<List<GuestbookDto>>> getMyGuestbooks(@RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
         List<GuestbookDto> guestbooks = guestbookService.getAllGuestbooks(userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "내 방명록 조회 성공", guestbooks));
     }
@@ -29,7 +32,7 @@ public class GuestbookController {
     }
 
     @PostMapping("/users/{ownerSeq}")
-    public ResponseEntity<ResponseDto<Object>> createGuestbook(@RequestHeader("X-User-Seq") Integer writerSeq, @PathVariable Integer ownerSeq, @RequestBody GuestbookDto guestbookDto){
+    public ResponseEntity<ResponseDto<Object>> createGuestbook(@RequestHeader("X-User-Seq") @NotNull Integer writerSeq, @PathVariable Integer ownerSeq, @RequestBody GuestbookDto guestbookDto){
         GuestbookDto createdGuestbook = guestbookService.createGuestbook(ownerSeq, writerSeq, guestbookDto);
         return ResponseEntity.status(201).body(ResponseDto.success(201, "방명록 작성 완료", createdGuestbook));
     }

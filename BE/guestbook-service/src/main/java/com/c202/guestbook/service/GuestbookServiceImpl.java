@@ -5,23 +5,24 @@ import com.c202.guestbook.entity.Guestbook;
 import com.c202.guestbook.model.GuestbookDto;
 import com.c202.guestbook.repository.GuestbookRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GuestbookServiceImpl implements GuestbookService {
+    private final WebClient.Builder webClientBuilder;
+    private final GuestbookRepository guestbookRepository;
 
-    // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
-
-    @Autowired
-    private GuestbookRepository guestbookRepository;
 
     @Override
     @Transactional
@@ -43,35 +44,70 @@ public class GuestbookServiceImpl implements GuestbookService {
 
         guestbook = guestbookRepository.save(guestbook);
 
-        return new GuestbookDto(
-                guestbook.getGuestbookSeq(),
-                guestbook.getOwnerSeq(),
-                guestbook.getWriterSeq(),
-                guestbook.getContent(),
-                guestbook.getCreatedAt(),
-                guestbook.getUpdatedAt(),
-                guestbook.getDeletedAt(),
-                guestbook.getIsDeleted()
-        );
+        return GuestbookDto.builder()
+                .guestbookSeq(guestbook.getGuestbookSeq())
+                .ownerSeq(guestbook.getOwnerSeq())
+                .writerSeq(guestbook.getWriterSeq())
+                .content(guestbook.getContent())
+                .createdAt(guestbook.getCreatedAt())
+                .updatedAt(guestbook.getUpdatedAt())
+                .deletedAt(guestbook.getDeletedAt())
+                .isDeleted(guestbook.getIsDeleted())
+                .build();
+
     }
 
     @Override
     public List<GuestbookDto> getAllGuestbooks(int ownerSeq) {
         List<Guestbook> guestbooks = guestbookRepository.findByOwnerSeqAndIsDeleted(ownerSeq, "N");
-
-        return guestbooks.stream()
-                .map(guestbook -> new GuestbookDto(
-                        guestbook.getGuestbookSeq(),
-                        guestbook.getOwnerSeq(),
-                        guestbook.getWriterSeq(),
-                        guestbook.getContent(),
-                        guestbook.getCreatedAt(),
-                        guestbook.getUpdatedAt(),
-                        guestbook.getDeletedAt(),
-                        guestbook.getIsDeleted()
-                ))
+    // 1. writerSeq 목록 추출
+        List<Integer> writerSeqList = guestbooks.stream()
+                .map(Guestbook::getWriterSeq)
+                .distinct()
                 .collect(Collectors.toList());
-    }
+
+        // 2. bulk 요청으로 user 정보 한번에 가져오기
+        Map<String, Object> response = webClientBuilder
+                .baseUrl("http://user-service")
+                .build()
+                .post()
+                .uri("/api/users/profiles")
+                .bodyValue(writerSeqList)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .onErrorMap(ex -> new WebClientCommunicationException("Web Client 통신 에러: " + ex.getMessage()))
+                .block();
+
+        List<Map<String, Object>> profiles = (List<Map<String, Object>>) response.get("data");
+
+        // 3. userSeq → profile Map으로 변환
+        Map<Integer, Map<String, Object>> profileMap = profiles.stream()
+                .collect(Collectors.toMap(
+                        p -> (Integer) p.get("userSeq"),
+                        p -> p
+                ));
+
+        // 4. Guestbook + 프로필 합쳐서 dto 반환
+        return guestbooks.stream()
+                .map(guestbook -> {
+                    Map<String, Object> profile = profileMap.getOrDefault(guestbook.getWriterSeq(), null);
+                    String nickname = profile != null ? (String) profile.getOrDefault("nickname", "알 수 없음") : "알 수 없음";
+                    Integer iconSeq = profile != null ? (Integer) profile.getOrDefault("iconSeq", 0) : 0;
+
+                    return GuestbookDto.builder()
+                            .guestbookSeq(guestbook.getGuestbookSeq())
+                            .ownerSeq(guestbook.getOwnerSeq())
+                            .writerSeq(guestbook.getWriterSeq())
+                            .writerNickname(nickname)
+                            .writerIconSeq(iconSeq)
+                            .content(guestbook.getContent())
+                            .createdAt(guestbook.getCreatedAt())
+                            .updatedAt(guestbook.getUpdatedAt())
+                            .deletedAt(guestbook.getDeletedAt())
+                            .isDeleted(guestbook.getIsDeleted())
+                            .build();
+                }).collect(Collectors.toList());
+        }
 
     @Override
     @Transactional

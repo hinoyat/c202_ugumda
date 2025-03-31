@@ -2,11 +2,12 @@ import app.core.chat_gpt_service as text
 import app.core.chat_stability_service as image
 import app.core.chat_runway_service as video
 from app.log_config import logging_check
+from app.core.save_video import save_video_to_backend
 import logging
 
 logging_check()
 
-def generate_video(content:str):
+def generate_video(content:str, diary_pk: int, token: str):
     logging.info("시작")
     prompt = text.chat_gpt(content)
 
@@ -16,13 +17,9 @@ def generate_video(content:str):
     logging.info("이미지 완료")
     video_url = video.runway(image_base64, prompt)
 
-    # return 값은 확인할 필요 없음
-    return video_url
+    logging.info(f"save_video_to_backend 호출 전 URL: {video_url}")
+    if video_url:
+        save_video_to_backend(diary_pk, video_url, token)
 
-
-'''
-비동기함수 프론트에 전해주기 위해 만들었음
-위에 코드는 포스트맨 확인용(지우기)
-'''
-
-
+    # 비동기 처리 return값은 사용되지 않음
+    return "비디오 생성 처리 중"
