@@ -34,8 +34,8 @@ const MainPage = () => {
   useEffect(() => {
     if (params.username) {
       console.log('✅ MainPage 마운트됨!');
-      // dispatch(visitUserpage({ username: params.username }));
-      dispatch(visitUserpage({ username: '2' })); // 일단 백이 userSeq니까 2 해두자
+      dispatch(visitUserpage({ username: params.username }));
+      // dispatch(visitUserpage({ username: '2' })); // 일단 백이 userSeq니까 2 해두자
       console.log('방문한 페이지 주인장 정보', visitUser);
     }
   }, [params.username, dispatch]);
