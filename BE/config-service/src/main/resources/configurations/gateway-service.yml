@@ -93,6 +93,13 @@ spring:
             - Path=/api/tags/**
           filters:
             - name: JwtAuthFilter
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+          filters:
+            - name: JwtAuthFilter
 logging:
   charset:
     console: ${LOG_CHARSET_CONSOLE}

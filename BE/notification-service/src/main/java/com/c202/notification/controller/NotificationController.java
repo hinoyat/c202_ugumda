@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notifications")
+@RequestMapping("/api/notifications")
 @CrossOrigin(origins = "*")  // 설정 파일에서 CORS 설정을 가져옴
 public class NotificationController {
 
