@@ -9,6 +9,7 @@ import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RabbitTemplate rabbitTemplate;
 
     // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
@@ -99,6 +101,10 @@ public class UserServiceImpl implements UserService {
         user.updateDeletedAt(now);
         // 물리적 삭제가 아닌 논리적 삭제 처리
         user.deleteUser();
+
+        rabbitTemplate.convertAndSend("user.event.exchange", "user.withdrawn", userSeq);
+
+        log.info("탈퇴 이벤트 발행: userSeq = {}", userSeq);
     }
 
     @Override

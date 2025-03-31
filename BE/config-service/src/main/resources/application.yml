@@ -5,6 +5,12 @@ spring:
   profiles:
     active: native
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
   application:
     name: config-service
 
