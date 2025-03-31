@@ -11,6 +11,5 @@ public class SignupRequestDto {
     private String password;
     private String nickname;
     private String birthDate;
-    private String birthTime;
     private Integer iconSeq;
 }

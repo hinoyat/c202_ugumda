@@ -67,9 +67,10 @@ public class Diary {
 
     public void setPublic(String isPublic) { this.isPublic = isPublic; }
 
-    public void update(String title, String content, String dreamDate, String updatedAt) {
+    public void update(String title, String content, String isPublic, String dreamDate, String updatedAt) {
         this.title = title;
         this.content = content;
+        this.isPublic = isPublic;
         this.dreamDate = dreamDate;
         this.updatedAt = updatedAt;
     }
