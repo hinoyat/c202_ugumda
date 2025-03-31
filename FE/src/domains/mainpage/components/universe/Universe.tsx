@@ -44,7 +44,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     x: number;
     y: number;
   } | null>(null);
-  const [viewingEntry, setViewingEntry] = useState<any | null>(null);
   const [currentDiaryDetail, setCurrentDiaryDetail] = useState<any | null>(
     null
   );
@@ -145,7 +144,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       );
 
       // 리덕스 스토어에서도 제거
-      // dispatch(removeDiary(currentDiaryDetail.diarySeq));
+      dispatch(removeDiary(currentDiaryDetail.diarySeq));
 
       // 모달 닫기
       setShowDetail(false);
