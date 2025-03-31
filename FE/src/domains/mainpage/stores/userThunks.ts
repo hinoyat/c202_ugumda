@@ -11,7 +11,7 @@ export const visitUserpage = createAsyncThunk<
 >('userpage/visit', async (credentials, { rejectWithValue }) => {
   try {
     const response = await api.get<visitResponse>(
-      `/users/names/${credentials.username}`
+      `/users/name/${credentials.username}`
     );
 
     return response.data.data;
