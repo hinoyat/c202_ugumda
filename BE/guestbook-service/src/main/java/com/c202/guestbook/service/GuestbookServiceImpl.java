@@ -75,6 +75,7 @@ public class GuestbookServiceImpl implements GuestbookService {
                 .bodyValue(writerSeqList)
                 .retrieve()
                 .bodyToMono(Map.class)
+                .onErrorMap(ex -> new WebClientCommunicationException("Web Client 통신 에러: " + ex.getMessage()))
                 .block();
 
         List<Map<String, Object>> profiles = (List<Map<String, Object>>) response.get("data");
