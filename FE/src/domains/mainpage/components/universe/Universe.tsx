@@ -4,7 +4,6 @@ import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryComponent from '@/domains/diary/modals/DiaryComponent';
 import DiaryDetail from '@/domains/diary/modals/DiaryDetail';
 import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
-import StarHoverMenu from '@/domains/mainpage/components/StarHoverMenu';
 import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
@@ -57,22 +56,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   // 카메라 컨트롤 참조
   const controlsRef = useRef<any>(null);
 
-  // ------------------- 별 선택 시 메뉴 관련 ------------------- //
-  // 별의 범위를 벗어남 (선택된 별이 없는 상태)
-  // const clearSelectedEntry = () => {
-  //   setSelectedEntry(null);
-  //   setSelectedPosition(null);
-  // };
-
-  // // 일기 수정 버튼 클릭
-  // const handleEditClick = () => {
-  //   console.log('일기수정 클릭');
-  // };
-
-  // const handleDeleteClick = () => {
-  //   console.log('일기 삭제');
-  // };
-
   // ------------------------- 일기 조회 ----------------------------//
 
   // 일기 상세 정보 로드 함수 추가 (이 함수를 컴포넌트 내부에 추가)
@@ -114,49 +97,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       }
     }
   };
-
-  // // 일기 보기 버튼 클릭
-  // const handleViewClick = async () => {
-  //   console.log('일기보기 클릭 - 일기 ID : ', selectedEntry.diarySeq);
-
-  //   try {
-  //     const response = await diaryApi.getDiaryById(selectedEntry.diarySeq);
-  //     console.log('일기 상세데이터 로드됨!!! : ', response);
-
-  //     if (response && response.data && response.data.data) {
-  //       setCurrentDiaryDetail(response.data.data);
-  //       clearSelectedEntry();
-  //       setShowDetail(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('일기 조회 중 오류 발생 : ', error);
-
-  //     // 에러 응답 확인
-  //     const err = error as any;
-
-  //     if (err.response && err.response.status === 400) {
-  //       // 400 에러일 경우 특정 메시지 처리
-  //       if (
-  //         err.response.data &&
-  //         err.response.data.message === '해당 일기를 찾을 수 없습니다.'
-  //       ) {
-  //         alert('해당 일기를 찾을 수 없습니다.');
-  //       } else {
-  //         alert('일기 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-  //       }
-  //     } else if (err.response && err.response.status === 401) {
-  //       // 401 권한 오류 처리
-  //       alert(
-  //         '로그인이 필요하거나 세션이 만료되었습니다. 다시 로그인해주세요.'
-  //       );
-  //     } else {
-  //       // 기타 오류
-  //       alert(
-  //         '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
-  //       );
-  //     }
-  //   }
-  // };
 
   // ------------------- 일기 생성 (작성/수정) ------------------------ //
   // 화면을 더블클릭하면 일기가 생성됨
@@ -376,23 +316,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           </group>
         </Canvas>
       </div>
-
-      {/* ----- 일기 별 클릭 시 메뉴 뜸 (다른사람 페이지에서는 일기 조회가 뜸) ----- */}
-      {/* {isMySpace && selectedEntry && selectedPosition && (
-        <div
-          className="absolute z-20"
-          style={{
-            left: `${selectedPosition.x}px`,
-            top: `${selectedPosition.y - 50}px`, // 별 위쪽에 표시
-          }}>
-          <StarHoverMenu
-            position={selectedPosition}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteClick}
-            onView={handleViewClick}
-          />
-        </div>
-      )} */}
 
       {/* -------------------- 일기별 호버 시 미리보기 뜸 -------------------- */}
       {hoveredEntry && hoveredPosition && (
