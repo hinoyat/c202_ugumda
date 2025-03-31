@@ -7,16 +7,12 @@ import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
-<<<<<<< HEAD
+import Ufo from '@/domains/mainpage/components/universe/Ufo';
 import {
   removeDiary,
   setCurrentDiary,
   updateDiary,
 } from '@/stores/diary/diarySlice';
-=======
-import Ufo from '@/domains/mainpage/components/universe/Ufo';
-import { removeDiary } from '@/stores/diary/diarySlice';
->>>>>>> 4871af3fe058cb33484b01a82be67f72c41aedfb
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
@@ -281,7 +277,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           {/* 3D블랙홀 */}
           <BlackHole />
           {/* 3D UFO */}
-          <Ufo/>
+          <Ufo />
 
           {/* 일기 별들 추가 */}
           <group>
