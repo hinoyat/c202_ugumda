@@ -23,7 +23,6 @@ export default function BlackHole() {
 
   const handleClick = async (e: THREE.Event) => {
     e.stopPropagation(); // 이벤트 전파 중단
-    console.log('눌렀다');
 
     try {
       const result = await dispatch(visitOtherUserpage()).unwrap(); // API 응답 기다림
@@ -31,7 +30,7 @@ export default function BlackHole() {
 
       if (result.username) {
         nav(`/${result.username}`); // API에서 받은 값으로 이동
-        // window.location.reload(); // 새로고침
+        window.location.reload(); // 새로고침
       }
     } catch (error) {
       console.error('랜덤 방문 실패:', error);
