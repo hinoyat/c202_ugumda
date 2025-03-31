@@ -8,7 +8,11 @@ import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
 import Ufo from '@/domains/mainpage/components/universe/Ufo';
-import { removeDiary } from '@/stores/diary/diarySlice';
+import {
+  removeDiary,
+  setCurrentDiary,
+  updateDiary,
+} from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
@@ -66,6 +70,9 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       console.log('일기 상세데이터 로드됨!!! : ', response);
 
       if (response && response.data && response.data.data) {
+        // 리덕스에 현재 선택된 일기 저장
+        dispatch(setCurrentDiary(response.data.data));
+
         setCurrentDiaryDetail(response.data.data);
         setShowDetail(true);
       }
@@ -99,7 +106,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     }
   };
 
-  // ------------------- 일기 생성 (작성/수정) ------------------------ //
+  // ------------------- 일기 생성 ------------------------ //
   // 화면을 더블클릭하면 일기가 생성됨
   const handleDoubleClick = () => {
     console.log('새 일기 생성을 위한 클릭 이벤트!');
@@ -129,6 +136,17 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     }, 20000);
 
     setShowForm(false); // 모달 닫기
+  };
+
+  // ----------------------- 일기 수정 ---------------------------- //
+  const handleDiaryUpdated = (responseData: any) => {
+    const updatedDiary = responseData.data;
+
+    // 리덕스 스토어 업데이트
+    dispatch(updateDiary(updatedDiary));
+
+    // 폼 닫기
+    setShowForm(false);
   };
 
   // ----------------------- 일기 삭제 ---------------------------- //
@@ -259,7 +277,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           {/* 3D블랙홀 */}
           <BlackHole />
           {/* 3D UFO */}
-          <Ufo/>
+          <Ufo />
 
           {/* 일기 별들 추가 */}
           <group>
@@ -368,6 +386,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           isEditing={isEditing}
           diaryData={isEditing ? selectedEntry : undefined}
           onDiaryCreated={handleDiaryCreated}
+          onDiaryUpdated={handleDiaryUpdated}
         />
       )}
     </div>
