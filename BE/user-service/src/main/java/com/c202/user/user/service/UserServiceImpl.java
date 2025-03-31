@@ -9,6 +9,7 @@ import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RabbitTemplate rabbitTemplate;
 
     // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
@@ -33,9 +35,20 @@ public class UserServiceImpl implements UserService {
 
     // 사용자 정보 조회
     @Override
-    public UserResponseDto getUserInfo(Integer userSeq) {
+    public UserResponseDto getUserByUserSeq(Integer userSeq) {
 
         User user = validateUser(userSeq);
+
+        return UserResponseDto.toDto(user);
+    }
+
+
+    // 사용자 정보 조회
+    @Override
+    public UserResponseDto getUserByUsername(String username) {
+
+        User user = userRepository.findByUsernameAndIsDeleted(username, "N")
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
         return UserResponseDto.toDto(user);
     }
@@ -48,7 +61,7 @@ public class UserServiceImpl implements UserService {
         User user = validateUser(userSeq);
 
         // 닉네임 변경 시 중복 체크
-        if (request.getNickname() != null && !request.getNickname().equals(user.getNickname())) {
+        if (request.getNickname() != null && !request.getNickname().trim().isEmpty() && !request.getNickname().equals(user.getNickname())) {
             if (userRepository.existsByNickname(request.getNickname())) {
                 throw new ConflictException("이미 사용 중인 닉네임입니다.");
             }
@@ -56,12 +69,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // 비밀번호 변경
-        if (request.getPassword() != null) {
+        if (request.getPassword() != null && !request.getPassword().trim().isEmpty()) {
             user.updatePassword(passwordEncoder.encode(request.getPassword()));
         }
 
         // 생일 변경
-        if (request.getBirthDate() != null) {
+        if (request.getBirthDate() != null && !request.getBirthDate().trim().isEmpty()) {
             user.updateBirthDate(request.getBirthDate());
         }
 
@@ -88,6 +101,10 @@ public class UserServiceImpl implements UserService {
         user.updateDeletedAt(now);
         // 물리적 삭제가 아닌 논리적 삭제 처리
         user.deleteUser();
+
+        rabbitTemplate.convertAndSend("user.event.exchange", "user.withdrawn", userSeq);
+
+        log.info("탈퇴 이벤트 발행: userSeq = {}", userSeq);
     }
 
     @Override
@@ -100,6 +117,14 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return UserResponseDto.toDto(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponseDto getRandomUser() {
+        return userRepository.findRandomActiveUser()
+                .map(UserResponseDto::toDto)
+                .orElse(UserResponseDto.empty());
     }
 
     private User validateUser(Integer userSeq) {

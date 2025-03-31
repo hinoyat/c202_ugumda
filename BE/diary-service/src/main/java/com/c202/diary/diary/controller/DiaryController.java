@@ -2,14 +2,14 @@ package com.c202.diary.diary.controller;
 
 import com.c202.diary.diary.model.request.VideoRequestDto;
 import com.c202.diary.diary.model.response.UniverseDataResponseDto;
-import com.c202.diary.tag.service.TagService;
+import com.c202.diary.like.model.response.DiaryLikeResponseDto;
+import com.c202.diary.like.service.DiaryLikeService;
 import com.c202.dto.ResponseDto;
 import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
 import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
 import com.c202.diary.diary.model.response.DiaryDetailResponseDto;
 import com.c202.diary.diary.model.response.DiaryListResponseDto;
 import com.c202.diary.diary.service.DiaryService;
-import com.c202.exception.CustomException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +26,7 @@ import java.util.Objects;
 public class DiaryController {
 
     private final DiaryService diaryService;
+    private final DiaryLikeService diaryLikeService;
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> createDiary(
@@ -69,12 +70,13 @@ public class DiaryController {
 
     @GetMapping("/{diarySeq}")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> getDiary(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
     ) {
-        return ResponseEntity.ok(ResponseDto.success(200, "일기 상세 조회 완료", diaryService.getDiary(diarySeq)));
+        return ResponseEntity.ok(ResponseDto.success(200, "일기 상세 조회 완료", diaryService.getDiary(diarySeq, userSeq)));
     }
 
-    @PutMapping("/{diarySeq}/visibility")
+    @PatchMapping("/{diarySeq}/visibility")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> toggleDiaryIsPublic(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
@@ -97,6 +99,15 @@ public class DiaryController {
             ) {
         diaryService.uploadVideo(diarySeq, userSeq, dto.getVideoUrl());
         return ResponseEntity.ok(ResponseDto.success(200, "동영상 업로드 완료"));
+    }
+
+    @PatchMapping("/{diarySeq}/like")
+    public ResponseEntity<ResponseDto<DiaryLikeResponseDto>> addLike(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer diarySeq
+    ) {
+        String resultMessage = diaryLikeService.toggleLike(diarySeq, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, resultMessage, null));
     }
 
 }

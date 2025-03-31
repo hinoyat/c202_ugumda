@@ -1,0 +1,60 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { UserpageState } from './userTypes';
+import { visitUserpage } from './userThunks';
+import { useNavigate } from 'react-router-dom';
+import { selectUser } from '@/stores/auth/authSelectors';
+import { useSelector } from 'react-redux';
+
+// interface UserpageState {
+//   userSeq: number;
+//   username: string;
+//   nickname: string;
+//   birthDate: string;
+//   introduction: string | null;
+//   iconSeq: number;
+// }
+
+const initialState: UserpageState = {
+  userSeq: 0,
+  username: '',
+  nickname: '',
+  birthDate: '',
+  introduction: null,
+  iconSeq: 0,
+};
+
+// const user = useSelector(selectUser);
+// const nav = useNavigate();
+
+const userpageSlice = createSlice({
+  name: 'userpage',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // 방문 주인장 정보 조회 성공
+      .addCase(visitUserpage.fulfilled, (state, action) => {
+        state.userSeq = action.payload.userSeq;
+        state.username = action.payload.username;
+        state.nickname = action.payload.nickname;
+        state.birthDate = action.payload.birthDate;
+        state.introduction = action.payload.introduction;
+        state.iconSeq = action.payload.iconSeq;
+      })
+      .addCase(visitUserpage.rejected, (state) => {
+        state.userSeq = 0;
+        state.username = '';
+        state.nickname = '';
+        state.birthDate = '';
+        state.introduction = null;
+        state.iconSeq = 0;
+        const loginUsername = localStorage.getItem('username');
+        // nav(`/${loginUsername}`, { replace: true });
+        console.log(
+          '다른 사람 페이지로 못 넘어갔는지 redux 정보도 확인해 봅세'
+        );
+      });
+  },
+});
+
+export default userpageSlice.reducer;
