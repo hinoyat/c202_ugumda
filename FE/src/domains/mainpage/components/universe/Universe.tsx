@@ -7,6 +7,7 @@ import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
+import { removeDiary } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
