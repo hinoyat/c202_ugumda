@@ -7,6 +7,7 @@ import DiaryPreview from '@/domains/mainpage/components/DiaryPreview';
 import BlackHole from '@/domains/mainpage/components/universe/BlackHoles';
 import DiaryStar from '@/domains/mainpage/components/universe/DiaryStar';
 import StarField from '@/domains/mainpage/components/universe/StarField';
+import Ufo from '@/domains/mainpage/components/universe/Ufo';
 import { removeDiary } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
@@ -257,6 +258,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           <StarField />
           {/* 3D블랙홀 */}
           <BlackHole />
+          {/* 3D UFO */}
+          <Ufo/>
 
           {/* 일기 별들 추가 */}
           <group>
