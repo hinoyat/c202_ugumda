@@ -15,6 +15,7 @@ import {
 } from '@/stores/diary/diarySlice';
 import { dispose } from '@react-three/fiber';
 import { DiaryData } from '@/domains/diary/Types/diary.types';
+import { Tag } from '@/domains/diary/api/tagApi';
 
 // 일기 생성 인터페이스
 // interface DiaryData {
@@ -111,7 +112,9 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
       isPublic: isPublic ? 'Y' : 'N',
       mainEmotion: finalEmotion,
-      tags: tags,
+      tags: Array.isArray(tags)
+        ? tags.map((tag) => (typeof tag === 'string' ? tag : (tag as Tag).name))
+        : [],
     };
 
     console.log('저장될 일기 내용', diaryToSave);
