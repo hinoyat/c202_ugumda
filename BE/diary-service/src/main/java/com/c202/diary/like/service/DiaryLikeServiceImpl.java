@@ -3,9 +3,8 @@ package com.c202.diary.like.service;
 import com.c202.diary.diary.entity.Diary;
 import com.c202.diary.diary.repository.DiaryRepository;
 import com.c202.diary.like.entity.DiaryLike;
-import com.c202.diary.like.model.response.DiaryLikeResponseDto;
 import com.c202.diary.like.repository.DiaryLikeRepository;
-import com.c202.exception.types.ConflictException;
+import com.c202.exception.types.BadRequestException;
 import com.c202.exception.types.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,37 +26,32 @@ public class DiaryLikeServiceImpl implements DiaryLikeService {
 
     @Transactional
     @Override
-    public DiaryLikeResponseDto addLike(Integer diarySeq, Integer userSeq) {
+    public String toggleLike(Integer diarySeq, Integer userSeq) {
+        if (diarySeq == null || userSeq == null) {
+            throw new BadRequestException("일기 또는 사용자 정보가 유효하지 않습니다.");
+        }
+
         Diary diary = diaryRepository.findByDiarySeqAndIsDeleted(diarySeq, "N")
                 .orElseThrow(() -> new NotFoundException("해당 일기를 찾을 수 없습니다."));
 
-        if (diaryLikeRepository.findByDiarySeqAndUserSeq(diarySeq, userSeq).isPresent()) {
-            throw new ConflictException("이미 좋아요를 누른 일기입니다.");
+        Optional<DiaryLike> existingLike =
+                diaryLikeRepository.findByDiarySeqAndUserSeq(diarySeq, userSeq);
+
+        if (existingLike.isPresent()) {
+            diaryLikeRepository.delete(existingLike.get());
+            return "좋아요 취소 완료";
+        } else {
+            String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
+            DiaryLike diaryLike = DiaryLike.builder()
+                    .diarySeq(diarySeq)
+                    .userSeq(userSeq)
+                    .createdAt(now)
+                    .build();
+            diaryLikeRepository.save(diaryLike);
+            return "좋아요 추가 완료";
         }
-
-        String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
-
-        DiaryLike diaryLike = DiaryLike.builder()
-                .diarySeq(diarySeq)
-                .userSeq(userSeq)
-                .createdAt(now)
-                .build();
-
-        diaryLikeRepository.save(diaryLike);
-
-        // 해당 일기의 총 좋아요 수 조회
-        Integer likeCount = diaryLikeRepository.countByDiarySeq(diarySeq);
-
-        return DiaryLikeResponseDto.toDto(diaryLike, likeCount);
     }
 
-    @Transactional
-    @Override
-    public void removeLike(Integer diarySeq, Integer userSeq) {
-        DiaryLike diaryLike = diaryLikeRepository.findByDiarySeqAndUserSeq(diarySeq, userSeq)
-                .orElseThrow(() -> new NotFoundException("좋아요를 누르지 않은 일기입니다."));
-        diaryLikeRepository.delete(diaryLike);
-    }
 
     @Override
     public Integer getLikeCount(Integer diarySeq) {

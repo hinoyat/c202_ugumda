@@ -4,14 +4,12 @@ import com.c202.diary.diary.model.request.VideoRequestDto;
 import com.c202.diary.diary.model.response.UniverseDataResponseDto;
 import com.c202.diary.like.model.response.DiaryLikeResponseDto;
 import com.c202.diary.like.service.DiaryLikeService;
-import com.c202.diary.tag.service.TagService;
 import com.c202.dto.ResponseDto;
 import com.c202.diary.diary.model.request.DiaryCreateRequestDto;
 import com.c202.diary.diary.model.request.DiaryUpdateRequestDto;
 import com.c202.diary.diary.model.response.DiaryDetailResponseDto;
 import com.c202.diary.diary.model.response.DiaryListResponseDto;
 import com.c202.diary.diary.service.DiaryService;
-import com.c202.exception.CustomException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -78,7 +76,7 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "일기 상세 조회 완료", diaryService.getDiary(diarySeq, userSeq)));
     }
 
-    @PutMapping("/{diarySeq}/visibility")
+    @PatchMapping("/{diarySeq}/visibility")
     public ResponseEntity<ResponseDto<DiaryDetailResponseDto>> toggleDiaryIsPublic(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
@@ -103,20 +101,13 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "동영상 업로드 완료"));
     }
 
-    @PostMapping("/{diarySeq}/like")
+    @PatchMapping("/{diarySeq}/like")
     public ResponseEntity<ResponseDto<DiaryLikeResponseDto>> addLike(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @PathVariable Integer diarySeq
     ) {
-        return ResponseEntity.ok(ResponseDto.success(200, "좋아요 추가 완료", diaryLikeService.addLike(diarySeq, userSeq)));
+        String resultMessage = diaryLikeService.toggleLike(diarySeq, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, resultMessage, null));
     }
 
-    @DeleteMapping("/{diarySeq}/like")
-    public ResponseEntity<ResponseDto<Void>> removeLike(
-            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
-            @PathVariable Integer diarySeq
-    ) {
-        diaryLikeService.removeLike(diarySeq, userSeq);
-        return ResponseEntity.ok(ResponseDto.success(200, "좋아요 취소 완료", null));
-    }
 }
