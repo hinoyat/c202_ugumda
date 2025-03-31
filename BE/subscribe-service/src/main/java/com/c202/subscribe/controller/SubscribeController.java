@@ -1,6 +1,7 @@
 package com.c202.subscribe.controller;
 
 import com.c202.dto.ResponseDto;
+import com.c202.subscribe.model.SubscriptionProfileDto;
 import com.c202.subscribe.service.SubscribeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,8 @@ public class SubscribeController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto<List<Integer>>> getSubscriptions(@RequestHeader("X-User-Seq") Integer userSeq){
-        List<Integer> subscriptions = subscribeService.getSubscriptions(userSeq); // userSeq가 구독한 목록 조회
+    public ResponseEntity<ResponseDto<List<SubscriptionProfileDto>>> getSubscriptions(@RequestHeader("X-User-Seq") Integer userSeq){
+        List<SubscriptionProfileDto> subscriptions = subscribeService.getSubscriptions(userSeq); // userSeq가 구독한 목록 조회
         return ResponseEntity.ok(ResponseDto.success(200, "구독 목록 조회 완료", subscriptions));
     }
 }
