@@ -6,6 +6,8 @@ import com.c202.subscribe.model.SubscriptionProfileDto;
 import com.c202.subscribe.repository.SubscribeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SubscribeServiceImpl implements SubscribeService {
@@ -103,5 +106,13 @@ public class SubscribeServiceImpl implements SubscribeService {
                 })
                 .collect(Collectors.toList());
     }
+    @RabbitListener(queues = "user.withdrawn.queue")
+    @Transactional
+    public void handleUserWithdrawn(Integer userSeq) {
+        log.info("유저 탈퇴 이벤트 수신: userSeq = {}", userSeq);
+        subscribeRepository.deleteBySubscriberSeq(userSeq);
+        log.info("구독 정보 삭제 완료: userSeq = {}", userSeq);
+    }
+
 
 }

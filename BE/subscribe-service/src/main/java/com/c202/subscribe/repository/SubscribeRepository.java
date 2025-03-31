@@ -10,4 +10,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
     boolean existsBySubscriberSeqAndSubscribedSeq(Integer subscriberSeq, Integer subscribedSeq);
     Optional<Subscribe> findBySubscriberSeqAndSubscribedSeq(Integer subscriberSeq, Integer subscribedSeq);
     List<Subscribe> findBySubscriberSeq(Integer subscriberSeq);
+
+    void deleteBySubscriberSeq(Integer userSeq);
 }
