@@ -96,6 +96,7 @@ public class DiaryServiceImpl implements DiaryService {
         diary.update(
                 request.getTitle(),
                 request.getContent(),
+                request.getIsPublic(),
                 request.getDreamDate(),
                 now
         );
