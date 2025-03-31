@@ -14,6 +14,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByUsername(String username);
     boolean existsByNickname(String nickname);
     Optional<User> findByUsername(String username);
-    List<User> findByUserSeqIn(List<Integer> userSeqList);
+    List<User> findByUserSeqInAndIsDeleted(List<Integer> userSeqList, String isDeleted);
 
 }

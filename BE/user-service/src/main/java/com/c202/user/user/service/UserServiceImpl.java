@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<UserProfileDto> getUserProfiles(List<Integer> userSeqList) {
-        return userRepository.findByUserSeqIn(userSeqList).stream()
+        return userRepository.findByUserSeqInAndIsDeleted(userSeqList, "N").stream()
                 .map(user -> UserProfileDto.builder()
                         .userSeq(user.getUserSeq())
                         .nickname(user.getNickname())
