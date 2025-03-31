@@ -1,5 +1,6 @@
 package com.c202.notification.service;
 
+import com.c202.exception.types.NotFoundException;
 import com.c202.notification.entity.Alarm;
 import com.c202.notification.model.AlarmMessageDto;
 import com.c202.notification.repository.AlarmRepository;
@@ -25,10 +26,8 @@ public class AlarmService {
 
     private final AlarmRepository alarmRepository;
 
-    // 알림 메시지를 저장
     @Transactional
     public Alarm saveAlarm(AlarmMessageDto alarmMessage) {
-        // DTO → Entity 변환
         Alarm alarm = Alarm.builder()
                 .userSeq(alarmMessage.getUserSeq())
                 .content(alarmMessage.getContent())
@@ -38,7 +37,6 @@ public class AlarmService {
                         LocalDateTime.now())
                 .isRead("N")
                 .build();
-
         Alarm saved = alarmRepository.save(alarm);
         log.info("알림 저장 완료: {}", saved);
         return saved;
@@ -46,6 +44,7 @@ public class AlarmService {
 
     // 사용자의 알림 목록 조회
     public List<Alarm> getAlarms(Integer userSeq) {
+
         return alarmRepository.findByUserSeqOrderByCreatedAtDesc(userSeq);
     }
 
@@ -56,7 +55,7 @@ public class AlarmService {
         return alarmPage.getContent();
     }
 
-    // 사용자의 알림 목록을 페이지네이션으로 조회
+    // 사용자의 알림 목록 페이지네이션
     public Map<String, Object> getPagedAlarms(Integer userSeq, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Alarm> alarmPage = alarmRepository.findByUserSeq(userSeq, pageable);
@@ -74,9 +73,8 @@ public class AlarmService {
     @Transactional
     public Alarm markAsRead(Integer alarmSeq) {
         Alarm alarm = alarmRepository.findById(alarmSeq)
-                .orElseThrow(() -> new EntityNotFoundException("알림을 찾을 수 없습니다. ID: " + alarmSeq));
+                .orElseThrow(() -> new NotFoundException("알림을 찾을 수 없습니다. ID: " + alarmSeq));
 
-        // 이미 읽은 알림이면 변경 없이 반환
         if ("Y".equals(alarm.getIsRead())) {
             return alarm;
         }
@@ -85,7 +83,7 @@ public class AlarmService {
         return alarmRepository.save(alarm);
     }
 
-    // 사용자의 모든 알림을 읽음 처리
+    // 사용자의 모든 알림을 읽음
     @Transactional
     public void markAllAsRead(Integer userSeq) {
         List<Alarm> unreadAlarms = alarmRepository.findByUserSeqAndIsRead(userSeq, "N");
@@ -99,11 +97,11 @@ public class AlarmService {
         log.info("사용자 {}의 {} 개 알림을 읽음 처리함", userSeq, unreadAlarms.size());
     }
 
-    // 특정 알림 삭제
+    // 알림 삭제
     @Transactional
     public Integer deleteAlarm(Integer alarmSeq) {
         Alarm alarm = alarmRepository.findById(alarmSeq)
-                .orElseThrow(() -> new EntityNotFoundException("알림을 찾을 수 없습니다. ID: " + alarmSeq));
+                .orElseThrow(() -> new NotFoundException("알림을 찾을 수 없습니다. ID: " + alarmSeq));
 
         Integer userSeq = alarm.getUserSeq();
         alarmRepository.delete(alarm);
@@ -111,7 +109,7 @@ public class AlarmService {
         return userSeq;
     }
 
-    // 사용자의 모든 알림 삭제
+    // 모든 알림 삭제
     @Transactional
     public void deleteAllAlarms(Integer userSeq) {
         List<Alarm> userAlarms = alarmRepository.findByUserSeq(userSeq);
@@ -124,7 +122,6 @@ public class AlarmService {
         log.info("사용자 {}의 {} 개 알림 삭제 완료", userSeq, userAlarms.size());
     }
 
-    // 사용자의 읽지 않은 알림 개수 조회
     public long getUnreadCount(Integer userSeq) {
         return alarmRepository.countByUserSeqAndIsRead(userSeq, "N");
     }
