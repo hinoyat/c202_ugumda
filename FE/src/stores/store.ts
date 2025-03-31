@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './auth/authSlice';
 import signupReducer from '@/domains/signup/stores/signupSlice';
 import diaryReducer from '@/stores/diary/diarySlice';
+import userpageReducer from '@/domains/mainpage/stores/userSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer, // auth 슬라이스 등록
     signup: signupReducer,
     diary: diaryReducer,
+    userpage: userpageReducer,
   },
 });
 
