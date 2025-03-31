@@ -116,10 +116,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDto getRandomUser() {
-        User randomUser = userRepository.findRandomActiveUser()
-                .orElseThrow(() -> new NotFoundException("사용 가능한 사용자가 없습니다."));
-
-        return UserResponseDto.toDto(randomUser);
+        return userRepository.findRandomActiveUser()
+                .map(UserResponseDto::toDto)
+                .orElse(UserResponseDto.empty());
     }
 
     private User validateUser(Integer userSeq) {
