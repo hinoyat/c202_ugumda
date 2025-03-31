@@ -1,8 +1,11 @@
 from app.log_config import logging_check
+import os
 import logging
 import requests
 
 logging_check()
+
+API_BASE_URL = os.environ.get("API_BASE_URL")
 
 def test_logic_1(content:str, diary_pk: int, token: str):
     logging.info("시작")
@@ -34,7 +37,7 @@ def test_logic_2(diary_pk:int, video_url:str, token:str):
         logging.info(f"요청 페이로드: {payload}")
         logging.info(f"사용된 diary_pk: {diary_pk}")
 
-        response = requests.post(f'https://j12c202.p.ssafy.io/api/diaries/{diary_pk}/video', json=payload,
+        response = requests.post(f'{API_BASE_URL}/diaries/{diary_pk}/video', json=payload,
                                  headers=headers)
         logging.info(f"요청 보내는 중")
 
