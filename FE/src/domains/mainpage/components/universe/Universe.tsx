@@ -365,7 +365,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
                   [connection.from.x, connection.from.y, connection.from.z],
                   [connection.to.x, connection.to.y, connection.to.z],
                 ]}
-                color={0xdce6ff} // 연한 푸른 빛 흰색, 투명도 낮춤
+                color="rgb(220, 230, 255)" // 연한 푸른 빛 흰색
                 lineWidth={0.5} // 선 두께 감소
                 dashed // 점선 효과 추가
                 dashSize={0.8} // 점선 크기
