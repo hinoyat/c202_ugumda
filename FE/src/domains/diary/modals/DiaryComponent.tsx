@@ -38,6 +38,7 @@ interface DiaryComponentProps {
   isEditing?: boolean;
   diaryData?: DiaryData;
   onDiaryCreated?: (responseData: any) => void;
+  onDiaryUpdated?: (data: any) => void;
 }
 
 const DiaryComponent: React.FC<DiaryComponentProps> = ({
@@ -46,6 +47,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   isEditing = false,
   diaryData,
   onDiaryCreated,
+  onDiaryUpdated,
 }) => {
   //   onClose,
   //   isEditing = false,
@@ -67,104 +69,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [emotion, setEmotion] = useState<string>(''); // 감정태그
 
-  //   // 데이터 초기화 (props 또는 API에서 가져오기)
-  //   useEffect(() => {
-  //     console.log('DiaryComponent useEffect 실행', { isEditing, diaryData, id });
-
-  //     if (isEditing) {
-  //       // props로 전달된 데이터가 있으면 사용
-  //       if (diaryData) {
-  //         console.log('props로 전달된 데이터 사용', diaryData);
-  //         setTitle(diaryData.title || '');
-  //         setContent(diaryData.content || '');
-  //         setTags(diaryData.tags || []);
-  //         setIsPublic(diaryData.isPublic === 'Y');
-  //       }
-  //       // props로 전달된 데이터가 없고 id가 있으면 API 호출
-  //       else if (id) {
-  //         console.log('API에서 데이터 가져오기 시도', { id });
-  //         // 여기서 API 호출을 통해 데이터를 가져오는 로직을 구현
-  //         // 예: fetchDiaryById(id).then(data => { ... })
-
-  //         // 임시 데이터 (실제로는 API 응답으로 대체)
-  //         const tempData = {
-  //           id: parseInt(id),
-  //           title: '수정할 일기 제목',
-  //           content: '수정할 일기 내용',
-  //           tags: ['태그1', '태그2'],
-  //           isPublic: true,
-  //         };
-
-  //         setTitle(tempData.title);
-  //         setContent(tempData.content);
-  //         setTags(tempData.tags);
-  //         setIsPublic(tempData.isPublic);
-  //       }
-  //     }
-  //   }, [isEditing, diaryData, id]);
-
-  //   // 일기를 저장해서 UniverseDiaryForm으로 넘김
-  //   const handleSave = () => {
-  //     console.log('저장될 일기 내용', {
-  //       title,
-  //       content,
-  //       dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
-  //       isPublic: isPublic ? 'Y' : 'N',
-  //       mainEmotion: emotion,
-  //       tags,
-  //     });
-
-  //     // 백에 넘길 데이터
-  //     const diaryToSave = {
-  //       title,
-  //       content,
-  //       dreamDate: new Date().toISOString().slice(0, 10).replace(/=/g, ''),
-  //       isPublic: isPublic ? 'Y' : 'N',
-  //       mainEmotion: emotion,
-  //       tags,
-  //     };
-
-  //     if (isEditing) {
-  //       console.log('일기 수정:', diaryToSave);
-  //       // 수정 API 호출은 여기에 구현
-  //     } else {
-  //       console.log('일기 생성:', diaryToSave);
-  //       // 생성 API 호출은 여기에 구현
-  //     }
-
-  //     // 데이터 전달 및 모달 닫기
-  //     if (onClose) {
-  //       onClose(diaryToSave);
-  //     } else {
-  //       navigate('/');
-  //     }
-  //   };
-
-  //   // -----------------------------이 부분 삭제 or 수정 필요 --------------------------//
-  //   // 임시 비디오 부분이라서 api연동하면 수정해야 함 //
-
-  //   // 동영상 생성 핸들러
-  //   const handleCreateVideo = () => {
-  //     console.log('등록 후 동영상 생성하기');
-  //     // 동영상 생성 API 호출
-
-  //     const diaryToSave = {
-  //       title,
-  //       content,
-  //       dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
-  //       isPublic: isPublic ? 'Y' : 'N',
-  //       mainEmotion: emotion,
-  //       tags,
-  //       dream_video: 'Y', // 동영상 생성 요청 표시
-  //     };
-
-  //     if (onClose) {
-  //       onClose(diaryToSave);
-  //     } else {
-  //       navigate('/');
-  //     }
-  //   };
-
   //   //-------------동영상 생성 가능 횟수도 영상 api 통신 하면서 수정 해야함 --------------//
   //   const Count = 3; // 동영상 생성 가능 횟수
 
@@ -172,11 +76,16 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   // 수정모드에서 데이터 불러오기
   useEffect(() => {
     if (isEditing && diaryData) {
+      console.log('수정 모드 데이터 로드:', {
+        diaryData,
+        메인감정쓰: diaryData.emotionName,
+      });
+
       setTitle(diaryData.title);
       setContent(diaryData.content);
       setTags(diaryData?.tags || []);
       setIsPublic(diaryData.isPublic === 'Y');
-      setEmotion(diaryData.mainEmotion);
+      setEmotion(diaryData.emotionName || diaryData.mainEmotion || '');
 
       // 리덕스에 현재 편집중인 일기 설정
       dispatch(setCurrentDiary(diaryData));
@@ -185,14 +94,23 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
   // -------------------- 일기 저장 -------------------- //
   const handleSave = async () => {
-    console.log('저장될 감정 태그:', emotion);
+    // 수정 시 감정 태그가 비어있으면 기존 값 사용
+    const finalEmotion =
+      isEditing && !emotion && diaryData ? diaryData.mainEmotion : emotion;
+
+    console.log('저장 시 감정 태그>P___<:', {
+      emotion,
+      diaryDataEmotion: diaryData?.mainEmotion,
+      finalEmotion,
+    });
+
     // 백에 넘길 데이터
     const diaryToSave = {
       title,
       content,
       dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
       isPublic: isPublic ? 'Y' : 'N',
-      mainEmotion: emotion,
+      mainEmotion: finalEmotion,
       tags: tags,
     };
 
@@ -200,10 +118,9 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
     try {
       if (isEditing && diaryData?.diarySeq) {
-        // 수정모드
-        console.log('수정 모드 진입, diarySeq:', diaryData.diarySeq);
-        console.log('수정할 데이터:', diaryToSave);
+        console.log('백에 보내는 수정 데이터:', diaryToSave);
 
+        // 수정모드
         const response = await diaryApi.updateDiary(
           diaryData.diarySeq,
           diaryToSave
@@ -213,9 +130,9 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 리덕스 스토어 업데이트
         dispatch(updateDiary(response.data.data));
 
-        if (onDiaryCreated) {
-          console.log('onDiaryCreated 호출됨');
-          onDiaryCreated(response.data);
+        if (onDiaryUpdated) {
+          console.log('onDiaryUpdated 호출됨');
+          onDiaryUpdated(response.data);
         }
       } else {
         // 생성 모드
@@ -234,7 +151,12 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
       onClose();
     } catch (error) {
-      console.error('일기 생성 중에 발생한 오류 : ', error);
+      console.error(
+        isEditing
+          ? '일기 수정 중에 발생한 오류 : '
+          : '일기 생성 중에 발생한 오류 : ',
+        error
+      );
 
       const err = error as any;
 
@@ -294,7 +216,9 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             </h2>
             <StarTag
               onSelect={setEmotion}
-              initialEmotion={diaryData?.mainEmotion || ''}
+              initialEmotion={
+                diaryData?.emotionName || diaryData?.mainEmotion || ''
+              }
             />
           </div>
 

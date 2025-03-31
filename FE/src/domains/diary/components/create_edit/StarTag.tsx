@@ -31,6 +31,14 @@ const StarTag: React.FC<StarTagProps> = ({ onSelect, initialEmotion }) => {
     };
   }, []);
 
+  // initialEmotion이 변경될 때 selectedEmotion도 업데이트
+  useEffect(() => {
+    if (initialEmotion) {
+      setSelectedEmotion(initialEmotion);
+      onSelect(initialEmotion);
+    }
+  }, [initialEmotion, onSelect]);
+
   const handleEmotionSelect = (emotion: string) => {
     setSelectedEmotion(emotion);
     setIsOpen(false);

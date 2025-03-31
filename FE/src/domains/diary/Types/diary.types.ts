@@ -5,6 +5,7 @@ export interface DiaryData {
   content: string;
   dreamDate: string;
   isPublic: string;
-  mainEmotion: string;
+  mainEmotion?: string;
+  emotionName?: string;
   tags?: string[];
 }
