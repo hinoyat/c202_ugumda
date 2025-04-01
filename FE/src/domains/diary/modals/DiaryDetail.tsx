@@ -30,6 +30,7 @@ interface DiaryDetailProps {
   onClose: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  isMySpace?: boolean;
 }
 
 const DiaryDetail: React.FC<DiaryDetailProps> = ({
@@ -37,6 +38,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   onClose,
   onEdit,
   onDelete,
+  isMySpace = false,
 }) => {
   // 현재 보여지는 일기 데이터를 상태로 관리
   const [currentDiary, setCurrentDiary] = useState(initialDiary);
