@@ -66,6 +66,7 @@ const MainPage = () => {
           nickname={isMySpace ? loginUser?.nickname : visitUser?.nickname}
           onButtonClick={handleButtonClick}
           buttonLabel={isMySpace ? '로그아웃' : '구독취소'}
+          isMySpace={isMySpace}
         />
       </div>
 
