@@ -114,5 +114,17 @@ public class SubscribeServiceImpl implements SubscribeService {
         log.info("구독 정보 삭제 완료: userSeq = {}", userSeq);
     }
 
+    @Override
+    public String isSubscribed(Integer subscriberSeq, Integer subscribedSeq) {
+        if (subscriberSeq == null || subscribedSeq == null) {
+            throw new BadRequestException("구독자 정보가 유효하지 않습니다.");
+        }
+
+        boolean result = subscribeRepository.findBySubscriberSeqAndSubscribedSeq(subscriberSeq, subscribedSeq).isPresent();
+
+        return result ? "Y" : "N";
+    }
+
+
 
 }
