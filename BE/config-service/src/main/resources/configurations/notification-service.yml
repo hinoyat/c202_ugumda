@@ -1,10 +1,4 @@
 spring:
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${NOTIFICATION_DB_URL}${DB_PARAMS}
