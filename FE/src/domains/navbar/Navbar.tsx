@@ -31,11 +31,13 @@ const Navbar = () => {
         {/* Rocket */}
         <Link
           to="/spaceship"
+          // onClick={onclose}
           className="hover:text-white"
-          data-tooltip-id="spaceship-tooltip"
-          data-tooltip-content="우주선으로 이동">
+          data-tooltip-id="Guestbook"
+          data-tooltip-content="방명록">
           <BsFillRocketTakeoffFill className="w-5 h-5" />
         </Link>
+
 
         {/* search (클릭하면 모달 열림) */}
         <VscSearch

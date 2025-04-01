@@ -1,104 +1,73 @@
 import { useState } from 'react';
+import { Guestbookdata } from '../apis/apiOthersGuestBook';
 import exampleProfile from '@/assets/images/exampleProfile.svg';
 import trash from '@/assets/images/trash.svg';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores/store';
 
-const GuestBookList = () => {
-  const owner = { user_id: 1 };
+interface GuestBookListProps {
+  data?: Guestbookdata[];
+  onDelete?: (guestbookSeq: number) => void;
+}
 
-  const mockdata = [
-    {
-      id: 1,
-      user_id: 1,
-      content: '방명록 테스트입니다.룰루랄라',
-      profile: `${exampleProfile}`,
-      nickname: '어린왕자',
-      created_at: '2025-03-13',
-    },
-    {
-      id: 2,
-      user_id: 6,
-      content: '방명록 테스트입니다.룰루랄라1',
-      profile: `${exampleProfile}`,
-      nickname: '꿈여행자2',
-      created_at: '2025-03-13',
-    },
-    {
-      id: 3,
-      user_id: 5,
-      content: '방명록 테스트입니다.룰루랄라12',
-      profile: `${exampleProfile}`,
-      nickname: '꿈여행자3',
-      created_at: '2025-03-13',
-    },
-    {
-      id: 4,
-      user_id: 4,
-      content: '방명록 테스트입니다.룰루랄라123',
-      profile: `${exampleProfile}`,
-      nickname: '꿈여행자4',
-      created_at: '2025-03-13',
-    },
-    {
-      id: 5,
-      user_id: 2,
-      content: '방명록 테스트입니다.룰루랄라1234',
-      profile: `${exampleProfile}`,
-      nickname: '꿈여행자5',
-      created_at: '2025-03-13',
-    },
-  ];
+const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) => {
 
-  // 페이지네이션 관련 state
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 10; // 페이지당 표시할 아이템 수
-  const totalItems = mockdata.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // 현재 페이지에 따라 슬라이싱할 범위
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedData = mockdata.slice(startIndex, endIndex);
-
-  // 페이지 변경
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // 이전 페이지
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-  };
-
-  // 다음 페이지
-  const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  };
+  const LoginUserNumber = useSelector((state: RootState) => state.auth?.user?.userSeq);
+    // 페이지네이션 관련 state
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 10; // 페이지당 표시할 아이템 수
+    const totalItems = data.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+    // 현재 페이지에 따라 슬라이싱할 범위
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const displayedData = Array.isArray(data) ? data.slice(startIndex, endIndex) : [];
+    console.log('GuestBookList received data:', data);
+    console.log('Data type:', typeof data, Array.isArray(data));
+  
+    // 페이지 변경
+    const handlePageChange = (pageNumber: number) => {
+      setCurrentPage(pageNumber);
+    };
+  
+    // 이전 페이지
+    const handlePrevPage = () => {
+      setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+  
+    // 다음 페이지
+    const handleNextPage = () => {
+      setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
 
   return (
     <div className="w-full text-white">
       {/* 내용 부분 */}
-      {mockdata.map((visitor) => (
+      {displayedData.map((item) => (
         <div
-          key={visitor.id}
+          key={item.guestbookSeq}
           className="flex items-center gap-4 p-2 w-full text-[14px]">
-          <p className="w-[78%] truncate">{visitor.content}</p>
+          <p className="w-[78%] truncate">{item.content}</p>
           {/* 프로필과 닉네임 영역 */}
           <div className="flex items-center gap-2 w-32">
             <img
-              src={visitor.profile}
+            //  어떻게 줘야하지?
+              // src={item.writerIconSeq}
               alt="profile"
               className="w-6"
             />
-            <p className="truncate">{visitor.nickname}</p>
+            <p className="truncate">{item.writerNickname}</p>
           </div>
           {/* 작성일 영역 */}
           <div className="flex gap-3">
-            <p className="w-24">{visitor.created_at}</p>
+            <p className="w-24">{item.createdAt}</p>
             <div className="w-8 text-center">
-              {owner.user_id === visitor.user_id ? (
+              {LoginUserNumber === item.writerSeq || LoginUserNumber === item.ownerSeq ? (
                 <img
                   src={trash}
                   className="w-4 h-6 hover:animate-pulse cursor-pointer"
+                  onClick={() => onDelete && onDelete(item.guestbookSeq)}
                 />
               ) : (
                 ''

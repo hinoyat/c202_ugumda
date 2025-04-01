@@ -1,13 +1,16 @@
 import api from "@/apis/apiClient"
 
-interface UserGuestbookResponse {
-
+export interface UserGuestbookResponse {
+    "guestbookSeq": number,
+    "ownerSeq":number,
     "writerSeq": number,
     "writerNickname": string,
     "writerIconSeq": number,
     "content": string,
     "createdAt": string,
-    "updatedAt": string
+    "updatedAt": string,
+    "deletedAt": null,
+    "isDeleted": "N"
 }
 
 
