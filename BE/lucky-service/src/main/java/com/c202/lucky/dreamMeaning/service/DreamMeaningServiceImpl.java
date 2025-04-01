@@ -26,22 +26,40 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     @Override
     public void createDreamMeaning(Integer userSeq, DreamMeaningRequestDto dto) {
         String content;
+        String isGood;
         try {
-            // 실제 사용 시에는 아래 주석 해제
-            // String prompt = String.format(dto.getInputContent() + " 이에 대한 꿈 해몽을 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.");
-            // content = chatModel.call(prompt);
-            content = "인프라 화이팅..!!";
+//            // 1. 해몽 생성
+//            String prompt1 = dto.getInputContent() + " 이에 대한 꿈 해몽을 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.";
+//            content = chatModel.call(prompt1);
+//
+//            // 2. 해몽 평가 (좋음/나쁨 분류)
+//            String prompt2 = content + "이 해몽은 좋습니까? 반드시 '좋음' 또는 '나쁨'으로만 답하세요. 다른 말 절대 하지 마세요.";
+//            String sentiment = chatModel.call(prompt2).trim();
+//            log.info(sentiment);
+//
+//            if (sentiment.contains("좋")) {
+//                isGood = "Y";
+//            } else if (sentiment.contains("나쁘") || sentiment.contains("나쁜")) {
+//                isGood = "N";
+//            } else {
+//                throw new AiCallFailedException("AI가 올바른 형식으로 분류하지 못했습니다. 답변: " + sentiment);
+//            }
+            content = "푸하하";
+            isGood = "Y";
+
         } catch (Exception e) {
             log.error("AI 해몽 생성 실패", e);
             throw new AiCallFailedException("AI 해몽 생성 중 오류가 발생했습니다.");
         }
 
-        log.info("GPT 응답: {}", content);
+        log.info("GPT 해몽 응답: {}", content);
+        log.info("GPT 분류 결과 (isGood): {}", isGood);
 
         DreamMeaning dreamMeaning = DreamMeaning.builder()
                 .userSeq(userSeq)
                 .inputContent(dto.getInputContent())
                 .resultContent(content)
+                .isGood(isGood)
                 .createdAt(LocalDateTime.now().format(FORMATTER))
                 .build();
 

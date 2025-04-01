@@ -11,6 +11,7 @@ public class DreamMeaningDto {
 
     private Integer dreamMeaningSeq;
     private Integer userSeq;
+    private String isGood;
     private String inputContent; // 사용자 입력
     private String resultContent; // 해몽 결과
     private String createdAt;
@@ -19,6 +20,7 @@ public class DreamMeaningDto {
         return DreamMeaningDto.builder()
                 .dreamMeaningSeq(entity.getDreamMeaningSeq())
                 .userSeq(entity.getUserSeq())
+                .isGood(entity.getIsGood())
                 .inputContent(entity.getInputContent())
                 .resultContent(entity.getResultContent())
                 .createdAt(entity.getCreatedAt())

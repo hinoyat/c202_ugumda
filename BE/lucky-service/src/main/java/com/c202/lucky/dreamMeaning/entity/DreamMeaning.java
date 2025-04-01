@@ -27,4 +27,7 @@ public class DreamMeaning {
 
     @Column(nullable = false, length = 15)
     private String createdAt;
+
+    @Column(length = 1)
+    private String isGood;
 }
