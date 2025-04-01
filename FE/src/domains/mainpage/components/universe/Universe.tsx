@@ -106,10 +106,11 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     }
   };
 
-  // ------------------- 일기 생성 ------------------------ //
+  // ------------------- 일기 생성 (내 우주만) ------------------------ //
   // 화면을 더블클릭하면 일기가 생성됨
   const handleDoubleClick = () => {
-    console.log('새 일기 생성을 위한 클릭 이벤트!');
+    if (!isMySpace) return;
+
     setShowForm(true);
     setIsEditing(false);
   };
@@ -360,19 +361,21 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       {showDetail && currentDiaryDetail && (
         <DiaryDetail
           initialDiary={currentDiaryDetail}
+          isMyspace={isMySpace}
           onClose={() => {
             setShowDetail(false);
             setCurrentDiaryDetail(null);
           }}
           onEdit={() => {
-            // 수정 모드로 전환
-            setIsEditing(true);
-            // 수정할 일기 데이터 설정
-            setSelectedEntry(currentDiaryDetail);
-            // 일기 조회 모달 닫기
-            setShowDetail(false);
-            // 작성/수정 폼 모달 열기
-            setShowForm(true);
+            if (isMySpace) {
+              setIsEditing(true);
+              // 수정할 일기 데이터 설정
+              setSelectedEntry(currentDiaryDetail);
+              // 일기 조회 모달 닫기
+              setShowDetail(false);
+              // 작성/수정 폼 모달 열기
+              setShowForm(true);
+            }
           }}
           onDelete={handleDeleteDiary}
         />
@@ -387,6 +390,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
           diaryData={isEditing ? selectedEntry : undefined}
           onDiaryCreated={handleDiaryCreated}
           onDiaryUpdated={handleDiaryUpdated}
+          isMySpace={isMySpace}
         />
       )}
     </div>
