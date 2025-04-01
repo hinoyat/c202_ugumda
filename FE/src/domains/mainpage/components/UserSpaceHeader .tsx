@@ -5,17 +5,27 @@ interface UserSpaceHeaderProps {
   nickname: string | undefined; // 닉네임 ( 내 닉네임 or 다른 사람 닉네임)
   onButtonClick: () => void; // 버튼 클릭 이벤트 (로그아웃 or 구독취소)
   buttonLabel: string;
+  isMySpace?: boolean;
 }
 const UserSpaceHeader = ({
   nickname,
   onButtonClick,
   buttonLabel,
+  isMySpace = false,
 }: UserSpaceHeaderProps) => {
   return (
     <div className="p-4">
       <div className="flex items-baseline">
-        <h3 className="text-base font-bold text-white/90">{nickname}</h3>
-        <p className="text-sm text-white/90 ml-1">님의 우주</p>
+        {isMySpace ? (
+          <h3 className="text-base font-bold text-white/90 ml-1">
+            나의 우주 ☄️
+          </h3>
+        ) : (
+          <>
+            <h3 className="text-base font-bold text-white/90">{nickname}</h3>
+            <p className="text-sm text-white/90 ml-1">님의 우주</p>
+          </>
+        )}
       </div>
       <button
         onClick={onButtonClick}
