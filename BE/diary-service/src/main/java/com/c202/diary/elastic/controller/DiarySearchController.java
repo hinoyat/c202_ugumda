@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class DiarySearchController {
 
     private final DiarySearchService diarySearchService;
 
-    @GetMapping("/diary")
+    @GetMapping("/diaries/search")
     public ResponseEntity<ResponseDto<List<DiarySearchListResponseDto>>> searchDiaries(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
             @ModelAttribute DiarySearchRequestDto requestDto) {
