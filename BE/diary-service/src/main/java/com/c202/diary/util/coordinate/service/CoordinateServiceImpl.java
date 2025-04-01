@@ -1,14 +1,13 @@
-package com.c202.diary.coordinate.service;
+package com.c202.diary.util.coordinate.service;
 
-import com.c202.diary.coordinate.model.ClusterDto;
-import com.c202.diary.coordinate.model.CoordinateDto;
+import com.c202.diary.util.coordinate.model.ClusterDto;
+import com.c202.diary.util.coordinate.model.CoordinateDto;
 import com.c202.diary.diary.entity.Diary;
 import com.c202.diary.diary.repository.DiaryRepository;
 import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.tag.entity.DiaryTag;
 import com.c202.diary.tag.repository.DiaryTagRepository;
-import com.c202.diary.tag.repository.TagRepository;
 import com.c202.exception.types.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
