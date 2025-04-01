@@ -47,8 +47,9 @@ const MainPage = () => {
   const isMySpace = params.username === loginUser?.username ? true : false; // 내 우주인지 여부
 
   const handleButtonClick = async () => {
+    // 로그아웃 버튼 로직
     await dispatch(logoutUser());
-    nav('/login', { replace: true });
+    nav('/intro', { replace: true });
     window.location.reload(); // 새로고침 -> refresh 삭제하려고, 백엔드한테 삭제 되나 요청해보기
   };
 
