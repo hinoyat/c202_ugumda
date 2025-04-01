@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { Guestbookdata } from '../apis/apiOthersGuestBook';
-import exampleProfile from '@/assets/images/exampleProfile.svg';
 import trash from '@/assets/images/trash.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
-
-interface GuestBookListProps {
-  data?: Guestbookdata[];
-  onDelete?: (guestbookSeq: number) => void;
-}
+import { getIconById } from '@/hooks/ProfileIcons';
 
 const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) => {
 
@@ -52,8 +47,7 @@ const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) =>
           {/* 프로필과 닉네임 영역 */}
           <div className="flex items-center gap-2 w-32">
             <img
-            //  어떻게 줘야하지?
-              // src={item.writerIconSeq}
+              src={getIconById(item.writerIconSeq)}
               alt="profile"
               className="w-6"
             />
@@ -61,7 +55,11 @@ const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) =>
           </div>
           {/* 작성일 영역 */}
           <div className="flex gap-3">
-            <p className="w-24">{item.createdAt}</p>
+            <p className="w-24">
+              {item.createdAt ?
+              `${item.createdAt.slice(0,4)}-${item.createdAt.slice(4,6)}-${item.createdAt.slice(6,8)}`: item.createdAt
+            }
+              </p>
             <div className="w-8 text-center">
               {LoginUserNumber === item.writerSeq || LoginUserNumber === item.ownerSeq ? (
                 <img

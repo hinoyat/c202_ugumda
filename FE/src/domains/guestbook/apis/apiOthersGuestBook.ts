@@ -46,7 +46,6 @@ export const GuestbookOtherapi = {
     },
     
 
-
     // 방명록 삭제
     deleteGuestbookEntry:  async(guestbookSeq:number) : Promise<any>=>{
         try{

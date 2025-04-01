@@ -21,6 +21,8 @@ const GuestBook: React.FC<MainPageProps> = ({onClose}) => {
   const LoginUserNumber = useSelector((state: RootState) => state.auth?.user?.userSeq);
   const PageUser = useSelector((state: RootState) => state.userpage);
   const PageUserNumber = useSelector((state: RootState) => state.userpage.userSeq);
+  const l = useSelector((state: RootState) => state)
+  console.log("확인", l)
   console.log("페이지 주인번호!", PageUserNumber)
   console.log('현재 유저번호:', LoginUserNumber);
 
@@ -108,7 +110,7 @@ const handleDeleteEntry = async (guestbookSeq: number) => {
 
 
   return (
-    <div className="">
+    <div className="absolute z-999 inset-0">
       {/* <MainPage /> */}
       <div className="absolute inset-0 backdrop-blur-lg"></div>
       {/* 모달 가장 바깥 부분 */}
