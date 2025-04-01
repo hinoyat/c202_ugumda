@@ -37,6 +37,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Ownglyph_wiseelist-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/Ownglyph_wiseelist-Rg.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -95,4 +103,8 @@ body {
 
 .modal-back-color {
   background-color: rgba(110, 110, 110, 0.47);
+}
+
+.ownglyph-font {
+  font-family: 'Ownglyph_wiseelist-Rg', 'sans-serif';
 }
