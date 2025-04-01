@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,16 +26,18 @@ import java.util.Map;
 public class AlarmService {
 
     private final AlarmRepository alarmRepository;
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
+
+
 
     @Transactional
     public Alarm saveAlarm(AlarmMessageDto alarmMessage) {
+        String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         Alarm alarm = Alarm.builder()
                 .userSeq(alarmMessage.getUserSeq())
                 .content(alarmMessage.getContent())
                 .type(alarmMessage.getType())
-                .createdAt(alarmMessage.getTimestamp() != null ?
-                        alarmMessage.getTimestamp() :
-                        LocalDateTime.now())
+                .createdAt(now)
                 .isRead("N")
                 .build();
         Alarm saved = alarmRepository.save(alarm);

@@ -26,7 +26,4 @@ public interface AlarmRepository extends JpaRepository<Alarm, Integer> {
     // 사용자별, 읽음 상태별 알림 개수 조회
     long countByUserSeqAndIsRead(Integer userSeq, String isRead);
 
-    // 특정 날짜 이전에 생성된 알림 목록 조회 (데이터 정리용)
-    List<Alarm> findByCreatedAtBefore(LocalDateTime date);
-
 }

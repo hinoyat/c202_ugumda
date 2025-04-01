@@ -17,9 +17,7 @@ public class AlarmResponseDto {
     private Integer alarmSeq;
     private String content;
     private String type;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     private boolean isRead;
 

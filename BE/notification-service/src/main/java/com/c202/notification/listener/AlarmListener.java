@@ -1,5 +1,6 @@
 package com.c202.notification.listener;
 
+import com.c202.exception.types.BadRequestException;
 import com.c202.notification.repository.EmitterRepository;
 import com.c202.notification.model.AlarmMessageDto;
 import com.c202.notification.service.AlarmService;
@@ -35,7 +36,7 @@ public class AlarmListener {
             // 알림 저장 및 전송
             processAlarmMessage(alarmMessage);
 
-        } catch (AmqpRejectAndDontRequeueException e) {
+        } catch (BadRequestException e) {
             log.error("Invalid alarm message rejected: {}", e.getMessage());
             throw e; // 메시지 재처리하지 않음
         } catch (Exception e) {
@@ -48,12 +49,12 @@ public class AlarmListener {
     private void validateMessage(AlarmMessageDto message) {
         if (message.getUserSeq() == null) {
             log.error("유효하지 않은 알림 메시지: userSeq가 null입니다.");
-            throw new AmqpRejectAndDontRequeueException("유효하지 않은 알림 메시지");
+            throw new BadRequestException("유효하지 않은 알림 메시지");
         }
 
         if (message.getContent() == null || message.getContent().isBlank()) {
             log.error("유효하지 않은 알림 메시지: content가 비어있습니다.");
-            throw new AmqpRejectAndDontRequeueException("유효하지 않은 알림 메시지");
+            throw new BadRequestException("유효하지 않은 알림 메시지");
         }
     }
 
