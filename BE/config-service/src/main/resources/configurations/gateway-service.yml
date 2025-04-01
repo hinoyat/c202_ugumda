@@ -94,6 +94,13 @@ spring:
           filters:
             - name: JwtAuthFilter
 
+        - id: emotion-service
+          uri: lb://diary-service
+          predicates:
+            - Path=/api/emotions/**
+          filters:
+            - name: JwtAuthFilter
+
         - id: notification-service
           uri: lb://notification-service
           predicates:
