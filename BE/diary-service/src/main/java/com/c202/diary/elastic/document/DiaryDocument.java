@@ -1,6 +1,6 @@
 package com.c202.diary.elastic.document;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.util.List;
 
 @Document(indexName = "diary")
+@Setting(settingPath = "/elasticsearch/diary-settings.json")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
