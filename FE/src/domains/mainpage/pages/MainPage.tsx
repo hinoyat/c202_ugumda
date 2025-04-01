@@ -109,11 +109,6 @@ const MainPage = () => {
         </Link>
       </div> */}
 
-      {/* 블랙홀 - 다른 사람의 우주로 가기 */}
-      <div className="absolute top-0 right-5">
-        <Blackhole />
-      </div>
-
       {/* 방명록 */}
       <div className="absolute bottom-0 left-5 mb-10 ml-5 z-10">
         <div onClick={onClickGuestBookModal}>

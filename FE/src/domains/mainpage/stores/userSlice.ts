@@ -1,9 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserpageState } from './userTypes';
-import { visitUserpage } from './userThunks';
-import { useNavigate } from 'react-router-dom';
-import { selectUser } from '@/stores/auth/authSelectors';
-import { useSelector } from 'react-redux';
+import { visitUserpage, visitOtherUserpage } from './userThunks';
 
 // interface UserpageState {
 //   userSeq: number;
@@ -14,6 +11,7 @@ import { useSelector } from 'react-redux';
 //   iconSeq: number;
 // }
 
+// 다음에 구독 정보도 넣어주면 고쳐야해
 const initialState: UserpageState = {
   userSeq: 0,
   username: '',
@@ -40,6 +38,7 @@ const userpageSlice = createSlice({
         state.birthDate = action.payload.birthDate;
         state.introduction = action.payload.introduction;
         state.iconSeq = action.payload.iconSeq;
+        // 구독 정보 넘어오면 고치기
       })
       .addCase(visitUserpage.rejected, (state) => {
         state.userSeq = 0;
@@ -48,11 +47,20 @@ const userpageSlice = createSlice({
         state.birthDate = '';
         state.introduction = null;
         state.iconSeq = 0;
-        const loginUsername = localStorage.getItem('username');
-        // nav(`/${loginUsername}`, { replace: true });
+        // 구독 정보 넘어오면 고치기
         console.log(
           '다른 사람 페이지로 못 넘어갔는지 redux 정보도 확인해 봅세'
         );
+      })
+      .addCase(visitOtherUserpage.fulfilled, (state, action) => {
+        console.log('랜덤방문 여기 넘어왔나요?');
+        state.userSeq = action.payload.userSeq;
+        state.username = action.payload.username;
+        state.nickname = action.payload.nickname;
+        state.birthDate = action.payload.birthDate;
+        state.introduction = action.payload.introduction;
+        state.iconSeq = action.payload.iconSeq;
+        // 구독 정보 넘어오면 고치기 (웬만하면 거의 다 구독 아님)
       });
   },
 });
