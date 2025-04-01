@@ -13,9 +13,9 @@ import {
   setCurrentDiary,
   updateDiary,
 } from '@/stores/diary/diarySlice';
-import { dispose } from '@react-three/fiber';
 import { DiaryData } from '@/domains/diary/Types/diary.types';
 import { Tag } from '@/domains/diary/api/tagApi';
+import { videoApi } from '@/domains/diary/api/videoApi';
 
 // 일기 생성 인터페이스
 // interface DiaryData {
@@ -40,6 +40,7 @@ interface DiaryComponentProps {
   diaryData?: DiaryData;
   onDiaryCreated?: (responseData: any) => void;
   onDiaryUpdated?: (data: any) => void;
+  isMySpace?: boolean;
 }
 
 const DiaryComponent: React.FC<DiaryComponentProps> = ({
@@ -49,16 +50,8 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   diaryData,
   onDiaryCreated,
   onDiaryUpdated,
+  isMySpace = true,
 }) => {
-  //   onClose,
-  //   isEditing = false,
-  //   diaryData,
-  // }) => {
-  //   console.log('DiaryComponent 렌더링 시작', { isEditing, diaryData });
-
-  //   const navigate = useNavigate();
-  //   const { id } = useParams();
-
   // 리덕스 관련 설정
   const dispatch = useDispatch();
   const { currentDiary } = useSelector((state: RootState) => state.diary);
@@ -99,12 +92,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
     const finalEmotion =
       isEditing && !emotion && diaryData ? diaryData.mainEmotion : emotion;
 
-    console.log('저장 시 감정 태그>P___<:', {
-      emotion,
-      diaryDataEmotion: diaryData?.mainEmotion,
-      finalEmotion,
-    });
-
     // 백에 넘길 데이터
     const diaryToSave = {
       title,
@@ -121,8 +108,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
     try {
       if (isEditing && diaryData?.diarySeq) {
-        console.log('백에 보내는 수정 데이터:', diaryToSave);
-
         // 수정모드
         const response = await diaryApi.updateDiary(
           diaryData.diarySeq,
@@ -138,12 +123,53 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           onDiaryUpdated(response.data);
         }
       } else {
-        // 생성 모드
+        // --------------- 생성 모드 ----------------
+
         const response = await diaryApi.createDiary(diaryToSave);
+
         console.log('일기 생성에 성공!!!!', response);
 
         // 리덕스 스토어에 추가
         dispatch(addDiary(response.data.data));
+
+        // 영상 생성 API 요청
+        const diarySeq = response.data.data.diarySeq;
+
+        // content 문자아닌 것 앞에 / 붙임
+
+        const escapeSpecialCharsForVideo = (text: string) => {
+          return text
+            .split('')
+            .map((char) => {
+              // 백슬래시는 특별한 이스케이프 문자이기 때문에 정규표현식에서 추가 처리가 필요
+              // 백슬래시는 먼저 처리
+              if (char === '\\') return '/\\';
+
+              // 한글 음절, 자음, 모음, 알파벳, 숫자, 공백인 경우 그대로 유지
+              return /[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]/.test(char)
+                ? char
+                : `/${char}`;
+            })
+            .join('');
+        };
+
+        const escapedContent = escapeSpecialCharsForVideo(content);
+
+        console.log('영상 생성 요청 데이터:', {
+          diary_pk: diarySeq,
+          content: escapedContent,
+        });
+        videoApi
+          .createVideo({
+            diary_pk: diarySeq,
+            content: escapedContent,
+          })
+          .then((response) => {
+            console.log('영상 생성 API 요청 성공:', response);
+          }) // 지우기
+          .catch((videoError) => {
+            console.error('영상 생성 요청 중 오류:', videoError);
+          });
 
         // 성공 시 onDiaryCreated 콜백 호출
         // 부모 컴포넌트(유니버스)로 전달 -> 새로운 일기 별 생성에 사용
@@ -193,7 +219,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       className="absolute inset-0 backdrop-blur-[4px] bg-black/50"
       onClick={onClose}>
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[27%] h-[75%] py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar bg-[#505050]/90 rounded-lg"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[80%] py-8 px-4 pl-8 overflow-y-scroll custom-scrollbar bg-[#505050]/90 rounded-lg"
         onClick={(e) => e.stopPropagation()}>
         <div className="pr-3 flex flex-col gap-5">
           <div>

@@ -14,7 +14,7 @@ const DiaryHeader: React.FC<DiaryHeaderProps> = ({
   return (
     <div className="flex justify-between relative">
       <div className="flex flex-col">
-        <h1 className="text-lg font-semibold text-white">
+        <h1 className="text-[20px] font-semibold text-white">
           {isEditing ? '꿈 일기를 수정해보세요' : '오늘은 무슨 꿈을 꾸었나요?'}
         </h1>
         <Today />
