@@ -10,7 +10,9 @@ import GuestBook from '../guestbook/GuestBook';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { visitUserpage } from '../mainpage/stores/userThunks';
+
+import Alarm from '../alarm/Alarm';
+import api from '@/apis/apiClient';
 
 const Navbar = () => {
   // 모달 열림 여부
@@ -22,26 +24,40 @@ const Navbar = () => {
   const closeModal = () => setIsModalOpen(false);
 
   //방명록을 열기 위해 유저정보 가져오기
-  const currentPageUser = useSelector((state) => state.userpage);
   const params = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (params.username) {
-      console.log(params.username)
-      dispatch(visitUserpage({ username: params.username }));
+      console.log(params.username);
     }
   }, [params.username, dispatch]);
-
-
 
   //방명록 모달
   const [showGuestbook, setShowGuestbook] = useState(false);
   const onClickGuestBookModal = () => {
     console.log('방명록 버튼 클릭됨:', showGuestbook);
-    console.log('Redux userpage 상태:', currentPageUser);
     setShowGuestbook(!showGuestbook);
   };
+
+  // 알림 모달 열림 여부
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
+
+  // 모달 열기
+  const openAlarm = async () => {
+    const response = await api.get('/notifications/list/page', {
+      params: { page: 0, size: 5 },
+    });
+
+    if (response) {
+      setIsAlarmOpen(true);
+      console.log('⏰⏰⏰⏰⏰알람 목록 페이지네이션 전체조회!!!!', response);
+    } else {
+      console.error(response);
+    }
+  };
+  // 모달 닫기
+  const closeAlarm = () => setIsAlarmOpen(false);
 
   return (
     <>
@@ -64,7 +80,6 @@ const Navbar = () => {
           <BsFillRocketTakeoffFill className="w-5 h-5" />
         </div>
 
-
         {/* search (클릭하면 모달 열림) */}
         <VscSearch
           onClick={openModal}
@@ -75,6 +90,7 @@ const Navbar = () => {
 
         {/* bell */}
         <FaRegBell
+          onClick={openAlarm} // 알림창 뜨기
           className="hover:text-white cursor-pointer w-5 h-5"
           data-tooltip-id="notification-tooltip"
           data-tooltip-content="알림"
@@ -110,6 +126,12 @@ const Navbar = () => {
 
       {/* 방명록 모달 (조건부 렌더링) */}
       {showGuestbook && <GuestBook onClose={onClickGuestBookModal} />}
+
+      {/* 알림 컴포넌트 */}
+      <Alarm
+        isOpen={isAlarmOpen}
+        onClose={closeAlarm}
+      />
     </>
   );
 };
