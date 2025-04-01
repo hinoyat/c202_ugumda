@@ -1,5 +1,6 @@
 package com.c202.lucky.luckyNumber.service;
 
+import com.c202.exception.types.AlreadyExistsException;
 import com.c202.exception.types.ValidationException;
 import com.c202.lucky.luckyNumber.repository.LuckyNumberRepository;
 import com.c202.lucky.luckyNumber.entity.LuckyNumber;
@@ -25,7 +26,7 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
     @Transactional
     public void createLuckyNumber(Integer userSeq) {
         if (luckyNumberRepository.findByUserSeq(userSeq).isPresent()) {
-            throw new ValidationException("오늘은 이미 생성된 행운 번호가 있습니다");
+            throw new AlreadyExistsException("오늘은 이미 생성된 행운 번호가 있습니다");
         }
 
         List<Integer> luckyNumbers = generateLuckyNumbers();
@@ -55,7 +56,7 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
                         luckyNumber.getNumber5(),
                         luckyNumber.getNumber6()
                 ))
-                .orElse(List.of());
+                .orElse(null);
     }
 
     private List<Integer> generateLuckyNumbers() {

@@ -24,6 +24,6 @@ public class DailyFortuneController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<String>> getDailyFortune (@RequestHeader("X-User-Seq") @NotNull Integer userSeq){
-        return ResponseEntity.ok(ResponseDto.success(201, "오늘의 운세 조회 성공", dailyFortuneService.getDailyFortune(userSeq)));
+        return ResponseEntity.ok(ResponseDto.success(200, "오늘의 운세 조회 성공", dailyFortuneService.getDailyFortune(userSeq)));
     }
 }
