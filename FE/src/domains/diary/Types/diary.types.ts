@@ -9,3 +9,9 @@ export interface DiaryData {
   emotionName?: string;
   tags?: string[];
 }
+
+// 영상 생성
+export interface VideoCreateData {
+  diary_pk: number;
+  content: string;
+}
