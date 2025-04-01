@@ -1,6 +1,6 @@
 package com.c202.notification.listener;
 
-import com.c202.notification.emitter.EmitterRepository;
+import com.c202.notification.repository.EmitterRepository;
 import com.c202.notification.model.AlarmMessageDto;
 import com.c202.notification.service.AlarmService;
 import lombok.RequiredArgsConstructor;

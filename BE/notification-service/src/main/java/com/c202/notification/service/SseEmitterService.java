@@ -1,7 +1,7 @@
 package com.c202.notification.service;
 
 import com.c202.notification.entity.Alarm;
-import com.c202.notification.emitter.EmitterRepository;
+import com.c202.notification.repository.EmitterRepository;
 import com.c202.notification.model.ConnectionInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
