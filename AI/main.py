@@ -32,7 +32,7 @@ app = FastAPI()
 2. 백에 보낼 
 '''
 
-@app.post("/ai/create-video")
+@app.post("/api/ai/create-video")
 async def create_video(generate_chat_request_dto:GenerateVideoRequestDto, background_tasks:BackgroundTasks, authorization: str = Header(None)):
     logging.info(f"일기 내용 받기 성공, dairy_pk: {generate_chat_request_dto.diary_pk}")
     # 백그라운드 테스크로 추가할 함수
@@ -53,7 +53,7 @@ async def create_video(generate_chat_request_dto:GenerateVideoRequestDto, backgr
 
 # 현호야 이거로 테스트해!!
 # url만 보내기
-@app.post("/ai/test-sample-video")
+@app.post("/api/ai/test-sample-video")
 async def sample_video(generate_chat_request_dto:GenerateVideoRequestDto, background_tasks:BackgroundTasks, authorization: str = Header(None)):
     logging.info(f"일기 내용 받기 성공, dairy_pk: {generate_chat_request_dto.diary_pk}")
     background_tasks.add_task(
