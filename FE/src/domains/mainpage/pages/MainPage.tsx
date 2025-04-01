@@ -3,18 +3,24 @@ import GuestBook from '@/domains/guestbook/GuestBook';
 import Universe from '@/domains/mainpage/components/universe/Universe';
 import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader ';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAppDispatch } from '@/hooks/hooks';
 import { logoutUser } from '@/stores/auth/authThunks';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/stores/auth/authSelectors';
+import { selectVisitUser } from '../stores/userSelectors';
+import { visitUserpage } from '../stores/userThunks';
 
 const MainPage = () => {
   console.log('🟡 내 메인 렌더링!');
+
+  const params = useParams();
   const dispatch = useAppDispatch();
-  const user = useSelector(selectUser);
+  const nav = useNavigate();
+
+  const loginUser = useSelector(selectUser);
+  const visitUser = useSelector(selectVisitUser);
 
   //      방명록 표시 여부      //
   const [showGuestbook, setShowGuestbook] = useState(false);
@@ -23,37 +29,39 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    console.log('✅ MainPage 마운트됨!');
-  }, []);
+    if (params.username) {
+      console.log('✅ MainPage 마운트됨!');
+      dispatch(visitUserpage({ username: params.username }));
+      console.log('방문한 페이지 주인장 정보', visitUser);
+    }
+  }, [params.username, dispatch]);
 
-  const nav = useNavigate();
-
-  const onClickLogin = () => {
-    nav('/login');
-  };
-  const onClickSignup = () => {
-    nav('/signup');
-  };
+  // 방문하려는 유저 정보를 가져오는 데 실패하면 내 페이지로 이동
+  useEffect(() => {
+    if (params.username === '') {
+      nav(`/${loginUser?.username}`, { replace: true });
+    }
+  }, [params.username, nav]);
 
   //          좌측 상단 UserSpaceHeader 컴포넌트          //
-  const isMySpace = true; // 내 우주인지 여부
-  // const myNickname = '내 우주일때';
-  const othernickname = '다른 유저 우주일때';
+  const isMySpace = params.username === loginUser?.username ? true : false; // 내 우주인지 여부
 
   const handleButtonClick = async () => {
+    // 로그아웃 버튼 로직
     await dispatch(logoutUser());
-    nav('/login', { replace: true });
+    nav('/intro', { replace: true });
     window.location.reload(); // 새로고침 -> refresh 삭제하려고, 백엔드한테 삭제 되나 요청해보기
   };
 
   return (
     <div className="flex flex-col items-start text-white relative w-screen h-screen overflow-hidden">
       {/* 우주영역 */}
-      <Universe isMySpace={true} />
+      <Universe isMySpace={isMySpace} />
+
       {/* 닉네임님의 우주입니다 & 버튼 */}
       <div className="absolute top-5 left-5">
         <UserSpaceHeader
-          nickname={isMySpace ? user?.nickname : othernickname}
+          nickname={isMySpace ? loginUser?.nickname : visitUser?.nickname}
           onButtonClick={handleButtonClick}
           buttonLabel={isMySpace ? '로그아웃' : '구독취소'}
           isMySpace={isMySpace}

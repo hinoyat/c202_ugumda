@@ -17,11 +17,11 @@ api.interceptors.request.use((config) => {
   console.log('api interceptors', config);
 
   const token: string = localStorage.getItem('accessToken') || '';
-  const jwtTMP: JwtPayload = jwtDecode(token);
+  // const jwtTMP: JwtPayload = jwtDecode(token);
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    config.headers['X-User-Seq'] = jwtTMP.userSeq;
+    // config.headers['X-User-Seq'] = jwtTMP.userSeq;
   }
   return config;
 });

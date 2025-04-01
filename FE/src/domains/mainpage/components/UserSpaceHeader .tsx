@@ -11,7 +11,7 @@ const UserSpaceHeader = ({
   nickname,
   onButtonClick,
   buttonLabel,
-  isMySpace = false,
+  isMySpace,
 }: UserSpaceHeaderProps) => {
   return (
     <div className="p-4">
