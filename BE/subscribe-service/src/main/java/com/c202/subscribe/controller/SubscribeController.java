@@ -32,11 +32,11 @@ public class SubscribeController {
     }
 
     @GetMapping("/check/{subscribedSeq}")
-    public ResponseEntity<ResponseDto<String>> checkSubscription(
+    public String checkSubscription(
             @RequestHeader("X-User-Seq") Integer subscriberSeq,
             @PathVariable Integer subscribedSeq) {
-        String isSubscribed = subscribeService.isSubscribed(subscriberSeq, subscribedSeq);
-        return ResponseEntity.ok(ResponseDto.success(200, "구독 여부 조회 성공", isSubscribed));
+        boolean result = subscribeService.isSubscribed(subscriberSeq, subscribedSeq).equals("Y");
+        return result ? "Y" : "N";
     }
 
 }
