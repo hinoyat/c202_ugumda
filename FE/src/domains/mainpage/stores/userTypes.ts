@@ -5,6 +5,7 @@ export interface UserpageState {
   birthDate: string;
   introduction: string | null;
   iconSeq: number;
+  isSubscribed: string;
 }
 
 export interface visitResponse {
