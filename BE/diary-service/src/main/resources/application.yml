@@ -8,3 +8,6 @@ spring:
   cloud:
     config:
       fail-fast: ${SPRING_CLOUD_CONFIG_FAIL_FAST}
+
+  elasticsearch:
+    uris: http://localhost:9200
