@@ -6,6 +6,11 @@ import { FaRegBell } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import SearchModal from '../search/modal/SearchModal'; // 모달 임포트
 import { Tooltip } from 'react-tooltip';
+import GuestBook from '../guestbook/GuestBook';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { visitUserpage } from '../mainpage/stores/userThunks';
 
 const Navbar = () => {
   // 모달 열림 여부
@@ -15,6 +20,28 @@ const Navbar = () => {
   const openModal = () => setIsModalOpen(true);
   // 모달 닫기
   const closeModal = () => setIsModalOpen(false);
+
+  //방명록을 열기 위해 유저정보 가져오기
+  const currentPageUser = useSelector((state) => state.userpage);
+  const params = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (params.username) {
+      console.log(params.username)
+      dispatch(visitUserpage({ username: params.username }));
+    }
+  }, [params.username, dispatch]);
+
+
+
+  //방명록 모달
+  const [showGuestbook, setShowGuestbook] = useState(false);
+  const onClickGuestBookModal = () => {
+    console.log('방명록 버튼 클릭됨:', showGuestbook);
+    console.log('Redux userpage 상태:', currentPageUser);
+    setShowGuestbook(!showGuestbook);
+  };
 
   return (
     <>
@@ -29,13 +56,14 @@ const Navbar = () => {
         </Link>
 
         {/* Rocket */}
-        <Link
-          to="/spaceship"
+        <div
+          onClick={onClickGuestBookModal}
           className="hover:text-white"
-          data-tooltip-id="spaceship-tooltip"
-          data-tooltip-content="우주선으로 이동">
+          data-tooltip-id="guestbook-tooltip"
+          data-tooltip-content="방명록">
           <BsFillRocketTakeoffFill className="w-5 h-5" />
-        </Link>
+        </div>
+
 
         {/* search (클릭하면 모달 열림) */}
         <VscSearch
@@ -59,7 +87,7 @@ const Navbar = () => {
         style={{ zIndex: 9999 }}
       />
       <Tooltip
-        id="spaceship-tooltip"
+        id="guestbook-tooltip"
         place="bottom"
         style={{ zIndex: 9999 }}
       />
@@ -79,6 +107,9 @@ const Navbar = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
       />
+
+      {/* 방명록 모달 (조건부 렌더링) */}
+      {showGuestbook && <GuestBook onClose={onClickGuestBookModal} />}
     </>
   );
 };

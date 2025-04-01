@@ -1,6 +1,7 @@
 package com.c202.lucky.dailyFortune.service;
 
 import com.c202.exception.types.AiCallFailedException;
+import com.c202.exception.types.AlreadyExistsException;
 import com.c202.lucky.dailyFortune.entity.DailyFortune;
 import com.c202.lucky.dailyFortune.repository.DailyFortuneRepository;
 import jakarta.transaction.Transactional;
@@ -26,7 +27,11 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
     @Override
     @Transactional
     public void createDailyFortune(Integer userSeq) {
+        if (dailyFortuneRepository.findByUserSeq(userSeq).isPresent()) {
+            throw new AlreadyExistsException("오늘의 운세가 이미 생성되었습니다.");
+        }
         try {
+
             // 실제 배포 시 주석 해제
 //            String birthDate = webClientBuilder
 //                    .baseUrl("http://user-service")
@@ -63,6 +68,6 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
     public String getDailyFortune(Integer userSeq) {
         return dailyFortuneRepository.findByUserSeq(userSeq)
                 .map(DailyFortune::getContent)
-                .orElse("오늘의 운세가 아직 생성되지 않았습니다.");
+                .orElse(null);
     }
 }
