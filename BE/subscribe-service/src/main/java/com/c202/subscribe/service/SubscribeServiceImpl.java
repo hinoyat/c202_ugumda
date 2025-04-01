@@ -70,6 +70,8 @@ public class SubscribeServiceImpl implements SubscribeService {
                 .distinct()
                 .collect(Collectors.toList());
 
+        log.info("subscriberSeq = {}, subscribedSeqList = {}", subscriberSeq, subscribedSeqList);
+
         // 2. bulk 요청으로 user profile 조회
         Map<String, Object> response = webClientBuilder
                 .baseUrl("http://user-service")
