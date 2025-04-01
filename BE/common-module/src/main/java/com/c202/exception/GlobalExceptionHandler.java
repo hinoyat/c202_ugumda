@@ -59,6 +59,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(ResponseDto.error(400, errorMessage));
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ResponseDto<Void>> handleAlreadyExists(AlreadyExistsException ex) {
+        return ResponseEntity.status(409).body(ResponseDto.error(409, ex.getMessage()));
+    }
+
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ResponseDto<Void>> handleCustomException(CustomException ex) {
         return ResponseEntity.status(ex.getStatusCode()).body(ResponseDto.error(ex.getStatusCode(), ex.getMessage()));
