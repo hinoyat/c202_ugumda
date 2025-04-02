@@ -8,7 +8,7 @@
 - 프로젝트 내에서 서비스 간 이벤트 전달(탈퇴 -> 구독 삭제)
 - 대량 스트림X
 - 실시간으로 처리를 끝내고 싶음
-- 개발, 운영 편리함 우선선
+- 개발, 운영 편리함 우선
 - 따라서 Kafka가 아닌 RabbitMQ를 사용함함
 
 ## 2. 사용자 탈퇴시 구독 취소
@@ -84,13 +84,13 @@ public class RabbitConsumerConfig {
 
 ### subscribeServiceImpl
 ```
-    @RabbitListener(queues = "user.withdrawn.queue")
-    @Transactional
-    public void handleUserWithdrawn(Integer userSeq) {
-        log.info("유저 탈퇴 이벤트 수신: userSeq = {}", userSeq);
-        subscribeRepository.deleteBySubscriberSeq(userSeq);
-        log.info("구독 정보 삭제 완료: userSeq = {}", userSeq);
-    }
+@RabbitListener(queues = "user.withdrawn.queue")
+@Transactional
+public void handleUserWithdrawn(Integer userSeq) {
+    log.info("유저 탈퇴 이벤트 수신: userSeq = {}", userSeq);
+    subscribeRepository.deleteBySubscriberSeq(userSeq);
+    log.info("구독 정보 삭제 완료: userSeq = {}", userSeq);
+}
 ```
 - user.withdrawn.queue 큐로부터 유저 탈퇴 메시지를 받아서, 해당 유저의 구독정보를 DB에서 삭제
 
@@ -155,9 +155,236 @@ public class RabbitConsumerConfig {
                 })
                 .collect(Collectors.toList());
     }
-    ```
-
+```
 
 # 2025-04-01 화요일
+## 1. 오늘의 운세 하루 1회 제한
+### AlreadyExistsException 추가
+```
+package com.c202.exception.types;
+
+import com.c202.exception.CustomException;
+
+public class AlreadyExistsException extends CustomException {
+    public AlreadyExistsException(String message) {
+        super(message, 409);
+    }
+}
+```
+
+### DailyFortuneServiceImpl
+```
+public void createDailyFortune(Integer userSeq) {
+        if (dailyFortuneRepository.findByUserSeq(userSeq).isPresent()) {
+            throw new AlreadyExistsException("오늘의 운세가 이미 생성되었습니다.");
+        }
+```
+- 이미 생성한 경우 예외 반환
+
+```
+public String getDailyFortune(Integer userSeq) {
+        return dailyFortuneRepository.findByUserSeq(userSeq)
+                .map(DailyFortune::getContent)
+                .orElse("오늘의 운세가 아직 생성되지 않았습니다.");
+                .orElse(null);
+    }
+```
+- 아직 생성되지 않은 경우 예외 대신 null 값 반환
+
+### LuckyNumberServiceImpl
+```
+ if (luckyNumberRepository.findByUserSeq(userSeq).isPresent()) {
+            throw new AlreadyExistsException("오늘은 이미 생성된 행운 번호가 있습니다");
+    }
+```
+- 이미 생성한 경우 예외 반환
+- 행운번호와 오늘의 운세의 경우 12시에 자동 초기화됨
+
+```
+ List<Integer> luckyNumbers = generateLuckyNumbers();
+@@ -55,7 +56,7 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
+                        luckyNumber.getNumber5(),
+                        luckyNumber.getNumber6()
+                ))
+                .orElse(null);
+    }
+```
+- 아직 생성되지 않은 경우 예외 대신 null 값 반환환
+
+
+## 2. 유저 정보 조회시(닉네임) 구독 여부 추가
+## 3. 유저 정보 조회시(이름) 구독 여부 추가
+
+### SubscribeController
+```
+@GetMapping("/check/{subscribedSeq}")
+    public String checkSubscription(
+            @RequestHeader("X-User-Seq") Integer subscriberSeq,
+            @PathVariable Integer subscribedSeq) {
+        boolean result = subscribeService.isSubscribed(subscriberSeq, subscribedSeq).equals("Y");
+        return result ? "Y" : "N";
+    }
+```
+- 구독 여부를 조회하는 api 구현
+- WebClient를 통해 호출되는 B2B(백엔드-백엔드) API 특성을 고려하여 단순 문자열 아닌 String 타입으로 응답
+- ResponseEntity 대신 "Y"/"N"로 응답하여 바로 사용하도록 쉽게 설계함
+
+
+### SubscribeService
+```
+    @Override
+    public String isSubscribed(Integer subscriberSeq, Integer subscribedSeq) {
+        if (subscriberSeq == null || subscribedSeq == null) {
+            throw new BadRequestException("구독자 정보가 유효하지 않습니다.");
+        }
+
+        boolean result = subscribeRepository.findBySubscriberSeqAndSubscribedSeq(subscriberSeq, subscribedSeq).isPresent();
+
+        return result ? "Y" : "N";
+    }
+
+```
+- 로그인한 유저(subscriberSeq)가 특정 유저(subscribedSeq)를 구독했는지 반환하는 로직
+
+### UserController
+```
+  @GetMapping("/seq/{otherSeq}")
+    public ResponseEntity<ResponseDto<UserWithSubscriptionDto>> getUserByUserSeq(
+            @PathVariable Integer otherSeq,
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+
+        UserWithSubscriptionDto user = userService.getUserByUserSeqWithSubscription(otherSeq, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 및 구독 여부 조회 성공", user));
+```
+- 로그인 유저는 userSeq, 대상 유저는 otherSeq
+
+```
+public ResponseEntity<ResponseDto<UserWithSubscriptionDto>> getUserByUsernameWithSubscription(
+            @PathVariable String username,
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+
+        UserWithSubscriptionDto user = userService.getUserByUsernameWithSubscription(username, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 및 구독 여부 조회 성공", user));
+```
+- 로그인 유저는 userSeq, 대상 유저의 닉네임은 username
+
+### UserWithSubscriptionDto
+```
+ public static UserWithSubscriptionDto from(User user, String isSubscribed) {
+        return UserWithSubscriptionDto.builder()
+                .userSeq(user.getUserSeq())
+                .username(user.getUsername())
+                .nickname(user.getNickname())
+                .birthDate(user.getBirthDate())
+                .introduction(user.getIntroduction())
+                .iconSeq(user.getIconSeq())
+                .isSubscribed(isSubscribed)
+                .build();
+    }
+```
+- 기존에 있던 User entity를 from(정적 팩토리 메서드)를 통해 isSubscribe정보를 함께 받아 객체로 만듦
+
+### UserServiceImpl
+```
+ private String getSubscriptionStatus(Integer targetUserSeq, Integer subscriberSeq) {
+        return webClientBuilder
+                .baseUrl("http://subscribe-service")
+                .build()
+                .get()
+                .uri("/api/subscription/check/{subscribedSeq}", targetUserSeq)
+                .header("X-User-Seq", subscriberSeq.toString())
+                .retrieve()
+                .bodyToMono(String.class)
+                .onErrorReturn("N")
+                .block();
+    }
+```
+- webclient를 이용하여 구독 여부 조회
+- 공통 로직을 모듈화함
+
+```
+  @Override
+    public UserWithSubscriptionDto getUserByUsernameWithSubscription(String username, Integer subscriberSeq) {
+        User targetUser = userRepository.findByUsernameAndIsDeleted(username, "N")
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+
+        String isSubscribed = getSubscriptionStatus(targetUser.getUserSeq(), subscriberSeq);
+
+        return UserWithSubscriptionDto.from(targetUser, isSubscribed);
+    }
+
+    @Override
+    public UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer subscriberSeq) {
+        User targetUser = validateUser(userSeq);
+
+        String isSubscribed = getSubscriptionStatus(targetUser.getUserSeq(), subscriberSeq);
+
+        return UserWithSubscriptionDto.from(targetUser, isSubscribed);
+    }
+```
+- getUserByUsernameWithSubscription와 getUserByUserSeqWithSubscription에서 위의 모듈을 사용하여 구독 여부를 return
 
 # 2025-04-02 수요일
+## 1. 소나큐브
+- 코드 품질과 보안을 자동으로 분석하고 관리하기 위해 사용하는 정적 분석 도구
+- 코드 품질 확보, 보안 취약점 탐지, 테스트 커버리지 확인, 리팩토링 가이드를 위해 사용
+- 젠킨스와 연동하고 싶었지만, 이미 젠킨스에 올라간 docker가 21개이므로, 로컬에서만 확인
+
+### docker-compose.yml
+```
+version: "3"
+services:
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+volumes:
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:
+```
+- 9000번 포트에서 소나큐브 활성화
+- Maven 프로젝트이기 때문에, 각 프로젝트에 sonar-maven-plugin을 추가
+
+```
+<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version>
+			</plugin>
+```
+
+- 각 프로젝트에서 mvnw 명령어 실행
+```
+./mvnw clean verify -DskipTests sonar:sonar -Dsonar.projectKey=이름 -Dsonar.projectName=이름 -Dsonar.host.url=http://localhost:9000 -Dsonar.token=토큰
+```
+
+### 결과
+![image-5.png](./images/image-5.png)
+
+## 2. 리펙토링
+- 사용하지 않는 import 제거
+- System.out.println 대신 log 사용
+- Collectors.toList()를 toList()로 줄여서 가독성 향상 (공식 권장)
+- 불필요한 객체 생성을 제거하고, static으로 만들어서 여러 번 재사용할 수 있게 만듦
+
+```
+return new Random() 대신에
+
+private static final Random RANDOM = new Random();
+return RANDOM. 사용
+```
+
+### print VS log..
+1. 로그는 info, warn, error, debug, trace처럼 레벨을 나눠서 출력 가능하기 때문에, 운영중에 필요한 정보만 볼 수 있음
+2. log는 로그 파일이나, 모니터링 시스템으로 연동 가능함.
+3. System.out.println은 문자열 연산이 발생하기 때문에 불필요한 비용이 발생.
+4. 특히, System.out.println()은 동기적이기 때문에, 출력이 완료될 때까지 코드가 멈춤. logging은 비동기 로깅
+5. 따라서, 실시간 트래픽이 많은 서비스에서는 비동기 로깅을 사용해야 함.
