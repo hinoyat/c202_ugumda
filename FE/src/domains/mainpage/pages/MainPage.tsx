@@ -22,6 +22,10 @@ const MainPage = () => {
   const loginUser = useSelector(selectUser);
   const visitUser = useSelector(selectVisitUser);
 
+  // 유저 정보 확인을 위한 콘솔 로그 추가
+  console.log('👤 로그인 유저 정보:', loginUser);
+  console.log('🔍 방문 유저 정보:', visitUser);
+
   //      방명록 표시 여부      //
   const [showGuestbook, setShowGuestbook] = useState(false);
   const onClickGuestBookModal = () => {
@@ -35,6 +39,14 @@ const MainPage = () => {
     }
   }, [params.username, dispatch]);
 
+  // visitUser가 변경될 때마다 로그 출력
+  useEffect(() => {
+    if (visitUser) {
+      console.log('🌟 visitUser 업데이트됨:', visitUser);
+      console.log('🌟 visitUser.userSeq:', visitUser.userSeq);
+    }
+  }, [visitUser]);
+
   // 방문하려는 유저 정보를 가져오는 데 실패하면 내 페이지로 이동
   useEffect(() => {
     if (params.username === '') {
@@ -44,6 +56,7 @@ const MainPage = () => {
 
   //          좌측 상단 UserSpaceHeader 컴포넌트          //
   const isMySpace = params.username === loginUser?.username ? true : false; // 내 우주인지 여부
+  console.log('🏠 isMySpace:', isMySpace);
 
   const handleButtonClick = async () => {
     // 로그아웃 버튼 로직
@@ -55,7 +68,11 @@ const MainPage = () => {
   return (
     <div className="flex flex-col items-start text-white relative w-screen h-screen overflow-hidden">
       {/* 우주영역 */}
-      <Universe isMySpace={isMySpace} />
+      <Universe
+        isMySpace={isMySpace}
+        // 내 우주면 userSeq 안넘기고 다른 사람 우주면 넘겨줌 (목록조회를 위해)
+        userSeq={isMySpace ? undefined : visitUser?.userSeq}
+      />
 
       {/* 닉네임님의 우주입니다 & 버튼 */}
       <div className="absolute top-5 left-5">
