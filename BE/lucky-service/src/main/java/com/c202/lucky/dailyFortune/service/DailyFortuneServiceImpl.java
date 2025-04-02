@@ -66,7 +66,7 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
 
     @Override
     public String getDailyFortune(Integer userSeq) {
-        return dailyFortuneRepository.findByUserSeqAndUserSeqIs(userSeq)
+        return dailyFortuneRepository.findByUserSeq(userSeq)
                 .map(DailyFortune::getContent)
                 .orElse(null);
     }

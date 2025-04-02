@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface DailyFortuneRepository extends JpaRepository<DailyFortune, Integer> {
 
-    Optional<DailyFortune> findByUserSeqAndUserSeqIs(Integer userSeq);
+    Optional<DailyFortune> findByUserSeq(Integer userSeq);
 
 }
