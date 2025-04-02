@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { putGuestbookIntroduction } from './apis/apiGuestbookIntroduction';
 import { setIntro } from '@/stores/auth/authSlice';
+import { useAppDispatch } from '@/hooks/hooks';
 
 
 interface MainPageProps {
@@ -28,7 +29,8 @@ const GuestBook: React.FC<MainPageProps> = ({onClose}) => {
   console.log("페이지 주인번호!", PageUserNumber)
   console.log('현재 유저번호:', LoginUserNumber);
 
-  
+  const dispatch = useAppDispatch();
+
   // 방명록 데이터를 저장할 상태 
   const [guestbookEntries, setGuestbookEntries] = useState<UserGuestbookResponse[]>([]);
   // 방명록 입력 상태 추가
@@ -137,7 +139,7 @@ const handleSaveIntro = async () => {
     if (response) {
       console.log("✅ 소개글 수정 성공", response);
       setIsEditingIntro(false);
-      setIntro(introduction)
+      dispatch(setIntro(introduction))
     }
   } catch (error) {
     console.error("❌ 소개글 수정 실패", error);

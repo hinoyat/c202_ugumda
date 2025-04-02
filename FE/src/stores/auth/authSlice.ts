@@ -20,8 +20,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setIntro: (state, action)=>{
-      console.log("액션이 뭐야?", action)
-      // state.user?.introduction = action.payload
+      state.user!.introduction = action.payload
+      console.log("서채서채서채", JSON.stringify(state))
     }
 
   }, // 직접 사용할 리듀서 제거 - Thunks에서 관리
