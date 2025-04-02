@@ -38,7 +38,7 @@ const MainPage = () => {
       console.log('내 우주인가?: ' + isMySpace);
       dispatch(visitUserpage({ username: params.username }));
     }
-  }, [params.username, dispatch]);
+  }, [params, dispatch]);
 
   // visitUser가 변경될 때마다 로그 출력
   useEffect(() => {
