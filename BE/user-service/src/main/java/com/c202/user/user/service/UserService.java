@@ -4,14 +4,13 @@ import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
+import com.c202.user.user.model.response.UserWithSubscriptionDto;
 
 import java.util.List;
 
 public interface UserService {
 
     UserResponseDto getUserByUserSeq(Integer userSeq);
-
-    UserResponseDto getUserByUsername(String username);
 
     UserResponseDto updateUser(Integer userSeq, UpdateUserRequestDto request);
 
@@ -24,4 +23,8 @@ public interface UserService {
     List<UserProfileDto> getUserProfiles(List<Integer> userSeqList);
 
     UserResponseDto getRandomUser();
+
+    UserWithSubscriptionDto getUserByUsernameWithSubscription(String username, Integer subscriberSeq);
+    UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer subscriberSeq);
+
 }

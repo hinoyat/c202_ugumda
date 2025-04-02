@@ -5,6 +5,7 @@ import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
+import com.c202.user.user.model.response.UserWithSubscriptionDto;
 import com.c202.user.user.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -33,20 +34,25 @@ public class UserController {
     }
 
     // 유저 조회 API
-    @GetMapping("/seq/{userSeq}")
-    public ResponseEntity<ResponseDto<UserResponseDto>> getUserByUserSeq(
-            @PathVariable Integer userSeq) {
-        UserResponseDto user = userService.getUserByUserSeq(userSeq);
-        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
+    @GetMapping("/seq/{otherSeq}")
+    public ResponseEntity<ResponseDto<UserWithSubscriptionDto>> getUserByUserSeq(
+            @PathVariable Integer otherSeq,
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+
+        UserWithSubscriptionDto user = userService.getUserByUserSeqWithSubscription(otherSeq, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 및 구독 여부 조회 성공", user));
     }
 
     // 유저 조회 API
     @GetMapping("/name/{username}")
-    public ResponseEntity<ResponseDto<UserResponseDto>> getUserByUsername(
-            @PathVariable String username) {
-        UserResponseDto user = userService.getUserByUsername(username);
-        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
+    public ResponseEntity<ResponseDto<UserWithSubscriptionDto>> getUserByUsernameWithSubscription(
+            @PathVariable String username,
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+
+        UserWithSubscriptionDto user = userService.getUserByUsernameWithSubscription(username, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 및 구독 여부 조회 성공", user));
     }
+
 
     // 사용자 정보 수정
     @PutMapping("/me")
