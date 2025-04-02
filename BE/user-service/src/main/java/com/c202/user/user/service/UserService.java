@@ -24,7 +24,7 @@ public interface UserService {
 
     UserResponseDto getRandomUser();
 
-    UserWithSubscriptionDto getUserByUsernameWithSubscription(String username, Integer loginUserSeq);
+    UserWithSubscriptionDto getUserByUsernameWithSubscription(String username, Integer subscriberSeq);
+    UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer subscriberSeq);
 
-    UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer loginUserSeq);
 }
