@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
-import Alarm from '../alarm/Alarm';
+import AlarmList from '../alarm/AlarmList';
 import api from '@/apis/apiClient';
 import { selectUser } from '@/stores/auth/authSelectors';
 
@@ -49,16 +49,16 @@ const Navbar = () => {
 
   // 모달 열기
   const openAlarm = async () => {
-    const response = await api.get('/notifications/list/page', {
-      params: { page: 0, size: 5 },
-    });
+    // const response = await api.get('/notifications/list/page', {
+    //   params: { page: 0, size: 5 },
+    // });
 
-    if (response) {
-      setIsAlarmOpen(true);
-      console.log('⏰⏰⏰⏰⏰알람 목록 페이지네이션 전체조회!!!!', response);
-    } else {
-      console.error(response);
-    }
+    // if (response) {
+    setIsAlarmOpen(true);
+    //   console.log('⏰⏰⏰⏰⏰알람 목록 페이지네이션 전체조회!!!!', response);
+    // } else {
+    //   console.error(response);
+    // }
   };
   // 모달 닫기
   const closeAlarm = () => setIsAlarmOpen(false);
@@ -132,7 +132,7 @@ const Navbar = () => {
       {showGuestbook && <GuestBook onClose={onClickGuestBookModal} />}
 
       {/* 알림 컴포넌트 */}
-      <Alarm
+      <AlarmList
         isOpen={isAlarmOpen}
         onClose={closeAlarm}
       />
