@@ -61,7 +61,7 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
 
     @Override
     public String getDailyFortune(Integer userSeq) {
-        return dailyFortuneRepository.findByUserSeq(userSeq)
+        return dailyFortuneRepository.findByUserSeqAndUserSeqIs(userSeq)
                 .map(DailyFortune::getContent)
                 .orElse("오늘의 운세가 아직 생성되지 않았습니다.");
     }
