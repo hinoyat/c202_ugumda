@@ -22,6 +22,8 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
     private final LuckyNumberRepository luckyNumberRepository;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
+    private static final Random RANDOM = new Random();
+
     @Override
     @Transactional
     public void createLuckyNumber(Integer userSeq) {
@@ -60,7 +62,7 @@ public class LuckyNumberServiceImpl implements LuckyNumberService {
     }
 
     private List<Integer> generateLuckyNumbers() {
-        return new Random().ints(1, 46)
+        return RANDOM.ints(1, 46)
                 .distinct()
                 .limit(6)
                 .boxed()

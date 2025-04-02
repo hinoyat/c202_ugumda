@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import com.c202.guestbook.model.GuestbookDto;
 import com.c202.guestbook.service.GuestbookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

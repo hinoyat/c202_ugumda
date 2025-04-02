@@ -3,7 +3,6 @@ package com.c202.guestbook.entity;
 import lombok.*;
 import jakarta.persistence.*;
 
-import lombok.*;
 @Entity
 @Table(name = "Guestbook")
 @Getter
