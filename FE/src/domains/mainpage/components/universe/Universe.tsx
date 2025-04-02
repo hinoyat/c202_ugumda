@@ -187,7 +187,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     const fetchDiaries = async () => {
       try {
         const response = await diaryApi.getDiaries();
-        console.log('저장된 일기 데이터들 로드됨!! : ', response);
+        console.log('---📒🧑‍🚀저장된 일기 데이터들 로드됨👾🚀--- : ', response);
 
         // api응답에서 일기 데이터 설정
         if (response && response.data && response.data.data) {
@@ -295,7 +295,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
                 }}
                 // 호버 했을 때는 일기 미리보기
                 onHover={(entry, position) => {
-                  console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
+                  // console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
@@ -348,7 +348,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             left: `${hoveredPosition.x}px`,
             top: `${hoveredPosition.y - 150}px`, // 별 위에 표시
           }}>
-          {console.log('🚩🚩🚩DiaryPreview에 전달되는 데이터:', hoveredEntry)}
+          {/* {console.log('🚩🚩🚩DiaryPreview에 전달되는 데이터:', hoveredEntry)} */}
           <DiaryPreview
             title={hoveredEntry.title}
             content={hoveredEntry.content}
