@@ -25,23 +25,6 @@ export const initializeAudio =
   (audioSrc: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      // 🟢 오디오 소스 로깅
-      console.log('🎵 오디오 소스:', audioSrc);
-      console.log('🔍 현재 페이지 경로:', window.location.href);
-
-      // 🟢 파일 존재 여부 로깅 (브라우저 환경에서)
-      try {
-        const response = await fetch(audioSrc);
-        console.log('🌐 파일 페치 상태:', response.status);
-        console.log(
-          '🌐 파일 크기:',
-          response.headers.get('content-length'),
-          'bytes'
-        );
-      } catch (fetchError) {
-        console.error('❌ 파일 페치 중 오류:', fetchError);
-      }
-
       // 기존 오디오 정지
       audioInstance.pause();
 
@@ -62,7 +45,7 @@ export const initializeAudio =
 
       // canplaythrough 이벤트: 오디오 충분히 로드되어 끊김 없이 재생 가능할 때
       audioInstance.addEventListener('canplaythrough', () => {
-        console.log('오디오 로드 완료, 재생 준비됨');
+        console.log('📻🎼🎵 오디오 로드 완료, 재생 준비됨');
 
         // 상태가 '재생 중'이면 자동으로 재생 시작
         if (state.isPlaying) {
