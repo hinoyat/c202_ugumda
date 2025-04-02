@@ -31,6 +31,7 @@ const MainPage = () => {
   useEffect(() => {
     if (params.username) {
       console.log('✅ MainPage 마운트됨!');
+      console.log('내 우주인가?: ' + isMySpace);
       dispatch(visitUserpage({ username: params.username }));
     }
   }, [params.username, dispatch]);
@@ -61,8 +62,6 @@ const MainPage = () => {
       <div className="absolute top-5 left-5">
         <UserSpaceHeader
           nickname={isMySpace ? loginUser?.nickname : visitUser?.nickname}
-          onButtonClick={handleButtonClick}
-          buttonLabel={isMySpace ? '로그아웃' : '구독취소'}
           isMySpace={isMySpace}
         />
       </div>
