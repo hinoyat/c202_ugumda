@@ -7,6 +7,7 @@ import DetailContent from '@/domains/diary/components/details/DetailContent';
 import DetailTags from '@/domains/diary/components/details/DetailTags';
 import DetailLike from '@/domains/diary/components/details/DetailLike';
 import DetailButtons from '@/domains/diary/components/details/DetailButtons';
+import ModalBase from '../components/modalBase';
 
 import '@/domains/search/styles/DiarySearch.css';
 
@@ -63,12 +64,18 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   };
 
   return (
+    <>
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[4px] z-[9999]">
-      <div
+        <div
         className="inset-0 absolute"
-        onClick={handleClose}></div>
+        onClick={handleClose}>
+        </div>
       {/* 일기 조회 UI */}
+
+      {/* 모달컨테이너 */}
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] bg-[#505050]/90 rounded-lg p-1 z-50">
+        
+      <ModalBase>
         {/* 닫기버튼 */}
         <button
           onClick={handleClose}
@@ -118,8 +125,10 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
             </div>
           </div>
         </div>
+       </ModalBase>
+       </div>
       </div>
-    </div>
+    </>
   );
 };
 
