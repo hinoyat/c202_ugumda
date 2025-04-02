@@ -4,6 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -13,16 +14,4 @@ public class DiarySearchRequestDto {
     private boolean searchContent;
     private boolean searchTag;
     private boolean currentUserOnly;
-
-    @Override
-    public String toString() {
-        return "DiarySearchRequestDto{" +
-                "keyword='" + keyword + '\'' +
-                ", searchTitle=" + searchTitle +
-                ", searchContent=" + searchContent +
-                ", searchTag=" + searchTag +
-                ", currentUserOnly=" + currentUserOnly +
-                '}';
-    }
-
 }
