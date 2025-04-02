@@ -31,3 +31,6 @@ management:
       enabled: ${PROMETHEUS_ENDPOINT_ENABLED:true}
     health:
       show-details: ${HEALTH_DETAILS}
+
+  elasticsearch:
+    uris: ${ELASTIC_SEARCH_URL}
