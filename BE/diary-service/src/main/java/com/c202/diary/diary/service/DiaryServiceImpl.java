@@ -1,5 +1,6 @@
 package com.c202.diary.diary.service;
 
+import com.c202.diary.elastic.service.DiaryIndexService;
 import com.c202.diary.util.coordinate.model.CoordinateDto;
 import com.c202.diary.util.coordinate.service.CoordinateService;
 import com.c202.diary.diary.entity.Diary;
@@ -46,6 +47,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final EmotionService emotionService;
     private final CoordinateService coordinateService;
     private final AlarmService alarmService;
+    private final DiaryIndexService diaryIndexService;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Transactional
@@ -80,6 +82,8 @@ public class DiaryServiceImpl implements DiaryService {
         emotionService.incrementDiaryCount(emotion.getEmotionSeq());
 
         diaryRepository.save(diary);
+
+        diaryIndexService.indexDiary(diary); // ElasticSearch 색인 업데이트
 
         alarmService.sendDiaryCreatedAlarm(
                 diary.getUserSeq(),
@@ -144,6 +148,8 @@ public class DiaryServiceImpl implements DiaryService {
 
         diaryRepository.save(diary);
 
+        diaryIndexService.indexDiary(diary);
+
         List<Integer> connectedDiaries = coordinateService.findSimilarDiaries(diary.getDiarySeq(), 5);
 
         Integer likeCount = diaryLikeService.getLikeCount(diarySeq);
@@ -161,6 +167,9 @@ public class DiaryServiceImpl implements DiaryService {
         if (diary.getEmotionSeq() != null) {
             emotionService.decrementDiaryCount(diary.getEmotionSeq());
         }
+
+        diaryIndexService.indexDiary(diary);
+
         diary.deleteDiary();
     }
 
@@ -245,6 +254,8 @@ public class DiaryServiceImpl implements DiaryService {
             diary.setPublic("Y");
         }
         diaryRepository.save(diary);
+
+        diaryIndexService.indexDiary(diary);
 
         List<TagResponseDto> tagDtos = getTagsForDiary(diary);
 

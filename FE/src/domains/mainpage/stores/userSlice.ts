@@ -9,6 +9,7 @@ import { visitUserpage, visitOtherUserpage } from './userThunks';
 //   birthDate: string;
 //   introduction: string | null;
 //   iconSeq: number;
+//   isSubscribed: string;
 // }
 
 // 다음에 구독 정보도 넣어주면 고쳐야해
@@ -19,6 +20,7 @@ const initialState: UserpageState = {
   birthDate: '',
   introduction: null,
   iconSeq: 0,
+  isSubscribed: '',
 };
 
 // const user = useSelector(selectUser);
@@ -38,7 +40,7 @@ const userpageSlice = createSlice({
         state.birthDate = action.payload.birthDate;
         state.introduction = action.payload.introduction;
         state.iconSeq = action.payload.iconSeq;
-        // 구독 정보 넘어오면 고치기
+        state.isSubscribed = action.payload.isSubscribed;
       })
       .addCase(visitUserpage.rejected, (state) => {
         state.userSeq = 0;
@@ -47,7 +49,7 @@ const userpageSlice = createSlice({
         state.birthDate = '';
         state.introduction = null;
         state.iconSeq = 0;
-        // 구독 정보 넘어오면 고치기
+        state.isSubscribed = '';
         console.log(
           '다른 사람 페이지로 못 넘어갔는지 redux 정보도 확인해 봅세'
         );
@@ -60,6 +62,7 @@ const userpageSlice = createSlice({
         state.birthDate = action.payload.birthDate;
         state.introduction = action.payload.introduction;
         state.iconSeq = action.payload.iconSeq;
+        state.isSubscribed = 'N';
         // 구독 정보 넘어오면 고치기 (웬만하면 거의 다 구독 아님)
       });
   },

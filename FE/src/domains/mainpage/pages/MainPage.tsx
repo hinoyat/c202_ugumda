@@ -32,7 +32,6 @@ const MainPage = () => {
     if (params.username) {
       console.log('✅ MainPage 마운트됨!');
       dispatch(visitUserpage({ username: params.username }));
-      console.log('방문한 페이지 주인장 정보', visitUser);
     }
   }, [params.username, dispatch]);
 

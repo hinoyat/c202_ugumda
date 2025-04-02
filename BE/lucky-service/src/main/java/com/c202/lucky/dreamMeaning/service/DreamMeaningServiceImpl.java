@@ -70,7 +70,7 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     public List<DreamMeaningDto> getAllDreamMeanings(Integer userSeq) {
         return dreamMeaningRepository.findByUserSeq(userSeq).stream()
                 .map(DreamMeaningDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
     @Override
     public DreamMeaningDto getDreamMeaning(Integer userSeq, Integer dreamMeaningSeq) {
