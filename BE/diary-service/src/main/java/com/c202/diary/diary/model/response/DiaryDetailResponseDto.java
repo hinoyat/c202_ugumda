@@ -46,6 +46,10 @@ public class DiaryDetailResponseDto {
         return toDto(diary, tags, null, null, 0, false);
     }
 
+    public static DiaryDetailResponseDto toDto(Diary diary, List<TagResponseDto> tags, String emotionName) {
+        return toDto(diary, tags, emotionName, null, 0, false);
+    }
+
     public static DiaryDetailResponseDto toDto(Diary diary, List<TagResponseDto> tags,
                                                String emotionName, List<Integer> connectedDiaries) {
         return toDto(diary, tags, emotionName, connectedDiaries, 0, false);

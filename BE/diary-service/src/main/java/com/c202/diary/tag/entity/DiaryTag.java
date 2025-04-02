@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name="diarytag")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
