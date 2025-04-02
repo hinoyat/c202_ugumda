@@ -60,6 +60,8 @@ public class DiaryServiceImpl implements DiaryService {
         Emotion emotion = emotionRepository.findByName(request.getMainEmotion())
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 감정입니다: " + request.getMainEmotion()));
 
+        String emotionName = emotion.getName();
+
         // 좌표 생성
         CoordinateDto coordinates = coordinateService.generateCoordinates(
                 request.getMainEmotion(), request.getTags(), null);
@@ -95,7 +97,7 @@ public class DiaryServiceImpl implements DiaryService {
             tagDtos = tagService.processTags(diary, request.getTags(), now);
         }
 
-        return DiaryDetailResponseDto.toDto(diary, tagDtos);
+        return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName);
     }
 
     @Transactional
