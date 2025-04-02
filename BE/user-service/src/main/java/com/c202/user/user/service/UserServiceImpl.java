@@ -113,10 +113,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto getRandomUser() {
-        return userRepository.findRandomActiveUser()
-                .map(UserResponseDto::toDto)
-                .orElse(UserResponseDto.empty());
+    public UserWithSubscriptionDto getRandomUser(Integer userSeq) {
+        User randomUser =  userRepository.findRandomActiveUser().
+                orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+
+        String isSubscribed = getSubscriptionStatus(randomUser.getUserSeq(), userSeq);
+
+        return UserWithSubscriptionDto.from(randomUser, isSubscribed);
+
     }
 
     private User validateUser(Integer userSeq) {
