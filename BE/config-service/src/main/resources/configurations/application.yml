@@ -17,6 +17,9 @@ spring:
         max-interval: ${CONFIG_RETRY_MAX_INTERVAL:10000}
         multiplier: ${CONFIG_RETRY_MULTIPLIER:1.5}
 
+  elasticsearch:
+    uris: ${ELASTIC_SEARCH_URL}
+
 management:
   endpoints:
     web:
@@ -32,5 +35,3 @@ management:
     health:
       show-details: ${HEALTH_DETAILS}
 
-  elasticsearch:
-    uris: ${ELASTIC_SEARCH_URL}
