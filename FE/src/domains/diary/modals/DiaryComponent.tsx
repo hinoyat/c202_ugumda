@@ -16,6 +16,7 @@ import {
 import { DiaryData } from '@/domains/diary/Types/diary.types';
 import { Tag } from '@/domains/diary/api/tagApi';
 import { videoApi } from '@/domains/diary/api/videoApi';
+import ModalBase from '../components/modalBase';
 
 // 일기 생성 인터페이스
 // interface DiaryData {
@@ -219,10 +220,11 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       className="absolute inset-0 backdrop-blur-[4px] bg-black/50"
       onClick={onClose}>
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[80%] py-8 px-4 pl-8 overflow-y-scroll custom-scrollbar bg-[#505050]/90 rounded-lg"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[80%] rounded-lg overflow-hidden"
         onClick={(e) => e.stopPropagation()}>
-        <div className="pr-3 flex flex-col gap-5">
-          <div>
+        <ModalBase>
+        <div className="w-full h-full py-8 px-4 pl-8 overflow-y-scroll custom-scrollbar">
+          <div className='pr-3 flex flex-col gap-5'>
             <DiaryHeader
               onClose={onClose}
               isEditing={isEditing}
@@ -277,6 +279,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             />
           </div>
         </div>
+        </ModalBase>
       </div>
     </div>
   );
