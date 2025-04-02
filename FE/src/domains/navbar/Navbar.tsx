@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MdHomeFilled } from 'react-icons/md';
-import { BsFillRocketTakeoffFill } from 'react-icons/bs';
+import { BsEnvelopePaperHeartFill } from 'react-icons/bs';
+
 import { VscSearch } from 'react-icons/vsc';
 import { FaRegBell } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
@@ -13,7 +14,6 @@ import { useEffect } from 'react';
 
 import Alarm from '../alarm/Alarm';
 import api from '@/apis/apiClient';
-import { UseSelector } from 'react-redux';
 import { selectUser } from '@/stores/auth/authSelectors';
 
 const Navbar = () => {
@@ -30,6 +30,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
+
   useEffect(() => {
     if (params.username) {
       console.log(params.username);
@@ -80,7 +81,7 @@ const Navbar = () => {
           className="hover:text-white"
           data-tooltip-id="guestbook-tooltip"
           data-tooltip-content="방명록">
-          <BsFillRocketTakeoffFill className="w-5 h-5" />
+          <BsEnvelopePaperHeartFill className="w-5 h-5" />
         </div>
 
         {/* search (클릭하면 모달 열림) */}
@@ -93,7 +94,7 @@ const Navbar = () => {
 
         {/* bell */}
         <FaRegBell
-          onClick={openAlarm} // 알림창 뜨기
+          onClick={isAlarmOpen ? closeAlarm : openAlarm} // 알림창 뜨기
           className="hover:text-white cursor-pointer w-5 h-5"
           data-tooltip-id="notification-tooltip"
           data-tooltip-content="알림"
