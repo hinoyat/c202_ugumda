@@ -68,7 +68,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   // ---------- 좋아요 ---------- //
   const handleLikeChange = async () => {
     try {
-      const response = await diaryApi.tooggleLike(currentDiary.diarySeq);
+      const response = await diaryApi.toggleLike(currentDiary.diarySeq);
 
       const isLiked = response.data.message.includes('추가'); // 응답에 '추가' 단어가 있는지
       const newLikeCount = isLiked

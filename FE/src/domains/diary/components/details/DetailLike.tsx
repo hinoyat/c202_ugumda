@@ -6,7 +6,7 @@ interface DiaryDetailProps {
   likes_boolean: boolean;
   likes: number;
   diarySeq: number;
-  isMyDiary: boolean;
+  isMyDiary: boolean; //  내 일기에만 좋아요 아니라서 필요없긴 한데 혹시 몰라서 일단 살려둘게여
   onLikeToggle: () => void;
 }
 
@@ -18,18 +18,15 @@ const DetailLike: React.FC<DiaryDetailProps> = ({
   onLikeToggle,
 }) => {
   const handleClick = () => {
-    if (!isMyDiary) {
-      onLikeToggle();
-    }
+    onLikeToggle();
   };
 
   return (
     <div className="flex items-center justify-end pr-2 gap-1">
       <div
         onClick={handleClick}
-        className={`${!isMyDiary ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-        title={isMyDiary ? '자신의 일기에는 좋아요를 누를 수 없습니다.' : ''}>
-        <Heartbox filled={likes_boolean} />
+        className="cursor-pointer">
+        <Heartbox />
       </div>
       <p className="text-white">{likes}</p>
     </div>
