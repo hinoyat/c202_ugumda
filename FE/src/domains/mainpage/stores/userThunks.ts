@@ -13,7 +13,7 @@ export const visitUserpage = createAsyncThunk<
     const response = await api.get<visitResponse>(
       `/users/name/${credentials.username}`
     );
-
+    console.log('👏🏻👏🏻👏🏻👏🏻👏🏻방문한 유저 정보', response.data.data);
     return response.data.data;
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
