@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '@/apis/apiClient';
+import { getIconById } from '@/hooks/ProfileIcons';
 
 interface Tag {
   tagSeq: number | null;
@@ -18,20 +20,102 @@ interface Diary {
   profileImage?: string;
 }
 
-interface DiaryListProps {
+interface User {
+  userSeq: number;
+  username: string;
+  nickname: string;
+  birthDate: string;
+  introduction: string | null;
+  iconSeq: number;
+  isSubscribed: string;
+}
+
+interface ApiResponse {
+  timestamp: string;
+  status: number;
+  message: string;
   data: Diary[];
 }
 
+interface DiaryListProps {
+  data: ApiResponse;
+}
+
 const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
-  if (!Array.isArray(data) || data.length === 0) {
-    return (
-      <div className="text-white text-center mt-4">검색 결과가 없습니다.</div>
-    );
+  const [diaries, setDiaries] = useState<Diary[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      // API 응답에서 일기 데이터 배열을 추출
+      if (!data || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
+        setDiaries([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Create a map to store user info by userSeq to avoid duplicate API calls
+        const userMap = new Map<number, User>();
+        
+        // Create a list of unique userSeqs to fetch
+        const uniqueUserSeqs = [...new Set(data.data.map(diary => diary.userSeq))];
+        
+        // Fetch user data for each unique userSeq
+        const userPromises = uniqueUserSeqs.map(async (userSeq) => {
+          try {
+            // API 주소 수정: '/api/users/seq/{userSeq}' -> '/users/{userSeq}'
+            const response = await api.get(`/users/seq/${userSeq}`);
+            console.log(`User ${userSeq} 응답:`, response);
+            
+            // apiClient는 이미 응답을 JSON으로 변환하므로 response.json() 호출 필요 없음
+            if (response.data && response.data.status === 200 && response.data.data) {
+              userMap.set(userSeq, response.data.data);
+            }
+            return response.data;
+          } catch (error) {
+            console.warn(`Error fetching user ${userSeq}:`, error);
+            return null;
+          }
+        });
+        
+        await Promise.all(userPromises);
+        
+        // Attach user info to each diary
+        const diariesWithUserInfo = data.data.map(diary => {
+          const userInfo = userMap.get(diary.userSeq);
+          return {
+            ...diary,
+            userNickname: userInfo?.nickname || `사용자 ${diary.userSeq}`,
+            // iconSeq가 1부터 시작하는 것으로 보이므로 iconSeq 그대로 사용
+            profileImage: userInfo ? getIconById(userInfo.iconSeq) : undefined
+          };
+        });
+        
+        setDiaries(diariesWithUserInfo);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        // If there's an error, still show diaries but without user info
+        setDiaries(data.data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [data]);
+
+  if (loading) {
+    return <div className="text-white text-center mt-4">로딩 중...</div>;
+  }
+
+  if (!diaries || diaries.length === 0) {
+    return <div className="text-white text-center mt-4">검색 결과가 없습니다.</div>;
   }
 
   return (
     <div className="flex flex-col gap-5 mt-4">
-      {data.map((diary) => (
+      {diaries.map((diary) => (
         <div
           key={diary.diarySeq}
           className="truncate w-full">
@@ -62,7 +146,7 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
               </div>
             </div>
             {/* 방명록 왼쪽 끝 */}
-            <div className="flex gap-5 items-center ">
+            <div className="flex gap-10 items-center ">
               <div className="flex gap-3 items-center">
                 {diary.profileImage ? (
                   <img
@@ -72,7 +156,7 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
                   />
                 ) : (
                   <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-xs text-white">
-                    {String(diary.userSeq).charAt(0)}
+                    {diary.userNickname?.charAt(0) || String(diary.userSeq).charAt(0)}
                   </div>
                 )}
                 <p className="text-[15px] text-white">

@@ -34,7 +34,7 @@ const MainPage = () => {
       console.log('내 우주인가?: ' + isMySpace);
       dispatch(visitUserpage({ username: params.username }));
     }
-  }, [params.username, dispatch]);
+  }, [params, dispatch]);
 
   // 방문하려는 유저 정보를 가져오는 데 실패하면 내 페이지로 이동
   useEffect(() => {

@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import '../styles/DiarySearch.css';
 import DiaryList from './DiaryList';
-import exampleProfile from '@/assets/images/exampleProfile.svg';
 import api from '@/apis/apiClient';
 
 const DiarySearch = () => {
-  const [diaryData, setDiaryData] = useState([]);
+  const [diaryData, setDiaryData] = useState({
+    timestamp: '',
+    status: 200,
+    message: '',
+    data: []
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [searchOptions, setSearchOptions] = useState({
     currentUserOnly: true,
-    searchTitle: false,
+    searchTitle: true,
     searchContent: true,
     searchTag: true,
   });
@@ -39,20 +43,26 @@ const DiarySearch = () => {
 
       const response = await api.get(`/diaries/search?${queryString}`);
 
-      // response.data.data 배열을 확인하고 설정
-      if (
-        response.data &&
-        response.data.data &&
-        Array.isArray(response.data.data)
-      ) {
-        setDiaryData(response.data.data);
+      // 전체 응답을 저장 (data 속성 자체가 DiaryList에 필요)
+      if (response.data && response.data.data && Array.isArray(response.data.data)) {
+        setDiaryData(response.data);
       } else {
         console.error('응답 데이터가 예상된 형식이 아닙니다:', response);
-        setDiaryData([]);
+        setDiaryData({
+          timestamp: '',
+          status: 200,
+          message: '',
+          data: []
+        });
       }
     } catch (error) {
       console.error(error, '목록을 불러오는데 에러가 발생하였습니다.');
-      setDiaryData([]);
+      setDiaryData({
+        timestamp: '',
+        status: 500,
+        message: '에러가 발생했습니다',
+        data: []
+      });
     } finally {
       setIsLoading(false);
     }
@@ -77,20 +87,26 @@ const DiarySearch = () => {
 
       const response = await api.get(`/diaries/search?${queryString}`);
 
-      // response.data.data 배열을 확인하고 설정
-      if (
-        response.data &&
-        response.data.data &&
-        Array.isArray(response.data.data)
-      ) {
-        setDiaryData(response.data.data);
+      // 전체 응답을 저장
+      if (response.data && response.data.data && Array.isArray(response.data.data)) {
+        setDiaryData(response.data);
       } else {
         console.error('응답 데이터가 예상된 형식이 아닙니다:', response);
-        setDiaryData([]);
+        setDiaryData({
+          timestamp: '',
+          status: 200,
+          message: '',
+          data: []
+        });
       }
     } catch (error) {
       console.error(error, '검색 중 에러가 발생하였습니다.');
-      setDiaryData([]);
+      setDiaryData({
+        timestamp: '',
+        status: 500,
+        message: '에러가 발생했습니다',
+        data: []
+      });
     } finally {
       setIsLoading(false);
     }
@@ -109,13 +125,13 @@ const DiarySearch = () => {
         <input
           type="text"
           placeholder="검색어를 입력해 주세요"
-          className="text-[16px] border-b border-white p-1 basis-63/100 placeholder:text-[#FFFFFF]/70"
+          className="text-[16px] border-b border-white p-1 basis-63/100 placeholder:text-[#FFFFFF]/70 text-white outline-none"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
         />
         <button
-          className="bg-[#545454] text-white rounded px-3 w-20 text-base"
+          className="bg-[#545454] text-white rounded px-3 w-20 text-base cursor-pointer hover:bg-neutral-400"
           onClick={handleSearch}>
           검색
         </button>
@@ -181,7 +197,7 @@ const DiarySearch = () => {
           <div className="flex justify-center items-center h-full">
             <p className="text-white">로딩 중...</p>
           </div>
-        ) : diaryData && diaryData.length > 0 ? (
+        ) : diaryData.data && diaryData.data.length > 0 ? (
           <DiaryList data={diaryData} />
         ) : (
           <div className="flex justify-center items-center h-full">
