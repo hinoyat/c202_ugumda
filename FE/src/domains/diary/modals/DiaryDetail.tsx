@@ -89,14 +89,9 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
               />
             </div>
             <div>
-              <DetailVideo dream_video={currentDiary.videoUrl || undefined} />
+              <DetailVideo dream_video={currentDiary.videoUrl || null} />
             </div>
-            {/* 감정 표시 추가
-            {currentDiary.emotionName && (
-              <div className="text-sm text-white mb-2">
-                감정: {currentDiary.emotionName}
-              </div>
-            )} */}
+
             {/* contents 칸 크기수정 여기서 */}
             <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words flex-glow min-h-[150px]">
               <DetailContent content={currentDiary.content} />
