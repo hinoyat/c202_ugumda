@@ -138,7 +138,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     const x = event.clientX + 20; // 오른쪽으로 20만큼 이동
     const y = event.clientY + 20; // 아래로 20만큼 이동
 
-    console.log('호버된 entry 데이터:', entry);
+    // console.log('호버된 entry 데이터:', entry);
 
     onHover(entry, { x, y });
     document.body.style.cursor = 'pointer';
