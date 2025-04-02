@@ -8,6 +8,9 @@ import MainPage from '../mainpage/pages/MainPage';
 import exampleProfile from '@/assets/images/exampleProfile.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
+import { putGuestbookIntroduction } from './apis/apiGuestbookIntroduction';
+import { setIntro } from '@/stores/auth/authSlice';
+import { useAppDispatch } from '@/hooks/hooks';
 
 
 interface MainPageProps {
@@ -26,13 +29,19 @@ const GuestBook: React.FC<MainPageProps> = ({onClose}) => {
   console.log("페이지 주인번호!", PageUserNumber)
   console.log('현재 유저번호:', LoginUserNumber);
 
-  
+  const dispatch = useAppDispatch();
+
   // 방명록 데이터를 저장할 상태 
   const [guestbookEntries, setGuestbookEntries] = useState<UserGuestbookResponse[]>([]);
   // 방명록 입력 상태 추가
   const [newEntry, setNewEntry] = useState('');
   // 로딩 상태 추가
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 소개글 수정 관련 상태 추가
+  const [isEditingIntro, setIsEditingIntro] = useState(false);
+  const [introduction, setIntroduction] = useState('');
+  const [isUpdatingIntro, setIsUpdatingIntro] = useState(false);
 
   // 입력 값 변경 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +111,43 @@ const handleDeleteEntry = async (guestbookSeq: number) => {
     }
   }
 
+// 방명록 소개글 디폴트 소개
+const defaultIntroduction = `안녕하세요 ${PageUser.nickname}의 방명록입니다.`
+
+
+// 소개글 초기화
+useEffect(() => {
+  setIntroduction(PageUser.introduction || defaultIntroduction);
+}, [PageUser.introduction]);
+
+// 소개글 수정 핸들러
+const handleEditIntro = () => {
+  setIntroduction('')
+  setIsEditingIntro(true);
+};
+
+// 소개글 변경 핸들러
+const handleChangeIntro = (e:React.ChangeEvent<HTMLInputElement>) => {
+  setIntroduction(e.target.value);
+};
+
+// 소개글 저장 핸들러
+const handleSaveIntro = async () => {
+  setIsUpdatingIntro(true);
+  try {
+    const response = await putGuestbookIntroduction({introduction});
+    if (response) {
+      console.log("✅ 소개글 수정 성공", response);
+      setIsEditingIntro(false);
+      dispatch(setIntro(introduction))
+    }
+  } catch (error) {
+    console.error("❌ 소개글 수정 실패", error);
+  } finally {
+    setIsUpdatingIntro(false);
+  }
+};
+
   
   const nav = useNavigate();
   const onClickHome = () => {
@@ -131,9 +177,41 @@ const handleDeleteEntry = async (guestbookSeq: number) => {
                 {PageUser.nickname} 님의 방명록
               </h1>
               {/* 소개글 */}
-              <p className="ml-0.5 text-white font-light text-xs">
-                {PageUser.introduction}
-              </p>
+              <div className="flex gap-7 justify-center text-sm">
+              {PageUserNumber===LoginUserNumber?
+                        (isEditingIntro ? (
+                            <div className='flex flex-row w-full items-center gap-2'>
+                              <input
+                                type="text"
+                                value={introduction}
+                                onChange={handleChangeIntro}
+                                className="flex-grow p-1 border-b border-gray-300 text-gray-300 outline-none text-[15px]"
+                              />
+                              <button
+                                className="bg-neutral-700 px-3 py-1 text-white rounded text-[13px] whitespace-nowrap cursor-pointer hover:bg-neutral-400"
+                                onClick={handleSaveIntro}
+                                disabled={isUpdatingIntro}
+                              >
+                                저장
+                              </button>
+                            </div>
+                          ) : (
+                            <div className='flex flex-row w-full items-center gap-2'>
+                              <p className="flex-grow text-white font-light text-[15px]">{introduction}</p>
+                              <button
+                                className="bg-neutral-700 px-3 py-1 text-white rounded text-[13px] whitespace-nowrap cursor-pointer hover:bg-neutral-400"
+                                onClick={handleEditIntro}
+                              >
+                                수정
+                              </button>
+                            </div>
+                          )) : (  
+                            <div className='flex flex-row w-full items-center gap-2'>
+                              <p className="flex-grow text-white font-light text-[15px]">{introduction}</p>
+                            </div>
+                              )}
+
+              </div>
             </div>
             {/* 프로필 아이콘 */}
             <img
@@ -158,7 +236,7 @@ const handleDeleteEntry = async (guestbookSeq: number) => {
                 }
               }}
             />
-            <button className=" bg-neutral-700 px-2 py-1 text-white rounded text-[13px] w-[10%] cursor-pointer hover:bg-neutral-400"
+            <button className=" bg-neutral-700 px-2 py-1 text-white rounded text-[16px] w-[10%] cursor-pointer hover:bg-neutral-400"
             onClick={handleSubmit}
             disabled={isSubmitting}
             >

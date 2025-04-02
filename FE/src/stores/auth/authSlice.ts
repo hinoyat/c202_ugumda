@@ -18,7 +18,13 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {}, // 직접 사용할 리듀서 제거 - Thunks에서 관리
+  reducers: {
+    setIntro: (state, action)=>{
+      state.user!.introduction = action.payload
+      console.log("서채서채서채", JSON.stringify(state))
+    }
+
+  }, // 직접 사용할 리듀서 제거 - Thunks에서 관리
   extraReducers: (builder) => {
     builder
       // 로그인 성공
@@ -40,5 +46,8 @@ const authSlice = createSlice({
       });
   },
 });
+export const {
+  setIntro
+} = authSlice.actions
 
-export default authSlice.reducer;
+export default authSlice.reducer ;
