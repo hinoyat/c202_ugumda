@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
         User targetUser = userRepository.findByUsernameAndIsDeleted(username, "N")
                 .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
-        // 내가(targetUser가 아님) -> targetUser 를 구독했는지 확인
+        // 로그인한 유저가 targetUser 를 구독했는지 확인
         String isSubscribed = webClientBuilder
                 .baseUrl("http://subscribe-service")
                 .build()
@@ -166,4 +166,23 @@ public class UserServiceImpl implements UserService {
 
         return UserWithSubscriptionDto.from(targetUser, isSubscribed);
     }
+
+    // UserWithSubscriptionDto user = userService.getUserByUserSeqWithSubscription(otherSeq, userSeq);
+    public UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer subscriberSeq) {
+        User targetUser = validateUser(userSeq);
+
+        String isSubscribed = webClientBuilder
+                .baseUrl("http://subscribe-service")
+                .build()
+                .get()
+                .uri("/api/subscription/check/{subscribedSeq}", targetUser.getUserSeq())
+                .header("X-User-Seq", subscriberSeq.toString())
+                .retrieve()
+                .bodyToMono(String.class)
+                .onErrorReturn("N")
+                .block();
+
+        return UserWithSubscriptionDto.from(targetUser, isSubscribed);
+    }
+
 }

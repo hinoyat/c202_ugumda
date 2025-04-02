@@ -34,11 +34,13 @@ public class UserController {
     }
 
     // 유저 조회 API
-    @GetMapping("/seq/{userSeq}")
-    public ResponseEntity<ResponseDto<UserResponseDto>> getUserByUserSeq(
-            @PathVariable Integer userSeq) {
-        UserResponseDto user = userService.getUserByUserSeq(userSeq); // TODO: 구독 조회
-        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 조회 성공", user));
+    @GetMapping("/seq/{otherSeq}")
+    public ResponseEntity<ResponseDto<UserWithSubscriptionDto>> getUserByUserSeq(
+            @PathVariable Integer otherSeq,
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+
+        UserWithSubscriptionDto user = userService.getUserByUserSeqWithSubscription(otherSeq, userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "사용자 정보 및 구독 여부 조회 성공", user));
     }
 
     // 유저 조회 API
