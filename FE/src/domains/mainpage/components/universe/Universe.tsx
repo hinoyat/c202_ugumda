@@ -67,8 +67,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   const loadDiaryDetail = async (diarySeq: number) => {
     try {
       const response = await diaryApi.getDiaryById(diarySeq);
-      console.log('일기 상세데이터 로드됨!!! : ', response);
-
+      // console.log('일기 상세데이터 로드됨!!! : ', response);
+      // console.log('🐤🐤🐤🐤🐤동영상 URL 확인:', response.data.data.videoUrl);
       if (response && response.data && response.data.data) {
         // 리덕스에 현재 선택된 일기 저장
         dispatch(setCurrentDiary(response.data.data));
@@ -118,6 +118,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
   // 일기 별 생성 -> DiaryComponent로 전달
   const handleDiaryCreated = (responseData: any) => {
     const newDiary = responseData.data;
+    console.log('백에서 오는 응답 데이터:', newDiary);
 
     // 새로 생성된 일기를 diaryEntries 배열에 추가
     setDiaryEntries((prev) => [...prev, newDiary]);
@@ -347,12 +348,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             left: `${hoveredPosition.x}px`,
             top: `${hoveredPosition.y - 150}px`, // 별 위에 표시
           }}>
-          {/* {console.log('DiaryPreview에 전달되는 데이터:', hoveredEntry)} */}
+          {console.log('🚩🚩🚩DiaryPreview에 전달되는 데이터:', hoveredEntry)}
           <DiaryPreview
             title={hoveredEntry.title}
             content={hoveredEntry.content}
             tags={hoveredEntry.tags || []}
-            emotion={hoveredEntry.emotionName}
+            emotion={hoveredEntry.emotionName || hoveredEntry.mainEmotion}
           />
         </div>
       )}
