@@ -27,9 +27,14 @@ export const diaryApi = {
     return await api.post('/diaries', diaryData);
   },
 
-  // 일기 목록 조회
+  // 일기 목록 조회 (내꺼)
   getDiaries: async () => {
     return await api.get('/diaries/me');
+  },
+
+  // 일기 목록 조회 (다른사람꺼)
+  getUserDiaries: async (userSeq: number) => {
+    return await api.get(`/diaries/users/${userSeq}`);
   },
 
   // 일기 개별 조회

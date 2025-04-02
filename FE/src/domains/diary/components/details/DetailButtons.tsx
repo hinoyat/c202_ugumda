@@ -6,18 +6,19 @@ interface DetailButtonsProps {
   onEdit?: () => void;
   onClose?: () => void;
   onDelete?: () => void;
+  isMySpace?: boolean;
 }
 
 const DetailButtons: React.FC<DetailButtonsProps> = ({
   onEdit,
   onClose,
   onDelete,
+  isMySpace = false, // 기본은 false. 내 우주일때만 버튼 활성화
 }) => {
   // 수정 버튼 클릭 핸들러
   const handleEditClick = () => {
     if (onEdit) {
       onEdit();
-    } else {
     }
   };
 
@@ -27,11 +28,7 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({
     if (onDelete) {
       if (window.confirm('정말로 이 일기를 삭제하시겠습니까?')) {
         onDelete();
-      } else {
-        console.log('삭제 취소됨');
       }
-    } else {
-      console.log('onDelete가 undefined임');
     }
   };
 
@@ -40,6 +37,10 @@ const DetailButtons: React.FC<DetailButtonsProps> = ({
     console.log('꿈 해몽 페이지로 이동');
     // 해몽 페이지로 이동하는 로직 추가
   };
+
+  if (!isMySpace) {
+    return <div></div>; // 버튼 없이 공간만
+  }
 
   return (
     <div className="flex w-full flex-col gap-3 ">
