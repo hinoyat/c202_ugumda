@@ -33,6 +33,7 @@ const DiaryPreview = ({
 
       {/* 감정 표시 */}
       <div className="absolute top-4 right-4 text-xs text-white bg-[#D9D9D9]/29 px-2 py-1 rounded-[7px]">
+        {/* {console.log('✅렌더링되는 감정:', emotion)} */}
         {emotion}
       </div>
 
