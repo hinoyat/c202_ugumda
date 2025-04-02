@@ -46,4 +46,9 @@ export const diaryApi = {
   deleteDiary: async (diarySeq: number) => {
     return await api.delete(`/diaries/${diarySeq}`);
   },
+
+  // 좋아요 토글
+  toggleLike: async (diarySeq: number) => {
+    return await api.patch(`/diaries/${diarySeq}/like`);
+  },
 };

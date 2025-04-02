@@ -9,6 +9,7 @@ import DetailLike from '@/domains/diary/components/details/DetailLike';
 import DetailButtons from '@/domains/diary/components/details/DetailButtons';
 
 import '@/domains/search/styles/DiarySearch.css';
+import { diaryApi } from '@/domains/diary/api/diaryApi';
 
 interface Tag {
   tagSeq: number;
@@ -26,6 +27,8 @@ interface DiaryDetailProps {
     videoUrl?: string | null;
     dreamDate?: string;
     emotionName: string;
+    likeCount?: number;
+    hasLiked?: boolean;
   };
   onClose: () => void;
   onEdit?: () => void;
@@ -60,6 +63,27 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   // 일기 상세 페이지 닫기
   const handleClose = () => {
     onClose();
+  };
+
+  // ---------- 좋아요 ---------- //
+  const handleLikeChange = async () => {
+    try {
+      const response = await diaryApi.tooggleLike(currentDiary.diarySeq);
+
+      const isLiked = response.data.message.includes('추가'); // 응답에 '추가' 단어가 있는지
+      const newLikeCount = isLiked
+        ? currentDiary.likeCount + 1
+        : currentDiary.likeCount - 1;
+
+      // 현재 일기 중 좋아요 관련 부분만 업데이트
+      setCurrentDiary({
+        ...currentDiary,
+        hasLiked: isLiked,
+        likeCount: newLikeCount,
+      });
+    } catch (error) {
+      console.error('좋아요 실패 ⚠️♥️♥️', error);
+    }
   };
 
   return (
@@ -103,10 +127,14 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 emotionName={currentDiary.emotionName}
               />
             </div>
+            {/* 좋아요 */}
             <div className="h-10 flex items-center justify-end">
               <DetailLike
-                likes={0} // 임시 값
-                likes_boolean={false} // 임시 값
+                likes={currentDiary.likeCount}
+                likes_boolean={currentDiary.hasLiked}
+                diarySeq={currentDiary.diarySeq}
+                isMyDiary={isMySpace}
+                onLikeToggle={handleLikeChange}
               />
             </div>
             <div className="">
