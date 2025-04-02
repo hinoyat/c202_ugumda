@@ -142,6 +142,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 onClose={handleClose}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                isMySpace={isMySpace}
               />
             </div>
           </div>
