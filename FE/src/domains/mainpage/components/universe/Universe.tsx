@@ -187,14 +187,16 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     // api에서 일기 데이터 가져오기
     const fetchDiaries = async () => {
       try {
-        let response;
+        const response = await (async () => {
+          if (isMySpace) {
+            return await diaryApi.getDiaries();
+          } else if (userSeq) {
+            return await diaryApi.getUserDiaries(userSeq);
+          }
+          return null;
+        })();
 
-        if (isMySpace) {
-          // 내 일기 목록 조회
-          response = await diaryApi.getDiaries();
-        } else if (userSeq) {
-          response = await diaryApi.getUserDiaries(userSeq);
-        }
+        if (!response) return;
 
         console.log('---📒🧑‍🚀저장된 일기 데이터들 로드됨👾🚀--- : ', response);
 
