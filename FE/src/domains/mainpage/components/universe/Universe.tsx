@@ -362,7 +362,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       {showDetail && currentDiaryDetail && (
         <DiaryDetail
           initialDiary={currentDiaryDetail}
-          isMyspace={isMySpace}
+          isMySpace={isMySpace}
           onClose={() => {
             setShowDetail(false);
             setCurrentDiaryDetail(null);
