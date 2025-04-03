@@ -20,6 +20,8 @@ public class DreamMeaning {
 
     private Integer userSeq;
 
+    private Integer diarySeq;
+
     @Column(nullable = false)
     private String inputContent;
 
