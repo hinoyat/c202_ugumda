@@ -1,6 +1,7 @@
 package com.c202.user.user.service;
 
 import com.c202.exception.types.*;
+import com.c202.user.elastic.service.UserIndexService;
 import com.c202.user.user.entity.User;
 import com.c202.user.user.model.request.CheckPasswordDto;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RabbitTemplate rabbitTemplate;
     private final WebClient.Builder webClientBuilder;
+    private final UserIndexService userIndexService;
 
     // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
@@ -79,6 +81,8 @@ public class UserServiceImpl implements UserService {
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         user.updateInfo(now);
 
+        userIndexService.indexUser(user);
+
         return UserResponseDto.toDto(user);
     }
 
@@ -96,6 +100,8 @@ public class UserServiceImpl implements UserService {
         user.deleteUser();
 
         rabbitTemplate.convertAndSend("user.event.exchange", "user.withdrawn", userSeq);
+
+        userIndexService.indexUser(user);
 
         log.info("탈퇴 이벤트 발행: userSeq = {}", userSeq);
     }

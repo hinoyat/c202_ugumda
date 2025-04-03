@@ -5,6 +5,7 @@ import com.c202.lucky.dreamMeaning.entity.DreamMeaning;
 import com.c202.lucky.dreamMeaning.model.DreamMeaningDto;
 import com.c202.lucky.dreamMeaning.model.DreamMeaningRequestDto;
 import com.c202.lucky.dreamMeaning.repository.DreamMeaningRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
@@ -24,7 +25,8 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Override
-    public void createDreamMeaning(Integer userSeq, DreamMeaningRequestDto dto) {
+    @Transactional
+    public DreamMeaningDto createDreamMeaning(Integer userSeq, Integer diarySeq, DreamMeaningRequestDto dto) {
         String content;
         String isGood;
         try {
@@ -55,15 +57,23 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
         log.info("GPT 해몽 응답: {}", content);
         log.info("GPT 분류 결과 (isGood): {}", isGood);
 
-        DreamMeaning dreamMeaning = DreamMeaning.builder()
-                .userSeq(userSeq)
-                .inputContent(dto.getInputContent())
-                .resultContent(content)
-                .isGood(isGood)
-                .createdAt(LocalDateTime.now().format(FORMATTER))
-                .build();
+        DreamMeaning dreamMeaning = dreamMeaningRepository.findByDiarySeq(diarySeq)
+                .map(existing -> {
+                    existing.update(content, isGood, dto.getInputContent());
+                    return existing;
+                })
+                .orElseGet(() -> DreamMeaning.builder()
+                        .userSeq(userSeq)
+                        .diarySeq(diarySeq)
+                        .inputContent(dto.getInputContent())
+                        .resultContent(content)
+                        .isGood(isGood)
+                        .createdAt(LocalDateTime.now().format(FORMATTER))
+                        .build()
+                );
 
         dreamMeaningRepository.save(dreamMeaning);
+        return DreamMeaningDto.fromEntity(dreamMeaning);
     }
 
     @Override
@@ -73,25 +83,25 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
                 .toList();
     }
     @Override
-    public DreamMeaningDto getDreamMeaning(Integer userSeq, Integer dreamMeaningSeq) {
-        DreamMeaning entity = dreamMeaningRepository.findByDreamMeaningSeq(dreamMeaningSeq)
+    public DreamMeaningDto getDreamMeaning(Integer userSeq, Integer diarySeq) {
+        DreamMeaning dreamMeaning = dreamMeaningRepository.findByDiarySeq(diarySeq)
                 .orElseThrow(() -> new NotFoundException("해당 꿈 해몽을 찾을 수 없습니다."));
 
-        if (!entity.getUserSeq().equals(userSeq)) {
+        if (!dreamMeaning.getUserSeq().equals(userSeq)) {
             throw new UnauthorizedException("해당 해몽을 조회할 권한이 없습니다.");
         }
-        return DreamMeaningDto.fromEntity(entity);
+        return DreamMeaningDto.fromEntity(dreamMeaning);
     }
 
     @Override
-    public void deleteDreamMeaning(Integer userSeq, Integer dreamMeaningSeq) {
-        DreamMeaning entity = dreamMeaningRepository.findByDreamMeaningSeq(dreamMeaningSeq)
+    public void deleteDreamMeaning(Integer userSeq, Integer diarySeq) {
+        DreamMeaning dreamMeaning = dreamMeaningRepository.findByDiarySeq(diarySeq)
                 .orElseThrow(() -> new NotFoundException("해당 꿈 해몽을 찾을 수 없습니다."));
 
-        if (!entity.getUserSeq().equals(userSeq)) {
+        if (!dreamMeaning.getUserSeq().equals(userSeq)) {
             throw new UnauthorizedException("해당 해몽을 삭제할 권한이 없습니다.");
         }
 
-        dreamMeaningRepository.delete(entity);
+        dreamMeaningRepository.delete(dreamMeaning);
     }
 }

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Builder
 @Table(name = "dreammeaning")
 @Entity
@@ -20,6 +23,9 @@ public class DreamMeaning {
 
     private Integer userSeq;
 
+    @Column(nullable = false, unique = true)
+    private Integer diarySeq;
+
     @Column(nullable = false)
     private String inputContent;
 
@@ -31,4 +37,12 @@ public class DreamMeaning {
 
     @Column(length = 1)
     private String isGood;
+
+    public void update(String resultContent, String isGood, String inputContent) {
+        this.resultContent = resultContent;
+        this.isGood = isGood;
+        this.inputContent = inputContent;
+        this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
+    }
+
 }
