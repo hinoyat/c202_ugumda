@@ -6,8 +6,8 @@ export interface Tag {
 }
 
 export const tagApi = {
-  // 최근 사용 태그 7개 가져오기
-  getRecentTags: async (limit: number = 7) => {
+  // 최근 사용 태그 가져오기
+  getRecentTags: async () => {
     return await api.get('/tags/recent');
   },
 };
