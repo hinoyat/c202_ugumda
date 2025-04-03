@@ -1,28 +1,63 @@
-// enter password 부분!
-
 import { AiOutlineEnter } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
 import passwordFrame from '@/assets/images/passwordFrame.svg';
 import enter from '@/assets/images/enter.svg';
+import { useState } from 'react';
+import api from '@/apis/apiClient';
 
 const PasswordCheckModal = () => {
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const glowingTextStyle = {
     textShadow: '0 0 5px #9decf9, 0 0 10px #9decf9, 0 0 15px #67e8f9',
   };
 
   const nav = useNavigate();
-  {
-    /*아직 기능 ㄴㄴ api 받아서 비밀번화 확인해서 맞으면 이 onClick함수 사용하도록 */
-  }
-  {
-    /* 지금은 디자인 단계니까 enter 누르면 myinformation으로 이동되도록 할게여 */
-  }
-  {
-    /* 꼭 나중에 api 받으면 나중에 button onclick함수 꼬곢꼬꼬까ㅗ꼮 고치기 */
-  }
-  const onClickGoMyInfomation = () => {
-    nav('/myinformation');
+
+  const handleSubmit = async() => {
+    if(!password) {
+      setErrorMessage("비밀번호를 입력해주세요");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      const response = await api.post('/users/me/check-password', {
+        password: password
+      });
+      
+      // 성공적으로 응답을 받았을 때
+      if(response.data.status === 200) {
+        nav('/myinformation');
+      } else {
+        // 서버에서 200이 아닌 상태 코드를 반환한 경우 (이 부분은 API 구현에 따라 다를 수 있음)
+        setErrorMessage(response.data.message || '비밀번호가 일치하지 않습니다.');
+        setPassword("");
+      }
+    } catch(error) {
+      console.error("비밀번호 확인 오류: ", error);
+      
+      // 에러 객체에서 응답 데이터 가져오기
+      if (error.response) {
+        // 서버가 응답을 반환했지만 2xx 범위가 아닌 상태 코드
+        setErrorMessage(error.response.data?.message || '비밀번호가 일치하지 않습니다.');
+      } else if (error.request) {
+        // 요청이 만들어졌으나 응답을 받지 못한 경우
+        setErrorMessage('서버 응답이 없습니다. 네트워크 연결을 확인해주세요.');
+      } else {
+        // 요청을 설정하는 중에 문제가 발생한 경우
+        setErrorMessage('요청 중 오류가 발생했습니다.');
+      }
+      
+      // 비밀번호 초기화
+      setPassword("");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onClickHome = () => {
@@ -30,11 +65,18 @@ const PasswordCheckModal = () => {
   };
 
   // 엔터 키 입력 이벤트
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      onClickGoMyInfomation();
+      handleSubmit();
     }
   };
+  
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if(errorMessage) {
+      setErrorMessage("");
+    }
+  }
 
   return (
     <div className="absolute inset-0">
@@ -61,11 +103,15 @@ const PasswordCheckModal = () => {
         <div className="flex items-center justify-center">
           <input
             type="password"
-            className="text-cyan-300 text-[40px] w-110 h-15 focus:outline-none"
+            value={password}
+            onChange={handlePasswordChange}
+            disabled={isLoading}
+            className="bg-transparent text-cyan-300 text-[40px] w-110 h-15 focus:outline-none"
             onKeyDown={handleKeyDown}
           />
           <button
-            onClick={onClickGoMyInfomation}
+            onClick={handleSubmit}
+            disabled={isLoading}
             className="cursor-pointer">
             <img
               src={enter}
@@ -74,6 +120,16 @@ const PasswordCheckModal = () => {
             />
           </button>
         </div>
+        {errorMessage && (
+           <div className="text-red-500 text-sm mt-2 press-font absolute bottom-0 ">
+           {errorMessage}
+         </div>
+        )}
+        {isLoading && (
+          <div className="text-cyan-300 text-sm mt-2 press-font">
+            확인 중...
+          </div>
+        )}
       </div>
     </div>
   );
