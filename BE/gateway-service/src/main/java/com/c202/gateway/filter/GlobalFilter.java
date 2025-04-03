@@ -28,7 +28,7 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             log.info("Request path: " + path);
 
             if (path.contains("/blocked")) {
-                System.out.println("Request blocked: " + path);
+                log.warn("Request blocked: {}", path);
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
             }

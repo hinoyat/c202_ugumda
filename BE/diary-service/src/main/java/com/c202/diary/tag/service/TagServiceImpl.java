@@ -28,10 +28,6 @@ public class TagServiceImpl implements TagService {
 
         List<Tag> recentTags = diaryTagRepository.findRecentTagsByUserSeq(userSeq, limit);
 
-        if (recentTags.isEmpty()) {
-            return getRecommendedTags();
-        }
-
         return recentTags.stream()
                 .map(TagResponseDto::toDto)
                 .collect(Collectors.toList());
@@ -89,21 +85,6 @@ public class TagServiceImpl implements TagService {
         if (!tagName.matches("^[가-힣a-zA-Z0-9]+$")) {
             throw new ValidationException("태그는 한글, 영문, 숫자만 사용 가능합니다");
         }
-    }
-
-    private List<TagResponseDto> getRecommendedTags() {
-
-        List<String> recommendedTagNames = Arrays.asList("행복", "슬픔", "분노", "기쁨", "평화", "불안", "희망");
-
-        return recommendedTagNames.stream()
-                .map(name -> {
-                    Tag tag = tagRepository.findByName(name).orElse(null);
-                    return TagResponseDto.builder()
-                            .tagSeq(tag != null ? tag.getTagSeq() : null)
-                            .name(name)
-                            .build();
-                })
-                .collect(Collectors.toList());
     }
 
 }

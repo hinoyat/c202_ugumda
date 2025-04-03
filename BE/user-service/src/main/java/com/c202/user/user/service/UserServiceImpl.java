@@ -1,7 +1,9 @@
 package com.c202.user.user.service;
 
 import com.c202.exception.types.*;
+import com.c202.user.elastic.service.UserIndexService;
 import com.c202.user.user.entity.User;
+import com.c202.user.user.model.request.CheckPasswordDto;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserProfileDto;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RabbitTemplate rabbitTemplate;
     private final WebClient.Builder webClientBuilder;
+    private final UserIndexService userIndexService;
 
     // 날짜 포맷터
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
@@ -78,6 +81,8 @@ public class UserServiceImpl implements UserService {
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         user.updateInfo(now);
 
+        userIndexService.indexUser(user);
+
         return UserResponseDto.toDto(user);
     }
 
@@ -96,6 +101,8 @@ public class UserServiceImpl implements UserService {
 
         rabbitTemplate.convertAndSend("user.event.exchange", "user.withdrawn", userSeq);
 
+        userIndexService.indexUser(user);
+
         log.info("탈퇴 이벤트 발행: userSeq = {}", userSeq);
     }
 
@@ -113,10 +120,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto getRandomUser() {
-        return userRepository.findRandomActiveUser()
-                .map(UserResponseDto::toDto)
-                .orElse(UserResponseDto.empty());
+    public UserWithSubscriptionDto getRandomUser(Integer userSeq) {
+        User randomUser =  userRepository.findRandomActiveUser().
+                orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+
+        String isSubscribed = getSubscriptionStatus(randomUser.getUserSeq(), userSeq);
+
+        return UserWithSubscriptionDto.from(randomUser, isSubscribed);
+
     }
 
     private User validateUser(Integer userSeq) {
@@ -130,11 +141,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
     public String getUserBirthDate(Integer userSeq){
         User user = validateUser(userSeq);
         return user.getBirthDate();
     }
 
+    @Override
     public List<UserProfileDto> getUserProfiles(List<Integer> userSeqList) {
         return userRepository.findByUserSeqInAndIsDeleted(userSeqList, "N").stream()
                 .map(user -> UserProfileDto.builder()
@@ -162,6 +175,17 @@ public class UserServiceImpl implements UserService {
         String isSubscribed = getSubscriptionStatus(targetUser.getUserSeq(), subscriberSeq);
 
         return UserWithSubscriptionDto.from(targetUser, isSubscribed);
+    }
+
+    @Override
+    public String checkPassword(Integer userSeq, CheckPasswordDto requestDto) {
+        User user = validateUser(userSeq);
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new BadRequestException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return "Y";
     }
 
 

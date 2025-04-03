@@ -22,9 +22,10 @@ import { useDispatch, useSelector } from 'react-redux';
 // props의 타입 정의
 interface UniverseProps {
   isMySpace?: boolean;
+  userSeq?: number; // 다른 사람 Seq
 }
 
-const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
+const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   console.log('✅ Universe 컴포넌트가 렌더링됨');
 
   // 리덕스 설정
@@ -186,8 +187,18 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
     // api에서 일기 데이터 가져오기
     const fetchDiaries = async () => {
       try {
-        const response = await diaryApi.getDiaries();
-        console.log('저장된 일기 데이터들 로드됨!! : ', response);
+        const response = await (async () => {
+          if (isMySpace) {
+            return await diaryApi.getDiaries();
+          } else if (userSeq) {
+            return await diaryApi.getUserDiaries(userSeq);
+          }
+          return null;
+        })();
+
+        if (!response) return;
+
+        console.log('---📒🧑‍🚀저장된 일기 데이터들 로드됨👾🚀--- : ', response);
 
         // api응답에서 일기 데이터 설정
         if (response && response.data && response.data.data) {
@@ -198,12 +209,11 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       }
     };
 
-    // 내 우주일 경우에만 데이터 로드
-    // 이 부분 다른 사람 메인페이지에서 다르게 해야 함!!! 🌟🌟🌟🌟
-    if (isMySpace) {
+    // userSeq에 맞게 데이터 로드
+    if (isMySpace || userSeq) {
       fetchDiaries();
     }
-  }, [isMySpace]);
+  }, [isMySpace, userSeq]);
 
   // 리덕스 스토어의 일기 데이터가 변경되면 로컬 상태 업데이트
   useEffect(() => {
@@ -295,7 +305,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
                 }}
                 // 호버 했을 때는 일기 미리보기
                 onHover={(entry, position) => {
-                  console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
+                  // console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
@@ -348,7 +358,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
             left: `${hoveredPosition.x}px`,
             top: `${hoveredPosition.y - 150}px`, // 별 위에 표시
           }}>
-          {console.log('🚩🚩🚩DiaryPreview에 전달되는 데이터:', hoveredEntry)}
+          {/* {console.log('🚩🚩🚩DiaryPreview에 전달되는 데이터:', hoveredEntry)} */}
           <DiaryPreview
             title={hoveredEntry.title}
             content={hoveredEntry.content}
@@ -362,7 +372,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true }) => {
       {showDetail && currentDiaryDetail && (
         <DiaryDetail
           initialDiary={currentDiaryDetail}
-          isMyspace={isMySpace}
+          isMySpace={isMySpace}
           onClose={() => {
             setShowDetail(false);
             setCurrentDiaryDetail(null);

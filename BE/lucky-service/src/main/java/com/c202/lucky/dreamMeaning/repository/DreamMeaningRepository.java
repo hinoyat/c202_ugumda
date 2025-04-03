@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface DreamMeaningRepository extends JpaRepository<DreamMeaning, Integer> {
     List<DreamMeaning> findByUserSeq(Integer userSeq);
 
-    Optional<DreamMeaning> findByDreamMeaningSeq(Integer dreamMeaningSeq);
+    Optional<DreamMeaning> findByDiarySeq(Integer diarySeq);
 }

@@ -1,9 +1,13 @@
 // 조회, 생성 모달에 쓰일 배경
 
-import React from 'react';
+import React, {ReactNode} from 'react';
 import styled from 'styled-components';
 
-const ModalBase = () => {
+interface ModalBaseProps {
+  children: ReactNode;
+}
+
+const ModalBase: React.FC<ModalBaseProps> = ({children}) => {
   return (
     <StyledWrapper>
       <div className="card">
@@ -20,30 +24,45 @@ const ModalBase = () => {
           />
         ))}
       </div>
+      {/* 일기 내용 */}
+      <div className='content'>
+      {children}
+      </div>
     </StyledWrapper>
   );
 };
 
 const StyledWrapper = styled.div`
+
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border-radius: 15px;
+  z-index: hidden;
+
   .card {
-    width: 190px;
-    height: 254px;
+    position: absolute;
+    insert: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(45deg, #000000, #0a0a2e);
     display: flex;
     justify-content: space-between;
     overflow: hidden;
-    border-radius: 15px;
-    position: relative;
-    cursor: pointer;
-    transition:
-      transform 0.3s,
-      box-shadow 0.3s;
-    box-shadow: 0 0 20px rgba(0, 0, 255, 0.1);
   }
 
   .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(100, 149, 237, 0.3);
+  }
+  
+  .content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
   }
 
   .blub {

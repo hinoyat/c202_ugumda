@@ -1,6 +1,7 @@
 package com.c202.user.auth.service;
 
 import com.c202.exception.types.*;
+import com.c202.user.elastic.service.UserIndexService;
 import com.c202.user.user.entity.User;
 import com.c202.user.auth.model.request.LoginRequestDto;
 import com.c202.user.auth.model.request.SignupRequestDto;
@@ -32,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserIndexService userIndexService;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
@@ -61,6 +63,8 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
+
+        userIndexService.indexUser(savedUser);
 
         return UserResponseDto.toDto(savedUser);
     }

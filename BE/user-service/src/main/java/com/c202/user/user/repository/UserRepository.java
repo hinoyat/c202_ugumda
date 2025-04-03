@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByNickname(String nickname);
     Optional<User> findByUsername(String username);
     List<User> findByUserSeqInAndIsDeleted(List<Integer> userSeqList, String isDeleted);
+    List<User> findByIsDeleted(String isDeleted);
 
     @Query(value = "SELECT * FROM users WHERE isDeleted = 'N' ORDER BY RAND() LIMIT 1", nativeQuery = true)
     Optional<User> findRandomActiveUser();

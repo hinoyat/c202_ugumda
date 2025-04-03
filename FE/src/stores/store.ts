@@ -4,6 +4,7 @@ import signupReducer from '@/domains/signup/stores/signupSlice';
 import diaryReducer from '@/stores/diary/diarySlice';
 import userpageReducer from '@/domains/mainpage/stores/userSlice';
 import alarmReducer from '@/domains/alarm/stores/alarmSlice';
+import musicReducer from '@/stores/music/musicSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     diary: diaryReducer,
     userpage: userpageReducer,
     alarm: alarmReducer,
+    music: musicReducer,
   },
 });
 
