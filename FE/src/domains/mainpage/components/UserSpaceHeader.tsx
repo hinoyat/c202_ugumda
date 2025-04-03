@@ -1,60 +1,67 @@
 import { useSelector } from 'react-redux';
 import { selectVisitUser } from '../stores/userSelectors';
-import { useState, useEffect } from 'react';
 import { useAppDispatch } from '@/hooks/hooks';
 import { logoutUser } from '@/stores/auth/authThunks';
 import { useNavigate } from 'react-router-dom';
 import api from '@/apis/apiClient';
+import { updateSubscriptionStatus } from '../stores/userSlice';
+import { useEffect, useState } from 'react';
 
 interface UserSpaceHeaderProps {
-  nickname: string | undefined; // 닉네임 ( 내 닉네임 or 다른 사람 닉네임)
+  nickname: string | undefined;
   isMySpace?: boolean;
 }
+
 const UserSpaceHeader = ({ nickname, isMySpace }: UserSpaceHeaderProps) => {
   const nav = useNavigate();
   const dispatch = useAppDispatch();
-  const [buttonLabel, setButtonLabel] = useState('');
-
   const currentOwnerUser = useSelector(selectVisitUser);
-  const isOwnerSubscribe = currentOwnerUser.isSubscribed;
 
-  // buttonLabel 업데이트 로직
+  // 로컬 상태로 구독 상태 관리 추가
+  const [isSubscribed, setIsSubscribed] = useState(
+    currentOwnerUser?.isSubscribed === 'Y'
+  );
+
+  // 디버깅: Redux 상태 변경 확인 + 로컬 상태 동기화
   useEffect(() => {
-    console.log('내 우주인가?: ' + isMySpace);
-    console.log('구독 상태: ', isOwnerSubscribe);
+    if (currentOwnerUser) {
+      setIsSubscribed(currentOwnerUser.isSubscribed === 'Y');
+    }
+  }, [currentOwnerUser]);
 
-    const buttonText = isMySpace
-      ? '로그아웃'
-      : isOwnerSubscribe === 'Y'
-        ? '구독취소'
-        : '구독';
-    
-    setButtonLabel(buttonText);
-  }, [isMySpace, isOwnerSubscribe, currentOwnerUser.userSeq]);
+  const buttonLabel = isMySpace
+    ? '로그아웃'
+    : isSubscribed
+      ? '구독취소'
+      : '구독';
 
   const handleButtonClick = async () => {
+    console.log('Button clicked. Current label:', buttonLabel);
     if (buttonLabel === '로그아웃') {
-      // 로그아웃 버튼 로직
       await dispatch(logoutUser());
       nav('/intro', { replace: true });
       window.location.reload();
-    } else if (buttonLabel === '구독취소') {
-      try {
-        await api.patch(
-          `/subscription/${currentOwnerUser.userSeq}`
-        );
-        // API 호출 후 상태 변경하지 않고 기다림 (리덕스 상태가 업데이트되면 자동으로 UI 변경)
-      } catch (error) {
-        console.error(error, '에러가 발생하였습니다.');
-      }
     } else {
       try {
-        await api.patch(
+        console.log('Sending API patch for userSeq:', currentOwnerUser.userSeq);
+        const response = await api.patch(
           `/subscription/${currentOwnerUser.userSeq}`
         );
-        // API 호출 후 상태 변경하지 않고 기다림 (리덕스 상태가 업데이트되면 자동으로 UI 변경)
+        console.log('API response:', response);
+
+        // API 응답 구조 확인 및 예외 처리
+        const newStatus =
+          response.data?.isSubscribed || (isSubscribed ? 'N' : 'Y'); // 응답이 없을 경우 토글
+
+        // 로컬 상태 즉시 업데이트
+        setIsSubscribed(newStatus === 'Y');
+
+        // Redux 상태도 업데이트
+        dispatch(updateSubscriptionStatus(newStatus));
       } catch (error) {
-        console.error(error, '에러가 발생하였습니다.');
+        console.error('에러가 발생하였습니다:', error);
+        // 오류 발생시 사용자에게 알림 (선택사항)
+        alert('구독 상태 변경 중 오류가 발생했습니다.');
       }
     }
   };
