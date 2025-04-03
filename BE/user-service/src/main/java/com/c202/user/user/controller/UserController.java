@@ -1,12 +1,14 @@
 package com.c202.user.user.controller;
 
 import com.c202.dto.ResponseDto;
+import com.c202.user.user.model.request.CheckPasswordDto;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserProfileDto;
 import com.c202.user.user.model.response.UserResponseDto;
 import com.c202.user.user.model.response.UserWithSubscriptionDto;
 import com.c202.user.user.service.UserService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,6 +95,14 @@ public class UserController {
     public ResponseEntity<ResponseDto<UserResponseDto>> getRandomUser() {
         UserResponseDto randomUser = userService.getRandomUser();
         return ResponseEntity.ok(ResponseDto.success(200, "랜덤 사용자 조회 성공", randomUser));
+    }
+
+    @PostMapping("/me/check-password")
+    public ResponseEntity<ResponseDto<String>> checkPassword(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @RequestBody @Valid CheckPasswordDto request) {
+        String  result = userService.checkPassword(userSeq, request);
+        return ResponseEntity.ok(ResponseDto.success(200, "비밀번호 확인 완료", result));
     }
 
 }
