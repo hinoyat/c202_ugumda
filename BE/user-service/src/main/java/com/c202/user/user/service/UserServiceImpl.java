@@ -2,6 +2,7 @@ package com.c202.user.user.service;
 
 import com.c202.exception.types.*;
 import com.c202.user.user.entity.User;
+import com.c202.user.user.model.request.CheckPasswordDto;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserProfileDto;
@@ -134,11 +135,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
     public String getUserBirthDate(Integer userSeq){
         User user = validateUser(userSeq);
         return user.getBirthDate();
     }
 
+    @Override
     public List<UserProfileDto> getUserProfiles(List<Integer> userSeqList) {
         return userRepository.findByUserSeqInAndIsDeleted(userSeqList, "N").stream()
                 .map(user -> UserProfileDto.builder()
@@ -166,6 +169,17 @@ public class UserServiceImpl implements UserService {
         String isSubscribed = getSubscriptionStatus(targetUser.getUserSeq(), subscriberSeq);
 
         return UserWithSubscriptionDto.from(targetUser, isSubscribed);
+    }
+
+    @Override
+    public String checkPassword(Integer userSeq, CheckPasswordDto requestDto) {
+        User user = validateUser(userSeq);
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new BadRequestException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return "Y";
     }
 
 
