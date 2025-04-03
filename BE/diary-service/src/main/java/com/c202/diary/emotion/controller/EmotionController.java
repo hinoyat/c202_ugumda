@@ -33,18 +33,18 @@ public class EmotionController {
         return ResponseEntity.ok(ResponseDto.success(200, "감정 조회 완료", emotionService.getEmotionByName(name)));
     }
 
-    @GetMapping("/statistics/week")
-    public ResponseEntity<ResponseDto<EmotionStatisticsResponseDto>> getEmotionStatisticsWithWeek(
+    @GetMapping("/statistics/two-weeks")
+    public ResponseEntity<ResponseDto<EmotionStatisticsResponseDto>> getEmotionStatisticsForTwoWeeks(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq
     ) {
         EmotionStatisticsResponseDto response = emotionService.getEmotionStatistics(userSeq, 14);
-        return ResponseEntity.ok(ResponseDto.success(200, "14일 통계 조회 완료", response));
+        return ResponseEntity.ok(ResponseDto.success(200, "최근 2주 통계 조회 완료", response));
     }
     @GetMapping("/statistics/month")
-    public ResponseEntity<ResponseDto<EmotionStatisticsResponseDto>> getEmotionStatisticsWithMonth(
+    public ResponseEntity<ResponseDto<EmotionStatisticsResponseDto>> getEmotionStatisticsForMonth(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq
     ) {
         EmotionStatisticsResponseDto response = emotionService.getEmotionStatistics(userSeq, 30);
-        return ResponseEntity.ok(ResponseDto.success(200, "30일 통계 조회 완료", response));
+        return ResponseEntity.ok(ResponseDto.success(200, "최근 한 달 통계 조회 완료", response));
     }
 }
