@@ -24,6 +24,9 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [currentIconUrl, setCurrentIconUrl] = useState<string>('');
   const [shuffleCount, setShuffleCount] = useState<number>(0);
   const [showRareMessage, setShowRareMessage] = useState<boolean>(false);
+  const [showEpicMessage, setShowEpicMessage] = useState<boolean>(false);
+  const [showUniqueMessage, setShowUniqueMessage] = useState<boolean>(false);
+  const [showLegendaryMessage, setShowLegendaryMessage] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   // userData가 변경될 때마다 아이콘 ID 업데이트
@@ -107,8 +110,32 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
 
     // 희귀 아이콘일 경우 메시지 표시
     if (randomIcon.isRare) {
+      setShowEpicMessage(false);
+      setShowUniqueMessage(false);
+      setShowLegendaryMessage(false);
       setShowRareMessage(true);
       setTimeout(() => setShowRareMessage(false), 3000);
+    }
+    if (randomIcon.isEpic) {
+      setShowRareMessage(false);
+      setShowUniqueMessage(false);
+      setShowLegendaryMessage(false);
+      setShowEpicMessage(true);
+      setTimeout(() => setShowEpicMessage(false), 3000);
+    }
+    if (randomIcon.isUnique) {
+      setShowRareMessage(false);
+      setShowEpicMessage(false);
+      setShowLegendaryMessage(false);
+      setShowUniqueMessage(true);
+      setTimeout(() => setShowUniqueMessage(false), 3000);
+    }
+    if (randomIcon.isLegendary) {
+      setShowRareMessage(false);
+      setShowEpicMessage(false);
+      setShowUniqueMessage(false);
+      setShowLegendaryMessage(true);
+      setTimeout(() => setShowLegendaryMessage(false), 3000);
     }
 
     // 서버에 아이콘 변경 요청
@@ -133,8 +160,26 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
           )}
 
           {showRareMessage && (
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-yellow-500 text-black p-2 rounded-md animate-bounce">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-blue-500 text-white p-2 rounded-md animate-bounce w-full">
               🎉 희귀 아이콘 획득!
+            </div>
+          )}
+
+          {showEpicMessage && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-purple-500 text-white p-2 rounded-md animate-bounce w-full">
+              🎉 에픽 아이콘 획득!
+            </div>
+          )}
+
+          {showUniqueMessage && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-yellow-500 text-white p-2 rounded-md animate-bounce w-full">
+              🎉 유니크 아이콘 획득!
+            </div>
+          )}
+
+          {showLegendaryMessage && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-emerald-400 text-white p-2 rounded-md animate-bounce w-full">
+              🎉 레전드리 아이콘 획득!
             </div>
           )}
 
