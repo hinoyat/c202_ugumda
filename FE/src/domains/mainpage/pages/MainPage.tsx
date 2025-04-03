@@ -1,7 +1,7 @@
 // 나의 우주페이지
 import GuestBook from '@/domains/guestbook/GuestBook';
 import Universe from '@/domains/mainpage/components/universe/Universe';
-import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader ';
+import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 

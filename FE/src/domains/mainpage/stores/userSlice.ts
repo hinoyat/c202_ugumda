@@ -2,17 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { UserpageState } from './userTypes';
 import { visitUserpage, visitOtherUserpage } from './userThunks';
 
-// interface UserpageState {
-//   userSeq: number;
-//   username: string;
-//   nickname: string;
-//   birthDate: string;
-//   introduction: string | null;
-//   iconSeq: number;
-//   isSubscribed: string;
-// }
-
-// 다음에 구독 정보도 넣어주면 고쳐야해
 const initialState: UserpageState = {
   userSeq: 0,
   username: '',
@@ -23,16 +12,17 @@ const initialState: UserpageState = {
   isSubscribed: '',
 };
 
-// const user = useSelector(selectUser);
-// const nav = useNavigate();
-
 const userpageSlice = createSlice({
   name: 'userpage',
   initialState,
-  reducers: {},
+  reducers: {
+    // 새로운 액션 추가: 구독 상태 업데이트
+    updateSubscriptionStatus: (state, action) => {
+      state.isSubscribed = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      // 방문 주인장 정보 조회 성공
       .addCase(visitUserpage.fulfilled, (state, action) => {
         state.userSeq = action.payload.userSeq;
         state.username = action.payload.username;
@@ -68,4 +58,5 @@ const userpageSlice = createSlice({
   },
 });
 
+export const { updateSubscriptionStatus } = userpageSlice.actions;
 export default userpageSlice.reducer;
