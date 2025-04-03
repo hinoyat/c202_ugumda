@@ -20,12 +20,13 @@ public class DreamMeaningController {
 
     private final DreamMeaningService dreamMeaningService;
 
-    @PostMapping
-    public ResponseEntity<ResponseDto<Void>> generateDreamMeaning(
+    @PostMapping("/{diarySeq}")
+    public ResponseEntity<ResponseDto<DreamMeaningDto >> generateDreamMeaning(
             @RequestHeader("X-User-Seq") @NotNull Integer userSeq,
+            @PathVariable Integer diarySeq,
             @RequestBody DreamMeaningRequestDto dto) {
-        dreamMeaningService.createDreamMeaning(userSeq, dto);
-        return ResponseEntity.ok(ResponseDto.success(201, "꿈 해몽 생성 성공"));
+        DreamMeaningDto dreamMeaningDto = dreamMeaningService.createDreamMeaning(userSeq, diarySeq, dto);
+        return ResponseEntity.status(201).body(ResponseDto.success(201, "꿈 해몽 생성 성공", dreamMeaningDto));
     }
 
     @GetMapping
