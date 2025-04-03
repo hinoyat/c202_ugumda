@@ -8,6 +8,6 @@ import java.util.List;
 public interface DreamMeaningService {
     DreamMeaningDto createDreamMeaning(Integer userSeq, Integer diarySeq, DreamMeaningRequestDto dto);
     List<DreamMeaningDto> getAllDreamMeanings(Integer userSeq);
-    DreamMeaningDto getDreamMeaning(Integer userSeq, Integer dreamMeaningSeq);
-    void deleteDreamMeaning(Integer userSeq, Integer dreamMeaningSeq);
+    DreamMeaningDto getDreamMeaning(Integer userSeq, Integer diarySeq);
+    void deleteDreamMeaning(Integer userSeq, Integer diarySeq);
 }
