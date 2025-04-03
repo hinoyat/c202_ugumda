@@ -22,7 +22,7 @@ public interface UserService {
 
     List<UserProfileDto> getUserProfiles(List<Integer> userSeqList);
 
-    UserResponseDto getRandomUser();
+    UserWithSubscriptionDto getRandomUser(Integer userSeq);
 
     UserWithSubscriptionDto getUserByUsernameWithSubscription(String username, Integer subscriberSeq);
     UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer subscriberSeq);

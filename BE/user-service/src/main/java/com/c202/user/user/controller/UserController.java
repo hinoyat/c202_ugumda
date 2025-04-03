@@ -90,8 +90,8 @@ public class UserController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<ResponseDto<UserResponseDto>> getRandomUser() {
-        UserResponseDto randomUser = userService.getRandomUser();
+    public ResponseEntity<ResponseDto<UserWithSubscriptionDto>> getRandomUser(@RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+        UserWithSubscriptionDto randomUser = userService.getRandomUser(userSeq);
         return ResponseEntity.ok(ResponseDto.success(200, "랜덤 사용자 조회 성공", randomUser));
     }
 
