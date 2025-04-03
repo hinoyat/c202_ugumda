@@ -1,7 +1,7 @@
 import {
   setAudioLoaded,
-  setCurrentTrack,
-  setIsPlaying,
+  // setCurrentTrack,
+  // setIsPlaying,
   setVolume,
   toggleMusic,
 } from '@/stores/music/musicSlice';
@@ -40,7 +40,7 @@ export const initializeAudio =
       audioInstance.load();
 
       // 트랙 및 로드 상태 업데이트
-      dispatch(setCurrentTrack(audioSrc));
+      // dispatch(setCurrentTrack(audioSrc));
       dispatch(setAudioLoaded(true));
 
       // canplaythrough 이벤트: 오디오 충분히 로드되어 끊김 없이 재생 가능할 때
@@ -58,7 +58,7 @@ export const initializeAudio =
               playPromise.catch((error) => {
                 console.error('자동 재생 차단됨:', error);
                 // 자동 재생 실패 시 상태 업데이트
-                dispatch(setIsPlaying(false));
+                // dispatch(setIsPlaying(false));
                 saveMusicSettings(false, state.volume);
               });
             }
@@ -102,7 +102,7 @@ export const togglePlayback =
           playPromise.catch((error) => {
             console.error('재생 시도 중 오류:', error);
             // 실패 시 상태 다시 업데이트
-            dispatch(setIsPlaying(false));
+            // dispatch(setIsPlaying(false));
             saveMusicSettings(false, state.music.volume);
           });
         }
@@ -118,7 +118,7 @@ export const togglePlayback =
 
       // 실제 오디오 상태와 리덕스 상태 동기화
       const actuallyPlaying = !audioInstance.paused;
-      dispatch(setIsPlaying(actuallyPlaying));
+      // dispatch(setIsPlaying(actuallyPlaying));
       saveMusicSettings(actuallyPlaying, state.music.volume);
     }
   };

@@ -17,6 +17,8 @@ const getSavedMusicState = (): { isPlaying: boolean; volume: number } => {
   return { isPlaying: true, volume: 0.5 };
 };
 
+// ------------------------------------------------------------------------------------
+
 // 저장된 설정 불러오기
 const { isPlaying, volume } = getSavedMusicState();
 
@@ -37,9 +39,9 @@ const musicSlice = createSlice({
       state.isPlaying = !state.isPlaying;
     },
     // 음악 재생 상태 직접 설정
-    setIsPlaying: (state, action: PayloadAction<boolean>) => {
-      state.isPlaying = action.payload;
-    },
+    // setIsPlaying: (state, action: PayloadAction<boolean>) => {
+    //   state.isPlaying = action.payload;
+    // },
 
     // 볼륨 설정
     setVolume: (state, action: PayloadAction<number>) => {
@@ -50,18 +52,18 @@ const musicSlice = createSlice({
       state.audioLoaded = action.payload;
     },
     // 현재 트랙 설정
-    setCurrentTrack: (state, action: PayloadAction<string | null>) => {
-      state.currentTrack = action.payload;
-    },
+    // setCurrentTrack: (state, action: PayloadAction<string | null>) => {
+    //   state.currentTrack = action.payload;
+    // },
   },
 });
 
 export const {
   toggleMusic,
-  setIsPlaying,
+  // setIsPlaying,
   setVolume,
   setAudioLoaded,
-  setCurrentTrack,
+  // setCurrentTrack,
 } = musicSlice.actions;
 
 export default musicSlice.reducer;
