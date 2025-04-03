@@ -1,4 +1,4 @@
-const DreamSolveLine = () => {
+const DashboardLine = () => {
   return (
     <div className="flex items-center my-1 w-[80%] justify-center">
       {/* 왼쪽 마름모 */}
@@ -13,4 +13,4 @@ const DreamSolveLine = () => {
   );
 };
 
-export default DreamSolveLine;
+export default DashboardLine;
