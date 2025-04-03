@@ -73,8 +73,8 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
       const isLiked = response.data.message.includes('추가'); // 응답에 '추가' 단어가 있는지
       const newLikeCount = isLiked
-        ? currentDiary.likeCount + 1
-        : currentDiary.likeCount - 1;
+        ? (currentDiary.likeCount || 0) + 1
+        : (currentDiary.likeCount || 0) - 1;
 
       // 현재 일기 중 좋아요 관련 부분만 업데이트
       setCurrentDiary({
