@@ -1,5 +1,6 @@
 package com.c202.user.user.service;
 
+import com.c202.user.user.model.request.CheckPasswordDto;
 import com.c202.user.user.model.request.UpdateIntroductionDto;
 import com.c202.user.user.model.request.UpdateUserRequestDto;
 import com.c202.user.user.model.response.UserProfileDto;
@@ -22,9 +23,10 @@ public interface UserService {
 
     List<UserProfileDto> getUserProfiles(List<Integer> userSeqList);
 
-    UserResponseDto getRandomUser();
+    UserWithSubscriptionDto getRandomUser(Integer userSeq);
 
     UserWithSubscriptionDto getUserByUsernameWithSubscription(String username, Integer subscriberSeq);
     UserWithSubscriptionDto getUserByUserSeqWithSubscription(Integer userSeq, Integer subscriberSeq);
 
+    String checkPassword(Integer userSeq, CheckPasswordDto requestDto);
 }
