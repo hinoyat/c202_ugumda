@@ -59,8 +59,6 @@ const alarmSlice = createSlice({
         state.loading = false;
       })
       .addCase(readAlarm.fulfilled, (state, action) => {
-        console.log('여기 알람 슬라이스 읽음 성공', action.payload);
-
         // 특정 alarmSeq를 가진 알람을 찾아 isRead를 'Y'로 변경
         const alarmIndex = state.alarms.findIndex(
           (alarm) => alarm.alarmSeq === action.payload
@@ -70,17 +68,14 @@ const alarmSlice = createSlice({
         }
       })
       .addCase(readAllAlarms.fulfilled, (state) => {
-        console.log('여기 알람 슬라이스 전체 읽음 성공');
         state.alarms = state.alarms.map((alarm) => ({ ...alarm, isRead: 'Y' }));
       })
       .addCase(deleteAlarm.fulfilled, (state, action) => {
-        console.log('여기 알람 슬라이스 삭제 성공', action.payload);
         state.alarms = state.alarms.filter(
           (alarm) => alarm.alarmSeq !== action.payload
         );
       })
       .addCase(deleteAllAlarms.fulfilled, (state) => {
-        console.log('여기 알람 슬라이스 전체 삭제 성공');
         state.alarms = [];
       });
   },

@@ -139,7 +139,6 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
               </div>
             ))}
           </div>
-          {loading && <p>Loading...</p>}
         </div>
       </div>
     </div>

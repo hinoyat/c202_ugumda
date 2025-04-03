@@ -26,7 +26,6 @@ export const readAlarm = createAsyncThunk<number, number>(
     try {
       await api.put(`/notifications/read/${alarmSeq}`);
 
-      console.log(alarmSeq, '의 알림 읽기 성공');
       return alarmSeq;
     } catch (error) {
       return rejectWithValue('알림 개별 읽기 실패');
@@ -39,8 +38,6 @@ export const readAllAlarms = createAsyncThunk<void, void>(
   async (_, { rejectWithValue }) => {
     try {
       await api.put('/notifications/read-all');
-
-      console.log('알림 전체 읽기 성공');
     } catch (error) {
       return rejectWithValue('알림 전체 읽기 실패');
     }
@@ -53,7 +50,6 @@ export const deleteAlarm = createAsyncThunk<number, number>(
     try {
       await api.delete(`/notifications/delete/${alarmSeq}`);
 
-      console.log(alarmSeq, '의 알림 삭제 성공');
       return alarmSeq;
     } catch (error) {
       return rejectWithValue('알림 개별 삭제 실패');
@@ -66,8 +62,6 @@ export const deleteAllAlarms = createAsyncThunk<void, void>(
   async (_, { rejectWithValue }) => {
     try {
       await api.delete('/notifications/delete-all');
-
-      console.log('알림 전체 삭제 성공');
     } catch (error) {
       return rejectWithValue('알림 전체 삭제 실패');
     }

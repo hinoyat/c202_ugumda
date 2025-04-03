@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 import AlarmList from '../alarm/AlarmList';
-import api from '@/apis/apiClient';
 import { selectUser } from '@/stores/auth/authSelectors';
 import { resetPage } from '../alarm/stores/alarmSlice';
 
@@ -50,16 +49,7 @@ const Navbar = () => {
 
   // 모달 열기
   const openAlarm = async () => {
-    // const response = await api.get('/notifications/list/page', {
-    //   params: { page: 0, size: 5 },
-    // });
-
-    // if (response) {
     setIsAlarmOpen(true);
-    //   console.log('⏰⏰⏰⏰⏰알람 목록 페이지네이션 전체조회!!!!', response);
-    // } else {
-    //   console.error(response);
-    // }
   };
   // 모달 닫기
   const closeAlarm = () => {
