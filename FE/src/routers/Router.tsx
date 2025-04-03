@@ -31,7 +31,7 @@ const LuckyNumber = lazy(
 const TodayFortune = lazy(
   () => import('../domains/todayFortune/pages/TodayFortune')
 );
-const DreamSolve = lazy(() => import('../domains/dreamSolve/pages/DreamSolve'));
+const Ggumplaylist = lazy(() => import('../domains/dashboard/pages/Ggumplaylist'));
 const Intro = lazy(() => import('../domains/intro/pages/Intro'));
 
 const AppRouter = () => {
@@ -64,7 +64,7 @@ const AppRouter = () => {
             />
             <Route
               path="/dreamsolve"
-              element={<DreamSolve />}
+              element={<Ggumplaylist />}
             />
             <Route
               path="/diary/create"
