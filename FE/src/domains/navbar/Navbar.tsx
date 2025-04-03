@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import AlarmList from '../alarm/AlarmList';
 import api from '@/apis/apiClient';
 import { selectUser } from '@/stores/auth/authSelectors';
+import { resetPage } from '../alarm/stores/alarmSlice';
 
 const Navbar = () => {
   // 모달 열림 여부
@@ -61,11 +62,14 @@ const Navbar = () => {
     // }
   };
   // 모달 닫기
-  const closeAlarm = () => setIsAlarmOpen(false);
+  const closeAlarm = () => {
+    setIsAlarmOpen(false);
+    dispatch(resetPage());
+  };
 
   return (
     <>
-      <nav className="fixed top-0 flex w-fit left-1/2 transform -translate-x-1/2 text-2xl text-gray-400 opacity-90 items-center justify-center gap-15 p-6 bg-transparent z-50">
+      <nav className="fixed top-0 flex w-fit left-1/2 transform -translate-x-1/2 text-2xl text-gray-200/85 items-center justify-center gap-15 p-6 bg-transparent z-50">
         {/* home */}
         <Link
           to={`/${user?.username}`}
@@ -74,7 +78,6 @@ const Navbar = () => {
           data-tooltip-content="홈으로 이동">
           <MdHomeFilled />
         </Link>
-
         {/* Rocket */}
         <div
           onClick={onClickGuestBookModal}
@@ -83,7 +86,6 @@ const Navbar = () => {
           data-tooltip-content="방명록">
           <BsEnvelopePaperHeartFill className="w-5 h-5" />
         </div>
-
         {/* search (클릭하면 모달 열림) */}
         <VscSearch
           onClick={openModal}
@@ -91,7 +93,6 @@ const Navbar = () => {
           data-tooltip-id="search-tooltip"
           data-tooltip-content="검색하기"
         />
-
         {/* bell */}
         <FaRegBell
           onClick={isAlarmOpen ? closeAlarm : openAlarm} // 알림창 뜨기

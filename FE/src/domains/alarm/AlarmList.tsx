@@ -2,13 +2,23 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useAppDispatch } from '@/hooks/hooks';
 import { useSelector } from 'react-redux';
-import { fetchAlarms, updateAlarm } from './stores/alarmThunks';
+import {
+  fetchAlarms,
+  readAlarm,
+  deleteAllAlarms,
+  readAllAlarms,
+  deleteAlarm,
+} from './stores/alarmThunks';
 import {
   selectAlarms,
   selectLoading,
   selectHasMore,
 } from './stores/alarmSelectors';
 import { Alarm } from './stores/alarmTypes';
+import './themes/alarm.css';
+import { FaBookReader } from 'react-icons/fa';
+import { BsTrash3Fill } from 'react-icons/bs';
+import { resetPage } from './stores/alarmSlice';
 
 interface AlarmProps {
   isOpen: boolean;
@@ -46,9 +56,30 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
   const handleAlarmClick = (alarm: Alarm) => {
     console.log('알림 눌렀지롱', alarm);
     if (alarm.isRead === 'N') {
-      dispatch(updateAlarm(alarm.alarmSeq));
+      dispatch(readAlarm(alarm.alarmSeq));
     }
     onClose();
+    dispatch(resetPage());
+  };
+
+  // 알림 하나 읽기
+  const handleReadAlarm = (alarm: Alarm) => {
+    dispatch(readAlarm(alarm.alarmSeq));
+  };
+
+  // 알림 하나 삭제
+  const handleDeleteAlarm = (alarm: Alarm) => {
+    dispatch(deleteAlarm(alarm.alarmSeq));
+  };
+
+  // 알림 전체 삭제
+  const handleDeleteAllAlarms = () => {
+    dispatch(deleteAllAlarms());
+  };
+
+  // 알림 전체 읽음
+  const handleReadAllAlarms = () => {
+    dispatch(readAllAlarms());
   };
 
   return (
@@ -61,23 +92,53 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
           onClick={onClose}>
           <IoClose className="text-white text-3xl" />
         </div>
-        <div className="bg-amber-500 w-full h-full overflow-y-auto relative">
-          <div className="px-4 sticky top-0 flex justify-between items-center h-[50px] bg-amber-700">
+        <div className="w-full h-full flex flex-col gap-3 overflow-hidden">
+          <div className="pb-2 px-4 sticky top-0 flex justify-between items-center h-[50px]">
             <p className="text-white font-semibold text-[24px]">알림</p>
             <div className="flex gap-4">
-              <button>전체 삭제</button>
-              <button>전체 읽음</button>
+              <button
+                onClick={handleReadAllAlarms}
+                className="mt-2 w-[80px] h-[25px] bg-white/50 text-white rounded-[6px] text-sm cursor-pointer hover:bg-white/70 transition-colors">
+                전체 읽음
+              </button>
+              <button
+                onClick={handleDeleteAllAlarms}
+                className="mt-2 w-[80px] h-[25px] bg-white/50 text-white rounded-[6px] text-sm cursor-pointer hover:bg-white/70 transition-colors">
+                전체 삭제
+              </button>
             </div>
           </div>
-          {alarms.map((alarm, index) => (
-            <div
-              onClick={() => handleAlarmClick(alarm)}
-              key={alarm.alarmSeq}
-              ref={index === alarms.length - 1 ? lastAlarmRef : null}
-              className={`p-4 border-b border-gray-300 ${alarm.isRead === 'N' ? 'bg-red-500' : 'bg-white'}`}>
-              {alarm.content}
-            </div>
-          ))}
+          <div
+            id="need-scrool"
+            className="overflow-y-auto">
+            {alarms.map((alarm, index) => (
+              <div
+                onClick={() => handleAlarmClick(alarm)}
+                key={alarm.alarmSeq}
+                ref={index === alarms.length - 1 ? lastAlarmRef : null}
+                className={`p-4 text-white border-b border-gray-300 flex items-center justify-between ${alarm.isRead === 'N' ? 'font-bold' : 'text-white/50'}`}>
+                <div className="relative group overflow-hidden w-[75%] text-lg cursor-pointer">
+                  <span className="block truncate group-hover:hidden">
+                    {alarm.content}
+                  </span>
+                  <span className="whitespace-nowrap hidden group-hover:block animate-marquee">
+                    {alarm.content}
+                  </span>
+                </div>
+                {/* 아이콘 부분 */}
+                <div className="flex justify-center items-center gap-4">
+                  <FaBookReader
+                    onClick={() => handleReadAlarm(alarm)}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                  <BsTrash3Fill
+                    onClick={() => handleDeleteAlarm(alarm)}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
           {loading && <p>Loading...</p>}
         </div>
       </div>
