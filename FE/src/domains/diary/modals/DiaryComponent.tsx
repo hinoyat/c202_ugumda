@@ -3,7 +3,6 @@ import DiaryHeader from '../components/create_edit/DiaryHeader';
 import DiaryInput from '../components/create_edit/DiaryInput';
 import DiaryDisclose from '../components/create_edit/DiaryDisclose';
 import DiaryCreateButton from '../components/create_edit/DiaryCreateButton';
-import DetailTags from '../components/details/DetailTags';
 import StarTag from '@/domains/diary/components/create_edit/StarTag';
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +16,7 @@ import { DiaryData } from '@/domains/diary/Types/diary.types';
 import { Tag } from '@/domains/diary/api/tagApi';
 import { videoApi } from '@/domains/diary/api/videoApi';
 import ModalBase from '../components/modalBase';
+import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
 
 // 일기 생성 인터페이스
 // interface DiaryData {
@@ -255,12 +255,12 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
             {/* 태그 */}
             <div className="mt-3">
-              {/* <DetailTags
+              <DiaryTags
                 initialTags={diaryData?.tags || []}
                 isEditing={true}
                 onTagsChange={setTags}
                 emotionName={emotion}
-              /> */}
+              />
             </div>
 
             <div>
