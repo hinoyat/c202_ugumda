@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react';
 import DetailHeader from '@/domains/diary/components/details/DetailHeader';
 import DetailVideo from '@/domains/diary/components/details/DetailVideo';
 import DetailContent from '@/domains/diary/components/details/DetailContent';
-import DetailTags from '@/domains/diary/components/details/DetailTags';
+// import DetailTags from '@/domains/diary/components/details/DetailTags';
 import DetailLike from '@/domains/diary/components/details/DetailLike';
 import DetailButtons from '@/domains/diary/components/details/DetailButtons';
 import ModalBase from '../components/modalBase';
 
 import '@/domains/search/styles/DiarySearch.css';
 import { diaryApi } from '@/domains/diary/api/diaryApi';
+import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
 
 interface Tag {
   tagSeq: number;
@@ -126,7 +127,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                   <DetailContent content={currentDiary.content} />
                 </div>
                 <div className="">
-                  <DetailTags
+                  <DiaryTags
                     initialTags={currentDiary.tags}
                     isEditing={false}
                     emotionName={currentDiary.emotionName}
