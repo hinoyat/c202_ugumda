@@ -388,3 +388,46 @@ return RANDOM. 사용
 3. System.out.println은 문자열 연산이 발생하기 때문에 불필요한 비용이 발생.
 4. 특히, System.out.println()은 동기적이기 때문에, 출력이 완료될 때까지 코드가 멈춤. logging은 비동기 로깅
 5. 따라서, 실시간 트래픽이 많은 서비스에서는 비동기 로깅을 사용해야 함.
+
+# 2025-04-03 목요일
+## 1. 방명록 페이징 처리
+- 방명록 페이지네이션을 추가하였음.
+- response dto에 guestbooks, currentPage, totalPages, totalElements, isLast를 담아 새로 생성
+- currentPage는 현재 페이지, totalPages는 전체 페이지 (기존에 0부터 시작인데, 프론트를 위해 1부터 보여지도록 만듦듦)
+- totalElements는 전체 개수. 여기서는 방명록 개수. isLast는 현재가 마지막 페이지인지 아닌지를 나타내는 boolean값
+- 따라서 만약 로그인한 사용자의 방명록에 7개의 글이 있다면 currentPage는 쿼리를 보낸 페이지 ?page=1, totalPages는 2, totalElements는 7, isLast는 false가 될 것.
+
+## 2. 비밀번호 확인 API 구현
+```
+   @Override
+    public String checkPassword(Integer userSeq, CheckPasswordDto requestDto) {
+        User user = validateUser(userSeq);
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new BadRequestException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return "Y";
+    }
+```
+- 비밀번호가 일치할 경우 "Y"를, 일치하지 않을 경우 400 예외를 반환함함.
+
+## 3. 해몽 서비스 로직 개선
+- 기존의 dreamMeaningSeq 기반으로 해몽 조회 및 삭제하던 것을,
+- diraySeq를 기존으로 조회 및 삭제로 변경하였음
+- 해몽 추가시 이미 diarySeq로 등록된 해몽이 존재하면 기존 해몽을 수정하고, 없을 경우에만 새롭게 해몽 생성함
+
+## 4. Graceful Shutdown ?
+- 서비스가 정상적으로 종료되는 방법(우아한 종료)
+- 일반적으로는 서버가 바로 꺼져, 요청 처리중이던 작업이 중간에 끊길 수 있음
+- 서비스 종료 시 발생할 수 있는 문제(비정상 종료로 인한 DB Connection leak, 미처리된 트랜잭션, 메시지 대기 등)를 방지하기 위함
+- Spring boot, webflux에서는 기본적으로 지원
+
+## 5. @Transactional ?
+- 트랜잭션을 관리하는 어노테이션
+- 데이터 무결성을 지키고, 장애 대응, 편의성이 좋음
+- 중간에 실패하면, 앞에 한 작업들도 다 취소하고, 다 성공하면 commit함
+- 따라서, 중요한 DB 작업이 하나로 묶일 때에는 무조건 써주어야 하는 보호막
+- Spring Data JPA의 save(), delete() 같은 Repository 기본 메서드들은 내부적으로 트랜잭션이 걸려 있음
+- 하지만 여러 개를 묶어서 처리할 때는 @Transactional로 묶어줘야 함함
+
