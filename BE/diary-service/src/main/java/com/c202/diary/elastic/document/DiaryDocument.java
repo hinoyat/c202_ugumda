@@ -33,7 +33,7 @@ public class DiaryDocument {
     @Field(type = FieldType.Text, analyzer = "korean")
     private String content;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text, analyzer = "korean")
     private List<String> tags;
 
     @Field(type = FieldType.Keyword)
