@@ -4,7 +4,7 @@ import Layout from '../common/Layout'; // Layout 컴포넌트 import
 import OtherMainPage from '@/domains/mainpage/pages/OtherMainPage';
 import ProtectedRoute from '@/common/ProtectedRoute';
 import PublicRoute from '@/common/PublicRoute';
-
+const Loading = lazy(() => import('../domains/Loading/Loading'));
 const ErrorPage = lazy(() => import('../domains/error/ErrorPage'));
 const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
 const Login = lazy(() => import('../domains/login/pages/Login'));
@@ -36,7 +36,7 @@ const Intro = lazy(() => import('../domains/intro/pages/Intro'));
 
 const AppRouter = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <Routes>
         {/* Layout이 필요한 라우트 */}
         <Route element={<Layout />}>
