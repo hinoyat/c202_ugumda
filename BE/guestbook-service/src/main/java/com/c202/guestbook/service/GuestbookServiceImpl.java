@@ -3,9 +3,14 @@ package com.c202.guestbook.service;
 import com.c202.exception.types.*;
 import com.c202.guestbook.entity.Guestbook;
 import com.c202.guestbook.model.GuestbookDto;
+import com.c202.guestbook.model.GuestbookPageResponse;
 import com.c202.guestbook.repository.GuestbookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -58,15 +63,16 @@ public class GuestbookServiceImpl implements GuestbookService {
     }
 
     @Override
-    public List<GuestbookDto> getAllGuestbooks(int ownerSeq) {
-        List<Guestbook> guestbooks = guestbookRepository.findByOwnerSeqAndIsDeleted(ownerSeq, "N");
-    // 1. writerSeq 목록 추출
-        List<Integer> writerSeqList = guestbooks.stream()
+    public GuestbookPageResponse getAllGuestbooks(int ownerSeq, int page) {
+        int size = 5;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Guestbook> guestbooks = guestbookRepository.findByOwnerSeqAndIsDeleted(ownerSeq, "N", pageable);
+
+        List<Integer> writerSeqList = guestbooks.getContent().stream()
                 .map(Guestbook::getWriterSeq)
                 .distinct()
                 .collect(Collectors.toList());
 
-        // 2. bulk 요청으로 user 정보 한번에 가져오기
         Map<String, Object> response = webClientBuilder
                 .baseUrl("http://user-service")
                 .build()
@@ -80,15 +86,13 @@ public class GuestbookServiceImpl implements GuestbookService {
 
         List<Map<String, Object>> profiles = (List<Map<String, Object>>) response.get("data");
 
-        // 3. userSeq → profile Map으로 변환
         Map<Integer, Map<String, Object>> profileMap = profiles.stream()
                 .collect(Collectors.toMap(
                         p -> (Integer) p.get("userSeq"),
                         p -> p
                 ));
 
-        // 4. Guestbook + 프로필 합쳐서 dto 반환
-        return guestbooks.stream()
+        List<GuestbookDto> guestbookDtos = guestbooks.getContent().stream()
                 .map(guestbook -> {
                     Map<String, Object> profile = profileMap.getOrDefault(guestbook.getWriterSeq(), null);
                     String nickname = profile != null ? (String) profile.getOrDefault("nickname", "알 수 없음") : "알 수 없음";
@@ -107,7 +111,15 @@ public class GuestbookServiceImpl implements GuestbookService {
                             .isDeleted(guestbook.getIsDeleted())
                             .build();
                 }).collect(Collectors.toList());
-        }
+
+        return GuestbookPageResponse.builder()
+                .guestbooks(guestbookDtos)
+                .currentPage(page+1)
+                .totalPages(guestbooks.getTotalPages())
+                .totalElements(guestbooks.getTotalElements())
+                .isLast(guestbooks.isLast())
+                .build();
+    }
 
     @Override
     @Transactional
