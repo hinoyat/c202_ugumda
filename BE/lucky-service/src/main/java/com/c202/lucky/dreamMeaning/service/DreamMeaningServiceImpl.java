@@ -24,7 +24,7 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Override
-    public void createDreamMeaning(Integer userSeq, DreamMeaningRequestDto dto) {
+    public DreamMeaningDto createDreamMeaning(Integer userSeq, DreamMeaningRequestDto dto) {
         String content;
         String isGood;
         try {
@@ -64,6 +64,7 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
                 .build();
 
         dreamMeaningRepository.save(dreamMeaning);
+        return DreamMeaningDto.fromEntity(dreamMeaning);
     }
 
     @Override
