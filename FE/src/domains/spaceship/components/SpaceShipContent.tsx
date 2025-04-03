@@ -14,7 +14,7 @@ const SpaceShipContent = () => {
     nav('/luckynumber');
   };
   const onClickDream = () => {
-    nav('/dreamsolve');
+    nav('/ggumplaylist');
   };
   const onClickFortune = () => {
     nav('/todayfortune');
