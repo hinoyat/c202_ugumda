@@ -10,7 +10,6 @@ interface GgumGrapProps {
     height?: number | string
 }
 
-
 const GgumGraph = ({periodName=30, height = "50%"}: GgumGrapProps)=>{
     const user = useSelector(selectUser)
     const chartRef = useRef(null);

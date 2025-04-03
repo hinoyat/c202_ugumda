@@ -63,7 +63,7 @@ const AppRouter = () => {
               element={<TodayFortune />}
             />
             <Route
-              path="/dreamsolve"
+              path="/ggumplaylist"
               element={<Ggumplaylist />}
             />
             <Route
