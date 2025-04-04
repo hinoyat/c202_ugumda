@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import LeftDreamSection from '../components/LeftDreamSection';
-import RightDreamSection from '../components/RightDreamSection';
+import MusicSection from '../components/MusicSection';
+import GraphSection from '../components/GraphSection';
+import UserInfoData from '../components/UserInfoData';
 import dreamSolve_bg from '@/assets/images/dreamSolve_bg.svg';
 import { Canvas } from '@react-three/fiber';
 import StarField from '@/domains/mainpage/components/universe/StarField';
+
 
 const DreamSolve: React.FC = () => {
   const nav = useNavigate();
@@ -36,9 +38,24 @@ const DreamSolve: React.FC = () => {
       </div>
 
       <div className="absolute w-[93%] h-[88%] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <div className="w-full h-full flex">
-          <LeftDreamSection />
-          <RightDreamSection />
+        <div className="w-full h-full flex flex-col">
+          {/* UserInfoData 중앙 상단에 배치 */}
+          <div className="w-full flex justify-center mb-6">
+            <UserInfoData />
+          </div>
+          
+          {/* GraphSection과 MusicSection 가로 배치 */}
+          <div className="w-full flex">
+            {/* 왼쪽에 GraphSection */}
+            <div className="w-1/2 pl-5">
+              <GraphSection />
+            </div>
+            
+            {/* 오른쪽에 MusicSection */}
+            <div className="w-1/2 pl-3">
+              <MusicSection />
+            </div>
+          </div>
         </div>
       </div>
     </div>

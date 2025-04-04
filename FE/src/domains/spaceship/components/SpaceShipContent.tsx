@@ -14,7 +14,7 @@ const SpaceShipContent = () => {
     nav('/luckynumber');
   };
   const onClickDream = () => {
-    nav('/dreamsolve');
+    nav('/ggumplaylist');
   };
   const onClickFortune = () => {
     nav('/todayfortune');
@@ -47,8 +47,8 @@ const SpaceShipContent = () => {
         {/* 꿈해몽 하기 버튼 */}
         <button
           onClick={onClickDream}
-          className="relative top-[-20px] text-white text-2xl font-bold cursor-pointer hover:scale-105 transition-transform neon-text">
-          꿈해몽 하기
+          className="relative top-[-20px] text-white text-2xl font-bold cursor-pointer hover:scale-105 transition-transform neon-text whitespace-nowrap">
+          꿈 플레이리스트
         </button>
 
         {/* 오늘의 운세 버튼 */}

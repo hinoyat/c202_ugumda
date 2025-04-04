@@ -26,6 +26,13 @@ public class JwtAuthFilter  extends AbstractGatewayFilterFactory<JwtAuthFilter.C
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            String path = exchange.getRequest().getPath().toString();
+
+            if (path.equals("/api/auth/refresh")) {
+                log.info("[JWT 필터] /auth/refresh 경로이므로 필터 우회");
+                return chain.filter(exchange);
+            }
+
             String token = resolveToken(exchange);
 
             if (token == null) {

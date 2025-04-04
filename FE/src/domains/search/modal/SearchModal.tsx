@@ -15,6 +15,15 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  const handleClose = () => {
+    onClose(); // 먼저 모달 닫기 함수 호출
+
+    // 약간의 지연 후 새로고침 (모달이 시각적으로 사라지는 것을 확인할 수 있도록)
+    setTimeout(() => {
+      window.location.reload();
+    }, 10); // 50ms 정도의 짧은 지연
+  };
+
   return (
     <div className="absolute inset-0">
       <div className="absolute inset-0 z-10 backdrop-blur-[2px]"></div>
@@ -23,7 +32,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
         {/* 닫기버튼 */}
         <div
           className="absolute z-40 top-[2%] right-[1%] cursor-pointer"
-          onClick={onClose}>
+          onClick={handleClose}>
           <IoClose className="text-white text-3xl" />
         </div>
         {/* 검색탭 */}
@@ -49,8 +58,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {activeTab === 'diary' && <DiarySearch />}
-        {activeTab === 'user' && <UserSearch />}
+        {activeTab === 'diary' && <DiarySearch onClose={onClose} />}
+        {activeTab === 'user' && <UserSearch onClose={onClose} />}
       </div>
     </div>
   );

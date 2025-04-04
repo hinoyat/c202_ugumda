@@ -138,19 +138,19 @@ export const iconWeights: IconWeight[] = Array.from({ length: 56 }, (_, i) => ({
 
 // id는 1부터 시작하므로 배열 인덱스와 동일하게 설정하려면 -1을 해줍니다
 // 매우 희귀한 아이콘 설정
-iconWeights[14].weight = 0.05;  // 아이콘 15
+iconWeights[14].weight = 5;  // 아이콘 15
 iconWeights[14].isRare = true;
 
-iconWeights[24].weight = 0.05;  // 아이콘 25
+iconWeights[24].weight = 5;  // 아이콘 25
 iconWeights[24].isRare = true;
 
-iconWeights[34].weight = 0.01;  // 아이콘 35
+iconWeights[34].weight = 1;  // 아이콘 35
 iconWeights[34].isEpic = true;
 
-iconWeights[44].weight = 0.001;  // 아이콘 45
+iconWeights[44].weight = 0.1;  // 아이콘 45
 iconWeights[44].isUnique = true;
 
-iconWeights[55].weight = 0.0001;  // 아이콘 56
+iconWeights[55].weight = 0.01;  // 아이콘 56
 iconWeights[55].isLengendary = true;
 
 
@@ -208,6 +208,46 @@ export const isRareIcon = (iconId: number): boolean => {
   return iconWeights[index].isRare;
 };
 
+/** 
+ * 아이콘이 에픽한지 여부를 반환하는 함수
+ * @param iconId 아이콘 ID (1-56)
+ * @returns 에픽 여부 (true/false)
+ */
+export const isEpicIcon = (iconId: number): boolean => {
+  const index = iconId - 1;
+  if (index < 0 || index >= iconWeights.length) {
+    return false;
+  }
+  return iconWeights[index].isEpic;
+};
+
+/**
+ * 아이콘이 유니크한지 여부를 반환하는 함수
+ * @param iconId 아이콘 ID (1-56)
+ * @returns 유니크 여부 (true/false)
+ */
+export const isUnique = (iconId: number): boolean => {
+  const index = iconId - 1;
+  if (index < 0 || index >= iconWeights.length) {
+    return false;
+  }
+  return iconWeights[index].isUnique;
+};
+
+/**
+ * 아이콘이 레전더리한지 여부를 반환하는 함수
+ * @param iconId 아이콘 ID (1-56)
+ * @returns 레전더리 여부 (true/false)
+ */
+export const isLegendary = (iconId: number): boolean => {
+  const index = iconId - 1;
+  if (index < 0 || index >= iconWeights.length) {
+    return false;
+  }
+  return iconWeights[index].isLengendary;
+};
+
+
 /**
  * 랜덤 아이콘을 선택하고 아이콘 정보를 반환하는 함수
  * @returns 선택된 아이콘 정보 객체
@@ -217,6 +257,9 @@ export const getRandomIcon = () => {
   return {
     id: iconId,
     url: getIconById(iconId),
-    isRare: isRareIcon(iconId)
+    isRare: isRareIcon(iconId),
+    isEpic: isEpicIcon(iconId),
+    isUnique: isUnique(iconId),
+    isLegendary: isLegendary(iconId)
   };
 };

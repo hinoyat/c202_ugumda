@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MdHomeFilled } from 'react-icons/md';
-import { BsFillRocketTakeoffFill } from 'react-icons/bs';
+import { BsEnvelopePaperHeartFill } from 'react-icons/bs';
+
 import { VscSearch } from 'react-icons/vsc';
 import { FaRegBell } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
@@ -11,10 +12,9 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
-import Alarm from '../alarm/Alarm';
-import api from '@/apis/apiClient';
-import { UseSelector } from 'react-redux';
+import AlarmList from '../alarm/AlarmList';
 import { selectUser } from '@/stores/auth/authSelectors';
+import { resetPage } from '../alarm/stores/alarmSlice';
 
 const Navbar = () => {
   // 모달 열림 여부
@@ -30,6 +30,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
+
   useEffect(() => {
     if (params.username) {
       console.log(params.username);
@@ -48,19 +49,13 @@ const Navbar = () => {
 
   // 모달 열기
   const openAlarm = async () => {
-    const response = await api.get('/notifications/list/page', {
-      params: { page: 0, size: 5 },
-    });
-
-    if (response) {
-      setIsAlarmOpen(true);
-      console.log('⏰⏰⏰⏰⏰알람 목록 페이지네이션 전체조회!!!!', response);
-    } else {
-      console.error(response);
-    }
+    setIsAlarmOpen(true);
   };
   // 모달 닫기
-  const closeAlarm = () => setIsAlarmOpen(false);
+  const closeAlarm = () => {
+    setIsAlarmOpen(false);
+    dispatch(resetPage());
+  };
 
   return (
     <>
@@ -73,16 +68,14 @@ const Navbar = () => {
           data-tooltip-content="홈으로 이동">
           <MdHomeFilled />
         </Link>
-
         {/* Rocket */}
         <div
           onClick={onClickGuestBookModal}
           className="hover:text-white"
           data-tooltip-id="guestbook-tooltip"
           data-tooltip-content="방명록">
-          <BsFillRocketTakeoffFill className="w-5 h-5" />
+          <BsEnvelopePaperHeartFill className="w-5 h-5" />
         </div>
-
         {/* search (클릭하면 모달 열림) */}
         <VscSearch
           onClick={openModal}
@@ -90,10 +83,9 @@ const Navbar = () => {
           data-tooltip-id="search-tooltip"
           data-tooltip-content="검색하기"
         />
-
         {/* bell */}
         <FaRegBell
-          onClick={openAlarm} // 알림창 뜨기
+          onClick={isAlarmOpen ? closeAlarm : openAlarm} // 알림창 뜨기
           className="hover:text-white cursor-pointer w-5 h-5"
           data-tooltip-id="notification-tooltip"
           data-tooltip-content="알림"
@@ -131,7 +123,7 @@ const Navbar = () => {
       {showGuestbook && <GuestBook onClose={onClickGuestBookModal} />}
 
       {/* 알림 컴포넌트 */}
-      <Alarm
+      <AlarmList
         isOpen={isAlarmOpen}
         onClose={closeAlarm}
       />

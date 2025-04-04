@@ -2,13 +2,17 @@ package com.c202.diary.emotion.service;
 
 import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.model.response.EmotionResponseDto;
+import com.c202.diary.emotion.model.response.EmotionStatisticsResponseDto;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.exception.types.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,4 +83,34 @@ public class EmotionServiceImpl implements EmotionService {
 
         emotionRepository.save(emotion);
     }
+
+    @Override
+    @Transactional
+    public EmotionStatisticsResponseDto getEmotionStatistics(Integer userSeq, Integer periodDays) {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusDays(periodDays - 1);
+
+        String formattedStartDate = startDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String formattedEndDate = endDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        List<Map<String, Object>> statistics =
+                emotionRepository.getEmotionStatisticsByPeriod(userSeq, formattedStartDate, formattedEndDate);
+
+        List<EmotionStatisticsResponseDto.EmotionCount> emotionCounts = statistics.stream()
+                .map(row -> {
+                    String emotion = (String) row.get("emotion");
+                    Long count = ((Number) row.get("count")).longValue();
+                    return EmotionStatisticsResponseDto.EmotionCount.builder()
+                            .emotion(emotion)
+                            .count(count)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return EmotionStatisticsResponseDto.builder()
+                .periodDays(periodDays)
+                .data(emotionCounts)
+                .build();
+    }
+
 }
