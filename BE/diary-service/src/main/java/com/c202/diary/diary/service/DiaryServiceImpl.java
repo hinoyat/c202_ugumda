@@ -89,7 +89,8 @@ public class DiaryServiceImpl implements DiaryService {
 
         alarmService.sendDiaryCreatedAlarm(
                 diary.getUserSeq(),
-                diary.getTitle()
+                diary.getTitle(),
+                diary.getDiarySeq()
         );
 
         List<TagResponseDto> tagDtos = new ArrayList<>();
@@ -322,12 +323,27 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public void uploadVideo(Integer diarySeq, Integer userSeq, String videoUrl) {
         Diary diary = validateDiary(diarySeq, userSeq);
+        try {
 
-        String newUrl = s3Service.uploadVideoFromUrl(videoUrl);
+            String newUrl = s3Service.uploadVideoFromUrl(videoUrl);
 
-        diary.setVideo(newUrl);
+            diary.setVideo(newUrl);
 
-        diaryRepository.save(diary);
+            alarmService.sendVideoCreatedAlarm(
+                    diary.getUserSeq(),
+                    diary.getTitle(),
+                    diary.getDiarySeq()
+            );
+            diaryRepository.save(diary);
+        } catch (Exception e) {
+            alarmService.sendVideoFailedAlarm(
+                    diary.getUserSeq(),
+                    diary.getTitle(),
+                    diary.getDiarySeq()
+            );
+            throw new AiCallFailedException("영상 생성에 실패했습니다");
+        }
+
 
     }
 

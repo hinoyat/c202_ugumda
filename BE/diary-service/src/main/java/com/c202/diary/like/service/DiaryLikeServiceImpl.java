@@ -4,6 +4,7 @@ import com.c202.diary.diary.entity.Diary;
 import com.c202.diary.diary.repository.DiaryRepository;
 import com.c202.diary.like.entity.DiaryLike;
 import com.c202.diary.like.repository.DiaryLikeRepository;
+import com.c202.diary.util.rabbitmq.AlarmService;
 import com.c202.exception.types.BadRequestException;
 import com.c202.exception.types.NotFoundException;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,7 @@ public class DiaryLikeServiceImpl implements DiaryLikeService {
 
     private final DiaryLikeRepository diaryLikeRepository;
     private final DiaryRepository diaryRepository;
+    private final AlarmService alarmService;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Transactional
@@ -48,6 +50,11 @@ public class DiaryLikeServiceImpl implements DiaryLikeService {
                     .createdAt(now)
                     .build();
             diaryLikeRepository.save(diaryLike);
+            alarmService.sendDiaryLikeAlarm(
+                    diary.getUserSeq(),
+                    diary.getTitle(),
+                    diary.getDiarySeq()
+            );
             return "좋아요 추가 완료";
         }
     }

@@ -13,4 +13,6 @@ public class AlarmMessageDto {
     private Integer userSeq;
     private String content;
     private String type;
+    private Integer diarySeq;
+    private boolean requiresPersistence;
 }
