@@ -45,14 +45,14 @@ const DreamSolve: React.FC = () => {
           </div>
           
           {/* GraphSection과 MusicSection 가로 배치 */}
-          <div className="w-full flex">
+          <div className="w-full flex relative">
             {/* 왼쪽에 GraphSection */}
             <div className="w-1/2 pl-5">
               <GraphSection />
             </div>
             
             {/* 오른쪽에 MusicSection */}
-            <div className="w-1/2 pl-3">
+            <div className="w-1/2 pl-3 relative h-[20px]">
               <MusicSection />
             </div>
           </div>

@@ -2,33 +2,27 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/stores/auth/authSelectors";
 import { useEffect, useRef } from "react";
 import Highcharts from 'highcharts';
-import { dreamPeriodData } from "./SampleGraphDataTwoWeeks";
+import { EmotionCountItem } from "../apis/apiDashboard";
 
 
 interface GgumGrapProps {
     periodName?: number;
-    height?: number | string
+    height?: number | string;
+    data: EmotionCountItem[]
 }
 
-const GgumGraph = ({periodName=30, height = "50%"}: GgumGrapProps)=>{
+const GgumGraph = ({periodName=30, height = "50%", data }: GgumGrapProps)=>{
     const user = useSelector(selectUser)
     const chartRef = useRef(null);
 
     useEffect(()=>{
+        console.log("받은 data", data)
         if (!chartRef.current) 
             return;
         
-        // 해당 기간의 데이터 찾기
-        const periodData = dreamPeriodData.find(item => item.name === periodName);
-
-        if (!periodData){
-            console.error(`${periodName}일 기간의 데이터를 찾을 수 없습니다.`);
-            return;
-        }
-
-        const emotions = periodData?.data.map(item => item.emotion)
-        const emotionsCounts = periodData?.data.map(item=>item.count)
-        console.log(emotions)
+        const emotions = data.map(item => item.emotion)
+        const emotionsCounts = data.map(item=>item.count)
+        console.log('그래프 데이터:', emotions, emotionsCounts);
            
         Highcharts.chart(chartRef.current, {
             chart: {
