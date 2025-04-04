@@ -88,7 +88,7 @@ public class UserSearchService {
         // 결과 변환
         List<UserSearchResponseDto> content = searchHits.getSearchHits().stream()
                 .map(hit -> UserSearchResponseDto.fromDocument(hit.getContent()))
-                .collect(Collectors.toList());
+                .toList();
 
         // 페이지 정보 생성
         return new PageImpl<>(content, pageRequest, searchHits.getTotalHits());
