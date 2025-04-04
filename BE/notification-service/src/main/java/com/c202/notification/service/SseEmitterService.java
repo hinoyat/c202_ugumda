@@ -140,10 +140,15 @@ public class SseEmitterService {
                         .name("heartbeat")
                         .data("ping"));
                 log.debug("Heartbeat sent to userSeq: {}", userSeq);
-            } catch (IOException e) {
-                log.warn("Heartbeat failed, closing connection for userSeq: {}", userSeq);
-                emitter.complete();
-                cleanup(userSeq, scheduler);
+            } catch (Exception e) {
+                log.warn("Heartbeat failed, closing connection for userSeq: {}: {}", userSeq, e.getMessage());
+                try {
+                    emitter.complete();
+                } catch (Exception ignored) {
+                    log.debug("연결 종료 중 추가 예외 발생 (무시됨)");
+                } finally {
+                    cleanup(userSeq, scheduler);
+                }
             }
         }, 0, HEARTBEAT_INTERVAL, TimeUnit.SECONDS);
     }
