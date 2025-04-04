@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class AlarmResponseDto {
     private Integer alarmSeq;
+    private Integer diarySeq;
     private String content;
     private String type;
     private String createdAt;
@@ -24,6 +25,7 @@ public class AlarmResponseDto {
     public static AlarmResponseDto toDto(Alarm alarm) {
         return AlarmResponseDto.builder()
                 .alarmSeq(alarm.getAlarmSeq())
+                .diarySeq(alarm.getDiarySeq())
                 .content(alarm.getContent())
                 .type(alarm.getType())
                 .createdAt(alarm.getCreatedAt())
