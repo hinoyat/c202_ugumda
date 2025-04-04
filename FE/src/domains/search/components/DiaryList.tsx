@@ -18,6 +18,7 @@ interface Diary {
   tags: Tag[];
   userNickname?: string;
   profileImage?: string;
+  username?: string; // username 추가
 }
 
 interface User {
@@ -48,7 +49,12 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       // API 응답에서 일기 데이터 배열을 추출
-      if (!data || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
+      if (
+        !data ||
+        !data.data ||
+        !Array.isArray(data.data) ||
+        data.data.length === 0
+      ) {
         setDiaries([]);
         setLoading(false);
         return;
@@ -57,19 +63,18 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
       try {
         // Create a map to store user info by userSeq to avoid duplicate API calls
         const userMap = new Map<number, User>();
-        
-        // Create a list of unique userSeqs to fetch
-        const uniqueUserSeqs = [...new Set(data.data.map(diary => diary.userSeq))];
-        
-        // Fetch user data for each unique userSeq
+        const uniqueUserSeqs = [
+          ...new Set(data.data.map((diary) => diary.userSeq)),
+        ];
         const userPromises = uniqueUserSeqs.map(async (userSeq) => {
           try {
-            // API 주소 수정: '/api/users/seq/{userSeq}' -> '/users/{userSeq}'
             const response = await api.get(`/users/seq/${userSeq}`);
             console.log(`User ${userSeq} 응답:`, response);
-            
-            // apiClient는 이미 응답을 JSON으로 변환하므로 response.json() 호출 필요 없음
-            if (response.data && response.data.status === 200 && response.data.data) {
+            if (
+              response.data &&
+              response.data.status === 200 &&
+              response.data.data
+            ) {
               userMap.set(userSeq, response.data.data);
             }
             return response.data;
@@ -78,23 +83,22 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
             return null;
           }
         });
-        
+
         await Promise.all(userPromises);
-        
-        // Attach user info to each diary
-        const diariesWithUserInfo = data.data.map(diary => {
+        const diariesWithUserInfo = data.data.map((diary) => {
           const userInfo = userMap.get(diary.userSeq);
           return {
             ...diary,
             userNickname: userInfo?.nickname || `사용자 ${diary.userSeq}`,
+            username: userInfo?.username, // username 추가
             // iconSeq가 1부터 시작하는 것으로 보이므로 iconSeq 그대로 사용
-            profileImage: userInfo ? getIconById(userInfo.iconSeq) : undefined
+            profileImage: userInfo ? getIconById(userInfo.iconSeq) : undefined,
           };
         });
-        
+
         setDiaries(diariesWithUserInfo);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
         // If there's an error, still show diaries but without user info
         setDiaries(data.data);
       } finally {
@@ -110,7 +114,9 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
   }
 
   if (!diaries || diaries.length === 0) {
-    return <div className="text-white text-center mt-4">검색 결과가 없습니다.</div>;
+    return (
+      <div className="text-white text-center mt-4">검색 결과가 없습니다.</div>
+    );
   }
 
   return (
@@ -156,7 +162,8 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
                   />
                 ) : (
                   <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-xs text-white">
-                    {diary.userNickname?.charAt(0) || String(diary.userSeq).charAt(0)}
+                    {diary.userNickname?.charAt(0) ||
+                      String(diary.userSeq).charAt(0)}
                   </div>
                 )}
                 <p className="text-[15px] text-white">
@@ -167,9 +174,15 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
               <div>
                 <button
                   className="text-[14px] bg-[#363736] text-white px-4 py-1 rounded cursor-pointer hover:bg-neutral-500"
-                  onClick={() =>
-                    (window.location.href = `/diary/${diary.diarySeq}`)
-                  }>
+                  onClick={() => {
+                    // 현재 선택한 일기 정보를 LocalStorage에 저장
+                    localStorage.setItem(
+                      'selectedDiarySeq',
+                      diary.diarySeq.toString()
+                    );
+                    // 페이지 이동
+                    window.location.href = `/${diary.username || ''}`;
+                  }}>
                   보러가기
                 </button>
               </div>
