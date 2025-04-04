@@ -10,6 +10,9 @@ import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.tag.model.response.TagResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -28,7 +31,7 @@ public class DiarySearchService {
     private final DiarySearchRepository diarySearchRepository;
     private final EmotionRepository emotionRepository;
 
-    public List<DiarySearchListResponseDto> searchDiaries(DiarySearchRequestDto requestDto, Integer userSeq) {
+    public Page<DiarySearchListResponseDto> searchDiaries(DiarySearchRequestDto requestDto, Integer userSeq) {
         // 쿼리 빌더 생성
         BoolQuery.Builder boolQueryBuilder = new BoolQuery.Builder();
 
@@ -93,9 +96,19 @@ public class DiarySearchService {
             boolQueryBuilder.must(Query.of(q -> q.bool(keywordQueryBuilder.build())));
         }
 
+        Integer page = requestDto.getPage() != null ? requestDto.getPage() - 1 : 0;
+        Integer size = requestDto.getSize() != null ? requestDto.getSize() : 20;
+
+        if (page < 0) {
+            page = 0;
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
         // 쿼리 생성
         NativeQuery searchQuery = NativeQuery.builder()
                 .withQuery(q -> q.bool(boolQueryBuilder.build()))
+                .withPageable(pageRequest)
                 .build();
 
         // 검색 실행
@@ -124,6 +137,6 @@ public class DiarySearchService {
             result.add(diaryDto);
         }
 
-        return result;
+        return new PageImpl<>(result, pageRequest, searchHits.getTotalHits());
     }
 }

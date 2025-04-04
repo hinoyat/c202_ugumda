@@ -12,4 +12,7 @@ public class UserSearchRequestDto {
     private String keyword;
     private boolean searchUsername;
     private boolean searchNickname;
+
+    private Integer page;
+    private Integer size;
 }
