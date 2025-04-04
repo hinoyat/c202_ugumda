@@ -55,7 +55,7 @@ public class AlarmService {
                 .requiresPersistence(true)
                 .build();
 
-        log.info("동영상 생성 알림 발송: {}", alarmMessage);
+        log.info("동영상 생성 실패 알림 발송: {}", alarmMessage);
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE_NAME,
                 RabbitMQConfig.ROUTING_KEY,
@@ -72,7 +72,7 @@ public class AlarmService {
                 .requiresPersistence(true)
                 .build();
 
-        log.info("동영상 생성 알림 발송: {}", alarmMessage);
+        log.info("좋아요 생성 알림 발송: {}", alarmMessage);
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE_NAME,
                 RabbitMQConfig.ROUTING_KEY,

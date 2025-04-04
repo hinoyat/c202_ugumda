@@ -322,8 +322,8 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     @Override
     public void uploadVideo(Integer diarySeq, Integer userSeq, String videoUrl) {
+        Diary diary = validateDiary(diarySeq, userSeq);
         try {
-            Diary diary = validateDiary(diarySeq, userSeq);
 
             String newUrl = s3Service.uploadVideoFromUrl(videoUrl);
 
@@ -336,7 +336,6 @@ public class DiaryServiceImpl implements DiaryService {
             );
             diaryRepository.save(diary);
         } catch (Exception e) {
-            Diary diary = validateDiary(diarySeq, userSeq);
             alarmService.sendVideoFailedAlarm(
                     diary.getUserSeq(),
                     diary.getTitle(),
