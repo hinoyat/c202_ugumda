@@ -38,6 +38,7 @@ export default function BlackHole() {
 
       if (result?.username) {
         nav(`/${result.username}`);
+        window.location.reload();
       }
     } catch (error) {
       console.error('랜덤 방문 실패:', error);
