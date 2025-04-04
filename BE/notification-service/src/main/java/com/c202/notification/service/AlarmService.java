@@ -35,6 +35,7 @@ public class AlarmService {
         String now = LocalDateTime.now().format(DATE_TIME_FORMATTER);
         Alarm alarm = Alarm.builder()
                 .userSeq(alarmMessage.getUserSeq())
+                .diarySeq(alarmMessage.getDiarySeq())
                 .content(alarmMessage.getContent())
                 .type(alarmMessage.getType())
                 .createdAt(now)

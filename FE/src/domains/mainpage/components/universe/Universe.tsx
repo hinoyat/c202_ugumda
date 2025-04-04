@@ -181,6 +181,48 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     }
   };
 
+  useEffect(() => {
+    const checkSelectedDiary = async () => {
+      try {
+        const selectedDiarySeq = localStorage.getItem('selectedDiarySeq');
+
+        if (selectedDiarySeq && diaryEntries.length > 0) {
+          // 일기 ID를 숫자로 변환
+          const diarySeq = parseInt(selectedDiarySeq);
+
+          // 선택된 일기가 현재 목록에 있는지 확인
+          const matchingEntry = diaryEntries.find(
+            (entry) => entry.diarySeq === diarySeq
+          );
+
+          if (matchingEntry) {
+            // 해당 일기 상세 정보 로드
+            await loadDiaryDetail(diarySeq);
+
+            // 카메라를 해당 별 위치로 이동
+            if (controlsRef.current) {
+              controlsRef.current.target.set(
+                matchingEntry.x,
+                matchingEntry.y,
+                matchingEntry.z
+              );
+              controlsRef.current.update();
+            }
+
+            // LocalStorage에서 삭제 (일회성 사용)
+            localStorage.removeItem('selectedDiarySeq');
+          }
+        }
+      } catch (error) {
+        console.error('선택된 일기 처리 중 오류 발생:', error);
+      }
+    };
+
+    if (diaryEntries.length > 0) {
+      checkSelectedDiary();
+    }
+  }, [diaryEntries]);
+
   // ------------------- 일기 목록 조회 (전체 별들) ------------------------ //
   // 컴포넌트 마운트 시 초기 일기 데이터 로드
   useEffect(() => {

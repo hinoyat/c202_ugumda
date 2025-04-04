@@ -1,30 +1,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loginUser, logoutUser } from './authThunks';
+import { loginUser, logoutUser, updateToken } from './authThunks';
 import { AuthState, User } from './authTypes';
-
-// 로그인 상태 인터페이스
-// interface AuthState {
-//   user: User | null;
-//   accessToken: string | null;
-//   isAuthenticated: boolean;
-//}
 
 const initialState: AuthState = {
   user: JSON.parse(localStorage.getItem('User') || 'null'),
-  accessToken: localStorage.getItem('accessToken') || null, // 로컬스토리지에서 토큰 가져옴
-  isAuthenticated: !!localStorage.getItem('accessToken'), // 토큰 존재 여부 확인
+  accessToken: localStorage.getItem('accessToken') || null,
+  isAuthenticated: !!localStorage.getItem('accessToken'),
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setIntro: (state, action)=>{
-      state.user!.introduction = action.payload
-      console.log("서채서채서채", JSON.stringify(state))
-    }
+    // 🔹 사용자 자기소개 업데이트
+    setIntro: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.introduction = action.payload;
+      }
+    },
 
-  }, // 직접 사용할 리듀서 제거 - Thunks에서 관리
+    // ✅ accessToken만 따로 갱신하고 싶은 경우 (예: 인터셉터에서)
+    setAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+      state.isAuthenticated = true;
+    },
+
+    // ✅ 전체 상태 초기화하고 싶을 때
+    clearAuth: (state) => {
+      state.accessToken = null;
+      state.user = null;
+      state.isAuthenticated = false;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('User');
+    },
+  },
   extraReducers: (builder) => {
     builder
       // 로그인 성공
@@ -34,20 +43,19 @@ const authSlice = createSlice({
         state.user = action.payload.user;
       })
       // 토큰 갱신 성공
-      // .addCase(refreshToken.fulfilled, (state, action) => {
-      //   state.accessToken = action.payload.accessToken;
-      // })
-      // 로그아웃 시 상태 초기화
+      .addCase(updateToken.fulfilled, (state, action) => {
+        state.accessToken = action.payload.accessToken;
+      })
+      // 로그아웃 성공
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.accessToken = null;
         state.isAuthenticated = false;
+        localStorage.removeItem('accessToken'); // ✅ 추가
         localStorage.removeItem('User');
       });
   },
 });
-export const {
-  setIntro
-} = authSlice.actions
 
-export default authSlice.reducer ;
+export const { setIntro, setAccessToken, clearAuth } = authSlice.actions;
+export default authSlice.reducer;

@@ -19,6 +19,9 @@ public class Alarm {
     @Column(nullable = false)
     private Integer userSeq;
 
+    @Column(nullable = true)
+    private Integer diarySeq;
+
     @Column(nullable = false, length = 1000)
     private String content;
 

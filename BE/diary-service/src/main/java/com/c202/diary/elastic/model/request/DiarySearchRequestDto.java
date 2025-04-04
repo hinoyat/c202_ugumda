@@ -14,4 +14,7 @@ public class DiarySearchRequestDto {
     private boolean searchContent;
     private boolean searchTag;
     private boolean currentUserOnly;
+
+    private Integer page;
+    private Integer size;
 }

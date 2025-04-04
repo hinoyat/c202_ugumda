@@ -4,6 +4,9 @@ import Layout from '../common/Layout'; // Layout 컴포넌트 import
 import OtherMainPage from '@/domains/mainpage/pages/OtherMainPage';
 import ProtectedRoute from '@/common/ProtectedRoute';
 import PublicRoute from '@/common/PublicRoute';
+import SlashPage from '@/domains/intro/pages/SlashPage';
+
+const Main = lazy(() => import('@/domains/intro/pages/SlashPage'));
 const Loading = lazy(() => import('../domains/Loading/Loading'));
 const ErrorPage = lazy(() => import('../domains/error/ErrorPage'));
 const MainPage = lazy(() => import('../domains/mainpage/pages/MainPage'));
@@ -31,7 +34,9 @@ const LuckyNumber = lazy(
 const TodayFortune = lazy(
   () => import('../domains/todayFortune/pages/TodayFortune')
 );
-const Ggumplaylist = lazy(() => import('../domains/dashboard/pages/Ggumplaylist'));
+const Ggumplaylist = lazy(
+  () => import('../domains/dashboard/pages/Ggumplaylist')
+);
 const Intro = lazy(() => import('../domains/intro/pages/Intro'));
 
 const AppRouter = () => {
@@ -107,6 +112,11 @@ const AppRouter = () => {
             path="/login"
             element={<Login />}
           />
+          <Route
+            path="/"
+            element={<SlashPage />}
+          />
+
           <Route
             path="/intro"
             element={<Intro />}
