@@ -9,7 +9,6 @@ export default defineConfig({
   plugins: [react(), svgr(), tailwindcss()],
   server: {
     port: 3000,
-    open: '/intro', // 개발 서버 실행 시 /intro로 자동 이동
     proxy: {
       '/api': {
         target: 'https://j12c202.p.ssafy.io',

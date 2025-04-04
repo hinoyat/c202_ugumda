@@ -29,7 +29,15 @@ public class NotificationController {
     // SSE 연결 생성 및 초기화
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
-        return sseEmitterService.createEmitter(userSeq);
+        try {
+            return sseEmitterService.createEmitter(userSeq);
+        } catch (Exception e) {
+            log.error("SSE 연결 생성 중 오류: {}", e.getMessage(), e);
+            // SSE 연결 오류 시 빈 emitter 반환 (status 200)
+            SseEmitter emitter = new SseEmitter(0L);
+            emitter.complete();
+            return emitter;
+        }
     }
 
     // 연결 정보 조회

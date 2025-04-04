@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import api from '@/apis/apiClient';
+
 import {
   LoginCredentials,
   LoginResponse,
@@ -10,50 +11,37 @@ import {
   LoginResponseData,
 } from './authTypes';
 
-// 로그인 API 호출
 export const loginUser = createAsyncThunk<
-  LoginResponseData, // 반환 타입 확장
+  LoginResponseData,
   LoginCredentials,
   { rejectValue: string }
 >('auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post<LoginResponse>(
-      '/api/auth/login',
-      credentials
-    );
-    console.log('로그인 성공✅✅✅✅✅✅✅✅✅✅✅✅✅', response);
-
-    // 쿠키에 토큰 저장
-    // Cookies.set('accessToken', response.data.data.accessToken, {
-    //   secure: true,
-    // });
-    // Cookies.set('refreshToken', response.data.refreshToken, { secure: true });
-    localStorage.setItem('accessToken', response.data.data.accessToken);
-
+    const response = await api.post<LoginResponse>('/auth/login', credentials);
+    const accessToken = response.data.data.accessToken;
+    localStorage.setItem('accessToken', accessToken);
     const userData = await api.get('/users/me');
     localStorage.setItem('User', JSON.stringify(userData.data.data));
 
     return {
-      accessToken: response.data.data.accessToken,
-      user: userData.data.data, // user 정보도 함께 반환
+      accessToken,
+      user: userData.data.data,
     };
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
-    console.log('로그인 실패 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴', axiosError);
     return rejectWithValue(axiosError.response?.data?.message || '로그인 실패');
   }
 });
 
-// 로그아웃 API 호출
 export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
       await api.post('/auth/logout');
-      console.log('로그아웃!! 성공✅✅✅✅✅✅✅✅✅✅✅✅✅');
 
-      // access token 삭제
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('User');
+
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       return rejectWithValue(
@@ -63,24 +51,22 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-// 토큰 갱신 (refresh)
 export const updateToken = createAsyncThunk<
   { accessToken: string },
   void,
   { rejectValue: string }
 >('auth/refresh', async (_, { rejectWithValue }) => {
   try {
-    // const refreshToken = .get('refreshToken');
-    // if (!refreshToken) throw new Error('Refresh token이 없습니다.');
+    const response = await api.post<RefreshResponse>('/auth/refresh', {}, { withCredentials: true });
+    const newAccessToken = response.data.data.accessToken;
 
-    const response = await api.post<RefreshResponse>('/auth/refresh');
+    localStorage.setItem('accessToken', newAccessToken);
+    console.log('[updateToken] 토큰 갱신 성공 → 새로운 accessToken 저장 완료', newAccessToken);
 
-    // 새 토큰을 쿠키에 저장
-    localStorage.setItem('accessToken', response.data.accessToken);
-
-    return { accessToken: response.data.accessToken };
+    return { accessToken: newAccessToken };
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
+    console.error('[updateToken] 토큰 갱신 실패 ❌', axiosError);
     return rejectWithValue(
       axiosError.response?.data?.message || '토큰 갱신 실패'
     );

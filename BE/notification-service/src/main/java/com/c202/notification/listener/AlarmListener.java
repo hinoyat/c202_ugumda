@@ -60,14 +60,18 @@ public class AlarmListener {
 
     // 알림 메시지 처리 및 전송
     private void processAlarmMessage(AlarmMessageDto message) {
-        // 알림 DB에 저장
-        alarmService.saveAlarm(message);
+
+        if (message.isRequiresPersistence()) {
+            alarmService.saveAlarm(message);
+        }
 
         // 연결된 사용자에게 전송
         sendToConnectedUser(message);
 
         // 이벤트 캐시에 저장 (재연결 시 활용)
-        emitterRepository.saveEventCache(message.getUserSeq(), message);
+        if (message.isRequiresPersistence()) {
+            emitterRepository.saveEventCache(message.getUserSeq(), message);
+        }
     }
 
 
