@@ -6,7 +6,7 @@ interface DiaryDetailProps {
   likes_boolean: boolean;
   likes: number;
   diarySeq: number;
-  isMyDiary: boolean; //  내 일기에만 좋아요 아니라서 필요없긴 한데 혹시 몰라서 일단 살려둘게여
+  isMyDiary: boolean; // 내 일기에만 좋아요 아니라서 필요없긴 한데 혹시 몰라서 일단 살려둘게여
   onLikeToggle: () => void;
 }
 
@@ -26,7 +26,7 @@ const DetailLike: React.FC<DiaryDetailProps> = ({
       <div
         onClick={handleClick}
         className="cursor-pointer">
-        <Heartbox />
+        <Heartbox isLiked={likes_boolean} />
       </div>
       <p className="text-white">{likes}</p>
     </div>
