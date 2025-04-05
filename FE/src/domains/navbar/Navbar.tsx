@@ -63,6 +63,7 @@ const Navbar = () => {
         {/* home */}
         <Link
           to={`/${user?.username}`}
+          reloadDocument
           className="hover:text-white"
           data-tooltip-id="home-tooltip"
           data-tooltip-content="홈으로 이동">
