@@ -1,5 +1,7 @@
 // 일기 생성/ 수정 버튼
 
+import RedButtonBase from '@/domains/diary/components/create_edit/RedButtonBase';
+import ButtonBase from '@/domains/diary/components/details/button/ButtonBase';
 import React from 'react';
 
 interface DiaryCreateButtonProps {
@@ -23,29 +25,31 @@ const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
     <div className="w-full flex flex-col gap-3">
       {isEditing ? (
         <>
-          <button
+          <ButtonBase
             onClick={onCreate}
-            className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-2 rounded text-sm font-bold">
+            borderRadius="6px">
             수정완료
-          </button>
+          </ButtonBase>
+
           {onDelete && (
-            <button
+            <RedButtonBase
               onClick={() => {
                 if (window.confirm('정말로 이 일기를 삭제하시겠습니까?')) {
                   onDelete();
                 }
               }}
-              className="text-white/90 cursor-pointer w-full bg-[#ff5757]/90 hover:bg-[#e74c4c]/90 py-2 rounded text-sm font-bold">
+              borderRadius="6px">
               삭제하기
-            </button>
+            </RedButtonBase>
           )}
         </>
       ) : (
-        <button
+        <ButtonBase
           onClick={onCreate}
-          className="text-white/90 cursor-pointer w-full bg-[#858484]/90 hover:bg-[#707070]/90 py-3 rounded text-[17px] font-bold">
+          borderRadius="6px"
+          height="46px">
           꿈 일기 등록하기
-        </button>
+        </ButtonBase>
       )}
     </div>
   );
