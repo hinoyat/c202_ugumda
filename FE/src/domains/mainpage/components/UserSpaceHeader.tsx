@@ -82,7 +82,7 @@ const UserSpaceHeader = ({ nickname, icon, isMySpace }: UserSpaceHeaderProps) =>
           <div className="flex items-center">
             <img src={getIconById(icon)} alt="" className="w-9 h-9"/>
             <>
-              <h3 className="text-base font-bold text-[#ffd700]">{nickname}</h3>
+              <h3 className="text-base font-bold text-[#e0cfaa]">{nickname}</h3>
               <p className="text-sm text-white/90 ml-1">님의 우주</p>
             </>
           </div>
