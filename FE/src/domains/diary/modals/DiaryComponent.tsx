@@ -43,6 +43,7 @@ interface DiaryComponentProps {
   onDiaryCreated?: (responseData: any) => void;
   onDiaryUpdated?: (data: any) => void;
   isMySpace?: boolean;
+  onDeleteDiary?: () => void;
 }
 
 const DiaryComponent: React.FC<DiaryComponentProps> = ({
@@ -53,6 +54,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   onDiaryCreated,
   onDiaryUpdated,
   isMySpace = true,
+  onDeleteDiary,
 }) => {
   // 리덕스 관련 설정
   const dispatch = useDispatch();
@@ -287,6 +289,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
                 onCreateVideo={handleCreateVideo}
                 isEditing={isEditing}
                 onClose={onClose}
+                onDelete={isEditing ? onDeleteDiary : undefined}
               />
             </div>
           </div>

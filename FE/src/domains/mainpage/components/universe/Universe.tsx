@@ -182,9 +182,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 리덕스 스토어에서도 제거
       dispatch(removeDiary(currentDiaryDetail.diarySeq));
 
-      // 모달 닫기
+      // 조회 모달 닫기
       setShowDetail(false);
       setCurrentDiaryDetail(null);
+
+      // 수정/작성 모달도 닫기
+      setShowForm(false);
 
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
@@ -456,6 +459,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           diaryData={isEditing ? selectedEntry : undefined}
           onDiaryCreated={handleDiaryCreated}
           onDiaryUpdated={handleDiaryUpdated}
+          onDeleteDiary={handleDeleteDiary}
           isMySpace={isMySpace}
         />
       )}
