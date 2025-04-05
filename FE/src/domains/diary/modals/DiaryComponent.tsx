@@ -17,6 +17,7 @@ import { Tag } from '@/domains/diary/api/tagApi';
 import { videoApi } from '@/domains/diary/api/videoApi';
 import ModalBase from '../components/modalBase';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
+import { dreamApi, DreamSolveResponse } from '@/domains/diary/api/dreamApi';
 
 // 일기 생성 인터페이스
 // interface DiaryData {
@@ -42,6 +43,7 @@ interface DiaryComponentProps {
   onDiaryCreated?: (responseData: any) => void;
   onDiaryUpdated?: (data: any) => void;
   isMySpace?: boolean;
+  onDeleteDiary?: () => void;
 }
 
 const DiaryComponent: React.FC<DiaryComponentProps> = ({
@@ -52,6 +54,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   onDiaryCreated,
   onDiaryUpdated,
   isMySpace = true,
+  onDeleteDiary,
 }) => {
   // 리덕스 관련 설정
   const dispatch = useDispatch();
@@ -172,6 +175,16 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             console.error('영상 생성 요청 중 오류:', videoError);
           });
 
+        // 꿈해몽 생성 api 호출
+        dreamApi
+          .createDreamMeaning(diarySeq, content)
+          .then((dreamResponse) => {
+            console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
+          })
+          .catch((dreamError) => {
+            console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
+          });
+
         // 성공 시 onDiaryCreated 콜백 호출
         // 부모 컴포넌트(유니버스)로 전달 -> 새로운 일기 별 생성에 사용
         if (onDiaryCreated) {
@@ -276,6 +289,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
                 onCreateVideo={handleCreateVideo}
                 isEditing={isEditing}
                 onClose={onClose}
+                onDelete={isEditing ? onDeleteDiary : undefined}
               />
             </div>
           </div>

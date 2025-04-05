@@ -6,17 +6,17 @@ import DetailVideo from '@/domains/diary/components/details/DetailVideo';
 import DetailContent from '@/domains/diary/components/details/DetailContent';
 // import DetailTags from '@/domains/diary/components/details/DetailTags';
 import DetailLike from '@/domains/diary/components/details/DetailLike';
-import DetailButtons from '@/domains/diary/components/details/DetailButtons';
 import ModalBase from '../components/modalBase';
 
 import '@/domains/search/styles/DiarySearch.css';
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
-
-interface Tag {
-  tagSeq: number;
-  name: string;
-}
+import UpdateButton from '@/domains/diary/components/details/button/UpdateButton';
+import DeleteButton from '@/domains/diary/components/details/button/DeleteButton';
+import { Tag } from '@/domains/diary/api/tagApi';
+import { dreamApi } from '@/domains/diary/api/dreamApi';
+import DreamMeaningView from '@/domains/diary/components/details/DreamMeaningView';
+import DestinyButton from '@/domains/diary/components/details/button/DestinyButton';
 
 interface DiaryDetailProps {
   initialDiary: {
@@ -45,8 +45,14 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   onDelete,
   isMySpace = false,
 }) => {
-  // 현재 보여지는 일기 데이터를 상태로 관리
+  // --------------- 상태관리 ----------------- //
   const [currentDiary, setCurrentDiary] = useState(initialDiary);
+  const [dreamMeaning, setDreamMeaning] = useState<{
+    resultContent: string;
+    isGood: string;
+  } | null>(null);
+  const [loadingDreamMeaning, setLoadingDreamMeaning] = useState(false);
+  // ------------------------------------------ //
 
   // 날짜 포맷 함수
   const formatDate = (dateString: string) => {
@@ -88,68 +94,153 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     }
   };
 
+  // --------- 꿈해몽 ---------- //
+
+  useEffect(() => {
+    const fetchDreamMeaning = async () => {
+      if (!initialDiary.diarySeq) return;
+
+      console.log('다이어리 시퀀스', initialDiary.diarySeq);
+      setLoadingDreamMeaning(true);
+      try {
+        const response = await dreamApi.getDreamMeaningById(
+          initialDiary.diarySeq
+        );
+        console.log('꿈해몽 데이터 로드됨:', response.data);
+
+        if (response.data && response.data.data) {
+          setDreamMeaning({
+            resultContent: response.data.data.resultContent,
+            isGood: response.data.data.isGood,
+          });
+        }
+      } catch (error) {
+        console.error('꿈해몽 데이터 로드 중 오류 발생:', error);
+        setDreamMeaning({
+          resultContent: '꿈해몽 데이터를 불러오는데 실패했습니다.',
+          isGood: 'N',
+        });
+      } finally {
+        setLoadingDreamMeaning(false);
+      }
+    };
+
+    fetchDreamMeaning();
+  }, [initialDiary.diarySeq]);
+
   return (
     <>
+      {/* 모달 바깥 부분 */}
       <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[4px] z-[9999]">
         <div
           className="inset-0 absolute"
           onClick={handleClose}></div>
-        {/* 일기 조회 UI */}
+        {/* ------------------------------------------ 일기 조회 UI ------------------------------------------ */}
 
         {/* 모달컨테이너 */}
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[27%] h-[75%] bg-[#505050]/90 rounded-lg p-1 z-50">
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[70%] h-[80%] p-1 z-50">
           <ModalBase>
-            {/* 닫기버튼 */}
+            {/* 삭제버튼 */}
+            {/* <div className="absolute top-3 right-3">
+              {isMySpace && (
+                <DeleteButton
+                  onDelete={onDelete}
+                  isMySpace={isMySpace}
+                />
+              )}
+            </div> */}
+            {/* -------------- 닫기버튼 -------------- */}
             <button
               onClick={handleClose}
-              className="absolute top-3 right-3 flex items-center justify-center"
+              className="absolute top-3 right-3 flex items-center justify-center cursor-pointer"
               aria-label="닫기">
               <span className="text-white text-lg font-semibold leading-none">
                 ×
               </span>
             </button>
-
-            {/* 모달 내용을 전체 감싸는 div태그 시작 */}
-            <div className="w-full h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
-              <div className="pr-3 flex flex-col justify-between w-full h-full gap-3">
-                <div>
-                  <DetailHeader
-                    title={currentDiary.title}
-                    created_at={formatDate(currentDiary.createdAt)}
-                  />
+            {/* ------------------------------------------ 2분할 레이아웃 컨테이너 ------------------------------------------ */}
+            <div className="flex w-full h-full">
+              {/* 왼쪽영역 */}
+              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
+                <div className="pr-3 flex flex-col  w-full h-full">
+                  <div className="mt-2 ml-2 mb-12">
+                    {/* 일기제목, 작성날짜, 공개여부 */}
+                    <DetailHeader
+                      title={currentDiary.title}
+                      created_at={formatDate(currentDiary.createdAt)}
+                      isPublic={currentDiary.isPublic === 'Y'}
+                    />
+                  </div>
+                  <div className="w-[90%] mb-14 mx-auto flex justify-center items-center h-64">
+                    {/* 영상 */}
+                    <DetailVideo dream_video={currentDiary.videoUrl || null} />
+                  </div>
+                  {/* 태그 */}
+                  <div>
+                    <DiaryTags
+                      initialTags={currentDiary.tags || []}
+                      isEditing={false}
+                      emotionName={currentDiary.emotionName}
+                    />
+                  </div>
+                  {/* 좋아요 */}
+                  <div className="h-10 flex items-center justify-end mr-2">
+                    <DetailLike
+                      likes={currentDiary.likeCount ?? 0}
+                      likes_boolean={currentDiary.hasLiked ?? false}
+                      diarySeq={currentDiary.diarySeq}
+                      isMyDiary={isMySpace}
+                      onLikeToggle={handleLikeChange}
+                    />
+                  </div>
+                  {/* <div className="">
+                    <DetailButtons
+                      onClose={handleClose}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                      isMySpace={isMySpace}
+                    />
+                  </div> */}
                 </div>
-                <div>
-                  <DetailVideo dream_video={currentDiary.videoUrl || null} />
-                </div>
+              </div>
 
-                {/* contents 칸 크기수정 여기서 */}
-                <div className="overflow-y-auto custom-scrollbar whitespace-normal break-words flex-glow min-h-[150px]">
+              {/* 오른쪽 영역 - 4개의 개별 div로 구성 */}
+              <div className="w-1/2 h-full py-7 px-7 overflow-y-auto custom-scrollbar">
+                {/* 1. 꿈일기내용 */}
+                <div className="whitespace-normal break-words mb-6 mt-6 h-40 overflow-y-auto">
                   <DetailContent content={currentDiary.content} />
                 </div>
-                <div className="">
-                  <DiaryTags
-                    initialTags={currentDiary.tags}
-                    isEditing={false}
-                    emotionName={currentDiary.emotionName}
-                  />
+
+                {/* 2. 수정하기 버튼 */}
+                {isMySpace && (
+                  <div className="mb-6 text-right">
+                    <UpdateButton
+                      onEdit={onEdit}
+                      isMySpace={isMySpace}
+                    />
+                  </div>
+                )}
+
+                {/* 3. 꿈해몽 섹션 */}
+                <div className="p-4 rounded mb-6 h-40 overflow-y-auto">
+                  <h3 className="text-white font-bold mb-2">꿈 해몽 🪄</h3>
+                  {loadingDreamMeaning ? (
+                    <p className="text-white">꿈해몽 데이터를 불러오는 중...</p>
+                  ) : dreamMeaning ? (
+                    <DreamMeaningView
+                      resultContent={dreamMeaning.resultContent}
+                      isGood={dreamMeaning.isGood}
+                    />
+                  ) : (
+                    <p className="text-white">꿈해몽 데이터가 없습니다.</p>
+                  )}
                 </div>
-                {/* 좋아요 */}
-                <div className="h-10 flex items-center justify-end">
-                  <DetailLike
-                    likes={currentDiary.likeCount ?? 0}
-                    likes_boolean={currentDiary.hasLiked ?? false}
-                    diarySeq={currentDiary.diarySeq}
-                    isMyDiary={isMySpace}
-                    onLikeToggle={handleLikeChange}
-                  />
-                </div>
-                <div className="">
-                  <DetailButtons
-                    onClose={handleClose}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    isMySpace={isMySpace}
-                  />
+
+                {/* 4. 운세보러가기 버튼 */}
+                <div className="text-right">
+                  {dreamMeaning && (
+                    <DestinyButton isGood={dreamMeaning.isGood} />
+                  )}
                 </div>
               </div>
             </div>
