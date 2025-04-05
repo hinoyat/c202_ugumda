@@ -1,6 +1,11 @@
 import styled from 'styled-components';
+import React from 'react';
 
-const Heartbox = () => {
+interface HeartboxProps {
+  isLiked?: boolean;
+}
+
+const Heartbox: React.FC<HeartboxProps> = ({ isLiked = false }) => {
   return (
     <StyledWrapper>
       <div
@@ -9,7 +14,9 @@ const Heartbox = () => {
         <input
           type="checkbox"
           className="checkbox"
-          id="Give-It-An-Id"
+          id="heart-checkbox"
+          checked={isLiked}
+          readOnly
         />
         <div className="svg-container">
           <svg

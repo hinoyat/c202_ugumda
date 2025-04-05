@@ -2,8 +2,8 @@ import GuestBookList from './components/GuestBookList';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { useState,useEffect } from 'react';
-import { getMyGuestbookEntries, UserGuestbookResponse } from './apis/apiUserGuestbook';
-import { GuestbookOtherapi } from './apis/apiOthersGuestBook';
+import { getMyGuestbookEntries} from './apis/apiUserGuestbook';
+import { GuestbookOtherapi, PaginatedResponse } from './apis/apiOthersGuestBook';
 import MainPage from '../mainpage/pages/MainPage';
 import exampleProfile from '@/assets/images/exampleProfile.svg';
 import { useSelector } from 'react-redux';
@@ -25,14 +25,13 @@ const GuestBook: React.FC<MainPageProps> = ({onClose}) => {
   const PageUser = useSelector((state: RootState) => state.userpage);
   const PageUserNumber = useSelector((state: RootState) => state.userpage.userSeq);
   const l = useSelector((state: RootState) => state)
-  console.log("확인", l)
-  console.log("페이지 주인번호!", PageUserNumber)
-  console.log('현재 유저번호:', LoginUserNumber);
 
   const dispatch = useAppDispatch();
 
   // 방명록 데이터를 저장할 상태 
-  const [guestbookEntries, setGuestbookEntries] = useState<UserGuestbookResponse[]>([]);
+  const [guestbookEntries, setGuestbookEntries] = useState<PaginatedResponse| null>(null);
+  // 현재 페이지 상태 추가
+  const [currentPage, setCurrentPage] = useState<number>(1);
   // 방명록 입력 상태 추가
   const [newEntry, setNewEntry] = useState('');
   // 로딩 상태 추가
@@ -49,22 +48,27 @@ const GuestBook: React.FC<MainPageProps> = ({onClose}) => {
   };
 
   // 방명록 데이터 가져오기 함수
-  const fetchGuestbook = async () => {
+  const fetchGuestbook = async (page: number = 1) => {
     if (!PageUserNumber) return;
 
     let data;
     if(PageUserNumber === LoginUserNumber){
-      data = await getMyGuestbookEntries();
-      console.log("📜 내 방명록 데이터:", data);
+      data = await getMyGuestbookEntries(page);
     }
     else {
-      data = await GuestbookOtherapi.getGuestbookEntries(PageUserNumber);
-      console.log("📜 다른 사람 방명록 데이터:", data);
+      data = await GuestbookOtherapi.getGuestbookEntries(PageUserNumber, page);
     }
 
     if (data) {
-      setGuestbookEntries(data);
+      setGuestbookEntries(data.data); 
+      console.log("📜 엔트리 데이터", data.data)// response.data가 PaginatedResponse 타입
     }
+  };
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchGuestbook(page);
   };
 
   // 컴포넌트가 마운트될 때 데이터 가져오기
@@ -245,8 +249,9 @@ const handleSaveIntro = async () => {
           </div>
 
           <GuestBookList 
-          data={guestbookEntries?.data || []}
+          data={guestbookEntries || { guestbooks: [], currentPage: 1, totalPages: 1, totalElements: 0, last: false }}
           onDelete={handleDeleteEntry}
+          onPageChange={handlePageChange}
           />
         </div>
       </div>

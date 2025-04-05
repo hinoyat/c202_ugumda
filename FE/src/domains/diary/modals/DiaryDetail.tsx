@@ -148,7 +148,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
             {/* ------------------------------------------ 2분할 레이아웃 컨테이너 ------------------------------------------ */}
             <div className="flex w-full h-full">
               {/* 왼쪽영역 */}
-              <div className="w-1/2 h-full py-7 px-3 pl-7">
+              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-hidden">
                 <div className="pr-3 flex flex-col  w-full h-full">
                   <div className="mt-2 ml-2 mb-12">
                     {/* 일기제목, 작성날짜, 공개여부 */}

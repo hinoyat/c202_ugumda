@@ -13,11 +13,24 @@ export interface UserGuestbookResponse {
     "isDeleted": "N"
 }
 
+// 페이지네이션 응답 타입
+export interface PaginatedResponse {
+    guestbooks: UserGuestbookResponse[];
+    currentPage: number;
+    totalPages: number;
+    totalElements: number;
+    last: boolean;
+}
+
 
 // 내 방명록 조회
-export const getMyGuestbookEntries = async (): Promise<UserGuestbookResponse[] | null> => {
+export const getMyGuestbookEntries = async (page: number = 1): Promise<PaginatedResponse | null> => {
     try {
-        const response = await api.get<UserGuestbookResponse[]>('/guestbook/me')
+        const response = await api.get<PaginatedResponse>('/guestbook/me',{
+            params:{
+                page:page
+            }
+        })
         console.log(response.data)
         return response.data
     } catch (error) {
