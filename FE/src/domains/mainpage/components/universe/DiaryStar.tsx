@@ -85,7 +85,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     if (isNew) {
       // 10초 동안 깜빡임 효과
       const startTime = Date.now();
-      const duration = 20000; // 20초동안 반짝임!
+      const duration = 15000; // 20초동안 반짝임!
 
       const animateNewStar = () => {
         const elapsed = Date.now() - startTime;
