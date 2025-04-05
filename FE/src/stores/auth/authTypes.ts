@@ -5,6 +5,7 @@ export interface User {
   nickname: string;
   userSeq: number;
   username: string;
+  iconSeq: number;
 }
 
 // 인증 상태 타입

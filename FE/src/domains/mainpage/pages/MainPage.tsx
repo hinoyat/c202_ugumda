@@ -103,6 +103,7 @@ const MainPage = () => {
       <div className="absolute top-5 left-5">
         <UserSpaceHeader
           nickname={isMySpace ? loginUser?.nickname : visitUser?.nickname}
+          icon = {isMySpace ? loginUser?.iconSeq : visitUser?.iconSeq}
           isMySpace={isMySpace}
         />
       </div>
