@@ -4,7 +4,7 @@ interface DiaryDetailProps {
 }
 const DetailContent: React.FC<DiaryDetailProps> = ({ content }) => {
   return (
-    <div className="text-white/70 tracking-wide text-sm inset-0">{content}</div>
+    <div className="text-white tracking-wide text-sm inset-0">{content}</div>
   );
 };
 
