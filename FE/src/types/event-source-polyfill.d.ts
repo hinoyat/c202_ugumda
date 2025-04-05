@@ -4,6 +4,7 @@ declare module 'event-source-polyfill' {
     headers?: Record<string, string>;
     withCredentials?: boolean;
     timeout?: number; // 타임아웃 설정 (밀리초)
+    heartbeatTimeout?: number;
   }
 
   export class EventSourcePolyfill implements EventSource {

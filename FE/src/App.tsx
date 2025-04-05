@@ -5,6 +5,8 @@ import { store } from './stores/store';
 import { useEffect } from 'react';
 import useSSE from './hooks/useSSE';
 import api from './apis/apiClient';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SSEProvider = () => {
   useSSE('/api/notifications/subscribe'); // SSE 연결은 인증된 사용자에게만 적용됨
@@ -38,15 +40,16 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <button
+        <SSEProvider />
+        {/* <button
           onClick={handleClick}
           className="absolute top-20 left-20 text-white z-50 cursor-pointer">
           핑테스트
-        </button>
+        </button> */}
         <BackHandler />
         <AppRouter />
-        <SSEProvider />
       </BrowserRouter>
+      <ToastContainer className="z-9999" />
     </Provider>
   );
 }
