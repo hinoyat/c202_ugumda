@@ -143,13 +143,26 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
   // ----------------------- 일기 수정 ---------------------------- //
   const handleDiaryUpdated = (responseData: any) => {
+    console.log('수정데이터 💚💚💚💚💚💚', responseData);
     const updatedDiary = responseData.data;
 
     // 리덕스 스토어 업데이트
     dispatch(updateDiary(updatedDiary));
 
+    // 현재 선택된 일기 정보 업데이트
+    setCurrentDiaryDetail(updatedDiary);
+
+    setDiaryEntries((prev) =>
+      prev.map((entry) =>
+        entry.diarySeq === updatedDiary.diarySeq ? updatedDiary : entry
+      )
+    );
+
     // 폼 닫기
     setShowForm(false);
+
+    // 수정된 일기 조회 띄우기
+    setShowDetail(true);
   };
 
   // ----------------------- 일기 삭제 ---------------------------- //
