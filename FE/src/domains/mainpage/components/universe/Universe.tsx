@@ -39,7 +39,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
   // 별 관련 상태
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]); // 일기 목록
-  const [newStarId, setNewStarId] = useState<number | null>(null); // 새로 생성된 별 ID - 최근 생성된 별을 찾아서 표시해줘야 하기 때문에 필요
+  const [newStarId, setNewStarId] = useState<number | null>(null); // 새로 생성된 별 - 최근 생성된 별을 찾아서 표시해줘야 하기 때문에 필요
+  const [highlightStarId, setHighlightStarId] = useState<number | null>(null); // 반짝임 효과만을 위한 상태 설정
 
   // 별 미리보기 및 클릭 시 사용할 상태
   const [hoveredEntry, setHoveredEntry] = useState<any | null>(null);
@@ -192,13 +193,16 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   // 일기 별 생성 -> DiaryComponent로 전달
   const handleDiaryCreated = (responseData: any) => {
     const newDiary = responseData.data;
-    console.log('백에서 오는 응답 데이터:', newDiary);
+    console.log('일기생성 응답 데이터⭐:', newDiary);
 
     // 새로 생성된 일기를 diaryEntries 배열에 추가
     setDiaryEntries((prev) => [...prev, newDiary]);
 
-    // 새 별 id 설정 (하이라이트 효과를 위해)
+    // 새 별 id 설정 (노란색 효과를 위해) - 10분 동안 유지
     setNewStarId(newDiary.diarySeq);
+
+    // 하이라이트 효과 적용 (반짝임)
+    setHighlightStarId(newDiary.diarySeq);
 
     // 현재 카메라 위치 저장 (나중에 원래 위치로 돌아가기 위해)
     if (controlsRef.current) {
@@ -214,15 +218,20 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       controlsRef.current.update();
     }
 
-    // 20초 후 하이라이트 효과 제거 및 카메라 원위치
+    // 5초 후 하이라이트 효과 제거 및 카메라 원위치
     setTimeout(() => {
-      setNewStarId(null);
+      setHighlightStarId(null); // 반짝이는 효과만 제거
 
       // 카메라를 초기 위치로 부드럽게 복원
       if (controlsRef.current) {
         animateCameraReturn(initialCameraPosition.current);
       }
     }, 5000);
+
+    // 10분 후 노란색 효과 제거
+    setTimeout(() => {
+      setNewStarId(null); // 노란색 효과 제거
+    }, 600000); // 10분
 
     setShowForm(false); // 모달 닫기
   };
@@ -449,11 +458,11 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
                 }}
                 // 호버 했을 때는 일기 미리보기
                 onHover={(entry, position) => {
-                  // console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
                 isNew={entry.diarySeq === newStarId}
+                isHighlight={entry.diarySeq === highlightStarId}
               />
             ))}
           </group>

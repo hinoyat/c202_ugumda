@@ -159,10 +159,10 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
         const escapedContent = escapeSpecialCharsForVideo(content);
 
-        console.log('영상 생성 요청 데이터:', {
-          diary_pk: diarySeq,
-          content: escapedContent,
-        });
+        // console.log('영상 생성 요청 데이터:', {
+        //   diary_pk: diarySeq,
+        //   content: escapedContent,
+        // });
         videoApi
           .createVideo({
             diary_pk: diarySeq,
@@ -172,17 +172,17 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             console.log('영상 생성 API 요청 성공:', response);
           }) // 지우기
           .catch((videoError) => {
-            console.error('영상 생성 요청 중 오류:', videoError);
+            // console.error('영상 생성 요청 중 오류:', videoError);
           });
 
         // 꿈해몽 생성 api 호출
         dreamApi
           .createDreamMeaning(diarySeq, content)
           .then((dreamResponse) => {
-            console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
+            // console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
           })
           .catch((dreamError) => {
-            console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
+            // console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
           });
 
         // 성공 시 onDiaryCreated 콜백 호출
