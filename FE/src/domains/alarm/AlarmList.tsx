@@ -18,7 +18,7 @@ import { Alarm } from './stores/alarmTypes';
 import './themes/alarm.css';
 import { FaBookReader } from 'react-icons/fa';
 import { BsTrash3Fill } from 'react-icons/bs';
-import { resetPage } from './stores/alarmSlice';
+import { resetPage, resetAlarms } from './stores/alarmSlice';
 
 interface AlarmProps {
   isOpen: boolean;
@@ -60,6 +60,7 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
     }
     onClose();
     dispatch(resetPage());
+    dispatch(resetAlarms());
   };
 
   // 알림 하나 읽기
