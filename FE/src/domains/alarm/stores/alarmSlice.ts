@@ -48,7 +48,7 @@ const alarmSlice = createSlice({
             currentPage: number;
           }>
         ) => {
-          state.alarms = [...action.payload.alarms];
+          state.alarms = [...state.alarms, ...action.payload.alarms];
           state.page = action.payload.currentPage + 1;
           state.totalPages = action.payload.totalPages;
           state.hasMore = state.page < state.totalPages;
