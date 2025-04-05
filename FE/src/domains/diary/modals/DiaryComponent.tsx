@@ -17,6 +17,7 @@ import { Tag } from '@/domains/diary/api/tagApi';
 import { videoApi } from '@/domains/diary/api/videoApi';
 import ModalBase from '../components/modalBase';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
+import { dreamApi, DreamSolveResponse } from '@/domains/diary/api/dreamApi';
 
 // 일기 생성 인터페이스
 // interface DiaryData {
@@ -170,6 +171,16 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           }) // 지우기
           .catch((videoError) => {
             console.error('영상 생성 요청 중 오류:', videoError);
+          });
+
+        // 꿈해몽 생성 api 호출
+        dreamApi
+          .createDreamMeaning(diarySeq, content)
+          .then((dreamResponse) => {
+            console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
+          })
+          .catch((dreamError) => {
+            console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
           });
 
         // 성공 시 onDiaryCreated 콜백 호출
