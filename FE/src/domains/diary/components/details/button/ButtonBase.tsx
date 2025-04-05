@@ -4,15 +4,25 @@ interface ButtonBaseProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
+  borderRadius?: string;
+  width?: string;
+  height?: string;
 }
 
 const ButtonBase: React.FC<ButtonBaseProps> = ({
   children,
   onClick,
   className,
+  borderRadius,
+  width,
+  height,
 }) => {
   return (
-    <StyledWrapper className={className}>
+    <StyledWrapper
+      className={className}
+      borderRadius={borderRadius}
+      width={width}
+      height={height}>
       <button
         className="button-base"
         onClick={onClick}>
@@ -25,16 +35,25 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   );
 };
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{
+  borderRadius?: string;
+  width?: string;
+  height?: string;
+}>`
+  display: block;
+  width: ${(props) => props.width || 'auto'};
+
   .button-base {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 9px 23px;
+    width: 100%;
+    height: ${(props) => props.height || 'auto'};
     border: 0;
     position: relative;
     overflow: hidden;
-    border-radius: 10rem;
+    border-radius: ${(props) => props.borderRadius || '10rem'};
     transition: all 0.02s;
     font-weight: bold;
     cursor: pointer;

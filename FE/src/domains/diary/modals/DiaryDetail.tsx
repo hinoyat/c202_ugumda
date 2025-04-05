@@ -148,7 +148,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
             {/* ------------------------------------------ 2분할 레이아웃 컨테이너 ------------------------------------------ */}
             <div className="flex w-full h-full">
               {/* 왼쪽영역 */}
-              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar">
+              <div className="w-1/2 h-full py-7 px-3 pl-7">
                 <div className="pr-3 flex flex-col  w-full h-full">
                   <div className="mt-2 ml-2 mb-12">
                     {/* 일기제목, 작성날짜, 공개여부 */}
@@ -180,14 +180,6 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                       onLikeToggle={handleLikeChange}
                     />
                   </div>
-                  {/* <div className="">
-                    <DetailButtons
-                      onClose={handleClose}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                      isMySpace={isMySpace}
-                    />
-                  </div> */}
                 </div>
               </div>
 
@@ -200,7 +192,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
                 {/* 2. 수정하기 버튼 */}
                 {isMySpace && (
-                  <div className="mb-6 text-right">
+                  <div className="mb-6 flex justify-end">
                     <UpdateButton
                       onEdit={onEdit}
                       isMySpace={isMySpace}
@@ -224,7 +216,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 </div>
 
                 {/* 4. 운세보러가기 버튼 */}
-                <div className="text-right">
+                <div className="flex justify-end">
                   {dreamMeaning && (
                     <DestinyButton isGood={dreamMeaning.isGood} />
                   )}

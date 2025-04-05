@@ -52,20 +52,20 @@ const StarTag: React.FC<StarTagProps> = ({ onSelect, initialEmotion }) => {
       {/* 선택 버튼 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full bg-[#505050] px-3 py-2 text-white rounded text-sm">
+        className="flex items-center justify-between w-full px-3 py-2 border border-white focus:border-2 text-white rounded text-sm">
         <span>{selectedEmotion || '선택'}</span>
         <span className="ml-2">{isOpen ? '▲' : '▼'}</span>
       </button>
 
       {/* 드롭다운 목록 */}
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-[#505050] border border-[#6E6E6E] rounded shadow-lg text-sm">
+        <div className="absolute z-10 w-full mt-1 bg-black/30 backdrop-blur-md border border-white/30 rounded shadow-lg text-sm">
           <ul className="py-1">
             {emotions.map((emotion) => (
               <li
                 key={emotion}
                 onClick={() => handleEmotionSelect(emotion)}
-                className="px-3 py-2 text-white cursor-pointer hover:bg-[#6E6E6E]">
+                className="px-3 py-2 text-white cursor-pointer hover:bg-white/10">
                 {emotion}
               </li>
             ))}

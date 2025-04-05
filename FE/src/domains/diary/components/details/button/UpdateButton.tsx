@@ -17,13 +17,12 @@ const UpdateButton: React.FC<UpdateButtonProps> = ({
   }
 
   return (
-    <div className="w-full">
-      <ButtonBase
-        onClick={onEdit}
-        className="text-[15px]">
-        수정하기
-      </ButtonBase>
-    </div>
+    <ButtonBase
+      onClick={onEdit}
+      className="text-[15px]"
+      width="100px">
+      수정하기
+    </ButtonBase>
   );
 };
 

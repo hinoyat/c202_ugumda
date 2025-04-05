@@ -24,13 +24,12 @@ const DestinyButton: React.FC<DestinyButtonProps> = ({ isGood, onClick }) => {
     isGood === 'Y' ? '행운번호 보러가기' : '오늘의 운세 보러가기';
 
   return (
-    <div>
-      <ButtonBase
-        onClick={handleClick}
-        className="text-[15px]">
-        {buttonText}
-      </ButtonBase>
-    </div>
+    <ButtonBase
+      onClick={handleClick}
+      className="text-[15px]"
+      width="200px">
+      {buttonText}
+    </ButtonBase>
   );
 };
 
