@@ -11,10 +11,7 @@ const DetailVideo: React.FC<DiaryDetailProps> = ({ dream_video }) => {
       <video
         src={videoSrc}
         controls
-        className="w-full rounded-lg shadow-md"
-        playsInline>
-        Your browser does not support the video tag.
-      </video>
+        className="w-full rounded-lg shadow-md"></video>
     </div>
   );
 };
