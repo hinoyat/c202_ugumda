@@ -143,13 +143,26 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
   // ----------------------- 일기 수정 ---------------------------- //
   const handleDiaryUpdated = (responseData: any) => {
+    console.log('수정데이터 💚💚💚💚💚💚', responseData);
     const updatedDiary = responseData.data;
 
     // 리덕스 스토어 업데이트
     dispatch(updateDiary(updatedDiary));
 
+    // 현재 선택된 일기 정보 업데이트
+    setCurrentDiaryDetail(updatedDiary);
+
+    setDiaryEntries((prev) =>
+      prev.map((entry) =>
+        entry.diarySeq === updatedDiary.diarySeq ? updatedDiary : entry
+      )
+    );
+
     // 폼 닫기
     setShowForm(false);
+
+    // 수정된 일기 조회 띄우기
+    setShowDetail(true);
   };
 
   // ----------------------- 일기 삭제 ---------------------------- //
@@ -169,9 +182,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 리덕스 스토어에서도 제거
       dispatch(removeDiary(currentDiaryDetail.diarySeq));
 
-      // 모달 닫기
+      // 조회 모달 닫기
       setShowDetail(false);
       setCurrentDiaryDetail(null);
+
+      // 수정/작성 모달도 닫기
+      setShowForm(false);
 
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
@@ -443,6 +459,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           diaryData={isEditing ? selectedEntry : undefined}
           onDiaryCreated={handleDiaryCreated}
           onDiaryUpdated={handleDiaryUpdated}
+          onDeleteDiary={handleDeleteDiary}
           isMySpace={isMySpace}
         />
       )}

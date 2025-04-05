@@ -6,13 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/apis/apiClient';
 import { updateSubscriptionStatus } from '../stores/userSlice';
 import { useEffect, useState } from 'react';
+import { getIconById } from '@/hooks/ProfileIcons';
 
 interface UserSpaceHeaderProps {
   nickname: string | undefined;
+  icon: number;
   isMySpace?: boolean;
 }
 
-const UserSpaceHeader = ({ nickname, isMySpace }: UserSpaceHeaderProps) => {
+const UserSpaceHeader = ({ nickname, icon, isMySpace }: UserSpaceHeaderProps) => {
   const nav = useNavigate();
   const dispatch = useAppDispatch();
   const currentOwnerUser = useSelector(selectVisitUser);
@@ -70,14 +72,20 @@ const UserSpaceHeader = ({ nickname, isMySpace }: UserSpaceHeaderProps) => {
     <div className="p-4">
       <div className="flex items-baseline">
         {isMySpace ? (
+          <div className="flex items-center">
+            <img src={getIconById(icon)} alt="내 프로필 사진" className="w-8 h-8" />
           <h3 className="text-base font-bold text-white/90 ml-1">
             나의 우주 ☄️
           </h3>
+          </div>
         ) : (
-          <>
-            <h3 className="text-base font-bold text-white/90">{nickname}</h3>
-            <p className="text-sm text-white/90 ml-1">님의 우주</p>
-          </>
+          <div className="flex items-center">
+            <img src={getIconById(icon)} alt="" className="w-9 h-9"/>
+            <>
+              <h3 className="text-base font-bold text-[#e0cfaa]">{nickname}</h3>
+              <p className="text-sm text-white/90 ml-1">님의 우주</p>
+            </>
+          </div>
         )}
       </div>
       <button

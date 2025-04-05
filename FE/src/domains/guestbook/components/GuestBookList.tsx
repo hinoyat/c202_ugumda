@@ -1,45 +1,67 @@
-import { useState } from 'react';
-import { Guestbookdata } from '../apis/apiOthersGuestBook';
+import { useEffect, useState } from 'react';
+import { Guestbookdata, PaginatedResponse } from '../apis/apiOthersGuestBook';
 import trash from '@/assets/images/trash.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/stores/store';
 import { getIconById } from '@/hooks/ProfileIcons';
 
-const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) => {
+// props로 받아온 타입지정
+interface GuestBookListProps {
+  data?: PaginatedResponse;
+  onDelete: (id: number) => void;
+  onPageChange: (page: number) => void;
+}
+
+const GuestBookList: React.FC<GuestBookListProps> = ({ data, onDelete, onPageChange }) => {
 
   const LoginUserNumber = useSelector((state: RootState) => state.auth?.user?.userSeq);
-    // 페이지네이션 관련 state
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 10; // 페이지당 표시할 아이템 수
-    const totalItems = data.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+
+    // props로 받아온 데이터
+    const guestbooksData = data?.guestbooks || [];                    // 방명록 데이터
+    const totalPages = data?.totalPages || 1;                     // 전체 페이지
+    const totalElements = data?.totalElements || 0;               // 전체 방명록 글 개수
+    const isLastPage = data?.last || false;                       // 마지막 페이지 여부
+
+    // 현재 페이지 상태 관리
+    const [currentPage, setCurrentPage] = useState<number>(data?.currentPage || 1);
+
+    // 데이터가 변경될 때 현재 페이지 업데이트
+    useEffect(() => {
+      if (data?.currentPage) {
+        setCurrentPage(data.currentPage);
+      }
+    }, [data]);
   
-    // 현재 페이지에 따라 슬라이싱할 범위
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const displayedData = Array.isArray(data) ? data.slice(startIndex, endIndex) : [];
-    console.log('GuestBookList received data:', data);
-    console.log('Data type:', typeof data, Array.isArray(data));
   
     // 페이지 변경
     const handlePageChange = (pageNumber: number) => {
       setCurrentPage(pageNumber);
+      onPageChange(pageNumber);
     };
   
     // 이전 페이지
     const handlePrevPage = () => {
-      setCurrentPage((prev) => Math.max(prev - 1, 1));
+      const newPage = Math.max(currentPage-1, 1)
+      setCurrentPage(newPage);
+      onPageChange(newPage);
     };
   
     // 다음 페이지
     const handleNextPage = () => {
-      setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+      const newPage = Math.min(currentPage + 1, totalPages)
+      setCurrentPage(newPage);
+      onPageChange(newPage);
     };
+
+    // 페에지 최대 표시 번호 
+
+
 
   return (
     <div className="w-full text-white">
       {/* 내용 부분 */}
-      {displayedData.map((item) => (
+      {guestbooksData.map((item) => (
         <div
           key={item.guestbookSeq}
           className="flex items-center gap-4 p-2 w-full text-[14px]">
@@ -61,7 +83,7 @@ const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) =>
             }
               </p>
             <div className="w-8 text-center">
-              {LoginUserNumber === item.writerSeq || LoginUserNumber === item.ownerSeq ? (
+              {LoginUserNumber === item.writerSeq? (
                 <img
                   src={trash}
                   className="w-4 h-6 hover:animate-pulse cursor-pointer"
@@ -85,7 +107,24 @@ const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) =>
         </button>
 
         {/* 페이지 번호들 */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {(() => {
+        // 표시할 페이지 번호 계산 로직
+        const maxButtons = 5; // 최대 표시할 버튼 수
+        let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+        let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+        
+        // startPage 조정 (endPage가 totalPages에 도달하면 startPage를 왼쪽으로 이동)
+        if (endPage === totalPages) {
+          startPage = Math.max(1, endPage - maxButtons + 1);
+        }
+        
+        // 페이지 버튼 배열 생성
+        const pages = [];
+        for (let i = startPage; i <= endPage; i++) {
+          pages.push(i);
+        }
+        
+        return pages.map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
@@ -93,12 +132,13 @@ const GuestBookList: React.FC<GuestBookListProps> = ({ data = [], onDelete }) =>
               ${page === currentPage ? 'bg-[#fbfbfb91]' : 'bg-[#FBFBFB]'}`}>
             {page}
           </button>
-        ))}
+        ));
+      })()}
 
         {/* 다음 페이지 버튼 */}
         <button
           onClick={handleNextPage}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPages || isLastPage }
           className="text-[#FBFBFB] text-xl disabled:opacity-50">
           &raquo;
         </button>

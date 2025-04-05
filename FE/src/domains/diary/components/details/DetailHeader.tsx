@@ -4,9 +4,14 @@ import '../../styles/DetailHeader.css';
 interface DetailHeaderProps {
   title: string;
   created_at: string;
+  isPublic: boolean;
 }
 
-const DetailHeader: React.FC<DetailHeaderProps> = ({ title, created_at }) => {
+const DetailHeader: React.FC<DetailHeaderProps> = ({
+  title,
+  created_at,
+  isPublic,
+}) => {
   return (
     <div className="flex flex-nowrap w-full items-center justify-between">
       <div className="flex flex-col">
@@ -17,16 +22,19 @@ const DetailHeader: React.FC<DetailHeaderProps> = ({ title, created_at }) => {
       </div>
 
       {/* 부모 컨테이너에 relative와 크기 지정 */}
-      <div
+      {/* <div
         className="relative"
         style={{ width: '64px', height: '64px' }}>
-        <div className="absolute top-2.5 right-2/3">
-          <input
+        <div className="absolute top-2.5 right-2/3"> */}
+      {/* 공개/비공개 상태 표시 */}
+      <div className="text-sm">{isPublic ? '공개' : '비공개'}</div>
+
+      {/* <input
             id="inpLock"
             type="checkbox"
             className="hidden"
-          />
-          <label
+          /> */}
+      {/* <label
             className="btn-lock"
             htmlFor="inpLock">
             <svg
@@ -49,9 +57,9 @@ const DetailHeader: React.FC<DetailHeaderProps> = ({ title, created_at }) => {
                 className="bling"
                 d="M29 10L31 8"></path>
             </svg>
-          </label>
-        </div>
-      </div>
+          </label> */}
+      {/* </div>
+      </div> */}
     </div>
   );
 };

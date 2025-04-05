@@ -8,6 +8,7 @@ import open from '@/assets/images/openEye.svg';
 import check from '@/assets/images/pixcelCheck.svg';
 import docs from '@/assets/images/pixcelDoc.svg';
 import api from '@/apis/apiClient';
+import { logoutUser } from '@/stores/auth/authThunks';
 
 interface LeftProfileSectionProps {
   userData: {
@@ -198,6 +199,22 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
     }
   };
 
+  const handleWithDraw = async () => {
+    try {
+      const response = await api.delete('/users/me');
+      if (response.data.status === 204) {
+        console.log(response.data.message);
+      } else if (response.data.status === 400) {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error('회원탈퇴에 실패하였습니다.');
+    } finally {
+      logoutUser();
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="text-white flex-1">
       <div className="w-full h-full flex flex-col items-center justify-center gap-10 px-10 pl-30 pb-10 text-[#86F5FF]">
@@ -324,16 +341,25 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         <div className="flex gap-5 text-black dung-font">
           <div className="box-button">
             <button
-              onClick={onClickCancle}
+              onClick={handleWithDraw}
               className="infor-button">
-              취소
+              탈퇴
             </button>
           </div>
+
           <div className="box-button">
             <button
               onClick={handleSubmit}
               className="infor-button">
               수정
+            </button>
+          </div>
+
+          <div className="box-button">
+            <button
+              onClick={onClickCancle}
+              className="infor-button">
+              취소
             </button>
           </div>
         </div>

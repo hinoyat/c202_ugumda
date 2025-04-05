@@ -15,6 +15,15 @@ export interface Guestbookdata {
     "isDeleted": "N"
 }
 
+// 페이지네이션 응답 타입
+export interface PaginatedResponse {
+    guestbooks: Guestbookdata[];
+    currentPage: number;
+    totalPages: number;
+    totalElements: number;
+    last: boolean;
+}
+
 // 방명록 생성 요청 타입
 export interface CreateGuestbookRequest {
     content: string
@@ -23,9 +32,13 @@ export interface CreateGuestbookRequest {
 export const GuestbookOtherapi = {
 
     // 방명록 조회(다른사람페이지)
-    getGuestbookEntries: async(PageUserNumber:number): Promise<Guestbookdata[] |null> => {
+    getGuestbookEntries: async(PageUserNumber:number, page: number = 1): Promise<PaginatedResponse |null> => {
         try{
-            const response = await api.get(`/guestbook/users/${PageUserNumber}`)
+            const response = await api.get(`/guestbook/users/${PageUserNumber}`, {
+                params: {
+                    page: page
+                }
+            });
             return response.data
         }catch(error){
             console.error("❌ 다른사람 방명록 조회 오류", error)

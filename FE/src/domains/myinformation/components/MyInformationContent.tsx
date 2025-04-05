@@ -1,4 +1,4 @@
-import { useEffect, useState,useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/MyInformationContent.css';
 import LeftProfileSection from './LeftProfileSection';
@@ -19,14 +19,13 @@ const MyInformationContent: React.FC = () => {
   const user = useSelector(selectUser);
   const [userdata, setUserData] = useState(null);
 
-  const refreshUserData = useCallback(async() => {
-    try{
+  const refreshUserData = useCallback(async () => {
+    try {
       const response = await api.get('/users/me');
       const data = response.data;
-      console.log("정보 갱신 테스트", data,data);
+      console.log('정보 갱신 테스트', data, data);
       setUserData(data.data);
-
-    }catch(error){
+    } catch (error) {
       console.error('유저 정보를 불러오는데 실패하였습니다.', error);
     }
   }, []);
@@ -61,8 +60,11 @@ const MyInformationContent: React.FC = () => {
       </div>
       {/* LeftProfileSection과 RightProfileSection이 들어갈 자리 */}
       <div className="flex absolute z-32 top-19/32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-250 h-100 items-center">
-        <LeftProfileSection userData={userData} onUpdateSuccess={refreshUserData}/>
-        <RightProfileSection userData={userData}/>
+        <LeftProfileSection
+          userData={userData}
+          onUpdateSuccess={refreshUserData}
+        />
+        <RightProfileSection userData={userData} />
 
         {/*오른쪽 영역끝 */}
       </div>
