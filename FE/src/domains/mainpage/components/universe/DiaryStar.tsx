@@ -53,7 +53,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
 }) => {
   // 상태
   const [hovered, setHovered] = useState<boolean>(false);
-  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
+  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 5);
 
   const { x, y, z } = entry;
   const meshRef = useRef<THREE.Mesh>(null); // 직접 별을 클릭하기 위해
@@ -76,10 +76,12 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   };
 
   // 별 색상 - 새 별은 노란색, 기존 별은 파란색
+  // ? '#ffcc00' // 새 별은 노란색
+  // : '#00ffe0' // 기존 별은 파란색
   const starColor = new THREE.Color(
     isNew
-      ? '#ffcc00' // 새 별은 노란색
-      : '#00ffe0' // 기존 별은 파란색
+      ? '#9932CC' // 새 별은 보라색
+      : '#FF4500' // 기존 별은 선명한 주황색
   );
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
