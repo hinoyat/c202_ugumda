@@ -9,7 +9,7 @@ import information_bg from '@/assets/images/information_bg.svg';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/stores/auth/authSelectors';
 import api from '@/apis/apiClient';
-import { useSelect } from '@react-three/drei';
+
 
 const MyInformationContent: React.FC = () => {
   const glowingTextStyle: React.CSSProperties = {
