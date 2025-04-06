@@ -39,7 +39,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
   // 별 관련 상태
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]); // 일기 목록
-  const [newStarId, setNewStarId] = useState<number | null>(null); // 새로 생성된 별 ID - 최근 생성된 별을 찾아서 표시해줘야 하기 때문에 필요
+  const [newStarId, setNewStarId] = useState<number | null>(null); // 새로 생성된 별 - 최근 생성된 별을 찾아서 표시해줘야 하기 때문에 필요
+  const [highlightStarId, setHighlightStarId] = useState<number | null>(null); // 반짝임 효과만을 위한 상태 설정
 
   // 별 미리보기 및 클릭 시 사용할 상태
   const [hoveredEntry, setHoveredEntry] = useState<any | null>(null);
@@ -62,64 +63,75 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   // -------------------------- 우주관련 -------------------------- //
   // 카메라 컨트롤 참조
   const controlsRef = useRef<any>(null);
-  
+
   // 카메라 초기 위치 (나중에 복원하기 위해 사용)
   const initialCameraPosition = useRef({
     position: [0, 0, -30],
-    target: [0, 0, 0]
+    target: [0, 0, 0],
   });
 
   // 카메라를 원래 위치로 부드럽게 복원하는 함수
-  const animateCameraReturn = (initialPosition: { position: number[], target: number[] }) => {
+  const animateCameraReturn = (initialPosition: {
+    position: number[];
+    target: number[];
+  }) => {
     // 현재 카메라 위치와 타겟
     const currentCamera = {
       position: controlsRef.current.object.position.clone(),
-      target: controlsRef.current.target.clone()
+      target: controlsRef.current.target.clone(),
     };
-    
+
     // 목표 위치와 타겟
     const targetCamera = {
-      position: new THREE.Vector3(initialPosition.position[0], initialPosition.position[1], initialPosition.position[2]),
-      target: new THREE.Vector3(initialPosition.target[0], initialPosition.target[1], initialPosition.target[2])
+      position: new THREE.Vector3(
+        initialPosition.position[0],
+        initialPosition.position[1],
+        initialPosition.position[2]
+      ),
+      target: new THREE.Vector3(
+        initialPosition.target[0],
+        initialPosition.target[1],
+        initialPosition.target[2]
+      ),
     };
-    
+
     // 애니메이션 시작 시간
     const startTime = Date.now();
     // 애니메이션 지속 시간 (밀리초)
     const duration = 2000;
-    
+
     // 애니메이션 프레임 함수
     const animateFrame = () => {
       const elapsedTime = Date.now() - startTime;
       // 경과 비율 (0~1)
       const ratio = Math.min(elapsedTime / duration, 1);
-      
+
       // 이징 함수 (smooth transition)
       const easedRatio = 1 - Math.pow(1 - ratio, 3);
-      
+
       // 위치 보간
       controlsRef.current.object.position.lerpVectors(
         currentCamera.position,
         targetCamera.position,
         easedRatio
       );
-      
+
       // 타겟 보간
       controlsRef.current.target.lerpVectors(
         currentCamera.target,
         targetCamera.target,
         easedRatio
       );
-      
+
       // 컨트롤 업데이트
       controlsRef.current.update();
-      
+
       // 애니메이션이 끝나지 않았으면 계속 진행
       if (ratio < 1) {
         requestAnimationFrame(animateFrame);
       }
     };
-    
+
     // 애니메이션 시작
     requestAnimationFrame(animateFrame);
   };
@@ -181,19 +193,22 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   // 일기 별 생성 -> DiaryComponent로 전달
   const handleDiaryCreated = (responseData: any) => {
     const newDiary = responseData.data;
-    console.log('백에서 오는 응답 데이터:', newDiary);
+    console.log('일기생성 응답 데이터⭐:', newDiary);
 
     // 새로 생성된 일기를 diaryEntries 배열에 추가
     setDiaryEntries((prev) => [...prev, newDiary]);
 
-    // 새 별 id 설정 (하이라이트 효과를 위해)
+    // 새 별 id 설정 (노란색 효과를 위해) - 10분 동안 유지
     setNewStarId(newDiary.diarySeq);
+
+    // 하이라이트 효과 적용 (반짝임)
+    setHighlightStarId(newDiary.diarySeq);
 
     // 현재 카메라 위치 저장 (나중에 원래 위치로 돌아가기 위해)
     if (controlsRef.current) {
       initialCameraPosition.current = {
         position: [...controlsRef.current.object.position.toArray()],
-        target: [...controlsRef.current.target.toArray()]
+        target: [...controlsRef.current.target.toArray()],
       };
     }
 
@@ -203,15 +218,20 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       controlsRef.current.update();
     }
 
-    // 20초 후 하이라이트 효과 제거 및 카메라 원위치
+    // 5초 후 하이라이트 효과 제거 및 카메라 원위치
     setTimeout(() => {
-      setNewStarId(null);
-      
+      setHighlightStarId(null); // 반짝이는 효과만 제거
+
       // 카메라를 초기 위치로 부드럽게 복원
       if (controlsRef.current) {
         animateCameraReturn(initialCameraPosition.current);
       }
     }, 5000);
+
+    // 10분 후 노란색 효과 제거
+    setTimeout(() => {
+      setNewStarId(null); // 노란색 효과 제거
+    }, 600000); // 10분
 
     setShowForm(false); // 모달 닫기
   };
@@ -438,11 +458,11 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
                 }}
                 // 호버 했을 때는 일기 미리보기
                 onHover={(entry, position) => {
-                  // console.log('호버된 엔트리 전체 데이터:', hoveredEntry);
                   setHoveredEntry(entry);
                   setHoveredPosition(position);
                 }}
                 isNew={entry.diarySeq === newStarId}
+                isHighlight={entry.diarySeq === highlightStarId}
               />
             ))}
           </group>
@@ -472,7 +492,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
                   [connection.to.x, connection.to.y, connection.to.z],
                 ]}
                 color="rgb(220, 230, 255)" // 연한 푸른 빛 흰색
-                lineWidth={0.5} // 선 두께 감소
+                lineWidth={1} // 선 두께
                 dashed // 점선 효과 추가
                 dashSize={0.8} // 점선 크기
                 dashScale={10} // 점선 간격 조정

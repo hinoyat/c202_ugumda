@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import DetailHeader from '@/domains/diary/components/details/DetailHeader';
 import DetailVideo from '@/domains/diary/components/details/DetailVideo';
 import DetailContent from '@/domains/diary/components/details/DetailContent';
-// import DetailTags from '@/domains/diary/components/details/DetailTags';
 import DetailLike from '@/domains/diary/components/details/DetailLike';
 import ModalBase from '../components/modalBase';
 
@@ -12,7 +11,6 @@ import '@/domains/search/styles/DiarySearch.css';
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
 import UpdateButton from '@/domains/diary/components/details/button/UpdateButton';
-import DeleteButton from '@/domains/diary/components/details/button/DeleteButton';
 import { Tag } from '@/domains/diary/api/tagApi';
 import { dreamApi } from '@/domains/diary/api/dreamApi';
 import DreamMeaningView from '@/domains/diary/components/details/DreamMeaningView';
@@ -34,7 +32,6 @@ interface DiaryDetailProps {
   };
   onClose: () => void;
   onEdit?: () => void;
-  onDelete?: () => void;
   isMySpace?: boolean;
 }
 
@@ -42,7 +39,6 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   initialDiary, // 일기 초기값
   onClose,
   onEdit,
-  onDelete,
   isMySpace = false,
 }) => {
   // --------------- 상태관리 ----------------- //
@@ -140,15 +136,6 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
         {/* 모달컨테이너 */}
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[70%] h-[80%] p-1 z-50">
           <ModalBase>
-            {/* 삭제버튼 */}
-            {/* <div className="absolute top-3 right-3">
-              {isMySpace && (
-                <DeleteButton
-                  onDelete={onDelete}
-                  isMySpace={isMySpace}
-                />
-              )}
-            </div> */}
             {/* -------------- 닫기버튼 -------------- */}
             <button
               onClick={handleClose}
@@ -161,7 +148,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
             {/* ------------------------------------------ 2분할 레이아웃 컨테이너 ------------------------------------------ */}
             <div className="flex w-full h-full">
               {/* 왼쪽영역 */}
-              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar overflow-hidden">
+              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-hidden">
                 <div className="pr-3 flex flex-col  w-full h-full">
                   <div className="mt-2 ml-2 mb-12">
                     {/* 일기제목, 작성날짜, 공개여부 */}
@@ -193,14 +180,6 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                       onLikeToggle={handleLikeChange}
                     />
                   </div>
-                  {/* <div className="">
-                    <DetailButtons
-                      onClose={handleClose}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                      isMySpace={isMySpace}
-                    />
-                  </div> */}
                 </div>
               </div>
 
@@ -213,7 +192,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
                 {/* 2. 수정하기 버튼 */}
                 {isMySpace && (
-                  <div className="mb-6 text-right">
+                  <div className="mb-6 flex justify-end">
                     <UpdateButton
                       onEdit={onEdit}
                       isMySpace={isMySpace}
@@ -237,7 +216,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 </div>
 
                 {/* 4. 운세보러가기 버튼 */}
-                <div className="text-right">
+                <div className="flex justify-end">
                   {dreamMeaning && (
                     <DestinyButton isGood={dreamMeaning.isGood} />
                   )}

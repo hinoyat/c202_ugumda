@@ -40,18 +40,20 @@ interface DiaryStarProps {
     entry: any | null,
     position: { x: number; y: number } | null
   ) => void;
-  isNew?: boolean;
+  isNew?: boolean; // 노란색 별 표시용 (10분)
+  isHighlight?: boolean; // 반짝이는 효과용 (5초)
 }
 
 const DiaryStar: React.FC<DiaryStarProps> = ({
   entry, // 일기 조회
   onClick, // 호버 or 조회
   onHover, // 미리보기
-  isNew, // 하이라이트 효과 적용
+  isNew, // 노란색 효과 적용 (10분)
+  isHighlight = false, // 반짝이는 효과 적용 (5초)
 }) => {
   // 상태
   const [hovered, setHovered] = useState<boolean>(false);
-  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 3);
+  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 5);
 
   const { x, y, z } = entry;
   const meshRef = useRef<THREE.Mesh>(null); // 직접 별을 클릭하기 위해
@@ -74,18 +76,20 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   };
 
   // 별 색상 - 새 별은 노란색, 기존 별은 파란색
+  // ? '#ffcc00' // 새 별은 노란색
+  // : '#00ffe0' // 기존 별은 파란색
   const starColor = new THREE.Color(
-    entry.createdAt && isWithin30Minutes(entry.createdAt)
-      ? '#ffcc00' // 30분 이내 생성: 노란색
-      : '#00ffe0' // 30분 지남: 파란색
+    isNew
+      ? '#9932CC' // 새 별은 보라색
+      : '#FF4500' // 기존 별은 선명한 주황색
   );
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
   useEffect(() => {
-    if (isNew) {
-      // 10초 동안 깜빡임 효과
+    if (isHighlight) {
+      // 5초 동안 깜빡임 효과
       const startTime = Date.now();
-      const duration = 15000; // 20초동안 반짝임!
+      const duration = 15000; // 15초동안 반짝임!
 
       const animateNewStar = () => {
         const elapsed = Date.now() - startTime;
@@ -95,7 +99,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
           setHighlightIntensity(intensity);
           requestAnimationFrame(animateNewStar);
         } else {
-          // 20초 후 일반 별로 변환
+          // 15초 후 일반 별로 변환
           setHighlightIntensity(3);
         }
       };
@@ -103,14 +107,14 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
       const animationFrame = requestAnimationFrame(animateNewStar);
       return () => cancelAnimationFrame(animationFrame);
     }
-  }, [isNew]);
+  }, [isHighlight]);
 
   // 매 프레임마다 실행되는 애니메이션 로직
   useFrame((state) => {
     if (meshRef.current) {
       // 별의 확대/축소 효과 (펄스 애니메이션)
-      const pulseFactor = isNew ? 0.15 : 0.05; // 새 별은 더 큰 펄스 효과
-      const pulseSpeed = isNew ? 3 : 1.5; // 새 별은 더 빠른 펄스
+      const pulseFactor = isHighlight ? 0.15 : 0.05; // 새 별은 더 큰 펄스 효과
+      const pulseSpeed = isHighlight ? 3 : 1.5; // 새 별은 더 빠른 펄스
       const scale =
         1 + pulseFactor * Math.sin(state.clock.elapsedTime * pulseSpeed);
 
@@ -124,8 +128,8 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
       );
     }
 
-    // 새 별의 경우 발광 효과 애니메이션
-    if (isNew && glowRef.current) {
+    // 반짝이는 효과가 있는 별의 경우 발광 효과 애니메이션
+    if (isHighlight && glowRef.current) {
       const glowScale = 2.5 + 0.5 * Math.sin(state.clock.elapsedTime * 2);
       glowRef.current.scale.set(glowScale, glowScale, glowScale);
     }
@@ -152,8 +156,8 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
 
   return (
     <group position={[x, y, z]}>
-      {/* 새 별이라면 발광 효과 추가 */}
-      {isNew && (
+      {/* 반짝이는 효과가 있는 별이라면 발광 효과 추가 */}
+      {isHighlight && (
         <mesh ref={glowRef}>
           <sphereGeometry args={[(starSize / 2) * 6, 16, 16]} />
           <meshBasicMaterial
@@ -175,8 +179,10 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         // 영역 내 마우스 올라와 있는지 상태
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}>
-        {/* 별 모양의 지오메트리 /// size / ___ (반지름) */}
-        <sphereGeometry args={[(starSize / 2) * (isNew ? 2.5 : 1.3), 16, 16]} />
+        {/* 별 모양의 지오메트리 */}
+        <sphereGeometry
+          args={[(starSize / 2) * (isHighlight ? 2.5 : 1.3), 16, 16]}
+        />
         {/* 별의 색과 발광 효과 */}
         <meshStandardMaterial
           color={starColor}
@@ -184,8 +190,8 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
           emissiveIntensity={hovered ? 5 : highlightIntensity} // 하이라이트 강도 사용
         />
       </mesh>
-      {/* 새 별이라면 빛나는 효과 추가 */}
-      {isNew && (
+      {/* 반짝이는 효과가 있는 별이라면 빛나는 효과 추가 */}
+      {isHighlight && (
         <pointLight
           color={starColor}
           intensity={2.5}

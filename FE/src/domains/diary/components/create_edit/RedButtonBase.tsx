@@ -1,6 +1,7 @@
+// RedButtonBase.tsx
 import styled from 'styled-components';
 
-interface ButtonBaseProps {
+interface RedButtonBaseProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
@@ -9,7 +10,7 @@ interface ButtonBaseProps {
   height?: string;
 }
 
-const ButtonBase: React.FC<ButtonBaseProps> = ({
+const RedButtonBase: React.FC<RedButtonBaseProps> = ({
   children,
   onClick,
   className,
@@ -57,15 +58,15 @@ const StyledWrapper = styled.div<{
     transition: all 0.02s;
     font-weight: bold;
     cursor: pointer;
-    color: rgb(37, 37, 37);
+    color: rgb(130, 45, 45);
     z-index: 0;
     box-shadow: 0 0px 7px -5px rgba(0, 0, 0, 0.5);
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(220, 215, 235, 0.7);
   }
 
   .button-base:hover {
-    background: rgb(193, 228, 248);
-    color: rgb(33, 0, 85);
+    background: rgba(190, 180, 280, 0.9);
+    color: rgb(30, 30, 80);
   }
 
   .button-base:active {
@@ -85,18 +86,18 @@ const StyledWrapper = styled.div<{
   }
 
   .hoverEffect div {
-    background: rgb(222, 0, 75);
+    background: rgb(230, 190, 60); /* 시작 색상: 골드 */
     background: linear-gradient(
       90deg,
-      rgba(222, 0, 75, 1) 0%,
-      rgba(191, 70, 255, 1) 49%,
-      rgba(0, 212, 255, 1) 100%
+      rgba(230, 190, 60, 1) 0%,
+      /* 골드 */ rgba(100, 80, 220, 1) 50%,
+      /* 블루 바이올렛 */ rgba(0, 180, 130, 1) 100% /* 에메랄드 */
     );
     border-radius: 40rem;
     width: 10rem;
     height: 10rem;
     transition: 0.4s;
-    filter: blur(20px);
+    filter: blur(18px);
     animation: effect infinite 3s linear;
     opacity: 0.5;
   }
@@ -117,4 +118,4 @@ const StyledWrapper = styled.div<{
   }
 `;
 
-export default ButtonBase;
+export default RedButtonBase;
