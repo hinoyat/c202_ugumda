@@ -158,10 +158,10 @@ const DiaryTags: FC<DiaryTagsProps> = ({
     );
   }
 
-  // 읽기 전용 모드 (기존 디자인 유지)
+  // 읽기 전용 모드
   return (
     <div className="flex flex-wrap gap-3 mt-4">
-      <div className="text-white bg-[#292929]/90 px-2 py-1 rounded-4xl">
+      <div className="text-[#06061E] px-2 py-1 rounded-4xl  bg-white/90 font-semibold">
         <div className="flex items-center justify-center gap-1 text-sm w-15">
           <p>{emotionName}</p>
         </div>
@@ -175,7 +175,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({
         return (
           <div
             key={tagSeq}
-            className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl">
+            className="text-white border border-white/80 px-2 py-1 rounded-4xl">
             <div className="flex items-center justify-center gap-1 text-sm w-15">
               <p>{tagName}</p>
             </div>
