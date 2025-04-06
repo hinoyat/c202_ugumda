@@ -167,7 +167,25 @@ const signupSlice = createSlice({
       .addCase(checkNickname.rejected, (state) => {
         state.nicknameStatus = 'unavailable';
         state.nicknameMessage = '다시 시도해 주세요.';
-      });
+      })
+      .addCase(signupUser.fulfilled, (state) => {
+        state.username= '';
+        state.usernameStatus= 'invalid';
+        state.usernameMessage= '';
+        state.nickname= '';
+        state.nicknameStatus= 'invalid';
+        state.nicknameMessage= '';
+        state.password= '';
+        state.confirmPassword= '';
+        state.confirmPasswordMessage= '';
+        state.confirmPasswordStatus= 'invalid';
+        state.passwordMessage= '';
+        state.passwordStatus= 'invalid';
+        state.iconSeq= 0;
+        state.birthDate= '';
+        state.birthDateMessage= '';
+        state.birthDateStatus= 'invalid';
+      })
   },
 });
 
