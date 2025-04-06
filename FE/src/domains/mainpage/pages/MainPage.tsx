@@ -33,9 +33,9 @@ const MainPage = () => {
   const loginUser = useSelector(selectUser);
   const visitUser = useSelector(selectVisitUser);
 
-  // 유저 정보 확인을 위한 콘솔 로그 추가
-  console.log('👤 로그인 유저 정보:', loginUser);
-  console.log('🔍 방문 유저 정보:', visitUser);
+  // // 유저 정보 확인을 위한 콘솔 로그 추가
+  // console.log('👤 로그인 유저 정보:', loginUser);
+  // console.log('🔍 방문 유저 정보:', visitUser);
 
   //      방명록 표시 여부      //
   const onClickGuestBookModal = () => {
@@ -103,7 +103,7 @@ const MainPage = () => {
       <div className="absolute top-5 left-5">
         <UserSpaceHeader
           nickname={isMySpace ? loginUser?.nickname : visitUser?.nickname}
-          icon = {isMySpace ? loginUser?.iconSeq : visitUser?.iconSeq}
+          icon={isMySpace ? loginUser?.iconSeq : visitUser?.iconSeq}
           isMySpace={isMySpace}
         />
       </div>
