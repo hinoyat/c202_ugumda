@@ -51,7 +51,8 @@ public class NotificationController {
 
     // 연결 상태 확인
     @GetMapping("/ping")
-    public ResponseEntity<?> pingConnection(@RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
+    public ResponseEntity<?> pingConnection(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq) {
         boolean isActive = sseEmitterService.testConnection(userSeq);
         if (isActive) {
             return ResponseEntity.ok(Map.of("message", "연결이 활성화되어 있습니다."));
