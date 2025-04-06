@@ -20,6 +20,12 @@ spring:
   elasticsearch:
     uris: ${ELASTIC_SEARCH_URL}
 
+  jackson:
+    time-zone: Asia/Seoul
+  logging:
+    pattern:
+      dateformat: yyyy-MM-dd HH:mm:ss.SSS
+
 management:
   endpoints:
     web:
