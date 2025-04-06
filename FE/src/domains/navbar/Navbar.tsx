@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 
 import AlarmList from '../alarm/AlarmList';
 import { selectUser } from '@/stores/auth/authSelectors';
-import { resetPage } from '../alarm/stores/alarmSlice';
+import { resetAlarms } from '../alarm/stores/alarmSlice';
 
 const Navbar = () => {
   // 모달 열림 여부
@@ -54,7 +54,7 @@ const Navbar = () => {
   // 모달 닫기
   const closeAlarm = () => {
     setIsAlarmOpen(false);
-    dispatch(resetPage());
+    dispatch(resetAlarms());
   };
 
   return (
@@ -63,6 +63,7 @@ const Navbar = () => {
         {/* home */}
         <Link
           to={`/${user?.username}`}
+          reloadDocument
           className="hover:text-white"
           data-tooltip-id="home-tooltip"
           data-tooltip-content="홈으로 이동">
@@ -71,7 +72,7 @@ const Navbar = () => {
         {/* Rocket */}
         <div
           onClick={onClickGuestBookModal}
-          className="hover:text-white"
+          className="hover:text-white cursor-pointer"
           data-tooltip-id="guestbook-tooltip"
           data-tooltip-content="방명록">
           <BsEnvelopePaperHeartFill className="w-5 h-5" />
