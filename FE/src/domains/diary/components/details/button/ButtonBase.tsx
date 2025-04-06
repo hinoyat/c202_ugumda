@@ -20,9 +20,9 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   return (
     <StyledWrapper
       className={className}
-      borderRadius={borderRadius}
-      width={width}
-      height={height}>
+      $borderRadius={borderRadius}
+      $width={width}
+      $height={height}>
       <button
         className="button-base"
         onClick={onClick}>
@@ -36,12 +36,12 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
 };
 
 const StyledWrapper = styled.div<{
-  borderRadius?: string;
-  width?: string;
-  height?: string;
+  $borderRadius?: string;
+  $width?: string;
+  $height?: string;
 }>`
   display: block;
-  width: ${(props) => props.width || 'auto'};
+  width: ${(props) => props.$width || 'auto'};
 
   .button-base {
     display: inline-flex;
@@ -49,11 +49,11 @@ const StyledWrapper = styled.div<{
     justify-content: center;
     padding: 9px 23px;
     width: 100%;
-    height: ${(props) => props.height || 'auto'};
+    height: ${(props) => props.$height || 'auto'};
     border: 0;
     position: relative;
     overflow: hidden;
-    border-radius: ${(props) => props.borderRadius || '10rem'};
+    border-radius: ${(props) => props.$borderRadius || '10rem'};
     transition: all 0.02s;
     font-weight: bold;
     cursor: pointer;
