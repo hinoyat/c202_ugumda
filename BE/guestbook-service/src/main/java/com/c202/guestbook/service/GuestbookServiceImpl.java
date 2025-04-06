@@ -5,6 +5,7 @@ import com.c202.guestbook.entity.Guestbook;
 import com.c202.guestbook.model.GuestbookDto;
 import com.c202.guestbook.model.GuestbookPageResponse;
 import com.c202.guestbook.repository.GuestbookRepository;
+import com.c202.guestbook.utill.rabbitmq.AlarmService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class GuestbookServiceImpl implements GuestbookService {
     private final WebClient.Builder webClientBuilder;
     private final GuestbookRepository guestbookRepository;
+    private final AlarmService alarmService;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
@@ -48,6 +50,23 @@ public class GuestbookServiceImpl implements GuestbookService {
                 .build();
 
         guestbook = guestbookRepository.save(guestbook);
+
+        String nickname = webClientBuilder
+                    .baseUrl("http://user-service")
+                    .build()
+                    .get()
+                    .uri("/api/users/nickname")
+                    .header("X-User-Seq", String.valueOf(writerSeq))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+        alarmService.sendGuestbookCreatedAlarm(
+                guestbook.getOwnerSeq(),
+                nickname,
+                null
+        );
+
 
         return GuestbookDto.builder()
                 .guestbookSeq(guestbook.getGuestbookSeq())

@@ -188,6 +188,12 @@ public class UserServiceImpl implements UserService {
         return "Y";
     }
 
+    @Override
+    public String getUserNickname(Integer userSeq) {
+        User user = validateUser(userSeq);
+        return user.getNickname();
+    }
+
 
     private String getSubscriptionStatus(Integer targetUserSeq, Integer subscriberSeq) {
         return webClientBuilder
