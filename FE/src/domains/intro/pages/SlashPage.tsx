@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '@/domains/Loading/themes/Loading.css';
+import { selectUser } from '@/stores/auth/authSelectors';
+import { useSelector } from 'react-redux';
 
 const SlashPage = () => {
   const nav = useNavigate();
+  const user = useSelector(selectUser);
+  
   useEffect(() => {
-    const goTointro = () => {
-      nav('/intro');
-    };
-    goTointro();
-  });
+    user ? nav(`/${user.username}`) : nav('/intro');
+    
+  }, [user, nav]);
+  
   return (
     <div className="hacker-loader-container bg-black">
       <div className="hacker-loader">
