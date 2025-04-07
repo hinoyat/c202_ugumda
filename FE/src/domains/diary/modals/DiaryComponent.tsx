@@ -109,7 +109,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           diaryData.diarySeq,
           diaryToSave
         );
-        // console.log('일기 수정에 성공!!!', response);
 
         // 리덕스 스토어 업데이트
         dispatch(updateDiary(response.data.data));
@@ -122,38 +121,30 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           //   updatedContent: content,
           // });
 
-          dreamApi
-            .createDreamMeaning(diaryData.diarySeq, content)
-            .then((dreamResponse) => {
-              // console.log('수정된 일기로 꿈해몽 api 요청 성공', dreamResponse);
-            })
-            .catch((dreamError) => {
-              // console.log('수정된 일기로 꿈해몽 요청 중 오류', dreamError);
-            });
+          try {
+            // 여기서 await을 추가하여 API 호출이 완료될 때까지 기다림
+            const dreamResponse = await dreamApi.createDreamMeaning(
+              diaryData.diarySeq,
+              content
+            );
+
+            // console.log('수정된 일기로 꿈해몽 api 요청 성공', dreamResponse);
+          } catch (dreamError) {
+            // console.log('수정된 일기로 꿈해몽 요청 중 오류', dreamError);
+          }
         } else {
           // console.log('내용이 변경되지 않아 꿈해몽 API 호출 생략');
         }
 
         if (onDiaryUpdated) {
-          // console.log('onDiaryUpdated 호출됨');
           onDiaryUpdated(response.data);
         }
+
+        // console.log('꿈해몽 API 처리 완료, 모달 닫기 준비');
+        // 모든 처리가 완료된 후 모달 닫기
+        onClose();
       } else {
         // --------------- 생성 모드 ----------------
-
-        // // 요청 직전에 데이터 형식 확인
-        // console.log(
-        //   'API 요청 전 diaryToSave 데이터:',
-        //   JSON.stringify(diaryToSave, null, 2)
-        // );
-
-        // // 태그 형식 특별 확인
-        // console.log('태그 데이터 형식:', Array.isArray(tags), tags);
-        // if (Array.isArray(tags)) {
-        //   tags.forEach((tag, index) => {
-        //     console.log(`태그 ${index}:`, typeof tag, tag);
-        //   });
-        // }
 
         const response = await diaryApi.createDiary(diaryToSave);
 
@@ -312,9 +303,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             <div>
               <DiaryCreateButton
                 onCreate={handleSave}
-                onCreateVideo={handleCreateVideo}
                 isEditing={isEditing}
-                onClose={onClose}
                 onDelete={isEditing ? onDeleteDiary : undefined}
               />
             </div>

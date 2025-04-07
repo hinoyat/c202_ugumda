@@ -120,19 +120,26 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     const fetchDreamMeaning = async () => {
       if (!initialDiary.diarySeq) return;
 
-      console.log('다이어리 시퀀스', initialDiary.diarySeq);
+      // console.log('DiaryDetail - 꿈해몽 데이터 로드 시작:', {
+      //   diarySeq: initialDiary.diarySeq,
+      //   timestamp: new Date().toISOString(),
+      // });
       setLoadingDreamMeaning(true);
       try {
         const response = await dreamApi.getDreamMeaningById(
           initialDiary.diarySeq
         );
-        console.log('꿈해몽 데이터 로드됨:', response.data);
-
+        // console.log('DiaryDetail - 꿈해몽 데이터 로드 성공:', {
+        //   diarySeq: initialDiary.diarySeq,
+        //   responseData: response.data,
+        //   timestamp: new Date().toISOString(),
+        // });
         if (response.data && response.data.data) {
           setDreamMeaning({
             resultContent: response.data.data.resultContent,
             isGood: response.data.data.isGood,
           });
+          // console.log('DiaryDetail - 꿈해몽 상태 업데이트 완료');
         }
       } catch (error) {
         console.error('꿈해몽 데이터 로드 중 오류 발생:', error);
