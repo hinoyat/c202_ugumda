@@ -27,4 +27,6 @@ public interface DiaryService {
     UniverseDataResponseDto getUniverseData(Integer userSeq);
 
     void uploadVideo(Integer diarySeq, Integer userSeq, String videoUrl);
+
+    void relayoutAllDiaries(Integer userSeq);
 }
