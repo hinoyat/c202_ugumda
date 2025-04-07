@@ -33,6 +33,11 @@ const authSlice = createSlice({
       localStorage.removeItem('accessToken');
       localStorage.removeItem('User');
     },
+    changeIcon: (state, action) => {
+      if (state.user) {
+        state.user.iconSeq = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -57,5 +62,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setIntro, setAccessToken, clearAuth } = authSlice.actions;
+export const { setIntro, setAccessToken, clearAuth, changeIcon } =
+  authSlice.actions;
 export default authSlice.reducer;
