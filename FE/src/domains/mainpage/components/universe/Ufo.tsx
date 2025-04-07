@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFBX, useCursor } from '@react-three/drei';
+import { useFBX, useCursor, Text } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ThreeEvent } from '@react-three/fiber';
@@ -66,6 +66,23 @@ export default function Ufo() {
           onPointerOver={() => setHovered(true)}
           onPointerOut={() => setHovered(false)}
         />
+
+        {/* 호버 시 3D 텍스트 표시 */}
+        {hovered && (
+          <Text
+            position={[0, 80, 0]}
+            fontSize={14}
+            color="white"
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.5}
+            outlineColor="black"
+            fillOpacity={1}
+            userData={{ disablePicking: true }} // 마우스 이벤트가 투과되도록 설정
+          >
+            UFO
+          </Text>
+        )}
       </group>
     </>
   );
