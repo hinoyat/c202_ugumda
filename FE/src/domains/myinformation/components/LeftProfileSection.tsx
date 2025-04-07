@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import profileFrame from '@/assets/images/profileFrame.svg';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useDebugValue } from 'react';
 import { getRandomIcon } from '@/hooks/ProfileIcons';
 import api from '@/apis/apiClient';
+import { changeIcon } from '@/stores/auth/authSlice';
+import { useAppDispatch } from '@/hooks/hooks';
 
 interface LeftProfileSectionProps {
   userData: {
@@ -26,8 +28,11 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [showRareMessage, setShowRareMessage] = useState<boolean>(false);
   const [showEpicMessage, setShowEpicMessage] = useState<boolean>(false);
   const [showUniqueMessage, setShowUniqueMessage] = useState<boolean>(false);
-  const [showLegendaryMessage, setShowLegendaryMessage] = useState<boolean>(false);
+  const [showLegendaryMessage, setShowLegendaryMessage] =
+    useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
 
   // userData가 변경될 때마다 아이콘 ID 업데이트
   useEffect(() => {
@@ -94,6 +99,7 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
       }
     } finally {
       setIsUpdating(false);
+      dispatch(changeIcon(iconSeq));
     }
   };
 
