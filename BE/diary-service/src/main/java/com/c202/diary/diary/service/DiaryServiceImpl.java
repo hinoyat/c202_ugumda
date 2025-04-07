@@ -15,6 +15,7 @@ import com.c202.diary.emotion.model.response.EmotionResponseDto;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.emotion.service.EmotionService;
 import com.c202.diary.like.service.DiaryLikeService;
+import com.c202.diary.util.coordinate.service.ForceDirectedLayoutService;
 import com.c202.diary.util.rabbitmq.AlarmService;
 import com.c202.diary.util.s3.S3Service;
 import com.c202.diary.tag.entity.DiaryTag;
@@ -48,6 +49,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final CoordinateService coordinateService;
     private final AlarmService alarmService;
     private final DiaryIndexService diaryIndexService;
+    private final ForceDirectedLayoutService forceDirectedLayoutService;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
 
     @Transactional
@@ -343,9 +345,49 @@ public class DiaryServiceImpl implements DiaryService {
             );
             throw new AiCallFailedException("영상 생성에 실패했습니다");
         }
-
-
     }
+
+    @Transactional
+    @Override
+    public void relayoutAllDiaries(Integer userSeq) {
+        // 해당 사용자의 삭제되지 않은 모든 일기 조회
+        List<Diary> diaries = diaryRepository.findByUserSeqAndIsDeleted(userSeq, "N");
+
+        // 같은 감정별로 그룹화 (예: "행복" 감정만 대상으로 Force-Directed Layout 적용)
+        Map<Integer, List<Diary>> diariesByEmotion = diaries.stream()
+                .filter(d -> d.getEmotionSeq() != null)
+                .collect(Collectors.groupingBy(Diary::getEmotionSeq));
+
+        for (Integer emotionSeq : diariesByEmotion.keySet()) {
+            List<Diary> emotionDiaries = diariesByEmotion.get(emotionSeq);
+            // 감정 정보 조회
+            Emotion emotion = emotionRepository.findById(emotionSeq)
+                    .orElseThrow(() -> new NotFoundException("감정을 찾을 수 없습니다."));
+            // 클러스터 중심 (여기서는 감정의 기본 중심 사용)
+            double[] clusterCenter = new double[]{emotion.getBaseX(), emotion.getBaseY(), emotion.getBaseZ()};
+
+            // 기존 좌표 배열 생성
+            int count = emotionDiaries.size();
+            double[][] positions = new double[count][3];
+            for (int i = 0; i < count; i++) {
+                Diary d = emotionDiaries.get(i);
+                positions[i][0] = d.getX() != null ? d.getX() : emotion.getBaseX();
+                positions[i][1] = d.getY() != null ? d.getY() : emotion.getBaseY();
+                positions[i][2] = d.getZ() != null ? d.getZ() : emotion.getBaseZ();
+            }
+            // Force-Directed Layout 적용
+            double[][] newPositions = forceDirectedLayoutService.applyForceDirectedLayout(positions, clusterCenter);
+
+            // 업데이트: Force-Directed Layout 결과를 각 일기에 반영
+            for (int i = 0; i < count; i++) {
+                Diary d = emotionDiaries.get(i);
+                d.setCoordinates(newPositions[i][0], newPositions[i][1], newPositions[i][2], emotionSeq);
+                diaryRepository.save(d);
+            }
+        }
+    }
+
+
 
 
     // 일기 유효성 검증
