@@ -30,8 +30,6 @@ interface UniverseProps {
 }
 
 const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
-  console.log('✅ Universe 컴포넌트가 렌더링됨');
-
   // 리덕스 설정
   const dispatch = useDispatch();
   const { diaries, showDiaryModal, selectedDiarySeq } = useSelector(
@@ -154,8 +152,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   const loadDiaryDetail = async (diarySeq: number) => {
     try {
       const response = await diaryApi.getDiaryById(diarySeq);
-      // console.log('일기 상세데이터 로드됨!!! : ', response);
-      // console.log('🐤🐤🐤🐤🐤동영상 URL 확인:', response.data.data.videoUrl);
+
       if (response && response.data && response.data.data) {
         // 리덕스에 현재 선택된 일기 저장
         dispatch(setCurrentDiary(response.data.data));
@@ -164,8 +161,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         setShowDetail(true);
       }
     } catch (error) {
-      console.error('일기 조회 중 오류 발생 : ', error);
-
       // 에러 응답 확인
       const err = error as any;
 
@@ -205,10 +200,16 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   // 일기 별 생성 -> DiaryComponent로 전달
   const handleDiaryCreated = (responseData: any) => {
     const newDiary = responseData.data;
-    console.log('일기생성 응답 데이터⭐:', newDiary);
 
     // 새로 생성된 일기를 diaryEntries 배열에 추가
-    setDiaryEntries((prev) => [...prev, newDiary]);
+    // setDiaryEntries((prev) => [...prev, newDiary]);
+    setDiaryEntries((prev) => {
+      const updated = [...prev, newDiary];
+      return updated;
+    });
+
+    // 추가: 리덕스 상태에도 새 일기 추가 (이 부분이 누락되어 있었음)
+    dispatch(addDiary(newDiary));
 
     // Redux 스토어에도 추가
     dispatch(addDiary(newDiary));
@@ -253,7 +254,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
   // ----------------------- 일기 수정 ---------------------------- //
   const handleDiaryUpdated = (responseData: any) => {
-    console.log('수정데이터 💚💚💚💚💚💚', responseData);
     const updatedDiary = responseData.data;
 
     // 리덕스 스토어 업데이트
@@ -302,7 +302,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
     } catch (error) {
-      console.error('일기 삭제 중 오류 발생:', error);
       alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -346,9 +345,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
             localStorage.removeItem('selectedDiarySeq');
           }
         }
-      } catch (error) {
-        console.error('선택된 일기 처리 중 오류 발생:', error);
-      }
+      } catch (error) {}
     };
 
     if (diaryEntries.length > 0) {
@@ -373,15 +370,13 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
         if (!response) return;
 
-        console.log('---📒🧑‍🚀저장된 일기 데이터들 로드됨👾🚀--- : ', response);
+        console.log('📒🧑‍🚀저장된 일기 데이터들 로드됨👾🚀 : ', response);
 
         // api응답에서 일기 데이터 설정
         if (response && response.data && response.data.data) {
           setDiaryEntries(response.data.data);
         }
-      } catch (error) {
-        console.error('일기 목록 데이터 로드 중 오류 발생 : ', error);
-      }
+      } catch (error) {}
     };
 
     // userSeq에 맞게 데이터 로드
@@ -539,7 +534,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
             left: `${hoveredPosition.x}px`,
             top: `${hoveredPosition.y - 150}px`, // 별 위에 표시
           }}>
-          {/* {console.log('🚩🚩🚩DiaryPreview에 전달되는 데이터:', hoveredEntry)} */}
           <DiaryPreview
             title={hoveredEntry.title}
             content={hoveredEntry.content}
