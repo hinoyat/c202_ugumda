@@ -64,7 +64,6 @@ const useSSE = (url: string): SSEHookReturn => {
   // 모든 리소스 정리 함수
   const cleanup = useCallback(() => {
     if (eventSourceRef.current) {
-      console.log('EventSource 연결 종료');
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
@@ -93,8 +92,7 @@ const useSSE = (url: string): SSEHookReturn => {
         }
 
         // 핑 요청 전송
-        const response = await api.get('/notifications/ping');
-        console.log('핑 테스트 성공:', response.status);
+        await api.get('/notifications/ping');
       } catch (error: any) {
         console.error('핑 테스트 실패:', error);
 
@@ -112,18 +110,15 @@ const useSSE = (url: string): SSEHookReturn => {
   const connectSSE = useCallback(() => {
     // 로그인 상태 확인
     if (!isAuthenticated || !accessToken) {
-      console.log('로그인되지 않음, SSE 연결 불가');
       return;
     }
 
     // 이미 연결 중이거나 시도 중이면 중단
     if (eventSourceRef.current !== null || isConnectingRef.current) {
-      console.log('이미 연결됨 또는 연결 시도 중');
       return;
     }
 
     isConnectingRef.current = true;
-    console.log('SSE 연결 시도');
 
     try {
       // 캐시 방지를 위한 타임스탬프 추가
@@ -144,7 +139,6 @@ const useSSE = (url: string): SSEHookReturn => {
 
       // 연결 성공 이벤트
       eventSource.onopen = () => {
-        console.log('SSE 연결 성공');
         isConnectingRef.current = false;
         setIsConnected(true);
         lastHeartbeatRef.current = Date.now();
@@ -168,13 +162,14 @@ const useSSE = (url: string): SSEHookReturn => {
       };
 
       // 알림 이벤트 리스너
+      // alarm으로 바꿀 것
       eventSource.addEventListener('alarm', ((event: SSEEvent) => {
         console.log('알림 이벤트 수신:', event.data);
         lastHeartbeatRef.current = Date.now();
 
         try {
           const data = JSON.parse(event.data);
-          // 데이터가 배열인 경우 각 항목에 대해 처리
+          // 데이터가 배열인 경우, 즉 recent-alarms인 경우 확인용
           if (Array.isArray(data)) {
             data.forEach((item) => {
               if (item.type === 'DIARY_CREATED') {
@@ -194,7 +189,6 @@ const useSSE = (url: string): SSEHookReturn => {
                   pauseOnHover: true,
                   draggable: true,
                   theme: 'dark',
-                  // icon: "🚀"
                 });
               } else if (item.type === 'VIDEO_CREATED_FAILED') {
                 toast.error(item.content, {
@@ -226,15 +220,54 @@ const useSSE = (url: string): SSEHookReturn => {
               }
             });
           }
-          // 단일 객체인 경우
+          // 실시간 알림
           else if (data && data.content) {
-            toast.info(data.content, {
-              position: 'bottom-right',
-              autoClose: 5000,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            });
+            if (data.type === 'DIARY_CREATED') {
+              toast.success(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'VIDEO_CREATED') {
+              toast.success(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'VIDEO_CREATED_FAILED') {
+              toast.error(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'LIKE_CREATED') {
+              toast.info(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'GUESTBOOK_CREATED') {
+              toast.info(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            }
           }
         } catch (error) {
           console.error('알림 데이터 파싱 오류:', error);
@@ -243,13 +276,11 @@ const useSSE = (url: string): SSEHookReturn => {
 
       // 하트비트 이벤트 리스너
       eventSource.addEventListener('heartbeat', (() => {
-        console.log('하트비트 수신');
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
 
       // 연결 이벤트 리스너
-      eventSource.addEventListener('connect', ((event: SSEEvent) => {
-        console.log('연결 이벤트 수신:', event.data);
+      eventSource.addEventListener('connect', (() => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
 
@@ -274,7 +305,6 @@ const useSSE = (url: string): SSEHookReturn => {
 
   // 수동 재연결 함수
   const reconnect = useCallback(() => {
-    console.log('SSE 수동 재연결 요청');
     cleanup();
     // 약간 지연 후 재연결
     reconnectTimeoutRef.current = window.setTimeout(() => {
