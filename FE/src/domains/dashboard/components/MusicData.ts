@@ -1,8 +1,8 @@
 // 이미지 파일
-import happy1 from '@/assets/music/happy/Dandelion.mp3'
+import happy1 from '@/assets/music/happy/LifeIsPiano.mp3'
 import happy2 from '@/assets/music/happy/Duggy - Brilliant World.mp3'
 import happy3 from '@/assets/music/happy/LikeAStrong.mp3'
-import hope1 from '@/assets/music/hope/LifeIsPiano.mp3'
+import hope1 from '@/assets/music/hope/Dandelion.mp3'
 import hope2 from '@/assets/music/hope/Lullaby.mp3'
 import hope3 from '@/assets/music/hope/Sono.mp3'
 import peace1 from '@/assets/music/peace/InLoveWithAGhost.mp3'
@@ -11,10 +11,10 @@ import peace3 from '@/assets/music/peace/PaleEvening.mp3'
 
 
 // 이미지 파일 
-import happyImg1 from '@/assets/music/happy/DandelionImg.jpg'
+import happyImg1 from '@/assets/music/happy/LifeIsPianoImg.jpg'
 import happyImg2 from '@/assets/music/happy/DuggyImg.jpg'
 import happyImg3 from '@/assets/music/happy/LikeImg.jpg'
-import hopeImg1 from '@/assets/music/hope/LifeIsPianoImg.jpg'
+import hopeImg1 from '@/assets/music/hope/DandelionImg.jpg'
 import hopeImg2 from '@/assets/music/hope/CrystalImg.jpg'
 import hopeImg3 from '@/assets/music/hope/SonoImg.jpg'
 import peaceImg1 from '@/assets/music/peace/InLoveImg.jpg'
@@ -43,10 +43,10 @@ export const MusicList : MusicCategory[]= [
         tracks: [
             {
                 id: "happy1",
-                title: "Dandelion",
+                title: "Life is piano",
                 audio: happy1,
                 image: happyImg1,
-                duration: "2:24"
+                duration: "2:09"
             },
             {
                 id: "happy2",
@@ -70,10 +70,10 @@ export const MusicList : MusicCategory[]= [
         tracks: [
             {
                 id: "hope1",
-                title: "Life is piano",
+                title: "Dandelion",
                 audio: hope1,
                 image: hopeImg1,
-                duration: "2:09"
+                duration: "2:24"
             },
             {
                 id: "hope2",
