@@ -29,7 +29,7 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     public DreamMeaningDto createDreamMeaning(Integer userSeq, Integer diarySeq, DreamMeaningRequestDto dto) {
         String content;
         String isGood;
-        try {
+//        try {
 //            // 1. 해몽 생성
 //            String prompt1 = dto.getInputContent() + " 이에 대한 꿈 해몽을 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.";
 //            content = chatModel.call(prompt1);
@@ -41,33 +41,43 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
 //
 //            if (sentiment.contains("좋")) {
 //                isGood = "Y";
-//            } else if (sentiment.contains("나쁘") || sentiment.contains("나쁜")) {
+//            } else if (sentiment.contains("나") || sentiment.contains("나쁨"))  {
 //                isGood = "N";
 //            } else {
-//                throw new AiCallFailedException("AI가 올바른 형식으로 분류하지 못했습니다. 답변: " + sentiment);
+//                log.warn("AI 분류 실패 - 기본값 적용");
+//                isGood = "Y";
+////                throw new AiCallFailedException("AI가 올바른 형식으로 분류하지 못했습니다. 답변: " + sentiment);
 //            }
-            content = "푸하하";
-            isGood = "Y";
+////            content = "푸하하";
+////            isGood = "Y";
+//
+//        } catch (Exception e) {
+//            log.error("AI 해몽 생성 실패 - 기본값 적용", e);
+//            isGood = "Y";
+//            content = "현재 삶에서 방향을 잃었거나, 해결되지 않은 고민 속에 있다는 무의식의 표현입니다. 하지만 끝까지 나아가겠다는 의지 또한 반영된 긍정적인 메시지일 수 있습니다.";
+////            throw new AiCallFailedException("AI 해몽 생성 중 오류가 발생했습니다.");
+//        }
 
-        } catch (Exception e) {
-            log.error("AI 해몽 생성 실패", e);
-            throw new AiCallFailedException("AI 해몽 생성 중 오류가 발생했습니다.");
-        }
+        isGood = "Y";
+        content = "현재 삶에서 방향을 잃었거나, 해결되지 않은 고민 속에 있다는 무의식의 표현입니다. 하지만 끝까지 나아가겠다는 의지 또한 반영된 긍정적인 메시지일 수 있습니다.";
 
         log.info("GPT 해몽 응답: {}", content);
         log.info("GPT 분류 결과 (isGood): {}", isGood);
 
+        final String finalContent = content;
+        final String finalIsGood = isGood;
+
         DreamMeaning dreamMeaning = dreamMeaningRepository.findByDiarySeq(diarySeq)
                 .map(existing -> {
-                    existing.update(content, isGood, dto.getInputContent());
+                    existing.update(finalContent, finalIsGood, dto.getInputContent());
                     return existing;
                 })
                 .orElseGet(() -> DreamMeaning.builder()
                         .userSeq(userSeq)
                         .diarySeq(diarySeq)
                         .inputContent(dto.getInputContent())
-                        .resultContent(content)
-                        .isGood(isGood)
+                        .resultContent(finalContent)
+                        .isGood(finalIsGood)
                         .createdAt(LocalDateTime.now().format(FORMATTER))
                         .build()
                 );

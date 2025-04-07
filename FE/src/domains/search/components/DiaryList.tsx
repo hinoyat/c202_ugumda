@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/apis/apiClient';
 import { getIconById } from '@/hooks/ProfileIcons';
+import { useNavigate } from 'react-router-dom';
 
 interface Tag {
   tagSeq: number | null;
@@ -35,7 +36,7 @@ interface ApiResponse {
   timestamp: string;
   status: number;
   message: string;
-  data: Diary[];
+  data: Diary[]; // 이제 DiarySearch에서 content 배열만 전달
 }
 
 interface DiaryListProps {
@@ -45,6 +46,7 @@ interface DiaryListProps {
 const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const nav = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -69,7 +71,6 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
         const userPromises = uniqueUserSeqs.map(async (userSeq) => {
           try {
             const response = await api.get(`/users/seq/${userSeq}`);
-            console.log(`User ${userSeq} 응답:`, response);
             if (
               response.data &&
               response.data.status === 200 &&
@@ -181,7 +182,7 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
                       diary.diarySeq.toString()
                     );
                     // 페이지 이동
-                    window.location.href = `/${diary.username || ''}`;
+                    nav(`/${diary.username || ''}`);
                   }}>
                   보러가기
                 </button>
