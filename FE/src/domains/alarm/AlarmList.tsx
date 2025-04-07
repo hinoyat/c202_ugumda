@@ -19,6 +19,8 @@ import './themes/alarm.css';
 import { FaBookReader } from 'react-icons/fa';
 import { BsTrash3Fill } from 'react-icons/bs';
 import { resetPage, resetAlarms } from './stores/alarmSlice';
+import { useNavigate } from 'react-router-dom';
+import { showDiaryModal } from '@/stores/diary/diarySlice';
 
 interface AlarmProps {
   isOpen: boolean;
@@ -29,6 +31,7 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const alarms = useSelector(selectAlarms);
   const loading = useSelector(selectLoading);
   const hasMore = useSelector(selectHasMore);
@@ -58,6 +61,13 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
     if (alarm.isRead === 'N') {
       dispatch(readAlarm(alarm.alarmSeq));
     }
+
+    // 일기 상세 모달을 띄우기 위해 diarySeq를 localStorage에 저장하고 Redux 상태 업데이트
+    if (alarm.diarySeq) {
+      localStorage.setItem('selectedDiarySeq', alarm.diarySeq.toString());
+      dispatch(showDiaryModal(alarm.diarySeq));
+    }
+
     onClose();
     dispatch(resetPage());
     dispatch(resetAlarms());
