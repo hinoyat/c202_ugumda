@@ -14,11 +14,6 @@ const SSEProvider = () => {
   return null; // UI를 렌더링하지 않음
 };
 
-const handleClick = async () => {
-  const response = await api.get('/notifications/ping');
-  console.log('핑테스트', response);
-};
-
 // 뒤로가기 감지 및 새로고침을 위한 컴포넌트
 const BackHandler = () => {
   useEffect(() => {
@@ -41,15 +36,33 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <SSEProvider />
-        {/* <button
-          onClick={handleClick}
-          className="absolute top-20 left-20 text-white z-50 cursor-pointer">
-          핑테스트
-        </button> */}
         <BackHandler />
         <AppRouter />
       </BrowserRouter>
-      <ToastContainer className="z-9999" />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        icon={({ type }) => {
+          switch (type) {
+            case 'success':
+              return '🚀';
+            case 'error':
+              return '❌';
+            case 'info':
+              return '♥️';
+            default:
+              return '📢';
+          }
+        }}
+      />
     </Provider>
   );
 }
