@@ -93,7 +93,13 @@ const LuckyNumber = () => {
 
   const nav = useNavigate();
   const onClickHome = () => {
-    nav('/spaceship');
+    const whereShouldIgo = localStorage.getItem("FromDiary");
+    if(whereShouldIgo==="goUniverse"){
+      nav("/")
+      localStorage.removeItem("FromDiary");
+    }else{
+      nav("/spaceship")
+    }
   };
 
   // 별자리 위치 옮기고 싶으면 여기 고치면 됩니다.!!
