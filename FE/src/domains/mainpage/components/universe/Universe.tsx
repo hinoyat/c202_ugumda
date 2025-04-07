@@ -541,7 +541,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
               setShowForm(true);
             }
           }}
-          onDelete={handleDeleteDiary}
+          // onDelete={handleDeleteDiary}
         />
       )}
 
@@ -555,7 +555,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           onDiaryCreated={handleDiaryCreated}
           onDiaryUpdated={handleDiaryUpdated}
           onDeleteDiary={handleDeleteDiary}
-          isMySpace={isMySpace}
+          // isMySpace={isMySpace}
         />
       )}
     </div>
