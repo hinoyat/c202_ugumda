@@ -41,7 +41,7 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
 
             if (sentiment.contains("좋")) {
                 isGood = "Y";
-            } else if (sentiment.contains("나쁘") || sentiment.contains("나쁜")) {
+            } else if (sentiment.contains("나") || sentiment.contains("나쁨"))  {
                 isGood = "N";
             } else {
                 log.warn("AI 분류 실패 - 기본값 적용");
