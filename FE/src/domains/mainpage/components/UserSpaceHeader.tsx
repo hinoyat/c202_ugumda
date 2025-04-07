@@ -14,7 +14,11 @@ interface UserSpaceHeaderProps {
   isMySpace?: boolean;
 }
 
-const UserSpaceHeader = ({ nickname, icon, isMySpace }: UserSpaceHeaderProps) => {
+const UserSpaceHeader = ({
+  nickname,
+  icon,
+  isMySpace,
+}: UserSpaceHeaderProps) => {
   const nav = useNavigate();
   const dispatch = useAppDispatch();
   const currentOwnerUser = useSelector(selectVisitUser);
@@ -38,18 +42,15 @@ const UserSpaceHeader = ({ nickname, icon, isMySpace }: UserSpaceHeaderProps) =>
       : '구독';
 
   const handleButtonClick = async () => {
-    console.log('Button clicked. Current label:', buttonLabel);
     if (buttonLabel === '로그아웃') {
       await dispatch(logoutUser());
       nav('/intro', { replace: true });
       window.location.reload();
     } else {
       try {
-        console.log('Sending API patch for userSeq:', currentOwnerUser.userSeq);
         const response = await api.patch(
           `/subscription/${currentOwnerUser.userSeq}`
         );
-        console.log('API response:', response);
 
         // API 응답 구조 확인 및 예외 처리
         const newStatus =
@@ -69,18 +70,27 @@ const UserSpaceHeader = ({ nickname, icon, isMySpace }: UserSpaceHeaderProps) =>
   };
 
   return (
-    <div className="p-4">
+    <div className="p-3">
       <div className="flex items-baseline">
         {isMySpace ? (
           <div className="flex items-center">
-            <img src={getIconById(icon)} alt="내 프로필 사진" className="w-8 h-8" />
-          <h3 className="text-base font-bold text-white/90 ml-1">
-            나의 우주 ☄️
-          </h3>
+            <img
+              src={getIconById(icon)}
+              alt="내 프로필 사진"
+              className="w-8 h-7 object-contain"
+            />
+            <span className="ml-1">
+              <span className="text-lg font-bold text-[#e0cfaa]">나</span>
+              <span className="text-base text-white/90">의 우주</span>
+            </span>
           </div>
         ) : (
           <div className="flex items-center">
-            <img src={getIconById(icon)} alt="" className="w-9 h-9"/>
+            <img
+              src={getIconById(icon)}
+              alt="내 프로필 사진"
+              className="w-8 h-8 mr-1"
+            />
             <>
               <h3 className="text-base font-bold text-[#e0cfaa]">{nickname}</h3>
               <p className="text-sm text-white/90 ml-1">님의 우주</p>
@@ -90,7 +100,7 @@ const UserSpaceHeader = ({ nickname, icon, isMySpace }: UserSpaceHeaderProps) =>
       </div>
       <button
         onClick={handleButtonClick}
-        className="mt-2 w-[80px] h-[25px] bg-white/50 text-white rounded-[6px] text-xs cursor-pointer hover:bg-white/70 transition-colors">
+        className="mt-2 ml-2 w-[80px] h-[25px] bg-white/50 text-white rounded-[6px] text-xs cursor-pointer hover:bg-white/70 transition-colors">
         {buttonLabel}
       </button>
     </div>
