@@ -7,6 +7,7 @@ interface ButtonBaseProps {
   borderRadius?: string;
   width?: string;
   height?: string;
+  disabled?: boolean;
 }
 
 const ButtonBase: React.FC<ButtonBaseProps> = ({
@@ -16,16 +17,19 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   borderRadius,
   width,
   height,
+  disabled = false,
 }) => {
   return (
     <StyledWrapper
       className={className}
-      borderRadius={borderRadius}
-      width={width}
-      height={height}>
+      $borderRadius={borderRadius}
+      $width={width}
+      $height={height}
+      $disabled={disabled}>
       <button
         className="button-base"
-        onClick={onClick}>
+        onClick={onClick}
+        disabled={disabled}>
         {children}
         <div className="hoverEffect">
           <div />
@@ -36,12 +40,13 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
 };
 
 const StyledWrapper = styled.div<{
-  borderRadius?: string;
-  width?: string;
-  height?: string;
+  $borderRadius?: string;
+  $width?: string;
+  $height?: string;
+  $disabled?: boolean;
 }>`
   display: block;
-  width: ${(props) => props.width || 'auto'};
+  width: ${(props) => props.$width || 'auto'};
 
   .button-base {
     display: inline-flex;
@@ -49,14 +54,15 @@ const StyledWrapper = styled.div<{
     justify-content: center;
     padding: 9px 23px;
     width: 100%;
-    height: ${(props) => props.height || 'auto'};
+    height: ${(props) => props.$height || 'auto'};
     border: 0;
     position: relative;
     overflow: hidden;
-    border-radius: ${(props) => props.borderRadius || '10rem'};
+    border-radius: ${(props) => props.$borderRadius || '10rem'};
     transition: all 0.02s;
     font-weight: bold;
-    cursor: pointer;
+    cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
+    opacity: ${(props) => (props.$disabled ? 0.5 : 1)};
     color: rgb(37, 37, 37);
     z-index: 0;
     box-shadow: 0 0px 7px -5px rgba(0, 0, 0, 0.5);
@@ -64,12 +70,13 @@ const StyledWrapper = styled.div<{
   }
 
   .button-base:hover {
-    background: rgb(193, 228, 248);
-    color: rgb(33, 0, 85);
+    background: ${(props) =>
+      props.$disabled ? 'inherit' : 'rgb(193, 228, 248)'};
+    color: ${(props) => (props.$disabled ? 'inherit' : 'rgb(33, 0, 85)')};
   }
 
   .button-base:active {
-    transform: scale(0.97);
+    transform: ${(props) => (props.$disabled ? 'none' : 'scale(0.97)')};
   }
 
   .hoverEffect {
