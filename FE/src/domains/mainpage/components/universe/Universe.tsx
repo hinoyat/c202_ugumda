@@ -12,6 +12,8 @@ import {
   removeDiary,
   setCurrentDiary,
   updateDiary,
+  showDiaryModal,
+  hideDiaryModal,
 } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
@@ -31,7 +33,9 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
   // 리덕스 설정
   const dispatch = useDispatch();
-  const { diaries } = useSelector((state: RootState) => state.diary);
+  const { diaries, showDiaryModal, selectedDiarySeq } = useSelector(
+    (state: RootState) => state.diary
+  );
 
   // ------------------- 상태관리 ------------------- //
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -137,6 +141,13 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   };
 
   // ------------------------- 일기 조회 ----------------------------//
+
+  // Redux 상태에 따라 일기 모달 표시
+  useEffect(() => {
+    if (showDiaryModal && selectedDiarySeq) {
+      loadDiaryDetail(selectedDiarySeq);
+    }
+  }, [showDiaryModal, selectedDiarySeq]);
 
   // 일기 상세 정보 로드 함수 추가 (이 함수를 컴포넌트 내부에 추가)
   const loadDiaryDetail = async (diarySeq: number) => {
@@ -290,6 +301,13 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       console.error('일기 삭제 중 오류 발생:', error);
       alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
     }
+  };
+
+  // 일기 조회 모달 닫기
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+    setCurrentDiaryDetail(null);
+    dispatch(hideDiaryModal());
   };
 
   useEffect(() => {
@@ -526,10 +544,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         <DiaryDetail
           initialDiary={currentDiaryDetail}
           isMySpace={isMySpace}
-          onClose={() => {
-            setShowDetail(false);
-            setCurrentDiaryDetail(null);
-          }}
+          onClose={handleCloseDetail}
           onEdit={() => {
             if (isMySpace) {
               setIsEditing(true);

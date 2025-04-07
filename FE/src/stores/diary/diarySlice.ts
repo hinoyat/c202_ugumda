@@ -16,6 +16,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface DiaryState {
   diaries: DiaryData[];
   currentDiary: DiaryData | null;
+  showDiaryModal: boolean; // 일기 모달 표시 상태
+  selectedDiarySeq: number | null; // 선택된 일기 ID
   loading: boolean;
   error: string | null;
 }
@@ -24,6 +26,8 @@ interface DiaryState {
 const initialState: DiaryState = {
   diaries: [],
   currentDiary: null,
+  showDiaryModal: false,
+  selectedDiarySeq: null,
   loading: false,
   error: null,
 };
@@ -54,6 +58,9 @@ const diarySlice = createSlice({
       if (index !== -1) {
         state.diaries[index] = action.payload;
       }
+      if (state.currentDiary?.diarySeq === action.payload.diarySeq) {
+        state.currentDiary = action.payload;
+      }
     },
 
     // 일기 삭제
@@ -61,6 +68,9 @@ const diarySlice = createSlice({
       state.diaries = state.diaries.filter(
         (diary) => diary.diarySeq !== action.payload
       );
+      if (state.currentDiary?.diarySeq === action.payload) {
+        state.currentDiary = null;
+      }
     },
 
     // 로딩 상태 설정
@@ -70,6 +80,14 @@ const diarySlice = createSlice({
     // 에러 설정
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
+    },
+    showDiaryModal: (state, action: PayloadAction<number>) => {
+      state.showDiaryModal = true;
+      state.selectedDiarySeq = action.payload;
+    },
+    hideDiaryModal: (state) => {
+      state.showDiaryModal = false;
+      state.selectedDiarySeq = null;
     },
   },
 });
@@ -83,6 +101,8 @@ export const {
   removeDiary,
   setLoading,
   setError,
+  showDiaryModal,
+  hideDiaryModal,
 } = diarySlice.actions;
 
 // 리듀서 내보내기
