@@ -17,8 +17,15 @@ const TodayFortune = () => {
   const [error, setError] = useState(null);
 
   const onClickHome = () => {
-    nav('/spaceship');
+    const whereShouldIgo = localStorage.getItem("FromDiary");
+    if(whereShouldIgo==="goUniverse"){
+      nav("/")
+      localStorage.removeItem("FromDiary");
+    }else{
+      nav("/spaceship")
+    }
   };
+
 
   useEffect(() => {
     let isMounted = true;

@@ -281,8 +281,9 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
             <DiaryList
               data={{
                 ...diaryData,
-                data: diaryData.data.content, // DiaryList에 content 배열만 전달
+                data: diaryData.data.content,
               }}
+              onClose ={onClose}
             />
             <div className="w-full block">{renderPagination()}</div>
           </>
