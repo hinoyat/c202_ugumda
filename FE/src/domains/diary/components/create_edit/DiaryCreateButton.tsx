@@ -6,19 +6,13 @@ import React from 'react';
 
 interface DiaryCreateButtonProps {
   onCreate?: () => void;
-  onCreateVideo?: () => void;
-  Count?: number;
   isEditing: boolean;
-  onClose?: () => void;
   onDelete?: () => void;
 }
 
 const DiaryCreateButton: React.FC<DiaryCreateButtonProps> = ({
   onCreate,
-  onCreateVideo,
-  Count,
   isEditing = false,
-  onClose,
   onDelete,
 }) => {
   return (
