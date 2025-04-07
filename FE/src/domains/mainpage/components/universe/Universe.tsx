@@ -14,6 +14,7 @@ import {
   updateDiary,
   showDiaryModal,
   hideDiaryModal,
+  addDiary,
 } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
@@ -209,6 +210,9 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     // 새로 생성된 일기를 diaryEntries 배열에 추가
     setDiaryEntries((prev) => [...prev, newDiary]);
 
+    // Redux 스토어에도 추가
+    dispatch(addDiary(newDiary));
+
     // 새 별 id 설정 (노란색 효과를 위해) - 10분 동안 유지
     setNewStarId(newDiary.diarySeq);
 
@@ -386,10 +390,16 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     }
   }, [isMySpace, userSeq]);
 
-  // 리덕스 스토어의 일기 데이터가 변경되면 로컬 상태 업데이트
   useEffect(() => {
-    if (diaries.length > 0) {
-      setDiaryEntries(diaries);
+    if (diaries && diaries.length > 0) {
+      // 기존 일기를 유지하면서 리덕스의 새 일기만 추가하는 방식으로 변경
+      setDiaryEntries((prevEntries) => {
+        const existingIds = new Set(prevEntries.map((entry) => entry.diarySeq));
+        const newEntries = diaries.filter(
+          (diary) => !existingIds.has(diary.diarySeq)
+        );
+        return [...prevEntries, ...newEntries];
+      });
     }
   }, [diaries]);
 
