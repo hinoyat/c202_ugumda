@@ -247,9 +247,16 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 </div>
 
                 {/* 4. 운세보러가기 버튼 */}
-                <div className="flex justify-end">
+                <div className="flex flex-col items-end">
                   {dreamMeaning && (
-                    <DestinyButton isGood={dreamMeaning.isGood} />
+                    <>
+                      <DestinyButton isGood={dreamMeaning.isGood} />
+                      <p className="text-white/85 text-xs mt-2 text-right">
+                        {dreamMeaning.isGood === 'Y'
+                          ? '좋은 꿈을 꿨으니, 오늘의 행운을 확인해보세요! 🍀'
+                          : '힘든 꿈이었다면, 오늘의 운세를 확인하고 용기를 얻어보세요. 💪'}
+                      </p>
+                    </>
                   )}
                 </div>
               </div>
