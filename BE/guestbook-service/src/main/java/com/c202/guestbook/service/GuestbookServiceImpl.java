@@ -83,7 +83,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 
     @Override
     public GuestbookPageResponse getAllGuestbooks(int ownerSeq, int page) {
-        int size = 5;
+        int size = 6;
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Guestbook> guestbooks = guestbookRepository.findByOwnerSeqAndIsDeleted(ownerSeq, "N", pageable);
 
