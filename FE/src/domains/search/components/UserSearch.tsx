@@ -16,21 +16,51 @@ interface User {
   introduction?: string | null;
   isSubscribed?: boolean;
 }
+
+// 페이지네이션 응답 인터페이스 정의
+interface PaginatedResponse {
+  timestamp: string;
+  status: number;
+  message: string;
+  data: {
+    content: User[];
+    currentPage: number;
+    totalPages: number;
+    totalElements: number;
+    size: number;
+    first: boolean;
+    last: boolean;
+  };
+}
+
 interface UserSearchProps {
   onClose: () => void;
 }
 
 const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<User[]>([]);
+  const [paginatedData, setPaginatedData] = useState<PaginatedResponse>({
+    timestamp: '',
+    status: 200,
+    message: '',
+    data: {
+      content: [],
+      currentPage: 1,
+      totalPages: 1,
+      totalElements: 0,
+      size: 20,
+      first: true,
+      last: true,
+    },
+  });
   const [searchText, setSearchText] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchFilters, setSearchFilters] = useState({
     searchNickname: true,
     searchUsername: false,
   });
   const [friends, setFriends] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
   // 초기 로딩 시 친구 목록 가져오기
   useEffect(() => {
@@ -51,12 +81,25 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
   useEffect(() => {
     if (!searchText.trim()) {
       setFilteredUsers(friends);
-      setUsers([]);
+      setPaginatedData({
+        timestamp: '',
+        status: 200,
+        message: '',
+        data: {
+          content: [],
+          currentPage: 1,
+          totalPages: 1,
+          totalElements: 0,
+          size: 20,
+          first: true,
+          last: true,
+        },
+      });
     }
   }, [searchText, friends]);
 
-  // 검색 함수
-  const handleSearch = async () => {
+  // 검색 함수: 페이지 번호를 인자로 받음
+  const loadSearchData = async (page: number) => {
     if (!searchText.trim()) {
       setFilteredUsers(friends);
       return;
@@ -64,42 +107,107 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
 
     setIsLoading(true);
     try {
+      // 검색 조건 적용
+      const params = {
+        keyword: searchText,
+        page: page, // API는 1부터 시작하는 페이지 번호 사용
+        size: 20, // 페이지당 아이템 수
+      };
+
+      // 쿼리 스트링으로 변환
+      const queryString = Object.entries(params)
+        .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
+        .join('&');
+
       // /users/search 엔드포인트로 검색 요청
-      const response = await api.get('/users/search', {
-        params: { keyword: searchText },
-      });
+      const response = await api.get(`/users/search?${queryString}`);
 
-      // 검색 결과에 친구 여부 표시 추가
-      const userData = response.data.data.map((user: User) => {
-        // 친구 목록에 있는지 확인해서 isSubscribed 필드 추가
-        const isFriend = friends.some(
-          (friend) =>
-            friend.userSeq === user.userSeq || friend.nickname === user.nickname
+      // 응답 데이터 확인 및 저장
+      if (
+        response.data &&
+        response.data.data &&
+        Array.isArray(response.data.data.content)
+      ) {
+        // 검색 결과에 친구 여부 표시 추가
+        const usersWithSubscriptionStatus = response.data.data.content.map(
+          (user: User) => {
+            // 친구 목록에 있는지 확인해서 isSubscribed 필드 추가
+            const isFriend = friends.some(
+              (friend) =>
+                friend.userSeq === user.userSeq ||
+                friend.nickname === user.nickname
+            );
+            return { ...user, isSubscribed: isFriend };
+          }
         );
-        return { ...user, isSubscribed: isFriend };
-      });
 
-      setUsers(userData);
+        // 필터 적용
+        const filtered = usersWithSubscriptionStatus.filter((user: User) => {
+          const matchNickname =
+            searchFilters.searchNickname &&
+            user.nickname.toLowerCase().includes(searchText.toLowerCase());
 
-      // 검색 필터 적용
-      const filtered = userData.filter((user: User) => {
-        const matchNickname =
-          searchFilters.searchNickname &&
-          user.nickname.toLowerCase().includes(searchText.toLowerCase());
+          const matchUsername =
+            searchFilters.searchUsername &&
+            user.username.toLowerCase().includes(searchText.toLowerCase());
 
-        const matchUsername =
-          searchFilters.searchUsername &&
-          user.username.toLowerCase().includes(searchText.toLowerCase());
+          return matchNickname || matchUsername;
+        });
 
-        return matchNickname || matchUsername;
-      });
+        // 응답 데이터 업데이트
+        const updatedResponse = {
+          ...response.data,
+          data: {
+            ...response.data.data,
+            content: usersWithSubscriptionStatus,
+          },
+        };
 
-      setFilteredUsers(filtered);
+        setPaginatedData(updatedResponse);
+        setFilteredUsers(filtered);
+      } else {
+        console.error('응답 데이터가 예상된 형식이 아닙니다:', response);
+        setPaginatedData({
+          timestamp: '',
+          status: 200,
+          message: '',
+          data: {
+            content: [],
+            currentPage: 1,
+            totalPages: 1,
+            totalElements: 0,
+            size: 20,
+            first: true,
+            last: true,
+          },
+        });
+        setFilteredUsers([]);
+      }
     } catch (error) {
       console.error('사용자 검색 오류:', error);
+      setPaginatedData({
+        timestamp: '',
+        status: 500,
+        message: '에러가 발생했습니다',
+        data: {
+          content: [],
+          currentPage: 1,
+          totalPages: 1,
+          totalElements: 0,
+          size: 20,
+          first: true,
+          last: true,
+        },
+      });
+      setFilteredUsers([]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // 검색 실행
+  const handleSearch = async () => {
+    await loadSearchData(1); // 검색 시 첫 페이지로 리셋
   };
 
   // Enter 키로 검색 실행
@@ -109,15 +217,36 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
     }
   };
 
+  // 페이지 변경 핸들러
+  const handlePageChange = (newPage: number) => {
+    if (
+      newPage < 1 ||
+      newPage > paginatedData.data.totalPages ||
+      newPage === paginatedData.data.currentPage
+    ) {
+      return;
+    }
+
+    loadSearchData(newPage);
+  };
+
   // 구독하기 핸들러
   const handleSubscribe = async (userSeq: number) => {
     try {
       await api.patch(`/subscription/${userSeq}`);
+
       // 구독 성공 후 검색 결과에서 해당 사용자 상태 업데이트
-      const updatedUsers = users.map((user) =>
+      const updatedContent = paginatedData.data.content.map((user) =>
         user.userSeq === userSeq ? { ...user, isSubscribed: true } : user
       );
-      setUsers(updatedUsers);
+
+      setPaginatedData({
+        ...paginatedData,
+        data: {
+          ...paginatedData.data,
+          content: updatedContent,
+        },
+      });
 
       // 필터링된 사용자도 업데이트
       const updatedFilteredUsers = filteredUsers.map((user) =>
@@ -133,6 +262,7 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
   const handleUnsubscribe = async (subscribedSeq: number) => {
     try {
       await api.patch(`/subscription/${subscribedSeq}`);
+
       // 구독 취소 후 친구 목록에서 제거
       const updatedFriends = friends.filter(
         (friend) => friend.subscribedSeq !== subscribedSeq
@@ -176,8 +306,8 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
     }));
 
     // 필터 변경 시 현재 검색 결과에 새 필터 적용
-    if (users.length > 0) {
-      const filtered = users.filter((user) => {
+    if (paginatedData.data.content.length > 0) {
+      const filtered = paginatedData.data.content.filter((user) => {
         const matchNickname =
           (filter === 'searchNickname'
             ? !searchFilters.searchNickname
@@ -195,6 +325,64 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
 
       setFilteredUsers(filtered);
     }
+  };
+
+  // 페이지 버튼 렌더링 함수
+  const renderPagination = () => {
+    const { totalPages, currentPage } = paginatedData.data;
+
+    if (!totalPages || totalPages <= 1) {
+      return null;
+    }
+
+    // 현재 페이지 주변 페이지 버튼만 표시 (최대 5개)
+    const pageButtons = [];
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, startPage + 4);
+
+    // 이전 페이지 버튼
+    pageButtons.push(
+      <button
+        key="prev"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="px-3 py-1 text-white bg-[#545454] rounded mx-1 disabled:opacity-50 cursor-pointer hover:bg-[#808080]">
+        &lt;
+      </button>
+    );
+
+    // 페이지 번호 버튼
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 mx-1 rounded cursor-pointer ${
+            i === currentPage
+              ? 'bg-[#808080] text-white'
+              : 'bg-[#545454] text-white hover:bg-[#808080]'
+          }`}>
+          {i}
+        </button>
+      );
+    }
+
+    // 다음 페이지 버튼
+    pageButtons.push(
+      <button
+        key="next"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="px-3 py-1 text-white bg-[#545454] rounded mx-1 disabled:opacity-50 cursor-pointer hover:bg-[#808080]">
+        &gt;
+      </button>
+    );
+
+    return (
+      <div className="flex justify-center mt-4 mb-4 p-2 rounded z-10 relative">
+        {pageButtons}
+      </div>
+    );
   };
 
   return (
@@ -246,18 +434,28 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
       </div>
       {/* 체크 박스 끝 */}
 
-      {isLoading ? (
-        <div className="text-center text-white">검색 중...</div>
-      ) : (
-        <div className="w-full pr-4 overflow-y-scroll custom-scrollbar">
-          <UserList
-            data={filteredUsers}
-            onSubscribe={handleSubscribe}
-            onUnsubscribe={handleUnsubscribe}
-            onVisit={handleVisit}
-          />
-        </div>
-      )}
+      {/* 검색 결과 */}
+      <div className="w-full pr-4 overflow-y-scroll custom-scrollbar">
+        {isLoading && filteredUsers.length === 0 ? (
+          <div className="text-center text-white">검색 중...</div>
+        ) : filteredUsers.length > 0 ? (
+          <>
+            <UserList
+              data={filteredUsers}
+              onSubscribe={handleSubscribe}
+              onUnsubscribe={handleUnsubscribe}
+              onVisit={handleVisit}
+            />
+            {searchText.trim() !== '' && (
+              <div className="w-full block">{renderPagination()}</div>
+            )}
+          </>
+        ) : (
+          <div className="text-center text-white mt-4">
+            {searchText.trim() !== '' ? '검색 결과가 없습니다.' : ''}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

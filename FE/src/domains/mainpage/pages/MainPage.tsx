@@ -2,6 +2,7 @@
 import GuestBook from '@/domains/guestbook/GuestBook';
 import Universe from '@/domains/mainpage/components/universe/Universe';
 import UserSpaceHeader from '@/domains/mainpage/components/UserSpaceHeader';
+import OnboardingModal from '@/domains/mainpage/components/onboarding/OnboardingModal'
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -18,10 +19,15 @@ import { Tooltip } from 'react-tooltip';
 import { selectMusicPlaying, selectCurrentTrack } from '@/stores/music/musicSelectors';
 import { initializeAudio, togglePlayback } from '@/stores/music/musicThunks';
 
+import onboardingBlackhole from '@/assets/images/boardingBlackhole.gif';
+import onboardingUfo from '@/assets/images/boardingUfo.gif'
+
 const MainPage = () => {
   console.log('🟡 내 메인 렌더링!');
 
-  // 상태관리
+  const [step, setStep] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
   const [showGuestbook, setShowGuestbook] = useState(false);
   const currentTrack = useAppSelector(selectCurrentTrack);
   const isMusicPlaying = useAppSelector(selectMusicPlaying);
@@ -33,6 +39,25 @@ const MainPage = () => {
   const loginUser = useSelector(selectUser);
   const visitUser = useSelector(selectVisitUser);
 
+  const slides = [
+      {
+          title: '일기 작성 🌌',
+          description: '우주의 끝에서, 오늘의 꿈을 기록해보세요. 더블 클릭으로 나만의 별자리를 시작할 수 있어요',
+          animation: 'double-click-animation'
+      },
+      {
+        title: 'UFO 🛸',
+        description: '내 우주에서 UFO를 찾아보세요. 무슨 기능이 있을까요?',
+        imageUrl: onboardingUfo
+      },
+      {
+        title: '블랙홀 🪐',
+        description: '블랙홀에 들어가면, 다른 사람들의 꿈 속으로 랜덤 여행이 시작됩니다. 신비한 우주 여행을 떠나보세요!',
+        imageUrl: onboardingBlackhole
+      },
+
+  ];
+
   // 유저 정보 확인을 위한 콘솔 로그 추가
   console.log('👤 로그인 유저 정보:', loginUser);
   console.log('🔍 방문 유저 정보:', visitUser);
@@ -43,6 +68,10 @@ const MainPage = () => {
   };
 
   useEffect(() => {
+      const hasSeen = localStorage.getItem('hasSeenOnboarding');
+        if (!hasSeen) {
+          setShowOnboarding(true);
+        }
     if (params.username) {
       console.log('✅ MainPage 마운트됨!');
       console.log('내 우주인가?: ' + isMySpace);
@@ -81,6 +110,11 @@ const MainPage = () => {
   const isMySpace = params.username === loginUser?.username ? true : false; // 내 우주인지 여부
   console.log('🏠 isMySpace:', isMySpace);
 
+  const handleOnboardingClose = () => {
+    localStorage.setItem('hasSeenOnboarding', 'true');
+    setShowOnboarding(false);
+  };
+
   const handleButtonClick = async () => {
     // 로그아웃 버튼 로직
     await dispatch(logoutUser());
@@ -96,6 +130,15 @@ const MainPage = () => {
   return (
     <div className="flex flex-col items-start text-white relative w-screen h-screen overflow-hidden">
       {/* 우주영역 */}
+
+        {showOnboarding && (
+          <OnboardingModal
+            slides={slides}
+            step={step}
+            onNext={(newStep) => setStep(newStep)}
+            onClose={handleOnboardingClose}
+          />
+        )}
       <Universe
         isMySpace={isMySpace}
         // 내 우주면 userSeq 안넘기고 다른 사람 우주면 넘겨줌 (목록조회를 위해)
@@ -106,7 +149,7 @@ const MainPage = () => {
       <div className="absolute top-5 left-5">
         <UserSpaceHeader
           nickname={isMySpace ? loginUser?.nickname : visitUser?.nickname}
-          icon = {isMySpace ? loginUser?.iconSeq : visitUser?.iconSeq}
+          icon={isMySpace ? loginUser?.iconSeq : visitUser?.iconSeq}
           isMySpace={isMySpace}
         />
       </div>

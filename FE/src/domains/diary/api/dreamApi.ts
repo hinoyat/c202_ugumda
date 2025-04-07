@@ -1,18 +1,5 @@
 import api from '@/apis/apiClient';
-
-export interface DreamSolveRequest {
-  inputContent: string;
-}
-
-export interface DreamSolveResponse {
-  dreamMeaningSeq: number;
-  userSeq: number;
-  diarySeq: number;
-  isGood: string;
-  inputContent: string;
-  resultContent: string;
-  createdAt: string;
-}
+import { DreamSolveRequest } from '@/domains/diary/Types/diary.types';
 
 export const dreamApi = {
   // 꿈해몽 생성

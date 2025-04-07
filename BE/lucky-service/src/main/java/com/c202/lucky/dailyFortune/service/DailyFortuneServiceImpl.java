@@ -30,9 +30,11 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
         if (dailyFortuneRepository.findByUserSeq(userSeq).isPresent()) {
             throw new AlreadyExistsException("오늘의 운세가 이미 생성되었습니다.");
         }
-        try {
 
-            // 실제 배포 시 주석 해제
+        String content;
+//        try {
+//
+//            // 실제 배포 시 주석 해제
 //            String birthDate = webClientBuilder
 //                    .baseUrl("http://user-service")
 //                    .build()
@@ -43,25 +45,28 @@ public class DailyFortuneServiceImpl implements DailyFortuneService{
 //                    .bodyToMono(String.class)
 //                    .block();
 //
+//            String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
 //            String prompt = String.format(
-//                    "생년월일이 %s인 사람을 위한 오늘의 운세를 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.", birthDate
+//                    "%s 기준으로, 생년월일이 %s인 사람을 위한 오늘의 운세를 한국어로 간결하게 알려줘. 너무 장황하지 않고 딱 2~3줄 정도.", today, birthDate
 //            );
 //
-//            String content = chatModel.call(prompt);
-            String content = "주찬이의 연동을 위한 오늘의 운세, 주찬이는 클린코딩을 아주 잘 할 것 같아요";
-            log.info("GPT 응답: {}", content);
+//            content = chatModel.call(prompt);
+//            log.info("GPT 응답: {}", content);
+//
+//        } catch (Exception e) {
+//            log.error("AI 운세 생성 실패", e);
+//            content = "오늘은 새로운 기회가 찾아올 수 있는 날입니다. 주변 사람들과의 소통이 중요하니, 적극적으로 대화해 보세요. 긍정적인 에너지를 잃지 않는 것이 좋습니다.";
+////            throw new AiCallFailedException("AI 운세 생성 중 오류가 발생했습니다.");
+//        }
 
-            DailyFortune fortune = DailyFortune.builder()
-                    .userSeq(userSeq)
-                    .content(content)
-                    .createdAt(LocalDateTime.now().format(FORMATTER))
-                    .build();
+        content = "오늘은 새로운 기회가 찾아올 수 있는 날입니다. 주변 사람들과의 소통이 중요하니, 적극적으로 대화해 보세요. 긍정적인 에너지를 잃지 않는 것이 좋습니다.";
+        DailyFortune fortune = DailyFortune.builder()
+                .userSeq(userSeq)
+                .content(content)
+                .createdAt(LocalDateTime.now().format(FORMATTER))
+                .build();
 
-            dailyFortuneRepository.save(fortune);
-        } catch (Exception e) {
-            log.error("AI 운세 생성 실패", e);
-            throw new AiCallFailedException("AI 운세 생성 중 오류가 발생했습니다.");
-        }
+        dailyFortuneRepository.save(fortune);
     }
 
     @Override

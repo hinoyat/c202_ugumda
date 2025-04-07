@@ -1,29 +1,12 @@
 import api from '@/apis/apiClient';
-import { DiaryData } from '@/domains/diary/Types/diary.types';
-
-// interface DiaryData {
-//   title: string;
-//   content: string;
-//   dreamDate: string;
-//   isPublic: string;
-//   mainEmotion: string;
-//   tags: string[];
-// }
-
-// 가져온 타입
-// export interface DiaryData {
-//   diarySeq?: number; // 생성 시에는 없을 수 있음
-//   title: string;
-//   content: string;
-//   dreamDate: string;
-//   isPublic: string;
-//   mainEmotion: string;
-//   tags?: string[];
-// }
+import {
+  DiaryCreateUpdateRequest,
+  DiaryData,
+} from '@/domains/diary/Types/diary.types';
 
 export const diaryApi = {
   // 일기 생성
-  createDiary: async (diaryData: DiaryData) => {
+  createDiary: async (diaryData: DiaryCreateUpdateRequest) => {
     return await api.post('/diaries', diaryData);
   },
 
@@ -43,7 +26,10 @@ export const diaryApi = {
   },
 
   // 일기 수정
-  updateDiary: async (diarySeq: number, diaryData: DiaryData) => {
+  updateDiary: async (
+    diarySeq: number,
+    diaryData: DiaryCreateUpdateRequest
+  ) => {
     return await api.put(`/diaries/${diarySeq}`, diaryData);
   },
 

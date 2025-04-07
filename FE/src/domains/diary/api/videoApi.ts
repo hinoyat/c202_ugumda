@@ -1,19 +1,14 @@
 import axios from 'axios';
-import { VideoCreateData } from '@/domains/diary/Types/diary.types';
 import { jwtDecode } from 'jwt-decode';
 import api from '@/apis/apiClient';
-
-// export interface VideoCreateData {
-//   diary_pk: number;
-//   content: string;
-// }
+import { VideoCreateRequest } from '@/domains/diary/Types/diary.types';
 
 interface JwtPayload {
   userSeq: number;
 }
 
 export const videoApi = {
-  createVideo: async (videoData: VideoCreateData) => {
+  createVideo: async (videoData: VideoCreateRequest) => {
     // const token = localStorage.getItem('accessToken') || '';
     // const jwtTMP: JwtPayload = jwtDecode(token);
 

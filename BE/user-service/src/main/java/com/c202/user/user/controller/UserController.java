@@ -85,6 +85,11 @@ public class UserController {
         return userService.getUserBirthDate(userSeq);
     }
 
+    @GetMapping("/nickname")
+    public String getUserNickname(@RequestHeader("X-User-Seq") Integer userSeq){
+        return userService.getUserNickname(userSeq);
+    }
+
     @PostMapping("/profiles")
     public ResponseEntity<ResponseDto<List<UserProfileDto>>> getUserProfiles(@RequestBody List<Integer> userSeqList) {
         List<UserProfileDto> profiles = userService.getUserProfiles(userSeqList);

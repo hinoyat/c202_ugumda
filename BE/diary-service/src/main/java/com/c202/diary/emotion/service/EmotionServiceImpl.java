@@ -6,6 +6,7 @@ import com.c202.diary.emotion.model.response.EmotionStatisticsResponseDto;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.exception.types.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {
@@ -91,7 +93,9 @@ public class EmotionServiceImpl implements EmotionService {
         LocalDate startDate = endDate.minusDays(periodDays - 1);
 
         String formattedStartDate = startDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("시작일{}", startDate);
         String formattedEndDate = endDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("종료일{}", endDate);
 
         List<Map<String, Object>> statistics =
                 emotionRepository.getEmotionStatisticsByPeriod(userSeq, formattedStartDate, formattedEndDate);

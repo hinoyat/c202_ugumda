@@ -77,7 +77,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({
           {/* 선택된 태그 영역 */}
           <div className="flex flex-wrap gap-1 mb-2">
             {emotionName && ( // emotionName이 존재할 때만 렌더링
-              <div className="text-white bg-[rgba(80,80,80,0.95)] px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
+              <div className="text-[#06061E] font-semibold bg-white/90 px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
                 <div className="flex items-center justify-center gap-1 text-sm w-15">
                   <p>{emotionName}</p>
                 </div>
@@ -87,7 +87,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({
             {tags.map((tag, index) => (
               <div
                 key={index}
-                className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
+                className="text-white border border-white/80 px-2 py-1 rounded-4xl flex items-center justify-center gap-1">
                 <div className="flex items-center justify-center gap-3 text-sm ">
                   <p>{tag}</p>
                   <button
@@ -158,10 +158,10 @@ const DiaryTags: FC<DiaryTagsProps> = ({
     );
   }
 
-  // 읽기 전용 모드 (기존 디자인 유지)
+  // 읽기 전용 모드
   return (
     <div className="flex flex-wrap gap-3 mt-4">
-      <div className="text-white bg-[#292929]/90 px-2 py-1 rounded-4xl">
+      <div className="text-[#06061E] px-2 py-1 rounded-4xl  bg-white/90 font-semibold">
         <div className="flex items-center justify-center gap-1 text-sm w-15">
           <p>{emotionName}</p>
         </div>
@@ -175,7 +175,7 @@ const DiaryTags: FC<DiaryTagsProps> = ({
         return (
           <div
             key={tagSeq}
-            className="text-white bg-[rgba(111,111,111,0.69)] px-2 py-1 rounded-4xl">
+            className="text-white border border-white/80 px-2 py-1 rounded-4xl">
             <div className="flex items-center justify-center gap-1 text-sm w-15">
               <p>{tagName}</p>
             </div>

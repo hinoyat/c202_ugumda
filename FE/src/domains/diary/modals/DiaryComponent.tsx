@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import DiaryHeader from '../components/create_edit/DiaryHeader';
-import DiaryInput from '../components/create_edit/DiaryInput';
-import DiaryDisclose from '../components/create_edit/DiaryDisclose';
-import DiaryCreateButton from '../components/create_edit/DiaryCreateButton';
+
+import DiaryHeader from '@/domains/diary/components/create_edit/DiaryHeader';
+import DiaryInput from '@/domains/diary/components/create_edit/DiaryInput';
+import DiaryDisclose from '@/domains/diary/components/create_edit/DiaryDisclose';
+import DiaryCreateButton from '@/domains/diary/components/create_edit/DiaryCreateButton';
+
 import StarTag from '@/domains/diary/components/create_edit/StarTag';
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,28 +14,14 @@ import {
   setCurrentDiary,
   updateDiary,
 } from '@/stores/diary/diarySlice';
-import { DiaryData } from '@/domains/diary/Types/diary.types';
-import { Tag } from '@/domains/diary/api/tagApi';
+import {
+  DiaryCreateUpdateRequest,
+  DiaryData,
+} from '@/domains/diary/Types/diary.types';
 import { videoApi } from '@/domains/diary/api/videoApi';
-import ModalBase from '../components/modalBase';
+import ModalBase from '@/domains/diary/components/modalBase';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
-import { dreamApi, DreamSolveResponse } from '@/domains/diary/api/dreamApi';
-
-// 일기 생성 인터페이스
-// interface DiaryData {
-//   diarySeq: number;
-//   title: string;
-//   content: string;
-//   dreamDate: string;
-//   isPublic: string;
-//   mainEmotion: string;
-//   tags?: string[];
-
-// interface DiaryProps {
-//   onClose?: (diaryData?: DiaryData) => void; // 일기 데이터 전달
-//   isEditing?: boolean;
-//   diaryData?: DiaryData;
-// }
+import { dreamApi } from '@/domains/diary/api/dreamApi';
 
 interface DiaryComponentProps {
   isOpen?: boolean;
@@ -42,7 +30,7 @@ interface DiaryComponentProps {
   diaryData?: DiaryData;
   onDiaryCreated?: (responseData: any) => void;
   onDiaryUpdated?: (data: any) => void;
-  isMySpace?: boolean;
+  // isMySpace?: boolean;
   onDeleteDiary?: () => void;
 }
 
@@ -53,7 +41,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   diaryData,
   onDiaryCreated,
   onDiaryUpdated,
-  isMySpace = true,
+  // isMySpace = true,
   onDeleteDiary,
 }) => {
   // 리덕스 관련 설정
@@ -74,14 +62,21 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   // 수정모드에서 데이터 불러오기
   useEffect(() => {
     if (isEditing && diaryData) {
-      console.log('수정 모드 데이터 로드:', {
-        diaryData,
-        메인감정쓰: diaryData.emotionName,
-      });
+      // console.log('수정 모드 데이터 로드:', {
+      //   diaryData,
+      //   메인감정쓰: diaryData.emotionName,
+      // });
 
       setTitle(diaryData.title);
       setContent(diaryData.content);
-      setTags(diaryData?.tags || []);
+
+      // tags 데이터 변환 - 객체 배열인 경우 문자열 배열로 변환
+      const initialTags = diaryData?.tags || [];
+      const stringTags = initialTags.map((tag) =>
+        typeof tag === 'string' ? tag : tag.name
+      );
+      setTags(stringTags);
+
       setIsPublic(diaryData.isPublic === 'Y');
       setEmotion(diaryData.emotionName || diaryData.mainEmotion || '');
 
@@ -97,18 +92,15 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       isEditing && !emotion && diaryData ? diaryData.mainEmotion : emotion;
 
     // 백에 넘길 데이터
-    const diaryToSave = {
+    const diaryToSave: DiaryCreateUpdateRequest = {
       title,
       content,
       dreamDate: new Date().toISOString().slice(0, 10).replace(/-/g, ''),
       isPublic: isPublic ? 'Y' : 'N',
-      mainEmotion: finalEmotion,
-      tags: Array.isArray(tags)
-        ? tags.map((tag) => (typeof tag === 'string' ? tag : (tag as Tag).name))
-        : [],
+      mainEmotion: finalEmotion || '', // 빈 문자열 대신 적절한 기본값 설정 필요할 수 있음
+      tags: tags,
     };
-
-    console.log('저장될 일기 내용', diaryToSave);
+    // console.log('저장될 일기 내용', diaryToSave);
 
     try {
       if (isEditing && diaryData?.diarySeq) {
@@ -117,21 +109,55 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           diaryData.diarySeq,
           diaryToSave
         );
-        console.log('일기 수정에 성공!!!', response);
+        // console.log('일기 수정에 성공!!!', response);
 
         // 리덕스 스토어 업데이트
         dispatch(updateDiary(response.data.data));
 
+        // 내용이 변경된 경우에만 꿈해몽 api 요청
+        if (content !== diaryData.content) {
+          // console.log('내용이 변경되어 꿈해몽 api 호출:', {
+          //   diarySeq: diaryData.diarySeq,
+          //   originalContent: diaryData.content,
+          //   updatedContent: content,
+          // });
+
+          dreamApi
+            .createDreamMeaning(diaryData.diarySeq, content)
+            .then((dreamResponse) => {
+              // console.log('수정된 일기로 꿈해몽 api 요청 성공', dreamResponse);
+            })
+            .catch((dreamError) => {
+              // console.log('수정된 일기로 꿈해몽 요청 중 오류', dreamError);
+            });
+        } else {
+          // console.log('내용이 변경되지 않아 꿈해몽 API 호출 생략');
+        }
+
         if (onDiaryUpdated) {
-          console.log('onDiaryUpdated 호출됨');
+          // console.log('onDiaryUpdated 호출됨');
           onDiaryUpdated(response.data);
         }
       } else {
         // --------------- 생성 모드 ----------------
 
+        // // 요청 직전에 데이터 형식 확인
+        // console.log(
+        //   'API 요청 전 diaryToSave 데이터:',
+        //   JSON.stringify(diaryToSave, null, 2)
+        // );
+
+        // // 태그 형식 특별 확인
+        // console.log('태그 데이터 형식:', Array.isArray(tags), tags);
+        // if (Array.isArray(tags)) {
+        //   tags.forEach((tag, index) => {
+        //     console.log(`태그 ${index}:`, typeof tag, tag);
+        //   });
+        // }
+
         const response = await diaryApi.createDiary(diaryToSave);
 
-        console.log('일기 생성에 성공!!!!', response);
+        console.log('일기 생성 성공✏️✏️', response);
 
         // 리덕스 스토어에 추가
         dispatch(addDiary(response.data.data));
@@ -159,30 +185,30 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
         const escapedContent = escapeSpecialCharsForVideo(content);
 
-        console.log('영상 생성 요청 데이터:', {
-          diary_pk: diarySeq,
-          content: escapedContent,
-        });
+        // console.log('영상 생성 요청 데이터:', {
+        //   diary_pk: diarySeq,
+        //   content: escapedContent,
+        // });
         videoApi
           .createVideo({
             diary_pk: diarySeq,
             content: escapedContent,
           })
           .then((response) => {
-            console.log('영상 생성 API 요청 성공:', response);
+            // console.log('영상 생성 API 요청 성공:', response);
           }) // 지우기
           .catch((videoError) => {
-            console.error('영상 생성 요청 중 오류:', videoError);
+            // console.error('영상 생성 요청 중 오류:', videoError);
           });
 
         // 꿈해몽 생성 api 호출
         dreamApi
           .createDreamMeaning(diarySeq, content)
           .then((dreamResponse) => {
-            console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
+            // console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
           })
           .catch((dreamError) => {
-            console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
+            // console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
           });
 
         // 성공 시 onDiaryCreated 콜백 호출
@@ -194,12 +220,12 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
       onClose();
     } catch (error) {
-      console.error(
-        isEditing
-          ? '일기 수정 중에 발생한 오류 : '
-          : '일기 생성 중에 발생한 오류 : ',
-        error
-      );
+      // console.error(
+      //   isEditing
+      //     ? '일기 수정 중에 발생한 오류 : '
+      //     : '일기 생성 중에 발생한 오류 : ',
+      //   error
+      // );
 
       const err = error as any;
 
@@ -216,7 +242,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
   // -------------------- 동영상 생성 -------------------- //
   const handleCreateVideo = () => {
-    console.log('등록 후 동영상 생성하기 버튼 누름');
+    // console.log('등록 후 동영상 생성하기 버튼 누름');
     // 여기서 AI 쪽으로 데이터 넘겨야함
     // 특수문자에는 앞에 '/' 붙여서 넘겨야함
     // 버튼 눌렀을 때 하루 생성 가능 횟수 차감

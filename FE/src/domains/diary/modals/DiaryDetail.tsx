@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import DetailHeader from '@/domains/diary/components/details/DetailHeader';
 import DetailVideo from '@/domains/diary/components/details/DetailVideo';
 import DetailContent from '@/domains/diary/components/details/DetailContent';
-// import DetailTags from '@/domains/diary/components/details/DetailTags';
 import DetailLike from '@/domains/diary/components/details/DetailLike';
 import ModalBase from '../components/modalBase';
 
@@ -12,11 +11,11 @@ import '@/domains/search/styles/DiarySearch.css';
 import { diaryApi } from '@/domains/diary/api/diaryApi';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
 import UpdateButton from '@/domains/diary/components/details/button/UpdateButton';
-import DeleteButton from '@/domains/diary/components/details/button/DeleteButton';
-import { Tag } from '@/domains/diary/api/tagApi';
 import { dreamApi } from '@/domains/diary/api/dreamApi';
 import DreamMeaningView from '@/domains/diary/components/details/DreamMeaningView';
 import DestinyButton from '@/domains/diary/components/details/button/DestinyButton';
+import { Tag } from '@/domains/diary/Types/diary.types';
+import { videoApi } from '@/domains/diary/api/videoApi';
 
 interface DiaryDetailProps {
   initialDiary: {
@@ -34,7 +33,6 @@ interface DiaryDetailProps {
   };
   onClose: () => void;
   onEdit?: () => void;
-  onDelete?: () => void;
   isMySpace?: boolean;
 }
 
@@ -42,7 +40,6 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   initialDiary, // 일기 초기값
   onClose,
   onEdit,
-  onDelete,
   isMySpace = false,
 }) => {
   // --------------- 상태관리 ----------------- //
@@ -52,6 +49,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     isGood: string;
   } | null>(null);
   const [loadingDreamMeaning, setLoadingDreamMeaning] = useState(false);
+  const [isVideoGenerating, setIsVideoGenerating] = useState(false); // 꿈영상 재생성
   // ------------------------------------------ //
 
   // 날짜 포맷 함수
@@ -94,6 +92,28 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     }
   };
 
+  // ---------- 꿈영상 재생성 ----------- //
+
+  const handleVideoRetry = async () => {
+    setIsVideoGenerating(true);
+    try {
+      const response = await videoApi.createVideo({
+        diary_pk: initialDiary.diarySeq,
+        content: initialDiary.content,
+      });
+
+      // 영상 재생성에 성공 시
+      setCurrentDiary((prevDiary) => ({
+        ...prevDiary,
+        videoUrl: response.data.videoUrl,
+      }));
+    } catch (error) {
+      alert('영상 재생성에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsVideoGenerating(false);
+    }
+  };
+
   // --------- 꿈해몽 ---------- //
 
   useEffect(() => {
@@ -133,22 +153,13 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
       {/* 모달 바깥 부분 */}
       <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[4px] z-[9999]">
         <div
-          className="inset-0 absolute"
+          className="inset-0 absolute "
           onClick={handleClose}></div>
         {/* ------------------------------------------ 일기 조회 UI ------------------------------------------ */}
 
         {/* 모달컨테이너 */}
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transform w-[70%] h-[80%] p-1 z-50">
           <ModalBase>
-            {/* 삭제버튼 */}
-            {/* <div className="absolute top-3 right-3">
-              {isMySpace && (
-                <DeleteButton
-                  onDelete={onDelete}
-                  isMySpace={isMySpace}
-                />
-              )}
-            </div> */}
             {/* -------------- 닫기버튼 -------------- */}
             <button
               onClick={handleClose}
@@ -161,7 +172,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
             {/* ------------------------------------------ 2분할 레이아웃 컨테이너 ------------------------------------------ */}
             <div className="flex w-full h-full">
               {/* 왼쪽영역 */}
-              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-y-scroll custom-scrollbar overflow-hidden">
+              <div className="w-1/2 h-full py-7 px-3 pl-7 overflow-hidden ">
                 <div className="pr-3 flex flex-col  w-full h-full">
                   <div className="mt-2 ml-2 mb-12">
                     {/* 일기제목, 작성날짜, 공개여부 */}
@@ -173,7 +184,13 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                   </div>
                   <div className="w-[90%] mb-14 mx-auto flex justify-center items-center h-64">
                     {/* 영상 */}
-                    <DetailVideo dream_video={currentDiary.videoUrl || null} />
+                    <DetailVideo
+                      dream_video={currentDiary.videoUrl || null}
+                      onVideoRetry={
+                        !currentDiary.videoUrl ? handleVideoRetry : undefined
+                      }
+                      isVideoGenerating={isVideoGenerating}
+                    />
                   </div>
                   {/* 태그 */}
                   <div>
@@ -193,16 +210,11 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                       onLikeToggle={handleLikeChange}
                     />
                   </div>
-                  {/* <div className="">
-                    <DetailButtons
-                      onClose={handleClose}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                      isMySpace={isMySpace}
-                    />
-                  </div> */}
                 </div>
               </div>
+
+              {/* 세로점선 */}
+              <div className=" h-[90%] my-auto border-r border-white/30 border-dashed mr-7"></div>
 
               {/* 오른쪽 영역 - 4개의 개별 div로 구성 */}
               <div className="w-1/2 h-full py-7 px-7 overflow-y-auto custom-scrollbar">
@@ -213,13 +225,16 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
                 {/* 2. 수정하기 버튼 */}
                 {isMySpace && (
-                  <div className="mb-6 text-right">
+                  <div className="mb-6 flex justify-end">
                     <UpdateButton
                       onEdit={onEdit}
                       isMySpace={isMySpace}
                     />
                   </div>
                 )}
+
+                {/* 가로선 */}
+                {/* <div className="border-b border-white/30 border-dashed mb-6  w-[100%] "></div> */}
 
                 {/* 3. 꿈해몽 섹션 */}
                 <div className="p-4 rounded mb-6 h-40 overflow-y-auto">
@@ -237,7 +252,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 </div>
 
                 {/* 4. 운세보러가기 버튼 */}
-                <div className="text-right">
+                <div className="flex justify-end">
                   {dreamMeaning && (
                     <DestinyButton isGood={dreamMeaning.isGood} />
                   )}

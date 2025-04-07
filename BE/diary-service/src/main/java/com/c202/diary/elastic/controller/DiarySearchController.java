@@ -28,7 +28,13 @@ public class DiarySearchController {
             @ModelAttribute DiarySearchRequestDto requestDto) {
         log.info("Diary search request: {}", requestDto);
         log.info("Diary search request: {}", requestDto.toString());
-        Page<DiarySearchListResponseDto> results = diarySearchService.searchDiaries(requestDto, userSeq);
+
+        Page<DiarySearchListResponseDto> results;
+        if (!requestDto.isUseCurrentUser() && requestDto.getTargetUserSeq() != null) {
+            results = diarySearchService.searchDiaries(requestDto, requestDto.getTargetUserSeq());
+        } else {
+            results = diarySearchService.searchDiaries(requestDto, userSeq);
+        }
         PageResponseDto<DiarySearchListResponseDto> pageResponse = PageResponseDto.from(results);
         return ResponseEntity.ok(ResponseDto.success(200, "일기 검색 완료", pageResponse));
     }

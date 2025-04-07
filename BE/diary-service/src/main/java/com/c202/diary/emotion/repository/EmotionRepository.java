@@ -19,7 +19,7 @@ public interface EmotionRepository extends JpaRepository<Emotion, Integer> {
             "FROM emotion e LEFT JOIN diary d ON d.emotionSeq = e.emotionSeq " +
             "AND d.userSeq = :userSeq " +
             "AND d.isDeleted = 'N' " +
-            "AND SUBSTRING(d.createdAt, 1, 8) BETWEEN :startDate AND :endDate " +
+            "AND d.dreamDate BETWEEN :startDate AND :endDate " +
             "GROUP BY e.name", nativeQuery = true)
     List<Map<String, Object>> getEmotionStatisticsByPeriod(
             @Param("userSeq") Integer userSeq,
