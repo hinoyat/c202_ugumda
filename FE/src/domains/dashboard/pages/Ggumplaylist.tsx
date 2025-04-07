@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import MusicSection from '../components/MusicSection';
-import GraphSection from '../components/GraphSection';
+import GraphSection from '../components/GgumGraphSection';
 import UserInfoData from '../components/UserInfoData';
 import dreamSolve_bg from '@/assets/images/dreamSolve_bg.svg';
 import { Canvas } from '@react-three/fiber';
@@ -47,12 +47,12 @@ const DreamSolve: React.FC = () => {
           {/* GraphSection과 MusicSection 가로 배치 */}
           <div className="w-full flex relative">
             {/* 왼쪽에 GraphSection */}
-            <div className="w-1/2 pl-5">
+            <div className="w-3/5 pl-5">
               <GraphSection />
             </div>
             
             {/* 오른쪽에 MusicSection */}
-            <div className="w-1/2 pl-3 relative h-[20px]">
+            <div className="w-2/5 pl-3 relative h-[20px]">
               <MusicSection />
             </div>
           </div>

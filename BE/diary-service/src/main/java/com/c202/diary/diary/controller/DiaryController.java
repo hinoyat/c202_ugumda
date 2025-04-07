@@ -110,4 +110,12 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, resultMessage, null));
     }
 
+    @PostMapping("/relayout")
+    public ResponseEntity<ResponseDto<String>> relayoutDiaries(
+            @RequestHeader("X-User-Seq") @NotNull Integer userSeq
+    ) {
+        diaryService.relayoutAllDiaries(userSeq);
+        return ResponseEntity.ok(ResponseDto.success(200, "전체 일기의 좌표가 재배치되었습니다.", "재배치 완료"));
+    }
+
 }

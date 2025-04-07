@@ -6,7 +6,7 @@ import OnboardingModal from '@/domains/mainpage/components/onboarding/Onboarding
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useAppDispatch } from '@/hooks/hooks';
+import { useAppDispatch, useAppSelector  } from '@/hooks/hooks';
 import { logoutUser } from '@/stores/auth/authThunks';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/stores/auth/authSelectors';
@@ -16,9 +16,8 @@ import { visitUserpage } from '../stores/userThunks';
 import { AiFillSound } from 'react-icons/ai';
 import { BiSolidVolumeMute } from 'react-icons/bi';
 import { Tooltip } from 'react-tooltip';
-import { selectMusicPlaying } from '@/stores/music/musicSelectors';
+import { selectMusicPlaying, selectCurrentTrack } from '@/stores/music/musicSelectors';
 import { initializeAudio, togglePlayback } from '@/stores/music/musicThunks';
-import { DEFAULT_BACKGROUND_MUSIC } from '@/common/bgm/backgroundMusic';
 
 import onboardingBlackhole from '@/assets/images/boardingBlackhole.gif';
 import onboardingUfo from '@/assets/images/boardingUfo.gif';
@@ -28,7 +27,8 @@ const MainPage = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const [showGuestbook, setShowGuestbook] = useState(false);
-  const isMusicPlaying = useSelector(selectMusicPlaying);
+  const currentTrack = useAppSelector(selectCurrentTrack);
+  const isMusicPlaying = useAppSelector(selectMusicPlaying);
 
   const params = useParams();
   const dispatch = useAppDispatch();
@@ -82,8 +82,11 @@ const MainPage = () => {
   }, [params.username, nav]);
 
   // 배경음악
+
   useEffect(() => {
-    dispatch(initializeAudio(DEFAULT_BACKGROUND_MUSIC)).then((result) => {
+    // initializeAudio()를 인자 없이 호출하면 내부에서 
+    // 사용자 정의 배경음악 또는 기본 배경음악을 자동으로 선택함
+    dispatch(initializeAudio()).then((result) => {
       if (!result) {
         console.error('오디오 초기화 실패....');
       }

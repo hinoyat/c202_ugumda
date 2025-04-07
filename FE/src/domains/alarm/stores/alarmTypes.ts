@@ -6,6 +6,7 @@ export interface Alarm {
   readYn: boolean;
   type: string;
   userSeq: number;
+  diarySeq?: number;
 }
 
 export interface AlarmState {
