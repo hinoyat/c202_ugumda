@@ -43,3 +43,28 @@
     0 0 25px #3be8ff;
   letter-spacing: 0.2em;
 }
+
+@keyframes flashEffect1 {
+  0% {
+    background-color: white;
+    opacity: 1;
+  }
+  50% {
+    background-color: black;
+    opacity: 1;
+  }
+  100% {
+    background-color: black;
+    opacity: 0;
+  }
+}
+
+.flashEffect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  animation: flashEffect1 1s forwards;
+}
