@@ -24,10 +24,10 @@ interface SSEHookReturn {
 const useSSE = (url: string): SSEHookReturn => {
   // EventSource 참조
   const eventSourceRef = useRef<EventSourcePolyfill | null>(null);
-  
+
   // 현재 연결 상태
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  
+
   // 인증 정보 가져오기
   const { isAuthenticated, accessToken } = useSelector(
     (state: RootState) => state.auth
@@ -35,13 +35,13 @@ const useSSE = (url: string): SSEHookReturn => {
 
   // 재연결 타이머 참조
   const reconnectTimeoutRef = useRef<number | null>(null);
-  
+
   // 핑 인터벌 참조
   const pingIntervalRef = useRef<number | null>(null);
 
   // 연결 시도 중인지 여부
   const isConnectingRef = useRef<boolean>(false);
-  
+
   // 마지막 하트비트 시간
   const lastHeartbeatRef = useRef<number>(Date.now());
 
@@ -68,7 +68,7 @@ const useSSE = (url: string): SSEHookReturn => {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
-    
+
     stopPingTest();
     stopReconnectTimer();
     isConnectingRef.current = false;
@@ -91,7 +91,7 @@ const useSSE = (url: string): SSEHookReturn => {
           connectSSE();
           return;
         }
-        
+
         // 핑 요청 전송
         const response = await api.get('/notifications/ping');
         console.log('핑 테스트 성공:', response.status);
@@ -129,7 +129,7 @@ const useSSE = (url: string): SSEHookReturn => {
       // 캐시 방지를 위한 타임스탬프 추가
       const timestamp = Date.now();
       const connUrl = `${url}?t=${timestamp}`;
-      
+
       // EventSource 생성
       const eventSource = new EventSourcePolyfill(connUrl, {
         headers: {
@@ -139,7 +139,7 @@ const useSSE = (url: string): SSEHookReturn => {
         withCredentials: true,
         heartbeatTimeout: 60000, // 60초
       });
-      
+
       eventSourceRef.current = eventSource;
 
       // 연결 성공 이벤트
@@ -148,7 +148,7 @@ const useSSE = (url: string): SSEHookReturn => {
         isConnectingRef.current = false;
         setIsConnected(true);
         lastHeartbeatRef.current = Date.now();
-        
+
         // 연결 성공 시 핑 테스트 시작
         startPingTest();
       };
@@ -156,10 +156,10 @@ const useSSE = (url: string): SSEHookReturn => {
       // 연결 오류 이벤트
       eventSource.onerror = (error) => {
         console.error('SSE 연결 오류:', error);
-        
+
         // 연결 정리
         cleanup();
-        
+
         // 3초 후 재연결 시도
         reconnectTimeoutRef.current = window.setTimeout(() => {
           console.log('SSE 재연결 시도');
@@ -171,19 +171,57 @@ const useSSE = (url: string): SSEHookReturn => {
       eventSource.addEventListener('alarm', ((event: SSEEvent) => {
         console.log('알림 이벤트 수신:', event.data);
         lastHeartbeatRef.current = Date.now();
-        
+
         try {
           const data = JSON.parse(event.data);
           // 데이터가 배열인 경우 각 항목에 대해 처리
           if (Array.isArray(data)) {
             data.forEach((item) => {
-              if (item.content) {
+              if (item.type === 'DIARY_CREATED') {
+                toast.success(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'VIDEO_CREATED') {
+                toast.success(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
+                  // icon: "🚀"
+                });
+              } else if (item.type === 'VIDEO_CREATED_FAILED') {
+                toast.error(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'LIKE_CREATED') {
                 toast.info(item.content, {
                   position: 'bottom-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
                   draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'GUESTBOOK_CREATED') {
+                toast.info(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
                 });
               }
             });
@@ -208,26 +246,25 @@ const useSSE = (url: string): SSEHookReturn => {
         console.log('하트비트 수신');
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-      
+
       // 연결 이벤트 리스너
       eventSource.addEventListener('connect', ((event: SSEEvent) => {
         console.log('연결 이벤트 수신:', event.data);
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-      
+
       // 기타 이벤트 리스너들
       eventSource.addEventListener('unread', (() => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-      
+
       eventSource.addEventListener('recent-alarms', (() => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-
     } catch (error) {
       console.error('SSE 연결 생성 중 오류:', error);
       isConnectingRef.current = false;
-      
+
       // 오류 발생 시 3초 후 재시도
       reconnectTimeoutRef.current = window.setTimeout(() => {
         connectSSE();
@@ -252,7 +289,7 @@ const useSSE = (url: string): SSEHookReturn => {
     } else {
       cleanup();
     }
-    
+
     // 컴포넌트 언마운트 시 정리
     return () => {
       cleanup();
