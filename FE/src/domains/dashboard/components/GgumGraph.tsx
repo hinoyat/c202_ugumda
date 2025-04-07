@@ -2,13 +2,12 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/stores/auth/authSelectors";
 import { useEffect, useRef } from "react";
 import Highcharts from 'highcharts';
-import { EmotionCountItem } from "../apis/apiDashboard";
 
 
 interface GgumGrapProps {
     periodName?: number;
     height?: number | string;
-    data: EmotionCountItem[]
+    data: { emotion: string; count: number }[]
 }
 
 const GgumGraph = ({periodName=30, height = "50%", data }: GgumGrapProps)=>{

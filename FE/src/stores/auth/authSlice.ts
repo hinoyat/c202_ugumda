@@ -53,6 +53,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         localStorage.removeItem('accessToken'); // ✅ 추가
         localStorage.removeItem('User');
+        localStorage.removeItem('musicSettings')
       });
   },
 });

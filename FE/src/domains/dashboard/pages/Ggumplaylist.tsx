@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import MusicSection from '../components/MusicSection';
-import GraphSection from '../components/GraphSection';
+import GraphSection from '../components/GgumGraphSection';
 import UserInfoData from '../components/UserInfoData';
 import dreamSolve_bg from '@/assets/images/dreamSolve_bg.svg';
 import { Canvas } from '@react-three/fiber';
