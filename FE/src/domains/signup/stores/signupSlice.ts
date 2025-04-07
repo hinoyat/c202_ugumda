@@ -5,19 +5,19 @@ import { checkUsername, checkNickname, signupUser } from './signupThunks';
 const initialState: SignupState = {
   username: '',
   usernameStatus: 'invalid',
-  usernameMessage: '아이디를 입력하세요.',
+  usernameMessage: '',
   nickname: '',
   nicknameStatus: 'invalid',
-  nicknameMessage: '닉네임을 입력하세요.',
+  nicknameMessage: '',
   password: '',
   confirmPassword: '',
-  confirmPasswordMessage: '비밀번호를 확인해주세요.',
+  confirmPasswordMessage: '',
   confirmPasswordStatus: 'invalid',
-  passwordMessage: '비밀번호를 입력하세요.',
+  passwordMessage: '',
   passwordStatus: 'invalid',
   iconSeq: 0,
   birthDate: '',
-  birthDateMessage: '생년월일을 입력하세요',
+  birthDateMessage: '',
   birthDateStatus: 'invalid',
 };
 
@@ -59,7 +59,7 @@ const signupSlice = createSlice({
       state.username = action.payload;
       // 유효성 검사
       if (!action.payload) {
-        state.usernameMessage = '아이디를 입력하세요.';
+        state.usernameMessage = '';
         state.usernameStatus = 'invalid';
       } else if (!/^[a-zA-Z0-9]{5,12}$/.test(action.payload)) {
         state.usernameMessage = '아이디는 5자에서 12자 사이로 입력해주세요.';
@@ -72,7 +72,7 @@ const signupSlice = createSlice({
     setNickname: (state, action: PayloadAction<string>) => {
       state.nickname = action.payload;
       if (!action.payload) {
-        state.nicknameMessage = '닉네임을 입력하세요.';
+        state.nicknameMessage = '';
         state.nicknameStatus = 'invalid';
       } else if (2 > action.payload.length || action.payload.length > 10) {
         state.nicknameMessage = '닉네임은 2자에서 10자 사이로 입력해주세요.';
@@ -85,7 +85,7 @@ const signupSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
       if (!action.payload) {
-        state.passwordMessage = '비밀번호를 입력하세요.';
+        state.passwordMessage = '';
         state.passwordStatus = 'invalid';
       } else if (
         !/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(
@@ -103,7 +103,7 @@ const signupSlice = createSlice({
     setConfirmPassword: (state, action: PayloadAction<string>) => {
       state.confirmPassword = action.payload;
       if (!action.payload) {
-        state.confirmPasswordMessage = '비밀번호를 확인해주세요.';
+        state.confirmPasswordMessage = '';
         state.confirmPasswordStatus = 'invalid';
       } else if (action.payload && action.payload === state.password) {
         state.confirmPasswordMessage = '비밀번호가 일치합니다.';
@@ -120,7 +120,7 @@ const signupSlice = createSlice({
       state.birthDate = action.payload;
       // 유효성 검사
       if (!action.payload) {
-        state.birthDateMessage = '생년월일을 입력하세요.';
+        state.birthDateMessage = '';
         state.birthDateStatus = 'invalid';
       } else if (!isValidBirthdate(action.payload)) {
         state.birthDateMessage = '유효하지 않는 생년월일 입니다.';
@@ -167,7 +167,25 @@ const signupSlice = createSlice({
       .addCase(checkNickname.rejected, (state) => {
         state.nicknameStatus = 'unavailable';
         state.nicknameMessage = '다시 시도해 주세요.';
-      });
+      })
+      .addCase(signupUser.fulfilled, (state) => {
+        state.username= '';
+        state.usernameStatus= 'invalid';
+        state.usernameMessage= '';
+        state.nickname= '';
+        state.nicknameStatus= 'invalid';
+        state.nicknameMessage= '';
+        state.password= '';
+        state.confirmPassword= '';
+        state.confirmPasswordMessage= '';
+        state.confirmPasswordStatus= 'invalid';
+        state.passwordMessage= '';
+        state.passwordStatus= 'invalid';
+        state.iconSeq= 0;
+        state.birthDate= '';
+        state.birthDateMessage= '';
+        state.birthDateStatus= 'invalid';
+      })
   },
 });
 
