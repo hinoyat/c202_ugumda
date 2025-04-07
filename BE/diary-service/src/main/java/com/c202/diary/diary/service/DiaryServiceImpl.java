@@ -343,9 +343,35 @@ public class DiaryServiceImpl implements DiaryService {
             );
             throw new AiCallFailedException("영상 생성에 실패했습니다");
         }
-
-
     }
+
+    @Transactional
+    @Override
+    public void relayoutAllDiaries(Integer userSeq) {
+        // 해당 사용자의 삭제되지 않은 모든 일기 조회
+        List<Diary> diaries = diaryRepository.findByUserSeqAndIsDeleted(userSeq, "N");
+
+        for (Diary diary : diaries) {
+            // 감정 정보 조회
+            String mainEmotion = "";
+            if (diary.getEmotionSeq() != null) {
+                mainEmotion = emotionRepository.findById(diary.getEmotionSeq())
+                        .map(emotion -> emotion.getName())
+                        .orElseThrow(() -> new NotFoundException("감정을 찾을 수 없습니다."));
+            } else {
+                throw new NotFoundException("일기의 감정 정보가 없습니다.");
+            }
+            // 태그 목록은 DiaryTagRepository를 통해 가져오기 (기존 getTagsForDiary와 유사한 방식)
+            List<String> tags = diaryTagRepository.findByDiary(diary).stream()
+                    .map(diaryTag -> diaryTag.getTag().getName())
+                    .collect(Collectors.toList());
+            // 자기 자신의 일기는 제외하도록 diarySeq를 전달
+            CoordinateDto newCoordinate = coordinateService.generateCoordinates(mainEmotion, tags, diary.getDiarySeq());
+            diary.setCoordinates(newCoordinate.getX(), newCoordinate.getY(), newCoordinate.getZ(), newCoordinate.getEmotionSeq());
+            diaryRepository.save(diary);
+        }
+    }
+
 
 
     // 일기 유효성 검증
