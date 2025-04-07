@@ -24,10 +24,10 @@ interface SSEHookReturn {
 const useSSE = (url: string): SSEHookReturn => {
   // EventSource 참조
   const eventSourceRef = useRef<EventSourcePolyfill | null>(null);
-  
+
   // 현재 연결 상태
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  
+
   // 인증 정보 가져오기
   const { isAuthenticated, accessToken } = useSelector(
     (state: RootState) => state.auth
@@ -35,13 +35,13 @@ const useSSE = (url: string): SSEHookReturn => {
 
   // 재연결 타이머 참조
   const reconnectTimeoutRef = useRef<number | null>(null);
-  
+
   // 핑 인터벌 참조
   const pingIntervalRef = useRef<number | null>(null);
 
   // 연결 시도 중인지 여부
   const isConnectingRef = useRef<boolean>(false);
-  
+
   // 마지막 하트비트 시간
   const lastHeartbeatRef = useRef<number>(Date.now());
 
@@ -64,11 +64,10 @@ const useSSE = (url: string): SSEHookReturn => {
   // 모든 리소스 정리 함수
   const cleanup = useCallback(() => {
     if (eventSourceRef.current) {
-      console.log('EventSource 연결 종료');
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
-    
+
     stopPingTest();
     stopReconnectTimer();
     isConnectingRef.current = false;
@@ -91,10 +90,9 @@ const useSSE = (url: string): SSEHookReturn => {
           connectSSE();
           return;
         }
-        
+
         // 핑 요청 전송
-        const response = await api.get('/notifications/ping');
-        console.log('핑 테스트 성공:', response.status);
+        await api.get('/notifications/ping');
       } catch (error: any) {
         console.error('핑 테스트 실패:', error);
 
@@ -112,24 +110,21 @@ const useSSE = (url: string): SSEHookReturn => {
   const connectSSE = useCallback(() => {
     // 로그인 상태 확인
     if (!isAuthenticated || !accessToken) {
-      console.log('로그인되지 않음, SSE 연결 불가');
       return;
     }
 
     // 이미 연결 중이거나 시도 중이면 중단
     if (eventSourceRef.current !== null || isConnectingRef.current) {
-      console.log('이미 연결됨 또는 연결 시도 중');
       return;
     }
 
     isConnectingRef.current = true;
-    console.log('SSE 연결 시도');
 
     try {
       // 캐시 방지를 위한 타임스탬프 추가
       const timestamp = Date.now();
       const connUrl = `${url}?t=${timestamp}`;
-      
+
       // EventSource 생성
       const eventSource = new EventSourcePolyfill(connUrl, {
         headers: {
@@ -139,16 +134,15 @@ const useSSE = (url: string): SSEHookReturn => {
         withCredentials: true,
         heartbeatTimeout: 60000, // 60초
       });
-      
+
       eventSourceRef.current = eventSource;
 
       // 연결 성공 이벤트
       eventSource.onopen = () => {
-        console.log('SSE 연결 성공');
         isConnectingRef.current = false;
         setIsConnected(true);
         lastHeartbeatRef.current = Date.now();
-        
+
         // 연결 성공 시 핑 테스트 시작
         startPingTest();
       };
@@ -156,10 +150,10 @@ const useSSE = (url: string): SSEHookReturn => {
       // 연결 오류 이벤트
       eventSource.onerror = (error) => {
         console.error('SSE 연결 오류:', error);
-        
+
         // 연결 정리
         cleanup();
-        
+
         // 3초 후 재연결 시도
         reconnectTimeoutRef.current = window.setTimeout(() => {
           console.log('SSE 재연결 시도');
@@ -168,35 +162,112 @@ const useSSE = (url: string): SSEHookReturn => {
       };
 
       // 알림 이벤트 리스너
+      // alarm으로 바꿀 것
       eventSource.addEventListener('alarm', ((event: SSEEvent) => {
         console.log('알림 이벤트 수신:', event.data);
         lastHeartbeatRef.current = Date.now();
-        
+
         try {
           const data = JSON.parse(event.data);
-          // 데이터가 배열인 경우 각 항목에 대해 처리
+          // 데이터가 배열인 경우, 즉 recent-alarms인 경우 확인용
           if (Array.isArray(data)) {
             data.forEach((item) => {
-              if (item.content) {
+              if (item.type === 'DIARY_CREATED') {
+                toast.success(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'VIDEO_CREATED') {
+                toast.success(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'VIDEO_CREATED_FAILED') {
+                toast.error(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'LIKE_CREATED') {
                 toast.info(item.content, {
                   position: 'bottom-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
                   draggable: true,
+                  theme: 'dark',
+                });
+              } else if (item.type === 'GUESTBOOK_CREATED') {
+                toast.info(item.content, {
+                  position: 'bottom-right',
+                  autoClose: 5000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: 'dark',
                 });
               }
             });
           }
-          // 단일 객체인 경우
+          // 실시간 알림
           else if (data && data.content) {
-            toast.info(data.content, {
-              position: 'bottom-right',
-              autoClose: 5000,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            });
+            if (data.type === 'DIARY_CREATED') {
+              toast.success(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'VIDEO_CREATED') {
+              toast.success(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'VIDEO_CREATED_FAILED') {
+              toast.error(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'LIKE_CREATED') {
+              toast.info(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            } else if (data.type === 'GUESTBOOK_CREATED') {
+              toast.info(data.content, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+              });
+            }
           }
         } catch (error) {
           console.error('알림 데이터 파싱 오류:', error);
@@ -205,29 +276,26 @@ const useSSE = (url: string): SSEHookReturn => {
 
       // 하트비트 이벤트 리스너
       eventSource.addEventListener('heartbeat', (() => {
-        console.log('하트비트 수신');
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-      
+
       // 연결 이벤트 리스너
-      eventSource.addEventListener('connect', ((event: SSEEvent) => {
-        console.log('연결 이벤트 수신:', event.data);
+      eventSource.addEventListener('connect', (() => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-      
+
       // 기타 이벤트 리스너들
       eventSource.addEventListener('unread', (() => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-      
+
       eventSource.addEventListener('recent-alarms', (() => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
-
     } catch (error) {
       console.error('SSE 연결 생성 중 오류:', error);
       isConnectingRef.current = false;
-      
+
       // 오류 발생 시 3초 후 재시도
       reconnectTimeoutRef.current = window.setTimeout(() => {
         connectSSE();
@@ -237,7 +305,6 @@ const useSSE = (url: string): SSEHookReturn => {
 
   // 수동 재연결 함수
   const reconnect = useCallback(() => {
-    console.log('SSE 수동 재연결 요청');
     cleanup();
     // 약간 지연 후 재연결
     reconnectTimeoutRef.current = window.setTimeout(() => {
@@ -252,7 +319,7 @@ const useSSE = (url: string): SSEHookReturn => {
     } else {
       cleanup();
     }
-    
+
     // 컴포넌트 언마운트 시 정리
     return () => {
       cleanup();
