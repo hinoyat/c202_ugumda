@@ -14,6 +14,7 @@ const DetailVideo: React.FC<DiaryDetailProps> = ({
   // const videoSrc = dream_video || miroVideo;
 
   return (
+    // 삭제 금지!!!!!!!!!!!! 임시 비디오 연결 코드
     // <div className="w-full h-auto flex flex-col items-center">
     //   <video
     //     src={videoSrc}
@@ -30,6 +31,7 @@ const DetailVideo: React.FC<DiaryDetailProps> = ({
     //   )}
     // </div>
 
+    // 임시 비디오가 아니라 생성 안되면 재생성 버튼 띄우는거
     <div className="w-full h-auto flex flex-col items-center">
       {dream_video ? (
         <video

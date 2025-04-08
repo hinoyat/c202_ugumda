@@ -10,6 +10,7 @@ import com.c202.exception.types.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DiaryLikeServiceImpl implements DiaryLikeService {
 
+    private final WebClient.Builder webClientBuilder;
     private final DiaryLikeRepository diaryLikeRepository;
     private final DiaryRepository diaryRepository;
     private final AlarmService alarmService;
@@ -39,6 +41,16 @@ public class DiaryLikeServiceImpl implements DiaryLikeService {
         Optional<DiaryLike> existingLike =
                 diaryLikeRepository.findByDiarySeqAndUserSeq(diarySeq, userSeq);
 
+        String nickname = webClientBuilder
+                .baseUrl("http://user-service")
+                .build()
+                .get()
+                .uri("/api/users/nickname")
+                .header("X-User-Seq", String.valueOf(userSeq))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
         if (existingLike.isPresent()) {
             diaryLikeRepository.delete(existingLike.get());
             return "좋아요 취소 완료";
@@ -50,11 +62,15 @@ public class DiaryLikeServiceImpl implements DiaryLikeService {
                     .createdAt(now)
                     .build();
             diaryLikeRepository.save(diaryLike);
-            alarmService.sendDiaryLikeAlarm(
-                    diary.getUserSeq(),
-                    diary.getTitle(),
-                    diary.getDiarySeq()
-            );
+
+            if (diary.getUserSeq() != userSeq) {
+                alarmService.sendDiaryLikeAlarm(
+                        diary.getUserSeq(),
+                        diary.getTitle(),
+                        diary.getDiarySeq(),
+                        nickname
+                );
+            }
             return "좋아요 추가 완료";
         }
     }

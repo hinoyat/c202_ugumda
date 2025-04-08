@@ -1,5 +1,6 @@
 import GuestBookList from '@/domains/guestbook/components/GuestBookList';
 import { IoClose } from 'react-icons/io5';
+import { LuPencilLine } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getMyGuestbookEntries } from '@/domains/guestbook/apis/apiUserGuestbook';
@@ -15,6 +16,7 @@ import { setIntro } from '@/stores/auth/authSlice';
 import { useAppDispatch } from '@/hooks/hooks';
 import ModalBase from '@/domains/diary/components/modalBase';
 import { updateIntroduction } from '@/domains/mainpage/stores/userSlice';
+import { FaRegCheckCircle } from 'react-icons/fa';
 
 interface MainPageProps {
   onClose: () => void;
@@ -131,7 +133,7 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
 
   // 소개글 수정 핸들러
   const handleEditIntro = () => {
-    setIntroduction('');
+    // setIntroduction('');
     setIsEditingIntro(true);
   };
 
@@ -186,7 +188,7 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
             onClick={onClose}>
             <IoClose className="text-gray-200 text-3xl hover:text-gray-400" />
           </div>
-          <div className="flex flex-col p-10 gap-10 w-full">
+          <div className="flex flex-col p-10 gap-8 w-full">
             {/*헤더 부분 */}
             <div className="flex items-center justify-between ml-3">
               <div className="flex flex-col gap-1">
@@ -204,11 +206,12 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
                           onChange={handleChangeIntro}
                           className="flex-grow p-1 border-b border-gray-300 text-gray-300 outline-none text-[15px]"
                         />
+                        {/* 저장버튼 */}
                         <button
-                          className="bg-neutral-700 px-3 py-1 text-white rounded text-[13px] whitespace-nowrap cursor-pointer hover:bg-neutral-400"
+                          className="text-white rounded cursor-pointer hover:text-gray-400"
                           onClick={handleSaveIntro}
                           disabled={isUpdatingIntro}>
-                          저장
+                          <FaRegCheckCircle size={20} />
                         </button>
                       </div>
                     ) : (
@@ -216,10 +219,11 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
                         <p className="flex-grow text-white font-light text-[15px]">
                           {introduction}
                         </p>
+                        {/* 수정버튼 */}
                         <button
-                          className="bg-neutral-700 px-3 py-1 text-white rounded text-[13px] whitespace-nowrap cursor-pointer hover:bg-neutral-400"
+                          className="text-white rounded cursor-pointer hover:text-gray-400 mt-0.5"
                           onClick={handleEditIntro}>
-                          수정
+                          <LuPencilLine size={18} />
                         </button>
                       </div>
                     )
@@ -241,27 +245,31 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
             </div>
 
             {/*방명록 남기는 부분 */}
-            <div className="flex gap-7 justify-center text-[15px]">
-              <input
-                type="text"
-                placeholder="내용을 입력해 주세요."
-                className="w-[90%] p-1 border-b border-gray-200 text-gray-200 outline-none"
-                value={newEntry}
-                onChange={handleInputChange}
-                disabled={isSubmitting}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSubmit();
-                  }
-                }}
-              />
-              <button
-                className="bg-white/90 px-2 py-1 text-[#06061E] font-semibold rounded text-[16px] w-20 cursor-pointer hover:bg-[#cdcccc]"
-                onClick={handleSubmit}
-                disabled={isSubmitting}>
-                남기기
-              </button>
-            </div>
+            {PageUserNumber !== LoginUserNumber ? (
+              <div className="flex gap-5 justify-center text-[15px]">
+                <input
+                  type="text"
+                  placeholder="내용을 입력해 주세요."
+                  className="w-[90%] p-1 border-b border-gray-200 text-gray-200 outline-none"
+                  value={newEntry}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSubmit();
+                    }
+                  }}
+                />
+                <button
+                  className="bg-white/90 px-2 py-1 text-[#06061E] font-semibold rounded text-[16px] w-20 cursor-pointer hover:bg-[#cdcccc]"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}>
+                  남기기
+                </button>
+              </div>
+            ) : (
+              <div className="w-full text-center text-gray-300 text-[15px] py-1"></div>
+            )}
 
             <GuestBookList
               data={
