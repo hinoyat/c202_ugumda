@@ -90,15 +90,18 @@ const UserInfoData = ()=>{
     
 
     return(
-    <div className="flex items-center mt-7.5">
+    <div className="flex items-center mt-2 pt-3">
     <img
       src={getIconById((user as any).iconSeq)}
       alt="프로필 사진"
-      className="w-13 h-14"
-    />
-        <h1 className="text-white/85 text-[23px] ml-3">{user?.nickname}님</h1>
-        <div className="p-3 bg-gray-800 rounded-lg text-[23px] text-white/85">{emotionMessage}</div>
-  </div>
+      className="w-12 h-12"
+    />  
+      {/* <div className="bg-cyan-800/50 rounded-xl flex items-center"> */}
+        <h1 className="text-white/85 text-[20px] ml-3">{user?.nickname}님</h1>
+        <h1 className="p-3 text-[20px] text-white/90">{emotionMessage}</h1>
+      {/* </div> */}
+      {/* 색 : text-blue-300 text-lime-300 text-amber-300*/}
+    </div>
 );
 }
 export default UserInfoData
