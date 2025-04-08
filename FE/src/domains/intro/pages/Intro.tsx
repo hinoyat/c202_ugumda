@@ -38,11 +38,11 @@ function Intro() {
         </Canvas>
       </div>
       <div className="absolute transform -translate-y-1/2 top-1/2 -translate-x-1/2 left-1/2 flex flex-col items-center gap-10">
-        <div className="flex flex-col text-white items-center gap-5">
+        <div className="flex flex-col text-white items-center gap-6">
           <h1 className="text-white text-4xl tracking-widest dung-font">
             우리들의 꿈 다이어리
           </h1>
-          <p className="text-gray-500 text-[20px] text-center dung-font">
+          <p className="text-gray-400 text-[18px] text-center dung-font">
             우리는 매일 밤 꿈을 꿉니다.
             <br />
             그 꿈을 기록하면, 우주에 하나의 별이 됩니다.
@@ -53,7 +53,7 @@ function Intro() {
           </p>
         </div>
         <button
-          className="shadow__btn cursor-pointer dung-font"
+          className="shadow__btn cursor-pointer dung-font opacity-95"
           onClick={handleGoStart}>
           시작하기
         </button>

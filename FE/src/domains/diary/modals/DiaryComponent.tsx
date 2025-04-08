@@ -25,7 +25,7 @@ import { dreamApi } from '@/domains/diary/api/dreamApi';
 
 interface DiaryComponentProps {
   isOpen?: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   isEditing?: boolean;
   diaryData?: DiaryData;
   onDiaryCreated?: (responseData: any) => void;
@@ -62,11 +62,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   // 수정모드에서 데이터 불러오기
   useEffect(() => {
     if (isEditing && diaryData) {
-      // console.log('수정 모드 데이터 로드:', {
-      //   diaryData,
-      //   메인감정쓰: diaryData.emotionName,
-      // });
-
       setTitle(diaryData.title);
       setContent(diaryData.content);
 
@@ -100,7 +95,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       mainEmotion: finalEmotion || '', // 빈 문자열 대신 적절한 기본값 설정 필요할 수 있음
       tags: tags,
     };
-    // console.log('저장될 일기 내용', diaryToSave);
 
     try {
       if (isEditing && diaryData?.diarySeq) {
@@ -115,32 +109,20 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
         // 내용이 변경된 경우에만 꿈해몽 api 요청
         if (content !== diaryData.content) {
-          // console.log('내용이 변경되어 꿈해몽 api 호출:', {
-          //   diarySeq: diaryData.diarySeq,
-          //   originalContent: diaryData.content,
-          //   updatedContent: content,
-          // });
-
           try {
             // 여기서 await을 추가하여 API 호출이 완료될 때까지 기다림
             const dreamResponse = await dreamApi.createDreamMeaning(
               diaryData.diarySeq,
               content
             );
-
-            // console.log('수정된 일기로 꿈해몽 api 요청 성공', dreamResponse);
-          } catch (dreamError) {
-            // console.log('수정된 일기로 꿈해몽 요청 중 오류', dreamError);
-          }
+          } catch (dreamError) {}
         } else {
-          // console.log('내용이 변경되지 않아 꿈해몽 API 호출 생략');
         }
 
         if (onDiaryUpdated) {
           onDiaryUpdated(response.data);
         }
 
-        // console.log('꿈해몽 API 처리 완료, 모달 닫기 준비');
         // 모든 처리가 완료된 후 모달 닫기
         onClose();
       } else {
@@ -176,31 +158,19 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
         const escapedContent = escapeSpecialCharsForVideo(content);
 
-        // console.log('영상 생성 요청 데이터:', {
-        //   diary_pk: diarySeq,
-        //   content: escapedContent,
-        // });
         videoApi
           .createVideo({
             diary_pk: diarySeq,
             content: escapedContent,
           })
-          .then((response) => {
-            // console.log('영상 생성 API 요청 성공:', response);
-          }) // 지우기
-          .catch((videoError) => {
-            // console.error('영상 생성 요청 중 오류:', videoError);
-          });
+          .then((response) => {}) // 지우기
+          .catch((videoError) => {});
 
         // 꿈해몽 생성 api 호출
         dreamApi
           .createDreamMeaning(diarySeq, content)
-          .then((dreamResponse) => {
-            // console.log('꿈해몽 생성 api 요청 성공♥️♥️', dreamResponse);
-          })
-          .catch((dreamError) => {
-            // console.log('꿈해몽 생성 요청 중 오류😭😭 :', dreamError);
-          });
+          .then((dreamResponse) => {})
+          .catch((dreamError) => {});
 
         // 성공 시 onDiaryCreated 콜백 호출
         // 부모 컴포넌트(유니버스)로 전달 -> 새로운 일기 별 생성에 사용
@@ -211,13 +181,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
       onClose();
     } catch (error) {
-      // console.error(
-      //   isEditing
-      //     ? '일기 수정 중에 발생한 오류 : '
-      //     : '일기 생성 중에 발생한 오류 : ',
-      //   error
-      // );
-
       const err = error as any;
 
       // 에러 응답 확인
@@ -229,16 +192,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
       }
     }
-  };
-
-  // -------------------- 동영상 생성 -------------------- //
-  const handleCreateVideo = () => {
-    // console.log('등록 후 동영상 생성하기 버튼 누름');
-    // 여기서 AI 쪽으로 데이터 넘겨야함
-    // 특수문자에는 앞에 '/' 붙여서 넘겨야함
-    // 버튼 눌렀을 때 하루 생성 가능 횟수 차감
-
-    onClose();
   };
 
   // ---------- 모달 바깥쪽을 누르면 모달이 닫힘 ---------- //

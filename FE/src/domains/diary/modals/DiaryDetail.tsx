@@ -87,9 +87,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
         hasLiked: isLiked,
         likeCount: newLikeCount,
       });
-    } catch (error) {
-      console.error('좋아요 실패 ⚠️♥️♥️', error);
-    }
+    } catch (error) {}
   };
 
   // ---------- 꿈영상 재생성 ----------- //
@@ -120,29 +118,19 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     const fetchDreamMeaning = async () => {
       if (!initialDiary.diarySeq) return;
 
-      // console.log('DiaryDetail - 꿈해몽 데이터 로드 시작:', {
-      //   diarySeq: initialDiary.diarySeq,
-      //   timestamp: new Date().toISOString(),
-      // });
       setLoadingDreamMeaning(true);
       try {
         const response = await dreamApi.getDreamMeaningById(
           initialDiary.diarySeq
         );
-        // console.log('DiaryDetail - 꿈해몽 데이터 로드 성공:', {
-        //   diarySeq: initialDiary.diarySeq,
-        //   responseData: response.data,
-        //   timestamp: new Date().toISOString(),
-        // });
+
         if (response.data && response.data.data) {
           setDreamMeaning({
             resultContent: response.data.data.resultContent,
             isGood: response.data.data.isGood,
           });
-          // console.log('DiaryDetail - 꿈해몽 상태 업데이트 완료');
         }
       } catch (error) {
-        console.error('꿈해몽 데이터 로드 중 오류 발생:', error);
         setDreamMeaning({
           resultContent: '꿈해몽 데이터를 불러오는데 실패했습니다.',
           isGood: 'N',
@@ -259,9 +247,16 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                 </div>
 
                 {/* 4. 운세보러가기 버튼 */}
-                <div className="flex justify-end">
+                <div className="flex flex-col items-end">
                   {dreamMeaning && (
-                    <DestinyButton isGood={dreamMeaning.isGood} />
+                    <>
+                      <DestinyButton isGood={dreamMeaning.isGood} />
+                      <p className="text-white/85 text-xs mt-2 text-right">
+                        {dreamMeaning.isGood === 'Y'
+                          ? '좋은 꿈을 꿨으니, 오늘의 행운을 확인해보세요! 🍀'
+                          : '힘든 꿈이었다면, 오늘의 운세를 확인하고 용기를 얻어보세요. 💪'}
+                      </p>
+                    </>
                   )}
                 </div>
               </div>
