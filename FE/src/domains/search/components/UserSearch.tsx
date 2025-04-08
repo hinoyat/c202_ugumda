@@ -286,9 +286,9 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
     const takeNickname = async () => {
       try {
         const response = await api.get(`/users/seq/${userSeq}`);
-        const paramsNickname = response.data.data.nickname;
+        const paramsUsername = response.data.data.username;
         onClose();
-        navigate(`/${paramsNickname}`);
+        navigate(`/${paramsUsername}`);
       } catch (error) {
         console.error(error, '닉네임 추출에 실패하였습니다.');
       }
