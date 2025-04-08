@@ -71,7 +71,6 @@ const UserInfoData = ()=>{
 
     const user = useSelector(selectUser)
     const dominantEmotion = useSelector(selectDominantEmotion)
-    console.log("지배감정:", dominantEmotion);
 
     let emotionMessage = "";
 
@@ -81,13 +80,11 @@ const UserInfoData = ()=>{
         item => item.emotion.toLowerCase() === dominantEmotion.toLowerCase()
       );
 
-      console.log("일치하는 감정 데이터:", emotionData);
       
       if (emotionData) {
         // 메시지 배열에서 무작위로 하나 선택
         const randomIndex = Math.floor(Math.random() * emotionData.messages.length);
         emotionMessage = emotionData.messages[randomIndex];
-        console.log("랜덤 메세지!!!",emotionMessage)
       }
     }
     
