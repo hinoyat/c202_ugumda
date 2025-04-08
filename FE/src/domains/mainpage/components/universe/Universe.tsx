@@ -202,14 +202,10 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     const newDiary = responseData.data;
 
     // 새로 생성된 일기를 diaryEntries 배열에 추가
-    // setDiaryEntries((prev) => [...prev, newDiary]);
     setDiaryEntries((prev) => {
       const updated = [...prev, newDiary];
       return updated;
     });
-
-    // 추가: 리덕스 상태에도 새 일기 추가 (이 부분이 누락되어 있었음)
-    dispatch(addDiary(newDiary));
 
     // Redux 스토어에도 추가
     dispatch(addDiary(newDiary));
@@ -311,6 +307,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     setShowDetail(false);
     setCurrentDiaryDetail(null);
     dispatch(hideDiaryModal());
+    localStorage.removeItem('selectedDiarySeq');
   };
 
   useEffect(() => {
