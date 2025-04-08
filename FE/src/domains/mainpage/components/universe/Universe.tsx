@@ -22,6 +22,7 @@ import { Canvas } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as THREE from 'three';
+import { selectVisitUser } from '../../stores/userSelectors';
 
 // props의 타입 정의
 interface UniverseProps {
@@ -35,6 +36,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   const { diaries, showDiaryModal, selectedDiarySeq } = useSelector(
     (state: RootState) => state.diary
   );
+  const visitUser = useSelector(selectVisitUser);
 
   // ------------------- 상태관리 ------------------- //
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -60,7 +62,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     null
   );
 
-  //
+  // 우주 데이터 관련 상태 추가
+  const [universeData, setUniverseData] = useState<any | null>(null);
+  const [connections, setConnections] = useState<{ [key: string]: number[] }>(
+    {}
+  ); // 일기 연결 정보
+
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   // -------------------------- 우주관련 -------------------------- //
@@ -161,6 +168,8 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         setShowDetail(true);
       }
     } catch (error) {
+      console.error('일기 조회 중 오류 발생 : ', error);
+
       // 에러 응답 확인
       const err = error as any;
 
@@ -202,10 +211,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     const newDiary = responseData.data;
 
     // 새로 생성된 일기를 diaryEntries 배열에 추가
-    setDiaryEntries((prev) => {
-      const updated = [...prev, newDiary];
-      return updated;
-    });
+    setDiaryEntries((prev) => [...prev, newDiary]);
 
     // Redux 스토어에도 추가
     dispatch(addDiary(newDiary));
@@ -298,6 +304,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
     } catch (error) {
+      console.error('일기 삭제 중 오류 발생:', error);
       alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -307,7 +314,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     setShowDetail(false);
     setCurrentDiaryDetail(null);
     dispatch(hideDiaryModal());
-    localStorage.removeItem('selectedDiarySeq');
   };
 
   useEffect(() => {
@@ -342,7 +348,9 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
             localStorage.removeItem('selectedDiarySeq');
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error('선택된 일기 처리 중 오류 발생:', error);
+      }
     };
 
     if (diaryEntries.length > 0) {
@@ -367,13 +375,13 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
         if (!response) return;
 
-        console.log('📒🧑‍🚀저장된 일기 데이터들 로드됨👾🚀 : ', response);
-
         // api응답에서 일기 데이터 설정
         if (response && response.data && response.data.data) {
           setDiaryEntries(response.data.data);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error('일기 목록 데이터 로드 중 오류 발생 : ', error);
+      }
     };
 
     // userSeq에 맞게 데이터 로드
@@ -382,6 +390,29 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     }
   }, [isMySpace, userSeq]);
 
+  // 우주 데이터 로드 추가
+  useEffect(() => {
+    const fetchUniverseData = async () => {
+      if (!visitUser || !visitUser.userSeq) return;
+
+      try {
+        const response = await diaryApi.getUniverseData(visitUser.userSeq);
+        if (response && response.data) {
+          console.log('우주 데이터 로드됨:', response.data);
+          setUniverseData(response.data.data);
+          if (response.data.data.connections) {
+            setConnections(response.data.data.connections);
+          }
+        }
+      } catch (error) {
+        console.error('우주 데이터 로드 중 오류 발생:', error);
+      }
+    };
+
+    fetchUniverseData();
+  }, [visitUser]); // <- visitUser가 바뀌었을 때만 실행되게
+
+  // 리덕스 스토어의 일기 데이터가 변경되면 로컬 상태 업데이트
   useEffect(() => {
     if (diaries && diaries.length > 0) {
       // 기존 일기를 유지하면서 리덕스의 새 일기만 추가하는 방식으로 변경
@@ -395,45 +426,55 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     }
   }, [diaries]);
 
-  // ----------------------- 감정 태그가 같은 별끼리 연결 ----------------------- //
-  const connectDiariesByEmotion = (entries: any[]) => {
-    const connections: { from: any; to: any }[] = [];
+  // ----------------------- 일기 연결 별자리 생성 ----------------------- //
+  // API에서 받아온 연결 정보를 기반으로 별들 간 연결 생성
+  const generateConnectionsFromApi = () => {
+    if (
+      !connections ||
+      Object.keys(connections).length === 0 ||
+      diaryEntries.length === 0
+    ) {
+      return [];
+    }
 
-    // 감정 태그별로 일기 그룹화
-    const diariesByEmotion: Record<string, any[]> = {};
+    const connectionLines: { from: any; to: any }[] = [];
 
-    // 먼저 감정 태그별로 일기들을 분류
-    entries.forEach((entry) => {
-      const emotion = entry.emotionName || entry.mainEmotion;
-      if (!diariesByEmotion[emotion]) {
-        diariesByEmotion[emotion] = [];
+    // 모든 연결 정보를 순회
+    Object.entries(connections).forEach(([sourceId, targetIds]) => {
+      const sourceIdNum = parseInt(sourceId);
+      const sourceDiary = diaryEntries.find(
+        (entry) => entry.diarySeq === sourceIdNum
+      );
+
+      if (sourceDiary) {
+        // 이 일기와 연결된 모든 대상 일기 순회
+        targetIds.forEach((targetId) => {
+          const targetDiary = diaryEntries.find(
+            (entry) => entry.diarySeq === targetId
+          );
+
+          if (targetDiary) {
+            // 양방향 중복 연결 방지 (이미 A->B가 있으면 B->A는 추가하지 않음)
+            const alreadyConnected = connectionLines.some(
+              (conn) =>
+                (conn.from.diarySeq === sourceIdNum &&
+                  conn.to.diarySeq === targetId) ||
+                (conn.from.diarySeq === targetId &&
+                  conn.to.diarySeq === sourceIdNum)
+            );
+
+            if (!alreadyConnected) {
+              connectionLines.push({
+                from: sourceDiary,
+                to: targetDiary,
+              });
+            }
+          }
+        });
       }
-      diariesByEmotion[emotion].push(entry);
     });
 
-    // 각 감정 태그 그룹 내에서 일기들을 연결
-    Object.values(diariesByEmotion).forEach((emotionGroup) => {
-      // 같은 감정을 가진 일기가 2개 이상일 때만 연결
-      if (emotionGroup.length >= 2) {
-        // 첫 번째 일기부터 마지막 일기까지 순차적으로 연결
-        for (let i = 0; i < emotionGroup.length - 1; i++) {
-          connections.push({
-            from: emotionGroup[i],
-            to: emotionGroup[i + 1],
-          });
-        }
-
-        // 마지막 일기와 첫 번째 일기도 연결
-        if (emotionGroup.length > 2) {
-          connections.push({
-            from: emotionGroup[emotionGroup.length - 1],
-            to: emotionGroup[0],
-          });
-        }
-      }
-    });
-
-    return connections;
+    return connectionLines;
   };
 
   return (
@@ -504,7 +545,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
           {/* ---------------- 일기를 별자리처럼 연결 ---------------- */}
           <group>
-            {connectDiariesByEmotion(diaryEntries).map((connection, index) => (
+            {generateConnectionsFromApi().map((connection, index) => (
               <Line
                 key={index}
                 points={[
@@ -557,7 +598,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
               setShowForm(true);
             }
           }}
-          // onDelete={handleDeleteDiary}
         />
       )}
 
@@ -571,7 +611,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           onDiaryCreated={handleDiaryCreated}
           onDiaryUpdated={handleDiaryUpdated}
           onDeleteDiary={handleDeleteDiary}
-          // isMySpace={isMySpace}
         />
       )}
     </div>
