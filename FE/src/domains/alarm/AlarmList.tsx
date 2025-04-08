@@ -19,8 +19,10 @@ import './themes/alarm.css';
 import { FaBookReader } from 'react-icons/fa';
 import { BsTrash3Fill } from 'react-icons/bs';
 import { resetPage, resetAlarms } from './stores/alarmSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { showDiaryModal } from '@/stores/diary/diarySlice';
+import { showGuestbookModal } from '@/stores/guestbook/guestbookSlice';
+import { selectUser } from '@/stores/auth/authSelectors';
 
 interface AlarmProps {
   isOpen: boolean;
@@ -35,6 +37,8 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
   const alarms = useSelector(selectAlarms);
   const loading = useSelector(selectLoading);
   const hasMore = useSelector(selectHasMore);
+  const params = useParams();
+  const loginUser = useSelector(selectUser);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastAlarmRef = useCallback(
@@ -61,9 +65,17 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
     if (alarm.isRead === 'N') {
       dispatch(readAlarm(alarm.alarmSeq));
     }
-
-    // 일기 상세 모달을 띄우기 위해 diarySeq를 localStorage에 저장하고 Redux 상태 업데이트
-    if (alarm.diarySeq) {
+    // 알림 타입에 따라 다른 모달 표시
+    if (alarm.type === 'GUESTBOOK_CREATED') {
+      if (params.username !== loginUser?.username) {
+        navigate(`/${loginUser?.username}`);
+        dispatch(showGuestbookModal());
+      } else {
+        // 방명록 모달 표시
+        dispatch(showGuestbookModal());
+      }
+    } else if (alarm.diarySeq) {
+      // 일기 상세 모달을 띄우기 위해 diarySeq를 localStorage에 저장하고 Redux 상태 업데이트
       localStorage.setItem('selectedDiarySeq', alarm.diarySeq.toString());
       dispatch(showDiaryModal(alarm.diarySeq));
     }

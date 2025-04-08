@@ -43,6 +43,7 @@ const authSlice = createSlice({
     builder
       // 로그인 성공
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log('로그인 후 페이로드', action.payload);
         state.accessToken = action.payload.accessToken;
         state.isAuthenticated = true;
         state.user = action.payload.user;
@@ -58,7 +59,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         localStorage.removeItem('accessToken'); // ✅ 추가
         localStorage.removeItem('User');
-        localStorage.removeItem('musicSettings')
+        localStorage.removeItem('musicSettings');
       });
   },
 });

@@ -14,6 +14,7 @@ import { putGuestbookIntroduction } from '@/domains/guestbook/apis/apiGuestbookI
 import { setIntro } from '@/stores/auth/authSlice';
 import { useAppDispatch } from '@/hooks/hooks';
 import ModalBase from '@/domains/diary/components/modalBase';
+import { updateIntroduction } from '@/domains/mainpage/stores/userSlice';
 
 interface MainPageProps {
   onClose: () => void;
@@ -28,7 +29,6 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
   const PageUserNumber = useSelector(
     (state: RootState) => state.userpage.userSeq
   );
-  const l = useSelector((state: RootState) => state);
 
   const dispatch = useAppDispatch();
 
@@ -149,6 +149,15 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
         console.log('✅ 소개글 수정 성공', response);
         setIsEditingIntro(false);
         dispatch(setIntro(introduction));
+        dispatch(updateIntroduction(introduction));
+
+        // 로컬 스토리지 업데이트 추가
+        const userStr = localStorage.getItem('User');
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          user.introduction = introduction;
+          localStorage.setItem('User', JSON.stringify(user));
+        }
       }
     } catch (error) {
       console.error('❌ 소개글 수정 실패', error);

@@ -20,6 +20,9 @@ const userpageSlice = createSlice({
     updateSubscriptionStatus: (state, action) => {
       state.isSubscribed = action.payload;
     },
+    updateIntroduction: (state, action) => {
+      state.introduction = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -58,5 +61,6 @@ const userpageSlice = createSlice({
   },
 });
 
-export const { updateSubscriptionStatus } = userpageSlice.actions;
+export const { updateSubscriptionStatus, updateIntroduction } =
+  userpageSlice.actions;
 export default userpageSlice.reducer;
