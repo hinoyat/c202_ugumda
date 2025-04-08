@@ -19,8 +19,10 @@ const DestinyButton: React.FC<DestinyButtonProps> = ({ isGood, onClick }) => {
     if (isGood === 'Y') {
       //이 localstorage도 닫기버튼 눌렀을 때 메인페이지로 가게 할 거라 참고 부탁드립니다.!
       localStorage.setItem('FromDiary', 'goUniverse');
+      navigate('/luckynumber');
     } else {
       localStorage.setItem('FromDiary', 'goUniverse');
+      navigate('/todayfortune');
     }
   };
 

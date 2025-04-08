@@ -1,5 +1,6 @@
 import React from 'react';
 import { getIconById } from '@/hooks/ProfileIcons';
+import ButtonBase from '@/domains/diary/components/details/button/ButtonBase';
 
 // 사용자 데이터 타입 정의
 interface User {
@@ -45,17 +46,19 @@ const UserList: React.FC<UserListProps> = ({
         return (
           <div
             key={key}
-            className="bg-[#505050]/90 rounded-lg flex px-15 py-5 gap-5 justify-between">
+            className="border border-white/90 border-dashed rounded-lg flex px-15 py-5 gap-5 justify-between">
             <div className="flex items-center gap-2">
-              <img
-                src={getIconById(user.iconSeq)}
-                className="w-7"
-                alt={`${user.nickname}의 프로필 아이콘`}
-                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = '/default-icon.png'; // Fallback image
-                }}
-              />
+              <div className="w-7 h-7 flex items-center justify-center overflow-hidden">
+                <img
+                  src={getIconById(user.iconSeq)}
+                  className="w-full h-full object-contain"
+                  alt={`${user.nickname}의 프로필 아이콘`}
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/default-icon.png'; // Fallback image
+                  }}
+                />
+              </div>
               <p className="text-white text-[17px]">{user.nickname}</p>
               {user.username && (
                 <span className="text-white/70 text-sm">({user.username})</span>
@@ -74,18 +77,22 @@ const UserList: React.FC<UserListProps> = ({
                 </button>
               ) : (
                 // 구독 중이 아닌 경우 - 구독하기 버튼
-                <button
-                  className="bg-[#363736] text-white text-[16px] py-1 w-28 rounded cursor-pointer hover:bg-neutral-500"
-                  onClick={() => user.userSeq && onSubscribe(user.userSeq)}>
+                <ButtonBase
+                  onClick={() => user.userSeq && onSubscribe(user.userSeq)}
+                  width="107px"
+                  height="36px"
+                  borderRadius="8px">
                   구독하기
-                </button>
+                </ButtonBase>
               )}
 
-              <button
-                className="bg-[#363736] text-white text-[16px] py-1 w-28 rounded cursor-pointer hover:bg-neutral-500"
-                onClick={() => visitId && onVisit(visitId)}>
+              <ButtonBase
+                onClick={() => visitId && onVisit(visitId)}
+                width="107px"
+                height="36px"
+                borderRadius="8px">
                 놀러가기
-              </button>
+              </ButtonBase>
             </div>
           </div>
         );

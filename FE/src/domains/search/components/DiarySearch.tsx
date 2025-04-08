@@ -229,6 +229,8 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
           <p className="text-white">현재 우주</p>
         </div>
 
+        {/* 검색결과 */}
+
         <div className="flex gap-1.5 items-center">
           <label className="cont">
             <input
@@ -283,7 +285,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
                 ...diaryData,
                 data: diaryData.data.content,
               }}
-              onClose ={onClose}
+              onClose={onClose}
             />
             <div className="w-full block">{renderPagination()}</div>
           </>
