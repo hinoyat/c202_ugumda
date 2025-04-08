@@ -314,6 +314,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     setShowDetail(false);
     setCurrentDiaryDetail(null);
     dispatch(hideDiaryModal());
+    localStorage.removeItem('selectedDiarySeq');
   };
 
   useEffect(() => {
