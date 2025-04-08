@@ -28,10 +28,119 @@ public class ConstellationConnectionService {
     private static final int MIN_CONNECTIONS_PER_DIARY = 1;
 
     // 3D 공간에서 최대 연결 거리 (너무 멀리 떨어진 일기는 연결하지 않음)
-    private static final double MAX_CONNECTION_DISTANCE = 40.0;
+    private static final double MAX_CONNECTION_DISTANCE = 50.0;
 
     // 구의 반경 (전체 우주의 크기)
-    private static final double SPHERE_RADIUS = 150.0;
+    private static final double SPHERE_RADIUS = 100.0;
+
+    // 별자리 패턴 유형 열거
+    // ConstellationLayoutService와 동일한 열거형 사용
+    private enum PatternType {
+        // 실제 별자리
+        ORION, BIG_DIPPER, CASSIOPEIA, GEMINI, LIBRA, SOUTHERN_CROSS, CORONA, PERSEUS, LYRA, SAGITTARIUS,
+        // 기하학적 패턴
+        STAR, CIRCLE, TRIANGLE, ARROW, ZIGZAG, WAVE, HEXAGON, SPIRAL, CROSS, SCATTER
+    }
+
+    // 오리온자리 연결 패턴 (인덱스 쌍 배열)
+    private static final int[][] ORION_CONNECTIONS = {
+            {0, 1}, {0, 3}, {1, 2}, {2, 3}, {3, 4}, {3, 5}, {4, 6}
+    };
+
+    // 북두칠성(큰곰자리) 연결 패턴
+    private static final int[][] BIG_DIPPER_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}
+    };
+
+    // 카시오페이아자리 연결 패턴
+    private static final int[][] CASSIOPEIA_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}
+    };
+
+    // 쌍둥이자리 연결 패턴
+    private static final int[][] GEMINI_CONNECTIONS = {
+            {0, 1}, {1, 2}, {3, 4}, {4, 5}, {2, 6}, {5, 6}
+    };
+
+    // 천칭자리 연결 패턴
+    private static final int[][] LIBRA_CONNECTIONS = {
+            {0, 2}, {1, 2}, {2, 3}, {2, 4}, {4, 5}
+    };
+
+    // 남십자자리 연결 패턴
+    private static final int[][] SOUTHERN_CROSS_CONNECTIONS = {
+            {0, 2}, {1, 2}, {2, 3}, {2, 4}
+    };
+
+    // 왕관자리 연결 패턴
+    private static final int[][] CORONA_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {5, 1}, {5, 3}, {5, 6}
+    };
+
+    // 페르세우스자리 연결 패턴
+    private static final int[][] PERSEUS_CONNECTIONS = {
+            {0, 1}, {0, 2}, {1, 3}, {2, 3}, {3, 4}, {3, 5}, {4, 6}
+    };
+
+    // 거문고자리 연결 패턴
+    private static final int[][] LYRA_CONNECTIONS = {
+            {0, 1}, {0, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 5}
+    };
+
+    // 궁수자리 연결 패턴
+    private static final int[][] SAGITTARIUS_CONNECTIONS = {
+            {0, 1}, {0, 2}, {0, 3}, {3, 4}, {3, 5}, {3, 6}
+    };
+
+    // 별 모양 연결 패턴
+    private static final int[][] STAR_CONNECTIONS = {
+            {0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 6}
+    };
+
+    // 원형 연결 패턴
+    private static final int[][] CIRCLE_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 0}
+    };
+
+    // 삼각형 연결 패턴
+    private static final int[][] TRIANGLE_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 0}, {3, 0}, {3, 1}, {3, 2}, {4, 5}
+    };
+
+    // 화살표 연결 패턴
+    private static final int[][] ARROW_CONNECTIONS = {
+            {0, 1}, {0, 2}, {0, 3}, {3, 4}, {4, 5}, {4, 6}
+    };
+
+    // 지그재그 연결 패턴
+    private static final int[][] ZIGZAG_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}
+    };
+
+    // 파도 연결 패턴
+    private static final int[][] WAVE_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}
+    };
+
+    // 육각형 연결 패턴
+    private static final int[][] HEXAGON_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 0}, {6, 0}, {6, 3}
+    };
+
+    // 나선형 연결 패턴
+    private static final int[][] SPIRAL_CONNECTIONS = {
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}
+    };
+
+    // 십자가 연결 패턴
+    private static final int[][] CROSS_CONNECTIONS = {
+            {0, 2}, {1, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}
+    };
+
+    // 흩어진 형태 연결 패턴 (중심점에서 방사형으로 연결)
+    private static final int[][] SCATTER_CONNECTIONS = {
+            {0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 6}
+    };
 
     /**
      * 일기 그룹들에 대한 연결 관계를 최적화합니다.
@@ -93,91 +202,144 @@ public class ConstellationConnectionService {
             return;
         }
 
-        // 일기가 많은 경우는 패턴 기반 연결 방식 적용
-        // 여기서는 MST(Minimum Spanning Tree) + 약간의 추가 연결 방식 사용
+        // 별자리 패턴을 기준으로 연결 구조 결정
+        PatternType patternType = determinePatternType(diaries);
 
-        // 1. 모든 가능한 엣지와 거리 계산
-        List<DiaryEdge> edges = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            for (int j = i + 1; j < size; j++) {
-                Diary diary1 = diaries.get(i);
-                Diary diary2 = diaries.get(j);
-                double distance = calculateDistance(diary1, diary2);
+        // 선택된 패턴 유형에 따른 연결 구조 가져오기
+        int[][] connectionPattern = getConnectionPatternByType(patternType, size);
 
-                // 너무 멀리 떨어진 경우 제외
-                if (distance <= MAX_CONNECTION_DISTANCE) {
-                    edges.add(new DiaryEdge(diary1.getDiarySeq(), diary2.getDiarySeq(), distance));
+        // 패턴에 따른 연결 적용
+        for (int[] connection : connectionPattern) {
+            // 인덱스가 유효한지 확인
+            if (connection[0] < size && connection[1] < size) {
+                Diary diary1 = diaries.get(connection[0]);
+                Diary diary2 = diaries.get(connection[1]);
+
+                // 거리 확인 (너무 멀리 떨어진 일기는 연결하지 않음)
+                if (calculateDistance(diary1, diary2) <= MAX_CONNECTION_DISTANCE) {
+                    addConnection(connections, diary1.getDiarySeq(), diary2.getDiarySeq());
                 }
             }
         }
 
-        // 거리순 정렬
-        edges.sort(Comparator.comparingDouble(DiaryEdge::getDistance));
-
-        // 2. MST 알고리즘으로 기본 연결 생성 (모든 일기가 연결되면서 총 거리는 최소화)
-        Map<Integer, Integer> diaryToSet = new HashMap<>();
-        for (Diary diary : diaries) {
-            diaryToSet.put(diary.getDiarySeq(), diary.getDiarySeq());
-        }
-
-        for (DiaryEdge edge : edges) {
-            int set1 = findSet(diaryToSet, edge.getDiary1Seq());
-            int set2 = findSet(diaryToSet, edge.getDiary2Seq());
-
-            if (set1 != set2) {
-                // 서로 다른 집합이면 연결 추가
-                addConnection(connections, edge.getDiary1Seq(), edge.getDiary2Seq());
-
-                // 집합 병합
-                diaryToSet.put(set1, set2);
-
-                // 모든 일기가 같은 집합에 속하는지 확인
-                boolean allConnected = true;
-                int firstSet = findSet(diaryToSet, diaries.get(0).getDiarySeq());
-                for (Diary diary : diaries) {
-                    if (findSet(diaryToSet, diary.getDiarySeq()) != firstSet) {
-                        allConnected = false;
-                        break;
-                    }
-                }
-
-                if (allConnected) break;
-            }
-        }
-
-        // 3. 추가적인 연결 생성 (별자리 모양에 자연스러움 추가)
-        // MST는 트리 구조라 사이클이 없으므로, 일부 추가 연결로 별자리 모양 향상
-        for (DiaryEdge edge : edges) {
-            int diary1Seq = edge.getDiary1Seq();
-            int diary2Seq = edge.getDiary2Seq();
-
-            // 이미 연결되어 있지 않고, 최대 연결 수를 초과하지 않는 경우
-            if (!connections.get(diary1Seq).contains(diary2Seq) &&
-                    connections.get(diary1Seq).size() < MAX_CONNECTIONS_PER_DIARY &&
-                    connections.get(diary2Seq).size() < MAX_CONNECTIONS_PER_DIARY) {
-
-                // 태그 유사도가 높거나 가까운 거리에 있는 일기 연결
-                double similarity = calculateTagSimilarity(
-                        getDiaryTags(diaries.stream().filter(d -> d.getDiarySeq().equals(diary1Seq)).findFirst().orElse(null)),
-                        getDiaryTags(diaries.stream().filter(d -> d.getDiarySeq().equals(diary2Seq)).findFirst().orElse(null))
-                );
-
-                // 가까운 거리(하위 30%)이거나 유사도가 높으면(0.3 이상) 연결 추가
-                if (edge.getDistance() < MAX_CONNECTION_DISTANCE * 0.3 || similarity > 0.3) {
-                    addConnection(connections, diary1Seq, diary2Seq);
-                }
-            }
+        // 추가적인 연결 생성 (별자리 모양에 자연스러움 추가, 필요한 경우)
+        if (patternType == PatternType.SCATTER) {
+            enhanceScatterConnections(diaries, connections);
         }
     }
 
     /**
-     * Union-Find 알고리즘을 위한 집합 찾기
+     * 일기 그룹에서 별자리 패턴 유형을 결정합니다.
+     * 좌표 분석을 통해 어떤 패턴이 적용되었는지 추론합니다.
      */
-    private int findSet(Map<Integer, Integer> diaryToSet, int diarySeq) {
-        if (diaryToSet.get(diarySeq) != diarySeq) {
-            diaryToSet.put(diarySeq, findSet(diaryToSet, diaryToSet.get(diarySeq)));
+    private PatternType determinePatternType(List<Diary> diaries) {
+        // 기본값 설정 (나중에 좌표 분석을 통해 개선할 수 있음)
+        int count = diaries.size();
+
+        // 일기 수를 기반으로 가장 적합한 패턴 선택
+        if (count == 7) {
+            return PatternType.BIG_DIPPER; // 7개이면 북두칠성 형태
+        } else if (count == 5) {
+            return PatternType.CASSIOPEIA; // 5개이면 카시오페이아자리 형태
+        } else if (count == 4) {
+            return PatternType.SOUTHERN_CROSS; // 4개이면 남십자자리 형태
+        } else if (count == 3) {
+            return PatternType.TRIANGLE; // 3개이면 삼각형 형태
+        } else if (count == 6) {
+            return PatternType.HEXAGON; // 6개이면 육각형 형태
+        } else {
+            // 기타 경우: 좌표 분석 기반 결정 (여기서는 간단히 처리)
+            return PatternType.STAR; // 기본값
         }
-        return diaryToSet.get(diarySeq);
+
+        // 참고: 실제로는 좌표 분석을 통해 더 정확한 패턴 추론 가능
+        // 예: 원형 배치인지, 별 모양인지 등을 좌표 분포로 판단
+    }
+
+    /**
+     * 패턴 유형에 따른 연결 구조를 반환합니다.
+     */
+    private int[][] getConnectionPatternByType(PatternType type, int count) {
+        switch (type) {
+            case ORION:          return limitConnectionsByCount(ORION_CONNECTIONS, count);
+            case BIG_DIPPER:     return limitConnectionsByCount(BIG_DIPPER_CONNECTIONS, count);
+            case CASSIOPEIA:     return limitConnectionsByCount(CASSIOPEIA_CONNECTIONS, count);
+            case GEMINI:         return limitConnectionsByCount(GEMINI_CONNECTIONS, count);
+            case LIBRA:          return limitConnectionsByCount(LIBRA_CONNECTIONS, count);
+            case SOUTHERN_CROSS: return limitConnectionsByCount(SOUTHERN_CROSS_CONNECTIONS, count);
+            case CORONA:         return limitConnectionsByCount(CORONA_CONNECTIONS, count);
+            case PERSEUS:        return limitConnectionsByCount(PERSEUS_CONNECTIONS, count);
+            case LYRA:           return limitConnectionsByCount(LYRA_CONNECTIONS, count);
+            case SAGITTARIUS:    return limitConnectionsByCount(SAGITTARIUS_CONNECTIONS, count);
+            case STAR:           return limitConnectionsByCount(STAR_CONNECTIONS, count);
+            case CIRCLE:         return limitConnectionsByCount(CIRCLE_CONNECTIONS, count);
+            case TRIANGLE:       return limitConnectionsByCount(TRIANGLE_CONNECTIONS, count);
+            case ARROW:          return limitConnectionsByCount(ARROW_CONNECTIONS, count);
+            case ZIGZAG:         return limitConnectionsByCount(ZIGZAG_CONNECTIONS, count);
+            case WAVE:           return limitConnectionsByCount(WAVE_CONNECTIONS, count);
+            case HEXAGON:        return limitConnectionsByCount(HEXAGON_CONNECTIONS, count);
+            case SPIRAL:         return limitConnectionsByCount(SPIRAL_CONNECTIONS, count);
+            case CROSS:          return limitConnectionsByCount(CROSS_CONNECTIONS, count);
+            case SCATTER:        return limitConnectionsByCount(SCATTER_CONNECTIONS, count);
+            default:             return limitConnectionsByCount(STAR_CONNECTIONS, count);
+        }
+    }
+
+    /**
+     * 연결 패턴을 일기 수에 맞게 제한합니다.
+     */
+    private int[][] limitConnectionsByCount(int[][] connections, int count) {
+        List<int[]> validConnections = new ArrayList<>();
+
+        for (int[] connection : connections) {
+            if (connection[0] < count && connection[1] < count) {
+                validConnections.add(connection);
+            }
+        }
+
+        return validConnections.toArray(new int[0][]);
+    }
+
+    /**
+     * 흩어진 형태의 연결을 강화합니다.
+     */
+    private void enhanceScatterConnections(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
+        if (diaries.size() <= 3) return;
+
+        // 중심점 (일반적으로 인덱스 0)
+        Diary centerDiary = diaries.get(0);
+        int centerSeq = centerDiary.getDiarySeq();
+
+        // 각 일기와 다른 일기 간의 태그 유사도 계산
+        for (int i = 1; i < diaries.size(); i++) {
+            Diary diary1 = diaries.get(i);
+            int diary1Seq = diary1.getDiarySeq();
+
+            // 이미 중심과 연결되어 있는지 확인
+            boolean connectedToCenter = connections.get(diary1Seq).contains(centerSeq);
+
+            // 다른 일기들과 유사도 확인
+            for (int j = i + 1; j < diaries.size(); j++) {
+                Diary diary2 = diaries.get(j);
+                int diary2Seq = diary2.getDiarySeq();
+
+                // 태그 유사도 계산
+                List<String> tags1 = getDiaryTags(diary1);
+                List<String> tags2 = getDiaryTags(diary2);
+                double similarity = calculateTagSimilarity(tags1, tags2);
+
+                // 거리 계산
+                double distance = calculateDistance(diary1, diary2);
+
+                // 유사도가 높고 거리가 가까우면 연결
+                if (similarity > 0.3 && distance <= MAX_CONNECTION_DISTANCE * 0.7 &&
+                        connections.get(diary1Seq).size() < MAX_CONNECTIONS_PER_DIARY &&
+                        connections.get(diary2Seq).size() < MAX_CONNECTIONS_PER_DIARY) {
+
+                    addConnection(connections, diary1Seq, diary2Seq);
+                }
+            }
+        }
     }
 
     /**
@@ -218,94 +380,61 @@ public class ConstellationConnectionService {
             groupCenters.put(groupId, center);
         }
 
-        // MST 알고리즘으로 그룹 간 연결 최적화
-        List<GroupEdge> groupEdges = new ArrayList<>();
-
-        // 모든 그룹 쌍에 대한 거리 계산
+        // 각 그룹쌍마다 가장 가까운 일기 쌍을 찾아 연결
         for (int i = 0; i < groupIds.size(); i++) {
             for (int j = i + 1; j < groupIds.size(); j++) {
-                int group1Id = groupIds.get(i);
-                int group2Id = groupIds.get(j);
-
-                double[] center1 = groupCenters.get(group1Id);
-                double[] center2 = groupCenters.get(group2Id);
-
-                double distance = Math.sqrt(
-                        Math.pow(center1[0] - center2[0], 2) +
-                                Math.pow(center1[1] - center2[1], 2) +
-                                Math.pow(center1[2] - center2[2], 2)
+                connectClosestDiaries(
+                        findGroupById(constellationGroups, groupIds.get(i)),
+                        findGroupById(constellationGroups, groupIds.get(j)),
+                        connections
                 );
-
-                groupEdges.add(new GroupEdge(group1Id, group2Id, distance));
-            }
-        }
-
-        // 거리순 정렬
-        groupEdges.sort(Comparator.comparingDouble(GroupEdge::getDistance));
-
-        // MST로 그룹 간 기본 연결 구조 생성
-        Map<Integer, Integer> groupToSet = new HashMap<>();
-        for (Integer groupId : groupIds) {
-            groupToSet.put(groupId, groupId);
-        }
-
-        List<GroupEdge> selectedEdges = new ArrayList<>();
-
-        for (GroupEdge edge : groupEdges) {
-            int set1 = findGroupSet(groupToSet, edge.getGroup1Id());
-            int set2 = findGroupSet(groupToSet, edge.getGroup2Id());
-
-            if (set1 != set2) {
-                selectedEdges.add(edge);
-                groupToSet.put(set1, set2);
-            }
-        }
-
-        // 선택된 그룹 간 연결에 대해, 각 그룹에서 가장 가까운 일기 쌍을 찾아 연결
-        for (GroupEdge edge : selectedEdges) {
-            List<Diary> group1 = constellationGroups.stream()
-                    .filter(g -> !g.isEmpty() && g.get(0).getDiarySeq().equals(edge.getGroup1Id()))
-                    .findFirst().orElse(new ArrayList<>());
-
-            List<Diary> group2 = constellationGroups.stream()
-                    .filter(g -> !g.isEmpty() && g.get(0).getDiarySeq().equals(edge.getGroup2Id()))
-                    .findFirst().orElse(new ArrayList<>());
-
-            if (group1.isEmpty() || group2.isEmpty()) continue;
-
-            // 두 그룹 간 가장 가까운 일기 쌍 찾기
-            Diary closest1 = null;
-            Diary closest2 = null;
-            double minDistance = Double.MAX_VALUE;
-
-            for (Diary d1 : group1) {
-                for (Diary d2 : group2) {
-                    double dist = calculateDistance(d1, d2);
-                    if (dist < minDistance &&
-                            connections.get(d1.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY &&
-                            connections.get(d2.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
-                        minDistance = dist;
-                        closest1 = d1;
-                        closest2 = d2;
-                    }
-                }
-            }
-
-            // 가장 가까운 일기 쌍 연결
-            if (closest1 != null && closest2 != null) {
-                addConnection(connections, closest1.getDiarySeq(), closest2.getDiarySeq());
             }
         }
     }
 
     /**
-     * Union-Find 알고리즘을 위한 그룹 집합 찾기
+     * 그룹 ID로 그룹 찾기
      */
-    private int findGroupSet(Map<Integer, Integer> groupToSet, int groupId) {
-        if (groupToSet.get(groupId) != groupId) {
-            groupToSet.put(groupId, findGroupSet(groupToSet, groupToSet.get(groupId)));
+    private List<Diary> findGroupById(List<List<Diary>> groups, int groupId) {
+        for (List<Diary> group : groups) {
+            if (!group.isEmpty() && group.get(0).getDiarySeq() == groupId) {
+                return group;
+            }
         }
-        return groupToSet.get(groupId);
+        return Collections.emptyList();
+    }
+
+    /**
+     * 두 그룹에서 가장 가까운 일기 쌍을 찾아 연결
+     */
+    private void connectClosestDiaries(List<Diary> group1, List<Diary> group2, Map<Integer, List<Integer>> connections) {
+        if (group1.isEmpty() || group2.isEmpty()) return;
+
+        Diary closest1 = null;
+        Diary closest2 = null;
+        double minDistance = Double.MAX_VALUE;
+
+        for (Diary d1 : group1) {
+            for (Diary d2 : group2) {
+                double dist = calculateDistance(d1, d2);
+
+                // 최대 거리 제한 및 각 일기의 최대 연결 수 확인
+                if (dist < minDistance && dist <= MAX_CONNECTION_DISTANCE &&
+                        connections.get(d1.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY &&
+                        connections.get(d2.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
+
+                    minDistance = dist;
+                    closest1 = d1;
+                    closest2 = d2;
+                }
+            }
+        }
+
+        // 가장 가까운 일기 쌍 연결
+        if (closest1 != null && closest2 != null) {
+            addConnection(connections, closest1.getDiarySeq(), closest2.getDiarySeq());
+            log.debug("그룹 간 연결 추가: {} - {}", closest1.getDiarySeq(), closest2.getDiarySeq());
+        }
     }
 
     /**
@@ -406,59 +535,5 @@ public class ConstellationConnectionService {
         intersection.retainAll(tags2);
 
         return (double) intersection.size() / union.size();
-    }
-
-    /**
-     * 내부 클래스: 두 일기 간의 연결 정보
-     */
-    private static class DiaryEdge {
-        private final int diary1Seq;
-        private final int diary2Seq;
-        private final double distance;
-
-        public DiaryEdge(int diary1Seq, int diary2Seq, double distance) {
-            this.diary1Seq = diary1Seq;
-            this.diary2Seq = diary2Seq;
-            this.distance = distance;
-        }
-
-        public int getDiary1Seq() {
-            return diary1Seq;
-        }
-
-        public int getDiary2Seq() {
-            return diary2Seq;
-        }
-
-        public double getDistance() {
-            return distance;
-        }
-    }
-
-    /**
-     * 내부 클래스: 그룹 간 연결 정보
-     */
-    private static class GroupEdge {
-        private final int group1Id;
-        private final int group2Id;
-        private final double distance;
-
-        public GroupEdge(int group1Id, int group2Id, double distance) {
-            this.group1Id = group1Id;
-            this.group2Id = group2Id;
-            this.distance = distance;
-        }
-
-        public int getGroup1Id() {
-            return group1Id;
-        }
-
-        public int getGroup2Id() {
-            return group2Id;
-        }
-
-        public double getDistance() {
-            return distance;
-        }
     }
 }

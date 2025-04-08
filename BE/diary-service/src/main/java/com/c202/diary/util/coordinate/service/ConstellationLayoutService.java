@@ -25,7 +25,7 @@ public class ConstellationLayoutService {
     private static final double BASE_SCALE = 30.0;
 
     // 구의 반경 (전체 우주의 크기)
-    private static final double SPHERE_RADIUS = 150.0;
+    private static final double SPHERE_RADIUS = 200.0;
 
     // 클러스터별 최대 일기 수 (이보다 많으면 여러 별자리로 분할)
     private static final int MAX_DIARIES_PER_CONSTELLATION = 7;
@@ -91,7 +91,7 @@ public class ConstellationLayoutService {
 
             // 별자리 크기는 그룹 크기에 비례하되 일정 범위 내로 제한
             double constellationScale = Math.min(
-                    emotion.getBaseRadius() * 0.3,  // 최대 크기 (감정 반경의 30%)
+                    emotion.getBaseRadius() * 0.4,  // 최대 크기 (감정 반경의 30%)
                     BASE_SCALE * Math.sqrt(group.size() / 3.0)  // 크기 조정
             );
 
