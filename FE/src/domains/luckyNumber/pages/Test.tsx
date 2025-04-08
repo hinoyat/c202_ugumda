@@ -74,12 +74,6 @@ const LuckyNumber = () => {
         // 데이터 로딩 완료 표시
         setDataLoaded(true);
       } catch (error) {
-        console.error('행운의 번호를 불러오는데 실패했습니다.', error);
-        console.error('에러 세부 정보:', {
-          message: error.message,
-          response: error.response,
-          request: error.request,
-        });
 
         // 에러 발생 시에도 버튼 표시
         setShowButton(true);
@@ -87,7 +81,7 @@ const LuckyNumber = () => {
       }
     };
 
-    console.log('fetchLuckyNumbers 실행 (의존성 배열 빈 배열)');
+
     fetchLuckyNumbers();
   }, []);
 
@@ -120,7 +114,7 @@ const LuckyNumber = () => {
   ];
 
   const handleDrawClick = async () => {
-    console.log('행운의 번호 버튼 클릭 - 애니메이션 상태 변경');
+
     setShowButton(false); // 버튼 클릭 즉시 버튼 숨기기
     setShowText(true);
     setAnimationStage(1); // 애니메이션 시작
@@ -128,7 +122,7 @@ const LuckyNumber = () => {
     try {
       // 버튼 클릭 시 새로운 행운의 번호 생성 API 호출
       const response = await api.post('/lucky-numbers');
-      console.log('API 응답:', response.data);
+
 
       // API 응답 구조에 따라 데이터 처리
       let numbersFromResponse;
@@ -150,35 +144,30 @@ const LuckyNumber = () => {
 
       // 응답으로 받은 번호로 stars 배열 업데이트
       if (numbersFromResponse && numbersFromResponse.length > 0) {
-        console.log(
-          '응답으로 받은 번호로 별 업데이트 시작:',
-          numbersFromResponse
-        );
+
         const updatedStars = [...stars];
         numbersFromResponse.forEach((num, index) => {
           if (index < updatedStars.length) {
             updatedStars[index].id = num;
           }
         });
-        console.log('업데이트된 별 배열:', updatedStars);
         setStars(updatedStars);
       } else {
-        console.warn('응답으로 받은 번호가 없거나 빈 배열입니다.');
+        // console.warn('응답으로 받은 번호가 없거나 빈 배열입니다.');
       }
     } catch (error) {
-      console.error('행운의 번호 생성에 실패했습니다.', error);
+      // console.error('행운의 번호 생성에 실패했습니다.', error);
       // 에러 발생 시에도 애니메이션은 계속 진행 (테스트용 더미 데이터 사용 가능)
     }
   };
 
   // animationStage 변경 추적
-  useEffect(() => {
-    console.log(`애니메이션 단계 변경: ${animationStage}`);
-  }, [animationStage]);
+  // useEffect(() => {
+  //   console.log(`애니메이션 단계 변경: ${animationStage}`);
+  // }, [animationStage]);
 
   useEffect(() => {
     if (animationStage === 1) {
-      console.log('애니메이션 단계 1: 텍스트 타이핑 시작');
       const fullText = '오늘의 행운의 번호는';
       let currentText = '';
       let index = 0;
@@ -190,7 +179,6 @@ const LuckyNumber = () => {
           index++;
         } else {
           clearInterval(typingInterval);
-          console.log('텍스트 타이핑 완료, 애니메이션 단계 2로 전환');
           setAnimationStage(2);
         }
       }, 100);
@@ -201,11 +189,10 @@ const LuckyNumber = () => {
 
   useEffect(() => {
     if (animationStage === 2) {
-      console.log('애니메이션 단계 2: 별과 선 표시 시작');
       const timer = setTimeout(() => {
         stars.forEach((star, index) => {
           setTimeout(() => {
-            console.log(`별 ${star.id} 표시`);
+
             setVisibleStars((prev) => [...prev, star.id]);
 
             if (index > 0) {
@@ -241,9 +228,7 @@ const LuckyNumber = () => {
 
             if (index === stars.length - 1) {
               setTimeout(() => {
-                console.log(
-                  '모든 별과 선 표시 완료, 애니메이션 단계 3으로 전환'
-                );
+
                 setAnimationStage(3);
               }, 1000);
             }
@@ -257,17 +242,14 @@ const LuckyNumber = () => {
 
   useEffect(() => {
     if (animationStage === 3) {
-      console.log('애니메이션 단계 3: 번호 표시 시작');
       stars.forEach((s, numIndex) => {
         setTimeout(() => {
-          console.log(`번호 ${s.id} 표시`);
           setVisibleNumbers((prev) => [...prev, s.id]);
 
           // 마지막 숫자가 추가되면 다음 단계로
           if (numIndex === stars.length - 1) {
             setTimeout(
               () => {
-                console.log('모든 번호 표시 완료, 애니메이션 단계 4로 전환');
                 setAnimationStage(4);
               },
               600 * numIndex + 300
@@ -280,7 +262,6 @@ const LuckyNumber = () => {
 
   // stars 상태 변경 감지
   useEffect(() => {
-    console.log('stars 상태 변경됨:', stars);
   }, [stars]);
 
   return (

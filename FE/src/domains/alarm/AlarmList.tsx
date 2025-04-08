@@ -61,7 +61,6 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
 
   // 알림 하나 클릭
   const handleAlarmClick = (alarm: Alarm) => {
-    console.log('알림 눌렀지롱', alarm);
     if (alarm.isRead === 'N') {
       dispatch(readAlarm(alarm.alarmSeq));
     }

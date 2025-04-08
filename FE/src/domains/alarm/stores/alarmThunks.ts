@@ -12,7 +12,6 @@ export const fetchAlarms = createAsyncThunk<
   const response = await api.get('/notifications/list/page', {
     params: { page, size },
   });
-  console.log('⏰⏰⏰⏰⏰알람 목록 페이지네이션 thunks', response);
   return {
     alarms: response.data.data.alarms,
     totalPages: response.data.data.totalPages,
