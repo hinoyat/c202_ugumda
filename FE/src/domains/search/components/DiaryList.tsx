@@ -41,12 +41,22 @@ interface ApiResponse {
 
 interface DiaryListProps {
   data: ApiResponse;
+  onClose: () => void;
 }
 
-const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
+const DiaryList: React.FC<DiaryListProps> = ({ data,onClose }) => {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const nav = useNavigate();
+
+  const handleClose = () => {
+    onClose(); // 먼저 모달 닫기 함수 호출
+
+    // 약간의 지연 후 새로고침 (모달이 시각적으로 사라지는 것을 확인할 수 있도록)
+    setTimeout(() => {
+      window.location.reload();
+    }, 10); // 50ms 정도의 짧은 지연
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -183,6 +193,7 @@ const DiaryList: React.FC<DiaryListProps> = ({ data }) => {
                     );
                     // 페이지 이동
                     nav(`/${diary.username || ''}`);
+                    handleClose();
                   }}>
                   보러가기
                 </button>

@@ -39,6 +39,9 @@ export default function Ufo() {
   const handleUfoClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation(); // 이벤트 버블링 방지
     console.log('🚀 UFO가 클릭되었습니다! 👽');
+
+    //아래는 우주선 이동할떄 쓰는 일회성 localstorage니까 지우지 말아주세요!
+    localStorage.setItem("EnterSpaceShip","ok");
     navigate('/spaceship'); // '/spaceship' 경로로 이동
   };
 
