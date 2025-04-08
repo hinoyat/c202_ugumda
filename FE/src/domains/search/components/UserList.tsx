@@ -68,13 +68,22 @@ const UserList: React.FC<UserListProps> = ({
             <div className="flex gap-3 text-white outline:none">
               {isSubscribed ? (
                 // 이미 구독 중인 경우 - 구독취소 버튼
-                <button
-                  className="bg-[#363736] text-white text-[16px] py-1 w-28 rounded cursor-pointer hover:bg-neutral-500"
+                // <button
+                //   className="bg-[#363736] text-white text-[16px] py-1 w-28 rounded cursor-pointer hover:bg-neutral-500"
+                //   onClick={() =>
+                //     user.subscribedSeq && onUnsubscribe(user.subscribedSeq)
+                //   }>
+                //   구독취소
+                // </button>
+                <ButtonBase
                   onClick={() =>
                     user.subscribedSeq && onUnsubscribe(user.subscribedSeq)
-                  }>
+                  }
+                  width="107px"
+                  height="36px"
+                  borderRadius="8px">
                   구독취소
-                </button>
+                </ButtonBase>
               ) : (
                 // 구독 중이 아닌 경우 - 구독하기 버튼
                 <ButtonBase
