@@ -124,7 +124,9 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         }
 
         // 모든 처리가 완료된 후 모달 닫기
-        onClose();
+        if (onClose) {
+          onClose();
+        }
       } else {
         // --------------- 생성 모드 ----------------
 
@@ -179,7 +181,9 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         }
       }
 
-      onClose();
+      if (onClose) {
+        onClose();
+      }
     } catch (error) {
       const err = error as any;
 
