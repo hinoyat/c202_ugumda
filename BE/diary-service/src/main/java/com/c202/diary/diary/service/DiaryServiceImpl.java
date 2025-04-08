@@ -98,6 +98,8 @@ public class DiaryServiceImpl implements DiaryService {
             tagDtos = tagService.processTags(diary, request.getTags(), now);
         }
 
+        coordinateService.relayoutUniverse(userSeq);
+
         return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName);
     }
 
@@ -159,6 +161,8 @@ public class DiaryServiceImpl implements DiaryService {
         boolean hasLiked = diaryLikeService.hasUserLiked(diarySeq, userSeq);
 
 
+        coordinateService.relayoutUniverse(userSeq);
+
         return DiaryDetailResponseDto.toDto(diary, tagDtos, newEmotion.getName(), connectedDiaries, likeCount, hasLiked);
     }
 
@@ -174,6 +178,8 @@ public class DiaryServiceImpl implements DiaryService {
         diaryIndexService.indexDiary(diary);
 
         diary.deleteDiary();
+
+        coordinateService.relayoutUniverse(userSeq);
     }
 
     @Transactional
