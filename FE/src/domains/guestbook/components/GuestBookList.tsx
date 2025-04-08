@@ -67,7 +67,7 @@ const GuestBookList: React.FC<GuestBookListProps> = ({
       {guestbooksData.map((item) => (
         <div
           key={item.guestbookSeq}
-          className="flex items-center gap-4 p-2 w-full text-[14px]">
+          className="flex items-center gap-4 p-1 w-full text-[14px]">
           {/* 남긴 글 */}
           <p className="w-[78%] truncate text-[15px] mr-2">{item.content}</p>
           {/* 프로필과 닉네임 영역 */}

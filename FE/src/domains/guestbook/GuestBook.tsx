@@ -179,7 +179,7 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
             onClick={onClose}>
             <IoClose className="text-gray-200 text-3xl hover:text-gray-400" />
           </div>
-          <div className="flex flex-col p-10 gap-10 w-full">
+          <div className="flex flex-col p-10 gap-8 w-full">
             {/*헤더 부분 */}
             <div className="flex items-center justify-between ml-3">
               <div className="flex flex-col gap-1">
@@ -237,7 +237,7 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
 
             {/*방명록 남기는 부분 */}
             {PageUserNumber !== LoginUserNumber ? (
-              <div className="flex gap-7 justify-center text-[15px]">
+              <div className="flex gap-5 justify-center text-[15px]">
                 <input
                   type="text"
                   placeholder="내용을 입력해 주세요."
