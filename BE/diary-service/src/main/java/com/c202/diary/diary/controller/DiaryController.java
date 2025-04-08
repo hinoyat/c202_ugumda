@@ -84,9 +84,9 @@ public class DiaryController {
         return ResponseEntity.ok(ResponseDto.success(200, "일기 공개 상태 변경 완료", diaryService.toggleDiaryIsPublic(diarySeq, userSeq)));
     }
 
-    @GetMapping("/universe")
+    @GetMapping("/universe/{userSeq}")
     public ResponseEntity<ResponseDto<UniverseDataResponseDto>> getUniverseData(
-            @RequestHeader("X-User-Seq") @NotNull Integer userSeq
+            @PathVariable Integer userSeq
     ) {
         return ResponseEntity.ok(ResponseDto.success(200, "우주 데이터 조회 완료", diaryService.getUniverseData(userSeq)));
     }
