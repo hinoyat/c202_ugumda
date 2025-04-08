@@ -22,6 +22,8 @@ import { initializeAudio, togglePlayback } from '@/stores/music/musicThunks';
 import onboardingBlackhole from '@/assets/images/boardingBlackhole.gif';
 import onboardingUfo from '@/assets/images/boardingUfo.gif';
 
+import { PiMusicNoteFill } from "react-icons/pi";
+
 const MainPage = () => {
   const [step, setStep] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -151,9 +153,9 @@ const MainPage = () => {
           data-tooltip-id="music-tooltip"
           data-tooltip-content={isMusicPlaying ? '음악 끄기' : '음악 켜기'}>
           {isMusicPlaying ? (
-            <AiFillSound size={23} />
+            <PiMusicNoteFill  className="text-teal-500" size={30} />
           ) : (
-            <BiSolidVolumeMute size={23} />
+            <PiMusicNoteFill size={30} />
           )}
         </button>
       </div>
