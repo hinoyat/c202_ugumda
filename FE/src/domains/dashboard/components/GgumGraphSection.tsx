@@ -14,8 +14,6 @@ const GraphSection = () => {
   const error = useSelector(selectError)
   const twoWeeksData = useSelector(selectTwoWeeksData)
   const monthlyData = useSelector(selectMonthlyData)
-  console.log(twoWeeksData)
-  console.log(monthlyData)
 
   useEffect(() => {
     // 컴포넌트 마운트 시 데이터 로드하기

@@ -39,7 +39,6 @@ const GgumGraph = ({periodName=30, height = "50%", data }: GgumGrapProps)=>{
         
         const emotions = data.map(item => item.emotion)
         const emotionsCounts = data.map(item=>item.count)
-        console.log('그래프 데이터:', emotions, emotionsCounts);
 
         const periodMapping = {
             "14": "이주일",

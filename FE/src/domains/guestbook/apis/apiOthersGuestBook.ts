@@ -41,7 +41,6 @@ export const GuestbookOtherapi = {
             });
             return response.data
         }catch(error){
-            console.error("❌ 다른사람 방명록 조회 오류", error)
             return null
         }
     },
@@ -53,7 +52,6 @@ export const GuestbookOtherapi = {
             const response = await api.post(`/guestbook/users/${ownerSeq}`, {content})
             return response.data
         }catch(error){
-            console.error("❌ 방명록 생성 오류:", error)
             return null
         }
     },
@@ -65,7 +63,6 @@ export const GuestbookOtherapi = {
             const response = await api.delete(`/guestbook/${guestbookSeq}`)
             return response.data
         }catch(error){
-            console.error("❌ 방명록 삭제 오류", error)
         }
     }
 

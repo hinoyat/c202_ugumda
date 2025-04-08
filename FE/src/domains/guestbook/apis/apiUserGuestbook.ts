@@ -31,10 +31,8 @@ export const getMyGuestbookEntries = async (page: number = 1): Promise<Paginated
                 page:page
             }
         })
-        console.log(response.data)
         return response.data
     } catch (error) {
-        console.error("내 방명록 조회 오류", error)
         return null
     }
 }
