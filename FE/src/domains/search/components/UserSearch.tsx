@@ -299,7 +299,7 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
   };
 
   // 필터 변경 처리
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: 'searchNickname' | 'searchUsername') => {
     setSearchFilters((prev) => ({
       ...prev,
       [filter]: !prev[filter],
