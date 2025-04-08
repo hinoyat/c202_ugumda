@@ -16,6 +16,9 @@ import AlarmList from '../alarm/AlarmList';
 import { selectUser } from '@/stores/auth/authSelectors';
 import { resetAlarms } from '../alarm/stores/alarmSlice';
 
+import { showGuestbookModal } from '@/stores/guestbook/guestbookSlice';
+import { RootState } from '@/stores/store';
+
 const Navbar = () => {
   // 모달 열림 여부
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,18 +33,21 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
+  const { guestbookModal } = useSelector((state: RootState) => state.guestbook);
 
-  useEffect(() => {
-    if (params.username) {
-      console.log(params.username);
-    }
-  }, [params.username, dispatch]);
+  // useEffect(() => {
+  //   if (params.username) {
+  //     console.log(params.username);
+  //   }
+  // }, [params.username, dispatch]);
 
-  //방명록 모달
+  //방명록 모달 -필요없어도 되나?
   const [showGuestbook, setShowGuestbook] = useState(false);
+
   const onClickGuestBookModal = () => {
-    console.log('방명록 버튼 클릭됨:', showGuestbook);
-    setShowGuestbook(!showGuestbook);
+    // console.log('방명록 버튼 클릭됨:', showGuestbook);
+    dispatch(showGuestbookModal());
+    // setShowGuestbook(!showGuestbook);
   };
 
   // 알림 모달 열림 여부
@@ -121,7 +127,7 @@ const Navbar = () => {
       />
 
       {/* 방명록 모달 (조건부 렌더링) */}
-      {showGuestbook && <GuestBook onClose={onClickGuestBookModal} />}
+      {guestbookModal && <GuestBook onClose={onClickGuestBookModal} />}
 
       {/* 알림 컴포넌트 */}
       <AlarmList
