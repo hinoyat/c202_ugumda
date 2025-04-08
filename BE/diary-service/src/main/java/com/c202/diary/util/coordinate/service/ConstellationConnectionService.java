@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * 별자리 연결 관계를 생성하고 최적화하는 서비스
- * 일기 간의 태그 유사도를 기반으로 최적의 연결 관계를 만들어 별자리처럼 보이도록 합니다.
+ * 일기 간의 연결을 생성하여 자연스러운 별자리 모양을 형성합니다.
  */
 @Slf4j
 @Service
@@ -22,53 +22,20 @@ public class ConstellationConnectionService {
     private final DiaryTagRepository diaryTagRepository;
 
     // 일기별 최대 연결 수 (시각적으로 복잡해지지 않도록 제한)
-    private static final int MAX_CONNECTIONS_PER_DIARY = 1;
+    private static final int MAX_CONNECTIONS_PER_DIARY = 3;
 
-    // 최소 연결 유사도 임계값 (이 값 이상의 유사도를 가진 일기만 연결)
-    private static final double MIN_SIMILARITY_THRESHOLD = 0.45;
+    // 최소 연결 수 (모든 일기가 최소한 이 개수만큼은 연결되도록)
+    private static final int MIN_CONNECTIONS_PER_DIARY = 1;
 
-    /**
-     * 일기 목록에서 최적의 연결 관계를 생성합니다.
-     *
-     * @param diaries 일기 목록
-     * @return 일기 ID를 키로, 연결된 일기 ID 목록을 값으로 하는 맵
-     */
-    public Map<Integer, List<Integer>> optimizeConnections(List<Diary> diaries) {
-        Map<Integer, List<Integer>> connections = new HashMap<>();
+    // 3D 공간에서 최대 연결 거리 (너무 멀리 떨어진 일기는 연결하지 않음)
+    private static final double MAX_CONNECTION_DISTANCE = 40.0;
 
-        // 각 일기에 빈 연결 목록 초기화
-        for (Diary diary : diaries) {
-            connections.put(diary.getDiarySeq(), new ArrayList<>());
-        }
-
-        // 일기가 1개 이하면 연결이 필요 없음
-        if (diaries.size() <= 1) {
-            return connections;
-        }
-
-        // 감정에 맞는 별자리 패턴으로 연결
-        String emotionName = "기본";
-        // 모든 일기가 같은 감정을 가지고 있다고 가정
-        if (diaries.get(0).getEmotionSeq() != null) {
-            // 실제 애플리케이션에서는 emotion 엔티티를 조회해야 함
-            // emotionName = emotionRepository.findById(diaries.get(0).getEmotionSeq()).getName();
-            // 여기서는 시각적 패턴을 선택하기 위한 값으로만 사용
-        }
-
-        // 일기 수에 따라 적절한 연결 패턴 적용
-        if (diaries.size() <= 3) {
-            applySimpleConnections(diaries, connections);
-        } else if (diaries.size() <= 5) {
-            applyMediumConnections(diaries, connections, emotionName);
-        } else {
-            applyLargeConnections(diaries, connections, emotionName);
-        }
-
-        return connections;
-    }
+    // 구의 반경 (전체 우주의 크기)
+    private static final double SPHERE_RADIUS = 150.0;
 
     /**
-     * 별자리 그룹 내에서 연결 관계를 최적화합니다.
+     * 일기 그룹들에 대한 연결 관계를 최적화합니다.
+     * 각 그룹은 하나의 별자리를 형성하고, 그룹 간에도 일부 연결됩니다.
      *
      * @param constellationGroups 별자리 그룹 목록
      * @return 최적화된 연결 관계
@@ -76,675 +43,324 @@ public class ConstellationConnectionService {
     public Map<Integer, List<Integer>> optimizeConstellationConnections(List<List<Diary>> constellationGroups) {
         Map<Integer, List<Integer>> connections = new HashMap<>();
 
-        // 모든 일기 수집 및 초기화
+        // 모든 일기 초기화
         for (List<Diary> group : constellationGroups) {
             for (Diary diary : group) {
                 connections.put(diary.getDiarySeq(), new ArrayList<>());
             }
         }
 
-        // 각 별자리 그룹 내부에 형태 적용
+        // 각 별자리 그룹 내부의 연결 생성
         for (List<Diary> group : constellationGroups) {
-            // 그룹 내 일기 수에 따라 다른 패턴 적용
-            if (group.size() <= 3) {
-                applySimpleConnections(group, connections);
-            } else if (group.size() <= 5) {
-                // 그룹의 감정에 따라 패턴 선택
-                String emotionName = "기본";
-                if (group.get(0).getEmotionSeq() != null) {
-                    // 실제로는 감정 이름 조회 필요
-                    // emotionName = emotionRepository.findById(group.get(0).getEmotionSeq()).getName();
-                }
-                applyMediumConnections(group, connections, emotionName);
-            } else {
-                // 큰 그룹은 특별한 패턴 적용
-                String emotionName = "기본";
-                applyLargeConnections(group, connections, emotionName);
-            }
+            createConstellationConnections(group, connections);
         }
 
-        // 별자리 그룹 간 최소한의 연결 추가 (필요한 경우)
+        // 별자리 그룹 간의 연결 생성 (필요한 경우)
         if (constellationGroups.size() > 1) {
             connectBetweenConstellations(constellationGroups, connections);
         }
+
+        // 고립된 일기가 없도록 보장
+        ensureMinimalConnections(connections, constellationGroups);
 
         return connections;
     }
 
     /**
-     * 작은 그룹(2-3개 일기)에 간단한 연결 적용
+     * 단일 일기 그룹(별자리)에 대한 연결 관계를 생성합니다.
+     * 별자리 모양에 맞는 자연스러운 연결을 생성합니다.
+     *
+     * @param diaries 일기 그룹
+     * @param connections 연결 관계 맵
      */
-    private void applySimpleConnections(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        // 일기가 2개면 서로 연결
-        if (diaries.size() == 2) {
-            int seq1 = diaries.get(0).getDiarySeq();
-            int seq2 = diaries.get(1).getDiarySeq();
-            addConnection(connections, seq1, seq2);
-            return;
-        }
+    public void createConstellationConnections(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
+        int size = diaries.size();
+        if (size <= 1) return;
 
-        // 일기가 3개면 삼각형 연결
-        if (diaries.size() == 3) {
-            int seq1 = diaries.get(0).getDiarySeq();
-            int seq2 = diaries.get(1).getDiarySeq();
-            int seq3 = diaries.get(2).getDiarySeq();
+        // 일기가 적은 경우(2-3개)는 모두 연결
+        if (size <= 3) {
+            for (int i = 0; i < size; i++) {
+                for (int j = i + 1; j < size; j++) {
+                    Diary diary1 = diaries.get(i);
+                    Diary diary2 = diaries.get(j);
 
-            addConnection(connections, seq1, seq2);
-            addConnection(connections, seq2, seq3);
-            addConnection(connections, seq3, seq1);
-            return;
-        }
-
-        // 일기가 1개면 연결 없음
-    }
-
-    /**
-     * 중간 규모 그룹(4-5개 일기)에 감정 맞춤형 연결 적용
-     */
-    private void applyMediumConnections(List<Diary> diaries, Map<Integer, List<Integer>> connections, String emotionName) {
-        if (diaries.size() < 4) {
-            applySimpleConnections(diaries, connections);
-            return;
-        }
-
-        // 감정별 다른 패턴 적용
-        switch (emotionName) {
-            case "행복":
-                applyStarPattern(diaries, connections); // 별/왕관 모양
-                break;
-            case "슬픔":
-                applyTearPattern(diaries, connections); // 눈물방울 모양
-                break;
-            case "분노":
-                applyLightningPattern(diaries, connections); // 번개 모양
-                break;
-            case "희망":
-                applyArrowPattern(diaries, connections); // 화살표 모양
-                break;
-            case "평화":
-                applyCirclePattern(diaries, connections); // 원형 모양
-                break;
-            case "공포":
-            case "불안":
-                applyScatterPattern(diaries, connections); // 흩어진 형태
-                break;
-            default:
-                // 기본 패턴은 중앙 노드 기준 방사형 연결
-                applyRadialPattern(diaries, connections);
-                break;
-        }
-    }
-
-    /**
-     * 큰 그룹(6개 이상 일기)에 감정 맞춤형 연결 적용
-     */
-    private void applyLargeConnections(List<Diary> diaries, Map<Integer, List<Integer>> connections, String emotionName) {
-        if (diaries.size() < 6) {
-            applyMediumConnections(diaries, connections, emotionName);
-            return;
-        }
-
-        // 감정별 다른 패턴 적용
-        switch (emotionName) {
-            case "행복":
-                applySunPattern(diaries, connections); // 태양 모양
-                break;
-            case "슬픔":
-                applyRiverPattern(diaries, connections); // 강/물결 모양
-                break;
-            case "분노":
-                applyExplosionPattern(diaries, connections); // 폭발 모양
-                break;
-            case "불안":
-                applySpiralPattern(diaries, connections); // 나선형 모양
-                break;
-            case "평화":
-                applyBalancePattern(diaries, connections); // 균형 모양
-                break;
-            case "희망":
-                applyBirdPattern(diaries, connections); // 새/날개 모양
-                break;
-            case "공포":
-                applyScatterPattern(diaries, connections); // 혼란스럽게 흩어진 형태
-                break;
-            default:
-                // 기본은 원형 + 중앙 연결 패턴
-                applyCircularPattern(diaries, connections);
-                break;
-        }
-    }
-
-    /**
-     * 별자리 그룹 간 연결을 추가합니다.
-     * 그룹 간에는 최소한의 연결만 유지합니다.
-     */
-    private void connectBetweenConstellations(List<List<Diary>> constellationGroups, Map<Integer, List<Integer>> connections) {
-        // 각 그룹에서 "중심" 일기를 선택
-//        List<Diary> representatives = new ArrayList<>();
-
-//        for (List<Diary> group : constellationGroups) {
-//            if (group.isEmpty()) continue;
-//
-//            // 중심 일기를 선택하는 방법:
-//            // 1. 연결이 가장 많은 일기, 또는
-//            // 2. 단순하게 첫 번째 일기
-//            Diary representative = group.get(0);
-//            representatives.add(representative);
-//        }
-//
-//        // 인접 그룹끼리만 체인 형태로 연결
-//        for (int i = 0; i < representatives.size() - 1; i++) {
-//            int seq1 = representatives.get(i).getDiarySeq();
-//            int seq2 = representatives.get(i + 1).getDiarySeq();
-//
-//            // 연결 추가
-//            addConnection(connections, seq1, seq2);
-//        }
-    }
-
-    /**
-     * 방사형 패턴 적용 (중앙 노드와 다른 노드들 연결)
-     */
-    private void applyRadialPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 2) return;
-
-        // 중앙 노드 선택 (첫 번째 노드 사용)
-        int centerSeq = diaries.get(0).getDiarySeq();
-
-        // 중앙 노드와 다른 노드들 연결
-        for (int i = 1; i < diaries.size(); i++) {
-            int nodeSeq = diaries.get(i).getDiarySeq();
-            addConnection(connections, centerSeq, nodeSeq);
-        }
-    }
-
-    /**
-     * 원형 패턴 적용 (노드들이 원형으로 연결)
-     */
-    private void applyCirclePattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 3) {
-            applySimpleConnections(diaries, connections);
-            return;
-        }
-
-        // 원형으로 연결
-        for (int i = 0; i < diaries.size(); i++) {
-            int current = diaries.get(i).getDiarySeq();
-            int next = diaries.get((i + 1) % diaries.size()).getDiarySeq();
-            addConnection(connections, current, next);
-        }
-    }
-
-    /**
-     * 원형 + 중앙 노드 패턴 적용 (원형 + 중앙 노드 연결)
-     */
-    private void applyCircularPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 4) {
-            applyCirclePattern(diaries, connections);
-            return;
-        }
-
-        // 중앙 노드 선택
-        int centerIndex = 0;
-        int centerSeq = diaries.get(centerIndex).getDiarySeq();
-
-        // 나머지 노드들을 원형으로 배치
-        List<Diary> outerDiaries = new ArrayList<>(diaries);
-        outerDiaries.remove(centerIndex);
-
-        // 원형 연결
-        for (int i = 0; i < outerDiaries.size(); i++) {
-            int current = outerDiaries.get(i).getDiarySeq();
-            int next = outerDiaries.get((i + 1) % outerDiaries.size()).getDiarySeq();
-            addConnection(connections, current, next);
-
-            // 중앙 노드와 연결 (MAX_CONNECTIONS_PER_DIARY를 고려)
-            if (i % 2 == 0 && connections.get(centerSeq).size() < MAX_CONNECTIONS_PER_DIARY) {
-                addConnection(connections, centerSeq, current);
-            }
-        }
-    }
-
-    /**
-     * 별/왕관 모양 패턴 적용 (행복 감정용)
-     */
-    private void applyStarPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 4) {
-            applySimpleConnections(diaries, connections);
-            return;
-        }
-
-        // 중앙 노드
-        int centerSeq = diaries.get(0).getDiarySeq();
-
-        // 별 모양 연결 (중앙에서 다른 노드로 + 외곽 노드들끼리 연결)
-        for (int i = 1; i < diaries.size(); i++) {
-            int current = diaries.get(i).getDiarySeq();
-
-            // 중앙과 연결
-            addConnection(connections, centerSeq, current);
-
-            // 인접한 외곽 노드와 연결
-            if (i < diaries.size() - 1) {
-                int next = diaries.get(i + 1).getDiarySeq();
-                addConnection(connections, current, next);
-            }
-        }
-
-        // 마지막 노드와 두 번째 노드 연결해서 별 모양 완성
-        if (diaries.size() > 3) {
-            int lastSeq = diaries.get(diaries.size() - 1).getDiarySeq();
-            int secondSeq = diaries.get(1).getDiarySeq();
-            addConnection(connections, lastSeq, secondSeq);
-        }
-    }
-
-    /**
-     * 태양 모양 패턴 적용 (행복 감정용, 큰 그룹)
-     */
-    private void applySunPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 5) {
-            applyStarPattern(diaries, connections);
-            return;
-        }
-
-        // 중앙 노드 (태양 중심)
-        int centerSeq = diaries.get(0).getDiarySeq();
-
-        // 나머지 노드들을 원형으로 배치
-        List<Diary> rayDiaries = new ArrayList<>(diaries);
-        rayDiaries.remove(0);
-
-        // 원형 연결 (태양 광선)
-        for (int i = 0; i < rayDiaries.size(); i++) {
-            int current = rayDiaries.get(i).getDiarySeq();
-
-            // 중앙과 연결 (태양 광선)
-            addConnection(connections, centerSeq, current);
-
-            // 인접한 노드와 연결 (태양 외곽)
-            int next = rayDiaries.get((i + 1) % rayDiaries.size()).getDiarySeq();
-            addConnection(connections, current, next);
-        }
-    }
-
-    /**
-     * 눈물방울 모양 패턴 적용 (슬픔 감정용)
-     */
-    private void applyTearPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 4) {
-            applySimpleConnections(diaries, connections);
-            return;
-        }
-
-        // 눈물방울 위쪽 (첫 번째 노드)
-        int topSeq = diaries.get(0).getDiarySeq();
-
-        // 중간 노드들
-        for (int i = 1; i < diaries.size() - 1; i++) {
-            int current = diaries.get(i).getDiarySeq();
-
-            // 위쪽 노드와 연결
-            addConnection(connections, topSeq, current);
-
-            // 인접한 노드와 연결
-            if (i < diaries.size() - 2) {
-                int next = diaries.get(i + 1).getDiarySeq();
-                addConnection(connections, current, next);
-            }
-        }
-
-        // 맨 아래 노드 (눈물방울 끝)
-        if (diaries.size() >= 4) {
-            int bottomSeq = diaries.get(diaries.size() - 1).getDiarySeq();
-            int secondLastSeq = diaries.get(diaries.size() - 2).getDiarySeq();
-            addConnection(connections, secondLastSeq, bottomSeq);
-        }
-    }
-
-    /**
-     * 강/물결 모양 패턴 적용 (슬픔 감정용, 큰 그룹)
-     */
-    private void applyRiverPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 5) {
-            applyTearPattern(diaries, connections);
-            return;
-        }
-
-        // 강 흐름처럼 지그재그 형태로 연결
-        for (int i = 0; i < diaries.size() - 1; i++) {
-            int current = diaries.get(i).getDiarySeq();
-            int next = diaries.get(i + 1).getDiarySeq();
-            addConnection(connections, current, next);
-        }
-
-        // 추가 연결로 물결 모양 형성
-        if (diaries.size() >= 6) {
-            for (int i = 0; i < diaries.size() - 2; i += 2) {
-                int current = diaries.get(i).getDiarySeq();
-                int skip = diaries.get(i + 2).getDiarySeq();
-                if (connections.get(current).size() < MAX_CONNECTIONS_PER_DIARY &&
-                        connections.get(skip).size() < MAX_CONNECTIONS_PER_DIARY) {
-                    addConnection(connections, current, skip);
+                    // 거리 확인 - 너무 멀리 떨어진 경우 연결 안 함
+                    if (calculateDistance(diary1, diary2) <= MAX_CONNECTION_DISTANCE) {
+                        addConnection(connections, diary1.getDiarySeq(), diary2.getDiarySeq());
+                    }
                 }
             }
-        }
-    }
-
-    /**
-     * 번개 모양 패턴 적용 (분노 감정용)
-     */
-    private void applyLightningPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 4) {
-            applySimpleConnections(diaries, connections);
             return;
         }
 
-        // 번개 형태로 지그재그 연결
-        for (int i = 0; i < diaries.size() - 1; i++) {
-            int current = diaries.get(i).getDiarySeq();
-            int next = diaries.get(i + 1).getDiarySeq();
-            addConnection(connections, current, next);
-        }
-    }
+        // 일기가 많은 경우는 패턴 기반 연결 방식 적용
+        // 여기서는 MST(Minimum Spanning Tree) + 약간의 추가 연결 방식 사용
 
-    /**
-     * 폭발 모양 패턴 적용 (분노 감정용, 큰 그룹)
-     */
-    private void applyExplosionPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 5) {
-            applyLightningPattern(diaries, connections);
-            return;
-        }
-
-        // 중앙 노드 (폭발 중심)
-        int centerSeq = diaries.get(0).getDiarySeq();
-
-        // 방사형으로 중앙에서 바깥으로 연결
-        for (int i = 1; i < diaries.size(); i++) {
-            int current = diaries.get(i).getDiarySeq();
-            addConnection(connections, centerSeq, current);
-        }
-
-        // 바깥쪽 노드들 사이에 불규칙한 연결 추가 (폭발 파편처럼)
-        Random random = new Random(42); // 일관된 랜덤 패턴
-
-        List<Diary> outerDiaries = new ArrayList<>(diaries);
-        outerDiaries.remove(0);
-
-        for (int i = 0; i < outerDiaries.size(); i++) {
-            // 각 노드마다 최대 1개의 추가 연결
-            if (connections.get(outerDiaries.get(i).getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
-                // 랜덤하게 다른 노드 선택
-                int j = random.nextInt(outerDiaries.size());
-                if (i != j && connections.get(outerDiaries.get(j).getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
-                    addConnection(connections,
-                            outerDiaries.get(i).getDiarySeq(),
-                            outerDiaries.get(j).getDiarySeq());
-                }
-            }
-        }
-    }
-
-    /**
-     * 나선형 패턴 적용 (불안 감정용, 큰 그룹)
-     */
-    private void applySpiralPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 5) {
-            applyCirclePattern(diaries, connections);
-            return;
-        }
-
-        // 순차적으로 다음 노드와 연결하여 나선형 형성
-        for (int i = 0; i < diaries.size() - 1; i++) {
-            int current = diaries.get(i).getDiarySeq();
-            int next = diaries.get(i + 1).getDiarySeq();
-            addConnection(connections, current, next);
-        }
-
-        // 추가 연결로 나선 느낌 강화
-        if (diaries.size() >= 6) {
-            // 첫 번째와 마지막 노드 연결
-            addConnection(connections,
-                    diaries.get(0).getDiarySeq(),
-                    diaries.get(diaries.size() - 1).getDiarySeq());
-
-            // 몇 개의 건너뛰기 연결 추가
-            for (int i = 0; i < diaries.size() - 3; i += 3) {
-                int current = diaries.get(i).getDiarySeq();
-                int skip = diaries.get(i + 3).getDiarySeq();
-                if (connections.get(current).size() < MAX_CONNECTIONS_PER_DIARY &&
-                        connections.get(skip).size() < MAX_CONNECTIONS_PER_DIARY) {
-                    addConnection(connections, current, skip);
-                }
-            }
-        }
-    }
-
-    /**
-     * 균형 모양 패턴 적용 (평화 감정용, 큰 그룹)
-     */
-    private void applyBalancePattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 6) {
-            applyCirclePattern(diaries, connections);
-            return;
-        }
-
-        // 중앙 노드
-        int centerSeq = diaries.get(0).getDiarySeq();
-
-        // 양쪽으로 균등하게 노드 분할 (음양 형태)
-        int half = (diaries.size() - 1) / 2;
-
-        // 왼쪽 그룹 연결 (음)
-        for (int i = 1; i <= half; i++) {
-            // 중앙과 연결
-            addConnection(connections, centerSeq, diaries.get(i).getDiarySeq());
-
-            // 같은 그룹 내 연결
-            if (i < half) {
-                addConnection(connections,
-                        diaries.get(i).getDiarySeq(),
-                        diaries.get(i + 1).getDiarySeq());
-            }
-        }
-
-        // 오른쪽 그룹 연결 (양)
-        for (int i = half + 1; i < diaries.size(); i++) {
-            // 중앙과 연결
-            addConnection(connections, centerSeq, diaries.get(i).getDiarySeq());
-
-            // 같은 그룹 내 연결
-            if (i < diaries.size() - 1) {
-                addConnection(connections,
-                        diaries.get(i).getDiarySeq(),
-                        diaries.get(i + 1).getDiarySeq());
-            }
-        }
-
-        // 양쪽 그룹의 끝 노드 연결해서 원형 완성
-        if (half >= 1 && diaries.size() > half + 1) {
-            addConnection(connections,
-                    diaries.get(half).getDiarySeq(),
-                    diaries.get(diaries.size() - 1).getDiarySeq());
-        }
-    }
-
-    /**
-     * 화살표 모양 패턴 적용 (희망 감정용)
-     */
-    private void applyArrowPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 4) {
-            applySimpleConnections(diaries, connections);
-            return;
-        }
-
-        // 화살촉 (첫 번째 노드)
-        int tipSeq = diaries.get(0).getDiarySeq();
-
-        // 화살 몸체 (두 번째 노드)
-        int bodySeq = diaries.get(1).getDiarySeq();
-
-        // 화살촉과 몸체 연결
-        addConnection(connections, tipSeq, bodySeq);
-
-        // 화살 날개 연결
-        for (int i = 2; i < diaries.size(); i++) {
-            int wingSeq = diaries.get(i).getDiarySeq();
-
-            // 몸체와 날개 연결
-            addConnection(connections, bodySeq, wingSeq);
-
-            // 날개 간 추가 연결 (대칭성 유지)
-            if (i >= 3 && i % 2 == 0) {
-                int otherWingSeq = diaries.get(i - 1).getDiarySeq();
-                addConnection(connections, wingSeq, otherWingSeq);
-            }
-        }
-    }
-
-    /**
-     * 새/날개 모양 패턴 적용 (희망 감정용, 큰 그룹)
-     */
-    private void applyBirdPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 5) {
-            applyArrowPattern(diaries, connections);
-            return;
-        }
-
-        // 몸체 (중앙)
-        int bodySeq = diaries.get(0).getDiarySeq();
-
-        // 날개 분할 (왼쪽/오른쪽)
-        int leftWingCount = (diaries.size() - 1) / 2;
-        int rightWingCount = diaries.size() - 1 - leftWingCount;
-
-        // 왼쪽 날개 연결
-        for (int i = 1; i <= leftWingCount; i++) {
-            int wingSeq = diaries.get(i).getDiarySeq();
-
-            // 몸체와 연결
-            addConnection(connections, bodySeq, wingSeq);
-
-            // 날개 내부 연결
-            if (i < leftWingCount) {
-                addConnection(connections,
-                        wingSeq,
-                        diaries.get(i + 1).getDiarySeq());
-            }
-        }
-
-        // 오른쪽 날개 연결
-        for (int i = 0; i < rightWingCount; i++) {
-            int wingIndex = leftWingCount + 1 + i;
-            int wingSeq = diaries.get(wingIndex).getDiarySeq();
-
-            // 몸체와 연결
-            addConnection(connections, bodySeq, wingSeq);
-
-            // 날개 내부 연결
-            if (i < rightWingCount - 1) {
-                addConnection(connections,
-                        wingSeq,
-                        diaries.get(wingIndex + 1).getDiarySeq());
-            }
-        }
-    }
-
-    /**
-     * 흩어진 형태의 패턴 적용 (공포/불안 감정용)
-     */
-    private void applyScatterPattern(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        if (diaries.size() < 4) {
-            applySimpleConnections(diaries, connections);
-            return;
-        }
-
-        // 유사도 기반으로 비정형 연결 (최대 연결 수 제한)
-        List<DiaryConnection> allConnections = new ArrayList<>();
-
-        // 모든 가능한 연결 쌍의 유사도 계산
-        for (int i = 0; i < diaries.size(); i++) {
-            for (int j = i + 1; j < diaries.size(); j++) {
+        // 1. 모든 가능한 엣지와 거리 계산
+        List<DiaryEdge> edges = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = i + 1; j < size; j++) {
                 Diary diary1 = diaries.get(i);
                 Diary diary2 = diaries.get(j);
+                double distance = calculateDistance(diary1, diary2);
 
-                double similarity = calculateTagSimilarity(
-                        getDiaryTags(diary1),
-                        getDiaryTags(diary2)
-                );
-
-                if (similarity >= MIN_SIMILARITY_THRESHOLD) {
-                    allConnections.add(new DiaryConnection(
-                            diary1.getDiarySeq(),
-                            diary2.getDiarySeq(),
-                            similarity
-                    ));
+                // 너무 멀리 떨어진 경우 제외
+                if (distance <= MAX_CONNECTION_DISTANCE) {
+                    edges.add(new DiaryEdge(diary1.getDiarySeq(), diary2.getDiarySeq(), distance));
                 }
             }
         }
 
-        // 유사도 순으로 정렬
-        allConnections.sort(Comparator.comparing(DiaryConnection::getSimilarity).reversed());
+        // 거리순 정렬
+        edges.sort(Comparator.comparingDouble(DiaryEdge::getDistance));
 
-        // 최대 연결 수를 고려하여 높은 유사도의 연결만 추가
-        for (DiaryConnection connection : allConnections) {
-            int seq1 = connection.getDiary1Seq();
-            int seq2 = connection.getDiary2Seq();
+        // 2. MST 알고리즘으로 기본 연결 생성 (모든 일기가 연결되면서 총 거리는 최소화)
+        Map<Integer, Integer> diaryToSet = new HashMap<>();
+        for (Diary diary : diaries) {
+            diaryToSet.put(diary.getDiarySeq(), diary.getDiarySeq());
+        }
 
-            if (connections.get(seq1).size() < MAX_CONNECTIONS_PER_DIARY &&
-                    connections.get(seq2).size() < MAX_CONNECTIONS_PER_DIARY) {
-                addConnection(connections, seq1, seq2);
+        for (DiaryEdge edge : edges) {
+            int set1 = findSet(diaryToSet, edge.getDiary1Seq());
+            int set2 = findSet(diaryToSet, edge.getDiary2Seq());
+
+            if (set1 != set2) {
+                // 서로 다른 집합이면 연결 추가
+                addConnection(connections, edge.getDiary1Seq(), edge.getDiary2Seq());
+
+                // 집합 병합
+                diaryToSet.put(set1, set2);
+
+                // 모든 일기가 같은 집합에 속하는지 확인
+                boolean allConnected = true;
+                int firstSet = findSet(diaryToSet, diaries.get(0).getDiarySeq());
+                for (Diary diary : diaries) {
+                    if (findSet(diaryToSet, diary.getDiarySeq()) != firstSet) {
+                        allConnected = false;
+                        break;
+                    }
+                }
+
+                if (allConnected) break;
             }
         }
 
-        // 모든 일기가 최소 하나의 연결을 가지도록 보장
-        ensureMinimalConnections(diaries, connections);
+        // 3. 추가적인 연결 생성 (별자리 모양에 자연스러움 추가)
+        // MST는 트리 구조라 사이클이 없으므로, 일부 추가 연결로 별자리 모양 향상
+        for (DiaryEdge edge : edges) {
+            int diary1Seq = edge.getDiary1Seq();
+            int diary2Seq = edge.getDiary2Seq();
+
+            // 이미 연결되어 있지 않고, 최대 연결 수를 초과하지 않는 경우
+            if (!connections.get(diary1Seq).contains(diary2Seq) &&
+                    connections.get(diary1Seq).size() < MAX_CONNECTIONS_PER_DIARY &&
+                    connections.get(diary2Seq).size() < MAX_CONNECTIONS_PER_DIARY) {
+
+                // 태그 유사도가 높거나 가까운 거리에 있는 일기 연결
+                double similarity = calculateTagSimilarity(
+                        getDiaryTags(diaries.stream().filter(d -> d.getDiarySeq().equals(diary1Seq)).findFirst().orElse(null)),
+                        getDiaryTags(diaries.stream().filter(d -> d.getDiarySeq().equals(diary2Seq)).findFirst().orElse(null))
+                );
+
+                // 가까운 거리(하위 30%)이거나 유사도가 높으면(0.3 이상) 연결 추가
+                if (edge.getDistance() < MAX_CONNECTION_DISTANCE * 0.3 || similarity > 0.3) {
+                    addConnection(connections, diary1Seq, diary2Seq);
+                }
+            }
+        }
     }
 
     /**
-     * 모든 일기가 최소 하나의 연결을 가지도록 보장
+     * Union-Find 알고리즘을 위한 집합 찾기
      */
-    private void ensureMinimalConnections(List<Diary> diaries, Map<Integer, List<Integer>> connections) {
-        for (Diary diary : diaries) {
+    private int findSet(Map<Integer, Integer> diaryToSet, int diarySeq) {
+        if (diaryToSet.get(diarySeq) != diarySeq) {
+            diaryToSet.put(diarySeq, findSet(diaryToSet, diaryToSet.get(diarySeq)));
+        }
+        return diaryToSet.get(diarySeq);
+    }
+
+    /**
+     * 별자리 그룹 간 연결을 생성합니다.
+     * 서로 다른 그룹의 일기 중 가장 가까운 것들을 연결합니다.
+     *
+     * @param constellationGroups 별자리 그룹 목록
+     * @param connections 연결 관계 맵
+     */
+    private void connectBetweenConstellations(List<List<Diary>> constellationGroups, Map<Integer, List<Integer>> connections) {
+        // 그룹이 하나면 연결할 필요 없음
+        if (constellationGroups.size() <= 1) return;
+
+        // 각 그룹의 중심점 계산
+        Map<Integer, double[]> groupCenters = new HashMap<>();
+        List<Integer> groupIds = new ArrayList<>();
+
+        for (List<Diary> group : constellationGroups) {
+            if (group.isEmpty()) continue;
+
+            int groupId = group.get(0).getDiarySeq();
+            groupIds.add(groupId);
+
+            // 그룹 중심 계산
+            double sumX = 0, sumY = 0, sumZ = 0;
+            for (Diary diary : group) {
+                sumX += diary.getX();
+                sumY += diary.getY();
+                sumZ += diary.getZ();
+            }
+
+            double[] center = {
+                    sumX / group.size(),
+                    sumY / group.size(),
+                    sumZ / group.size()
+            };
+
+            groupCenters.put(groupId, center);
+        }
+
+        // MST 알고리즘으로 그룹 간 연결 최적화
+        List<GroupEdge> groupEdges = new ArrayList<>();
+
+        // 모든 그룹 쌍에 대한 거리 계산
+        for (int i = 0; i < groupIds.size(); i++) {
+            for (int j = i + 1; j < groupIds.size(); j++) {
+                int group1Id = groupIds.get(i);
+                int group2Id = groupIds.get(j);
+
+                double[] center1 = groupCenters.get(group1Id);
+                double[] center2 = groupCenters.get(group2Id);
+
+                double distance = Math.sqrt(
+                        Math.pow(center1[0] - center2[0], 2) +
+                                Math.pow(center1[1] - center2[1], 2) +
+                                Math.pow(center1[2] - center2[2], 2)
+                );
+
+                groupEdges.add(new GroupEdge(group1Id, group2Id, distance));
+            }
+        }
+
+        // 거리순 정렬
+        groupEdges.sort(Comparator.comparingDouble(GroupEdge::getDistance));
+
+        // MST로 그룹 간 기본 연결 구조 생성
+        Map<Integer, Integer> groupToSet = new HashMap<>();
+        for (Integer groupId : groupIds) {
+            groupToSet.put(groupId, groupId);
+        }
+
+        List<GroupEdge> selectedEdges = new ArrayList<>();
+
+        for (GroupEdge edge : groupEdges) {
+            int set1 = findGroupSet(groupToSet, edge.getGroup1Id());
+            int set2 = findGroupSet(groupToSet, edge.getGroup2Id());
+
+            if (set1 != set2) {
+                selectedEdges.add(edge);
+                groupToSet.put(set1, set2);
+            }
+        }
+
+        // 선택된 그룹 간 연결에 대해, 각 그룹에서 가장 가까운 일기 쌍을 찾아 연결
+        for (GroupEdge edge : selectedEdges) {
+            List<Diary> group1 = constellationGroups.stream()
+                    .filter(g -> !g.isEmpty() && g.get(0).getDiarySeq().equals(edge.getGroup1Id()))
+                    .findFirst().orElse(new ArrayList<>());
+
+            List<Diary> group2 = constellationGroups.stream()
+                    .filter(g -> !g.isEmpty() && g.get(0).getDiarySeq().equals(edge.getGroup2Id()))
+                    .findFirst().orElse(new ArrayList<>());
+
+            if (group1.isEmpty() || group2.isEmpty()) continue;
+
+            // 두 그룹 간 가장 가까운 일기 쌍 찾기
+            Diary closest1 = null;
+            Diary closest2 = null;
+            double minDistance = Double.MAX_VALUE;
+
+            for (Diary d1 : group1) {
+                for (Diary d2 : group2) {
+                    double dist = calculateDistance(d1, d2);
+                    if (dist < minDistance &&
+                            connections.get(d1.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY &&
+                            connections.get(d2.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
+                        minDistance = dist;
+                        closest1 = d1;
+                        closest2 = d2;
+                    }
+                }
+            }
+
+            // 가장 가까운 일기 쌍 연결
+            if (closest1 != null && closest2 != null) {
+                addConnection(connections, closest1.getDiarySeq(), closest2.getDiarySeq());
+            }
+        }
+    }
+
+    /**
+     * Union-Find 알고리즘을 위한 그룹 집합 찾기
+     */
+    private int findGroupSet(Map<Integer, Integer> groupToSet, int groupId) {
+        if (groupToSet.get(groupId) != groupId) {
+            groupToSet.put(groupId, findGroupSet(groupToSet, groupToSet.get(groupId)));
+        }
+        return groupToSet.get(groupId);
+    }
+
+    /**
+     * 모든 일기가 최소한 하나의 연결을 가지도록 보장합니다.
+     *
+     * @param connections 연결 관계 맵
+     * @param constellationGroups 별자리 그룹 목록
+     */
+    private void ensureMinimalConnections(Map<Integer, List<Integer>> connections, List<List<Diary>> constellationGroups) {
+        // 모든 일기 목록 생성
+        List<Diary> allDiaries = constellationGroups.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        // 연결이 없는 일기 찾기
+        for (Diary diary : allDiaries) {
             int diarySeq = diary.getDiarySeq();
 
-            // 연결이 없는 일기 찾기
             if (connections.get(diarySeq).isEmpty()) {
-                // 가장 가까운(태그 유사도 기준) 다른 일기 찾기
-                Diary closestDiary = null;
-                double highestSimilarity = 0;
+                // 가장 가까운 다른 일기 찾기
+                Diary closest = null;
+                double minDistance = Double.MAX_VALUE;
 
-                for (Diary other : diaries) {
+                for (Diary other : allDiaries) {
                     if (other.getDiarySeq().equals(diarySeq)) continue;
 
-                    double similarity = calculateTagSimilarity(
-                            getDiaryTags(diary),
-                            getDiaryTags(other)
-                    );
+                    double distance = calculateDistance(diary, other);
 
-                    if (similarity > highestSimilarity &&
+                    if (distance < minDistance && distance <= MAX_CONNECTION_DISTANCE &&
                             connections.get(other.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
-                        highestSimilarity = similarity;
-                        closestDiary = other;
+                        minDistance = distance;
+                        closest = other;
                     }
                 }
 
                 // 가장 가까운 일기와 연결
-                if (closestDiary != null) {
-                    addConnection(connections, diarySeq, closestDiary.getDiarySeq());
+                if (closest != null) {
+                    addConnection(connections, diarySeq, closest.getDiarySeq());
+                    log.debug("고립된 일기 연결 추가: {} - {}", diarySeq, closest.getDiarySeq());
                 } else {
-                    // 최악의 경우, 아무 일기나 연결
-                    for (Diary other : diaries) {
-                        if (!other.getDiarySeq().equals(diarySeq) &&
-                                connections.get(other.getDiarySeq()).size() < MAX_CONNECTIONS_PER_DIARY) {
-                            addConnection(connections, diarySeq, other.getDiarySeq());
-                            break;
-                        }
-                    }
+                    log.warn("고립된 일기를 연결할 수 없음: {}", diarySeq);
                 }
             }
         }
+    }
+
+    /**
+     * 두 일기 간의 3D 거리를 계산합니다.
+     */
+    private double calculateDistance(Diary diary1, Diary diary2) {
+        return Math.sqrt(
+                Math.pow(diary1.getX() - diary2.getX(), 2) +
+                        Math.pow(diary1.getY() - diary2.getY(), 2) +
+                        Math.pow(diary1.getZ() - diary2.getZ(), 2)
+        );
     }
 
     /**
@@ -764,6 +380,7 @@ public class ConstellationConnectionService {
      * 일기의 태그 목록 조회
      */
     private List<String> getDiaryTags(Diary diary) {
+        if (diary == null) return Collections.emptyList();
         List<DiaryTag> diaryTags = diaryTagRepository.findByDiary(diary);
         return diaryTags.stream()
                 .map(diaryTag -> diaryTag.getTag().getName())
@@ -794,15 +411,15 @@ public class ConstellationConnectionService {
     /**
      * 내부 클래스: 두 일기 간의 연결 정보
      */
-    private static class DiaryConnection {
+    private static class DiaryEdge {
         private final int diary1Seq;
         private final int diary2Seq;
-        private final double similarity;
+        private final double distance;
 
-        public DiaryConnection(int diary1Seq, int diary2Seq, double similarity) {
+        public DiaryEdge(int diary1Seq, int diary2Seq, double distance) {
             this.diary1Seq = diary1Seq;
             this.diary2Seq = diary2Seq;
-            this.similarity = similarity;
+            this.distance = distance;
         }
 
         public int getDiary1Seq() {
@@ -813,8 +430,35 @@ public class ConstellationConnectionService {
             return diary2Seq;
         }
 
-        public double getSimilarity() {
-            return similarity;
+        public double getDistance() {
+            return distance;
+        }
+    }
+
+    /**
+     * 내부 클래스: 그룹 간 연결 정보
+     */
+    private static class GroupEdge {
+        private final int group1Id;
+        private final int group2Id;
+        private final double distance;
+
+        public GroupEdge(int group1Id, int group2Id, double distance) {
+            this.group1Id = group1Id;
+            this.group2Id = group2Id;
+            this.distance = distance;
+        }
+
+        public int getGroup1Id() {
+            return group1Id;
+        }
+
+        public int getGroup2Id() {
+            return group2Id;
+        }
+
+        public double getDistance() {
+            return distance;
         }
     }
 }

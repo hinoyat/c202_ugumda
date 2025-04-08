@@ -6,11 +6,11 @@ import com.c202.diary.emotion.entity.Emotion;
 import com.c202.diary.emotion.repository.EmotionRepository;
 import com.c202.diary.tag.entity.DiaryTag;
 import com.c202.diary.tag.repository.DiaryTagRepository;
-import com.c202.diary.util.coordinate.model.CoordinateDto;
 import com.c202.exception.types.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,14 +30,17 @@ public class CoordinateResetService {
     private final ConstellationLayoutService layoutService;
     private final ConstellationConnectionService connectionService;
 
-    // 태그 유사도 기준 클러스터링 임계값
-    private static final double CLUSTERING_SIMILARITY_THRESHOLD = 0.3;
+    // 별자리당 최적 일기 수
+    private static final int OPTIMAL_DIARIES_PER_CONSTELLATION = 5;
 
-    // 최대 클러스터 크기
-    private static final int MAX_CLUSTER_SIZE = 7;
+    // 별자리당 최대 일기 수
+    private static final int MAX_DIARIES_PER_CONSTELLATION = 7;
 
-    // 최소 클러스터 크기
-    private static final int MIN_CLUSTER_SIZE = 3;
+    // 별자리당 최소 일기 수
+    private static final int MIN_DIARIES_PER_CONSTELLATION = 3;
+
+    // 구의 반경 (전체 우주의 크기)
+    private static final double SPHERE_RADIUS = 150.0;
 
     /**
      * 전체 우주를 재배치합니다.
@@ -46,8 +49,11 @@ public class CoordinateResetService {
      * @param userSeq 사용자 시퀀스
      * @return 연결 관계 맵 (일기 ID → 연결된 일기 ID 목록)
      */
+    @Transactional
     public Map<Integer, List<Integer>> resetEntireUniverse(Integer userSeq) {
-        // 사용자의 모든 일기 조회
+        log.info("사용자 {} 우주 별자리 형태 재배치 시작", userSeq);
+
+        // 1. 사용자의 모든 일기 조회
         List<Diary> diaries = diaryRepository.findByUserSeqAndIsDeleted(userSeq, "N");
 
         if (diaries.isEmpty()) {
@@ -55,203 +61,372 @@ public class CoordinateResetService {
             return new HashMap<>();
         }
 
-        // 감정별로 일기 그룹화
-        Map<Integer, List<Diary>> diariesByEmotion = groupDiariesByEmotion(diaries);
+        // null 좌표 확인
+        int nullCoordinatesCount = 0;
+        for (Diary diary : diaries) {
+            if (diary.getX() == null || diary.getY() == null || diary.getZ() == null) {
+                nullCoordinatesCount++;
+            }
+        }
+        log.info("사용자 {}의 전체 일기 수: {}, 좌표가 null인 일기 수: {}",
+                userSeq, diaries.size(), nullCoordinatesCount);
 
-        // 각 감정별로 별자리 클러스터 생성 및 좌표 설정
+        // 2. 감정별로 일기 그룹화 (감정이 null인 일기 제외)
+        Map<Integer, List<Diary>> diariesByEmotion = diaries.stream()
+                .filter(d -> d.getEmotionSeq() != null)
+                .collect(Collectors.groupingBy(Diary::getEmotionSeq));
+
+        // 3. 전체 연결 관계 맵
         Map<Integer, List<Integer>> allConnections = new HashMap<>();
 
-        for (Integer emotionSeq : diariesByEmotion.keySet()) {
-            List<Diary> emotionDiaries = diariesByEmotion.get(emotionSeq);
+        // 4. 각 감정별로 처리
+        for (Map.Entry<Integer, List<Diary>> entry : diariesByEmotion.entrySet()) {
+            Integer emotionSeq = entry.getKey();
+            List<Diary> emotionDiaries = entry.getValue();
 
-            // 감정 정보 조회
-            Emotion emotion = emotionRepository.findById(emotionSeq)
-                    .orElseThrow(() -> new NotFoundException("감정을 찾을 수 없습니다 (seq: " + emotionSeq + ")"));
+            try {
+                // 감정 정보 조회
+                Emotion emotion = emotionRepository.findById(emotionSeq)
+                        .orElseThrow(() -> new NotFoundException("감정을 찾을 수 없습니다 (seq: " + emotionSeq + ")"));
 
-            // 별자리 클러스터 그룹화
-            List<List<Diary>> constellationGroups = clusterIntoConstellations(emotionDiaries);
+                // 별자리 클러스터 그룹화 - 간소화된 로직 사용
+                List<List<Diary>> constellationGroups = createConstellationGroups(emotionDiaries);
 
-            // 각 별자리 좌표 생성
-            Map<Integer, double[][]> constellationCoordinates =
-                    layoutService.generateMultipleConstellations(emotion, constellationGroups);
+                log.info("감정 '{}' 클러스터링 결과: {} 그룹", emotion.getName(), constellationGroups.size());
+                for (int i = 0; i < constellationGroups.size(); i++) {
+                    log.debug("  - 그룹 {}: {} 일기", i + 1, constellationGroups.get(i).size());
+                }
 
-            // 좌표 적용
-            applyCoordinatesToDiaries(constellationGroups, constellationCoordinates);
+                // 각 별자리 좌표 생성 및 적용
+                Map<Integer, double[][]> constellationCoordinates =
+                        layoutService.generateMultipleConstellations(emotion, constellationGroups);
 
-            // 별자리 연결 관계 생성
-            Map<Integer, List<Integer>> emotionConnections =
-                    connectionService.optimizeConstellationConnections(constellationGroups);
+                // 좌표 적용
+                applyCoordinatesToDiaries(constellationGroups, constellationCoordinates);
 
-            // 전체 연결 관계에 추가
-            allConnections.putAll(emotionConnections);
+                // 별자리 연결 관계 생성
+                Map<Integer, List<Integer>> emotionConnections =
+                        connectionService.optimizeConstellationConnections(constellationGroups);
+
+                // 전체 연결 관계에 추가
+                allConnections.putAll(emotionConnections);
+            } catch (Exception e) {
+                log.error("감정 {} 처리 중 오류 발생: {}", emotionSeq, e.getMessage(), e);
+            }
         }
 
-        // 변경된 일기들 저장
-        diaryRepository.saveAll(diaries);
+        // 5. 감정이 null인 일기들에 대한 처리 (필요한 경우)
+        handleDiariesWithoutEmotion(diaries.stream()
+                .filter(d -> d.getEmotionSeq() == null)
+                .collect(Collectors.toList()));
+
+        // 6. 변경된 일기들 저장
+        try {
+            diaryRepository.saveAll(diaries);
+            log.info("사용자 {} 일기 {} 개 좌표 저장 완료", userSeq, diaries.size());
+        } catch (Exception e) {
+            log.error("일기 저장 중 오류 발생: {}", e.getMessage(), e);
+        }
 
         return allConnections;
     }
 
     /**
-     * 일기를 감정별로 그룹화합니다.
-     *
-     * @param diaries 전체 일기 목록
-     * @return 감정별 일기 목록 맵
-     */
-    private Map<Integer, List<Diary>> groupDiariesByEmotion(List<Diary> diaries) {
-        return diaries.stream()
-                .filter(d -> d.getEmotionSeq() != null)
-                .collect(Collectors.groupingBy(Diary::getEmotionSeq));
-    }
-
-    /**
      * 동일 감정 내 일기들을 별자리 클러스터로 그룹화합니다.
-     * 태그 유사도를 기준으로 비슷한 일기들을 하나의 별자리로 묶습니다.
+     * 간소화된 로직으로 자연스러운 별자리 형성을 촉진합니다.
      *
      * @param diaries 동일 감정의 일기 목록
      * @return 별자리 클러스터 목록
      */
-    public List<List<Diary>> clusterIntoConstellations(List<Diary> diaries) {
-        List<List<Diary>> clusters = new ArrayList<>();
-        Set<Integer> assignedDiaries = new HashSet<>();
-
-        // 일기 수가 적으면 하나의 클러스터로 처리
-        if (diaries.size() <= MAX_CLUSTER_SIZE) {
-            clusters.add(new ArrayList<>(diaries));
-            return clusters;
+    private List<List<Diary>> createConstellationGroups(List<Diary> diaries) {
+        if (diaries == null || diaries.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        // 유사도 기반 클러스터링
-        for (Diary diary : diaries) {
-            if (assignedDiaries.contains(diary.getDiarySeq())) {
-                continue;
-            }
+        // 전체 일기 수가 최대 별자리 크기 이하면 하나의 그룹으로
+        if (diaries.size() <= MAX_DIARIES_PER_CONSTELLATION) {
+            return Collections.singletonList(new ArrayList<>(diaries));
+        }
 
-            List<Diary> cluster = new ArrayList<>();
-            cluster.add(diary);
-            assignedDiaries.add(diary.getDiarySeq());
+        // 최적의 그룹 수 계산 (각 그룹이 OPTIMAL_DIARIES_PER_CONSTELLATION에 가깝도록)
+        int groupCount = Math.max(1, (int) Math.ceil((double) diaries.size() / OPTIMAL_DIARIES_PER_CONSTELLATION));
 
-            List<String> diaryTags = getDiaryTags(diary);
+        // 그룹화 방식 결정
+        // 작은 수의 일기는 태그 기반 그룹화, 많은 수의 일기는 시간 기반 그룹화
+        if (diaries.size() <= 20) {
+            return createTagBasedGroups(diaries, groupCount);
+        } else {
+            return createTimeBasedGroups(diaries, groupCount);
+        }
+    }
 
-            // 유사도가 높은 일기들 추가
-            List<DiaryWithSimilarity> similarities = new ArrayList<>();
-            for (Diary otherDiary : diaries) {
-                if (otherDiary.getDiarySeq().equals(diary.getDiarySeq()) ||
-                        assignedDiaries.contains(otherDiary.getDiarySeq())) {
+    /**
+     * 태그 유사도에 기반한 그룹화 (더 간소화된 버전)
+     */
+    private List<List<Diary>> createTagBasedGroups(List<Diary> diaries, int targetGroupCount) {
+        // 그룹 목록 초기화
+        List<List<Diary>> groups = new ArrayList<>();
+
+        // 처리된 일기 추적
+        Set<Integer> processedDiaries = new HashSet<>();
+
+        // 1. 시드 일기 선택
+        List<Diary> seeds = selectDiverseSeeds(diaries, targetGroupCount);
+
+        // 각 시드로 초기 그룹 생성
+        for (Diary seed : seeds) {
+            List<Diary> group = new ArrayList<>();
+            group.add(seed);
+            processedDiaries.add(seed.getDiarySeq());
+            groups.add(group);
+        }
+
+        // 2. 나머지 일기들을 가장 적합한 그룹에 할당
+        List<Diary> unassigned = diaries.stream()
+                .filter(d -> !processedDiaries.contains(d.getDiarySeq()))
+                .collect(Collectors.toList());
+
+        for (Diary diary : unassigned) {
+            int bestGroupIndex = 0;
+            double bestSimilarity = -1;
+
+            // 각 그룹과의 유사도 계산
+            for (int i = 0; i < groups.size(); i++) {
+                List<Diary> group = groups.get(i);
+
+                // 그룹이 이미 최대 크기라면 스킵
+                if (group.size() >= MAX_DIARIES_PER_CONSTELLATION) {
                     continue;
                 }
 
-                List<String> otherTags = getDiaryTags(otherDiary);
-                double similarity = calculateTagSimilarity(diaryTags, otherTags);
-
-                if (similarity >= CLUSTERING_SIMILARITY_THRESHOLD) {
-                    similarities.add(new DiaryWithSimilarity(otherDiary, similarity));
+                double similarity = calculateGroupSimilarity(diary, group);
+                if (similarity > bestSimilarity) {
+                    bestSimilarity = similarity;
+                    bestGroupIndex = i;
                 }
             }
 
-            // 유사도 높은 순으로 정렬
-            similarities.sort(Comparator.comparing(DiaryWithSimilarity::getSimilarity).reversed());
-
-            // 클러스터 크기 제한 내에서 추가
-            for (DiaryWithSimilarity sim : similarities) {
-                if (cluster.size() >= MAX_CLUSTER_SIZE) {
-                    break;
-                }
-                cluster.add(sim.getDiary());
-                assignedDiaries.add(sim.getDiary().getDiarySeq());
-            }
-
-            clusters.add(cluster);
-        }
-
-        // 아직 할당되지 않은 일기들 처리
-        List<Diary> unassigned = diaries.stream()
-                .filter(d -> !assignedDiaries.contains(d.getDiarySeq()))
-                .collect(Collectors.toList());
-
-        if (!unassigned.isEmpty()) {
-            // 작은 클러스터들 먼저 채우기
-            for (Diary diary : unassigned) {
-                // 가장 작은 클러스터 찾기
-                List<Diary> smallestCluster = clusters.stream()
-                        .filter(c -> c.size() < MAX_CLUSTER_SIZE)
-                        .min(Comparator.comparing(List::size))
-                        .orElse(null);
-
-                if (smallestCluster != null) {
-                    smallestCluster.add(diary);
-                } else {
-                    // 모든 클러스터가 가득 찼다면 새 클러스터 생성
-                    List<Diary> newCluster = new ArrayList<>();
-                    newCluster.add(diary);
-                    clusters.add(newCluster);
-                }
-            }
-        }
-
-        // 너무 작은 클러스터들 병합
-        mergeSmallClusters(clusters);
-
-        return clusters;
-    }
-
-    /**
-     * 너무 작은 클러스터들을 병합합니다.
-     *
-     * @param clusters 클러스터 목록
-     */
-    private void mergeSmallClusters(List<List<Diary>> clusters) {
-        if (clusters.size() <= 1) {
-            return;
-        }
-
-        boolean mergeOccurred;
-        do {
-            mergeOccurred = false;
-
-            // 크기 순으로 정렬 (작은 것부터)
-            clusters.sort(Comparator.comparing(List::size));
-
-            List<Diary> smallestCluster = clusters.get(0);
-            if (smallestCluster.size() < MIN_CLUSTER_SIZE) {
-                // 병합 대상 찾기 (가장 유사한 다른 클러스터)
-                int bestTargetIdx = -1;
-                double bestSimilarity = -1;
-
-                for (int i = 1; i < clusters.size(); i++) {
-                    List<Diary> targetCluster = clusters.get(i);
-
-                    // 병합 후 크기가 최대 크기를 넘지 않는지 확인
-                    if (smallestCluster.size() + targetCluster.size() <= MAX_CLUSTER_SIZE) {
-                        double similarity = calculateClusterSimilarity(smallestCluster, targetCluster);
-                        if (similarity > bestSimilarity) {
-                            bestSimilarity = similarity;
-                            bestTargetIdx = i;
-                        }
-                    }
-                }
-
-                // 병합 가능한 대상이 있으면 병합
-                if (bestTargetIdx != -1) {
-                    clusters.get(bestTargetIdx).addAll(smallestCluster);
-                    clusters.remove(0);
-                    mergeOccurred = true;
-                } else {
-                    // 병합할 대상이 없으면 종료
-                    break;
-                }
+            // 가장 유사한 그룹에 할당
+            // 모든 그룹이 가득 찬 경우 새 그룹 생성
+            if (groups.get(bestGroupIndex).size() < MAX_DIARIES_PER_CONSTELLATION) {
+                groups.get(bestGroupIndex).add(diary);
             } else {
-                // 가장 작은 클러스터도 최소 크기 이상이면 종료
-                break;
+                List<Diary> newGroup = new ArrayList<>();
+                newGroup.add(diary);
+                groups.add(newGroup);
             }
-        } while (mergeOccurred && clusters.size() > 1);
+        }
+
+        // 3. 너무 작은 그룹 처리
+        return mergeSmallGroups(groups);
     }
 
     /**
-     * 생성된 좌표를 일기들에 적용합니다.
-     *
-     * @param constellationGroups 별자리 그룹 목록
-     * @param constellationCoordinates 그룹별 좌표 맵
+     * 시간(생성일) 기반 그룹화
+     */
+    private List<List<Diary>> createTimeBasedGroups(List<Diary> diaries, int targetGroupCount) {
+        // 생성일 기준 정렬
+        diaries.sort(Comparator.comparing(Diary::getCreatedAt, Comparator.nullsLast(Comparator.naturalOrder())));
+
+        // 그룹 목록 초기화
+        List<List<Diary>> groups = new ArrayList<>();
+
+        // 그룹당 일기 수 계산
+        int diariesPerGroup = (int) Math.ceil((double) diaries.size() / targetGroupCount);
+
+        // 그룹 나누기
+        for (int i = 0; i < diaries.size(); i += diariesPerGroup) {
+            int end = Math.min(i + diariesPerGroup, diaries.size());
+            groups.add(new ArrayList<>(diaries.subList(i, end)));
+        }
+
+        return groups;
+    }
+
+    /**
+     * 다양한 시드 일기 선택 (가능한 서로 다른 태그를 가진 일기들)
+     */
+    private List<Diary> selectDiverseSeeds(List<Diary> diaries, int count) {
+        if (diaries.size() <= count) {
+            return new ArrayList<>(diaries);
+        }
+
+        List<Diary> seeds = new ArrayList<>();
+        Set<String> usedTags = new HashSet<>();
+
+        // 태그가 다양한 일기들 선택
+        for (Diary diary : diaries) {
+            List<String> diaryTags = getDiaryTags(diary);
+
+            // 이 일기가 새로운 태그를 가지고 있는지 확인
+            boolean hasNewTag = false;
+            for (String tag : diaryTags) {
+                if (!usedTags.contains(tag)) {
+                    hasNewTag = true;
+                    break;
+                }
+            }
+
+            if (hasNewTag || seeds.size() < count / 2) {
+                seeds.add(diary);
+                usedTags.addAll(diaryTags);
+
+                if (seeds.size() >= count) {
+                    break;
+                }
+            }
+        }
+
+        // 필요한 수만큼 선택되지 않았다면 나머지는 랜덤 선택
+        if (seeds.size() < count) {
+            List<Diary> remaining = diaries.stream()
+                    .filter(d -> !seeds.contains(d))
+                    .collect(Collectors.toList());
+
+            Collections.shuffle(remaining);
+
+            for (Diary diary : remaining) {
+                seeds.add(diary);
+                if (seeds.size() >= count) {
+                    break;
+                }
+            }
+        }
+
+        return seeds;
+    }
+
+    /**
+     * 일기와 그룹 간의 유사도 계산 (간소화 버전)
+     */
+    private double calculateGroupSimilarity(Diary diary, List<Diary> group) {
+        if (group.isEmpty()) {
+            return 0.0;
+        }
+
+        List<String> diaryTags = getDiaryTags(diary);
+
+        // 그룹 내 모든 태그 수집
+        Set<String> groupTags = new HashSet<>();
+        for (Diary groupDiary : group) {
+            groupTags.addAll(getDiaryTags(groupDiary));
+        }
+
+        // 태그 유사도 계산 (자카드)
+        if (diaryTags.isEmpty() && groupTags.isEmpty()) {
+            return 0.5; // 둘 다 태그 없으면 중간 유사도
+        }
+
+        if (diaryTags.isEmpty() || groupTags.isEmpty()) {
+            return 0.1; // 한쪽만 태그 있으면 낮은 유사도
+        }
+
+        Set<String> intersection = new HashSet<>(diaryTags);
+        intersection.retainAll(groupTags);
+
+        Set<String> union = new HashSet<>(diaryTags);
+        union.addAll(groupTags);
+
+        return (double) intersection.size() / union.size();
+    }
+
+    /**
+     * 너무 작은 그룹들을 병합합니다.
+     */
+    private List<List<Diary>> mergeSmallGroups(List<List<Diary>> groups) {
+        if (groups.size() <= 1) {
+            return groups;
+        }
+
+        List<List<Diary>> result = new ArrayList<>();
+
+        // 크기 순 정렬 (작은 것부터)
+        groups.sort(Comparator.comparing(List::size));
+
+        for (List<Diary> group : groups) {
+            // 그룹이 최소 크기 이상이면 결과에 추가
+            if (group.size() >= MIN_DIARIES_PER_CONSTELLATION) {
+                result.add(group);
+                continue;
+            }
+
+            // 작은 그룹은 가장 적합한 그룹에 병합
+            if (result.isEmpty()) {
+                result.add(group);
+                continue;
+            }
+
+            // 가장 적합한(유사도 높은) 그룹 찾기
+            int bestGroupIndex = 0;
+            double bestSimilarity = -1;
+
+            for (int i = 0; i < result.size(); i++) {
+                List<Diary> existingGroup = result.get(i);
+
+                // 병합 후 크기가 최대 크기를 넘지 않는지 확인
+                if (existingGroup.size() + group.size() > MAX_DIARIES_PER_CONSTELLATION) {
+                    continue;
+                }
+
+                double similarity = calculateGroupToGroupSimilarity(group, existingGroup);
+                if (similarity > bestSimilarity) {
+                    bestSimilarity = similarity;
+                    bestGroupIndex = i;
+                }
+            }
+
+            // 병합 가능한 그룹이 있으면 병합
+            if (result.get(bestGroupIndex).size() + group.size() <= MAX_DIARIES_PER_CONSTELLATION) {
+                result.get(bestGroupIndex).addAll(group);
+            } else {
+                // 병합할 수 없으면 새 그룹으로 추가
+                result.add(group);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 두 그룹 간의 태그 유사도 계산
+     */
+    private double calculateGroupToGroupSimilarity(List<Diary> group1, List<Diary> group2) {
+        if (group1.isEmpty() || group2.isEmpty()) {
+            return 0.0;
+        }
+
+        // 각 그룹의 모든 태그 수집
+        Set<String> tags1 = new HashSet<>();
+        for (Diary diary : group1) {
+            tags1.addAll(getDiaryTags(diary));
+        }
+
+        Set<String> tags2 = new HashSet<>();
+        for (Diary diary : group2) {
+            tags2.addAll(getDiaryTags(diary));
+        }
+
+        // 자카드 유사도 계산
+        if (tags1.isEmpty() && tags2.isEmpty()) {
+            return 0.5; // 둘 다 태그 없으면 중간 유사도
+        }
+
+        if (tags1.isEmpty() || tags2.isEmpty()) {
+            return 0.1; // 한쪽만 태그 있으면 낮은 유사도
+        }
+
+        Set<String> intersection = new HashSet<>(tags1);
+        intersection.retainAll(tags2);
+
+        Set<String> union = new HashSet<>(tags1);
+        union.addAll(tags2);
+
+        return (double) intersection.size() / union.size();
+    }
+
+    /**
+     * 좌표를 일기들에 적용합니다.
+     * null 체크 및 예외 처리 추가
      */
     private void applyCoordinatesToDiaries(
             List<List<Diary>> constellationGroups,
@@ -265,238 +440,93 @@ public class CoordinateResetService {
             int groupKey = group.get(0).getDiarySeq();
             double[][] coordinates = constellationCoordinates.get(groupKey);
 
-            if (coordinates == null || coordinates.length < group.size()) {
-                log.warn("좌표 배열이 없거나 크기가 부족합니다. 그룹: {}, 좌표: {}",
-                        groupKey, coordinates != null ? coordinates.length : "null");
+            if (coordinates == null) {
+                log.warn("그룹 {}의 좌표가 null입니다", groupKey);
+                continue;
+            }
+
+            if (coordinates.length < group.size()) {
+                log.warn("좌표 배열 크기가 부족합니다. 그룹: {}, 좌표: {}, 일기: {}",
+                        groupKey, coordinates.length, group.size());
                 continue;
             }
 
             // 각 일기에 좌표 적용
             for (int i = 0; i < group.size(); i++) {
-                Diary diary = group.get(i);
-                diary.setCoordinates(
-                        coordinates[i][0],
-                        coordinates[i][1],
-                        coordinates[i][2],
-                        diary.getEmotionSeq()
-                );
+                try {
+                    Diary diary = group.get(i);
+
+                    // 좌표가 null인지 확인
+                    if (coordinates[i] == null || coordinates[i].length < 3) {
+                        log.warn("일기 {}의 좌표가 null이거나 불완전합니다", diary.getDiarySeq());
+                        continue;
+                    }
+
+                    diary.setCoordinate(coordinates[i][0], coordinates[i][1], coordinates[i][2]);
+
+
+                    log.debug("일기 {} 좌표 설정: ({}, {}, {})",
+                            diary.getDiarySeq(), diary.getX(), diary.getY(), diary.getZ());
+                } catch (Exception e) {
+                    log.error("일기 좌표 설정 중 오류: {}", e.getMessage());
+                }
             }
         }
     }
 
     /**
-     * 단일 일기에 대한 최적의 좌표를 생성합니다.
-     * 새 일기를 추가할 때 사용됩니다.
-     *
-     * @param diary 일기
-     * @return 생성된 좌표
+     * 감정이 설정되지 않은 일기들 처리
+     * 이 일기들은 구 표면의 랜덤한 위치에 배치
      */
-    public CoordinateDto generateOptimalCoordinates(Diary diary) {
-        if (diary.getEmotionSeq() == null) {
-            throw new IllegalArgumentException("일기에 감정이 설정되어 있지 않습니다.");
+    private void handleDiariesWithoutEmotion(List<Diary> diariesWithoutEmotion) {
+        if (diariesWithoutEmotion.isEmpty()) {
+            return;
         }
 
-        // 같은 감정의 다른 일기들 조회
-        List<Diary> sameCategoryDiaries = diaryRepository.findAll().stream()
-                .filter(d -> !d.getIsDeleted().equals("Y"))
-                .filter(d -> d.getDiarySeq() == null || !d.getDiarySeq().equals(diary.getDiarySeq()))
-                .filter(d -> Objects.equals(d.getEmotionSeq(), diary.getEmotionSeq()))
-                .collect(Collectors.toList());
+        log.info("감정이 없는 일기 {} 개 처리", diariesWithoutEmotion.size());
 
-        // 감정 정보 조회
-        Emotion emotion = emotionRepository.findById(diary.getEmotionSeq())
-                .orElseThrow(() -> new NotFoundException("감정을 찾을 수 없습니다."));
-
-        // 유사한 일기가 없으면 새 위치 생성
-        if (sameCategoryDiaries.isEmpty()) {
-            double[] position = generateRandomPosition(emotion);
-            return CoordinateDto.builder()
-                    .x(position[0])
-                    .y(position[1])
-                    .z(position[2])
-                    .emotionSeq(emotion.getEmotionSeq())
-                    .build();
-        }
-
-        // 태그 유사도 기반으로 가장 가까운 클러스터 찾기
-        List<String> diaryTags = getDiaryTags(diary);
-        List<List<Diary>> clusters = clusterIntoConstellations(sameCategoryDiaries);
-
-        // 가장 유사한 클러스터 찾기
-        List<Diary> bestCluster = null;
-        double bestSimilarity = 0;
-
-        for (List<Diary> cluster : clusters) {
-            double similarity = calculateClusterTagSimilarity(cluster, diaryTags);
-            if (similarity > bestSimilarity) {
-                bestSimilarity = similarity;
-                bestCluster = cluster;
-            }
-        }
-
-        // 유사한 클러스터가 있고 공간이 있으면 클러스터에 추가
-        if (bestCluster != null && bestCluster.size() < MAX_CLUSTER_SIZE &&
-                bestSimilarity >= CLUSTERING_SIMILARITY_THRESHOLD) {
-
-            // 클러스터에 현재 일기 추가
-            List<Diary> newCluster = new ArrayList<>(bestCluster);
-            newCluster.add(diary);
-
-            // 별자리 패턴 좌표 생성
-            double[][] coordinates = layoutService.generateConstellationLayout(emotion, newCluster);
-
-            // 마지막 인덱스가 새 일기 위치
-            return CoordinateDto.builder()
-                    .x(coordinates[coordinates.length - 1][0])
-                    .y(coordinates[coordinates.length - 1][1])
-                    .z(coordinates[coordinates.length - 1][2])
-                    .emotionSeq(emotion.getEmotionSeq())
-                    .build();
-        }
-
-        // 적합한 클러스터가 없으면 새 위치 생성
-        double[] position = generateRandomPosition(emotion);
-        return CoordinateDto.builder()
-                .x(position[0])
-                .y(position[1])
-                .z(position[2])
-                .emotionSeq(emotion.getEmotionSeq())
-                .build();
-    }
-
-    /**
-     * 감정 영역 내 랜덤한 위치를 생성합니다.
-     */
-    private double[] generateRandomPosition(Emotion emotion) {
-        double[] position = new double[3];
+        // 감정이 없는 일기들은 구 표면의 랜덤한 위치에 배치
         Random random = new Random();
 
-        // 감정 중심으로부터의 거리 (0.3~0.8 범위)
-        double distance = emotion.getBaseRadius() * (0.3 + 0.5 * random.nextDouble());
+        for (Diary diary : diariesWithoutEmotion) {
+            try {
+                // 구면 좌표계 사용하여 구 표면에 균등하게 분포
+                double phi = Math.acos(2 * random.nextDouble() - 1); // 0 ~ PI
+                double theta = random.nextDouble() * 2 * Math.PI;    // 0 ~ 2PI
 
-        // 구면 좌표 생성
-        double theta = random.nextDouble() * 2 * Math.PI; // 방위각
-        double phi = random.nextDouble() * Math.PI; // 극각
+                // 구면 좌표를 3D 직교 좌표로 변환
+                diary.setCoordinate(SPHERE_RADIUS * Math.sin(phi) * Math.cos(theta), SPHERE_RADIUS * Math.sin(phi) * Math.sin(theta), SPHERE_RADIUS * Math.cos(phi));
 
-        // 구면 좌표를 직교 좌표로 변환
-        position[0] = emotion.getBaseX() + distance * Math.sin(phi) * Math.cos(theta);
-        position[1] = emotion.getBaseY() + distance * Math.sin(phi) * Math.sin(theta);
-        position[2] = emotion.getBaseZ() + distance * Math.cos(phi);
-
-        return position;
+                log.debug("감정 없는 일기 {} 좌표 설정: ({}, {}, {})",
+                        diary.getDiarySeq(), diary.getX(), diary.getY(), diary.getZ());
+            } catch (Exception e) {
+                log.error("감정 없는 일기 좌표 설정 중 오류: {}", e.getMessage());
+            }
+        }
     }
 
     /**
-     * 두 클러스터 간의 유사도를 계산합니다.
-     */
-    private double calculateClusterSimilarity(List<Diary> cluster1, List<Diary> cluster2) {
-        if (cluster1.isEmpty() || cluster2.isEmpty()) {
-            return 0.0;
-        }
-
-        // 각 클러스터의 모든 태그를 모음
-        Set<String> tags1 = new HashSet<>();
-        Set<String> tags2 = new HashSet<>();
-
-        for (Diary diary : cluster1) {
-            tags1.addAll(getDiaryTags(diary));
-        }
-
-        for (Diary diary : cluster2) {
-            tags2.addAll(getDiaryTags(diary));
-        }
-
-        // 자카드 유사도 계산
-        Set<String> union = new HashSet<>(tags1);
-        union.addAll(tags2);
-
-        if (union.isEmpty()) {
-            return 0.1; // 기본 유사도
-        }
-
-        Set<String> intersection = new HashSet<>(tags1);
-        intersection.retainAll(tags2);
-
-        return (double) intersection.size() / union.size();
-    }
-
-    /**
-     * 클러스터와 태그 목록 간의 유사도를 계산합니다.
-     */
-    private double calculateClusterTagSimilarity(List<Diary> cluster, List<String> tags) {
-        if (cluster.isEmpty() || tags.isEmpty()) {
-            return 0.0;
-        }
-
-        // 클러스터의 모든 태그를 모음
-        Set<String> clusterTags = new HashSet<>();
-        for (Diary diary : cluster) {
-            clusterTags.addAll(getDiaryTags(diary));
-        }
-
-        // 자카드 유사도 계산
-        Set<String> union = new HashSet<>(clusterTags);
-        union.addAll(tags);
-
-        if (union.isEmpty()) {
-            return 0.1; // 기본 유사도
-        }
-
-        Set<String> intersection = new HashSet<>(clusterTags);
-        intersection.retainAll(tags);
-
-        return (double) intersection.size() / union.size();
-    }
-
-    /**
-     * 일기의 태그 목록을 조회합니다.
+     * 일기의 태그 목록 조회 (null 안전)
      */
     private List<String> getDiaryTags(Diary diary) {
-        List<DiaryTag> diaryTags = diaryTagRepository.findByDiary(diary);
-        return diaryTags.stream()
-                .map(diaryTag -> diaryTag.getTag().getName())
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 두 태그 목록 간의 자카드 유사도를 계산합니다.
-     */
-    private double calculateTagSimilarity(List<String> tags1, List<String> tags2) {
-        if (tags1.isEmpty() && tags2.isEmpty()) {
-            return 0.1; // 기본 유사도
+        if (diary == null) {
+            return Collections.emptyList();
         }
 
-        if (tags1.isEmpty() || tags2.isEmpty()) {
-            return 0.0;
-        }
-
-        Set<String> union = new HashSet<>(tags1);
-        union.addAll(tags2);
-
-        Set<String> intersection = new HashSet<>(tags1);
-        intersection.retainAll(tags2);
-
-        return (double) intersection.size() / union.size();
-    }
-
-    /**
-     * 내부 클래스: 일기와 유사도를 함께 저장
-     */
-    private static class DiaryWithSimilarity {
-        private final Diary diary;
-        private final double similarity;
-
-        public DiaryWithSimilarity(Diary diary, double similarity) {
-            this.diary = diary;
-            this.similarity = similarity;
-        }
-
-        public Diary getDiary() {
-            return diary;
-        }
-
-        public double getSimilarity() {
-            return similarity;
+        try {
+            List<DiaryTag> diaryTags = diaryTagRepository.findByDiary(diary);
+            return diaryTags.stream()
+                    .map(diaryTag -> {
+                        if (diaryTag.getTag() != null) {
+                            return diaryTag.getTag().getName();
+                        }
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("일기 태그 조회 중 오류: {}", e.getMessage());
+            return Collections.emptyList();
         }
     }
 }
