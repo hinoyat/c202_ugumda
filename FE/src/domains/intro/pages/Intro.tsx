@@ -40,7 +40,7 @@ function Intro() {
       <div className="absolute transform -translate-y-1/2 top-1/2 -translate-x-1/2 left-1/2 flex flex-col items-center gap-10">
         <div className="flex flex-col text-white items-center gap-6">
           <h1 className="text-white text-4xl tracking-widest dung-font">
-            우리들의 꿈 다이어리
+            우리들의 꿈꾸는 다이어리
           </h1>
           <p className="text-gray-400 text-[18px] text-center dung-font">
             우리는 매일 밤 꿈을 꿉니다.
