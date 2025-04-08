@@ -1,21 +1,27 @@
+import app.core.chat_gpt_service as text
+import app.core.chat_stability_service as image
+import app.core.chat_runway_service as video
 from app.log_config import logging_check
-import os
+from app.core.save_video import save_video_to_backend
 import logging
+import os
 import requests
 
 logging_check()
 
 API_BASE_URL = os.environ.get("API_BASE_URL")
 
-def test_logic_1(content:str, diary_pk: int, token: str):
+def test_logic_1(content:str, diary_pk: int):
     logging.info("시작")
-    logging.info(f"내용:{content}")
-    video_url = "https://dnznrvs05pmza.cloudfront.net/4e89ed2d-13ba-4e12-9b4c-05bbdae46641.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYzQ3ZDdhOWI2YWE1MmY3NyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzI5MjgwMH0.ddvpDnzMFvUSgTsuvrgBEo-RLJMLH5zWSKOyC-PKETo"
-    # 비동기 처리 return값은 사용되지 않음
-    if video_url:
-        logging.info(f"URL 있어요!: {video_url}")
-        test_logic_2(diary_pk, video_url, token)
-    return "비디오 생성 처리 중"
+    prompt = text.chat_gpt(content)
+
+    logging.info("프롬프트 완료")
+    image_base64 = image.stability(prompt)
+
+    video_url = video.runway(image_base64, prompt)
+
+
+    return video_url
 
 
 
