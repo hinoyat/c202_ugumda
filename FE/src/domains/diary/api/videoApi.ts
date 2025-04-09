@@ -14,8 +14,8 @@ export const videoApi = {
 
     // return await axios.post('/ai/test-sample-video', videoData, {
     return await api.post(
-      '/ai/test-sample-video', // 요청 확인용
-      // '/ai/create-video', // 이걸로 보내야 영상 생성됨
+      // '/ai/test-sample-video', // 요청 확인용
+      '/ai/create-video', // 이걸로 보내야 영상 생성됨
       videoData
       // headers: {
 
