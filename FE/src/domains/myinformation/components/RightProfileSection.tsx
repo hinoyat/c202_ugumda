@@ -137,7 +137,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         return;
       }
       const response = await api.get(`/auth/check-nickname/${nickname}`);
-      console.log(response);
+
 
       if (response && response.status === 200) {
         setNicknameCheck(true);
@@ -145,7 +145,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         setNicknameCheck(false);
       }
     } catch (error) {
-      console.error('닉네임 중복체크 도중 오류가 발생하였습니다.', error);
+
       setNicknameCheck(false);
     }
   };
@@ -185,14 +185,14 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         password,
         birthDate: birthDateFormatted,
       });
-      console.log('회원정보 수정 응답', response);
+  
       if (response.data && response.data.status === 200) {
         nav('/successedit');
       } else {
         nav('/failedit');
       }
     } catch (error) {
-      console.error('회원정보 수정 실패:', error);
+   
       nav('/failedit');
     } finally {
       setIsLoading(false);
@@ -203,12 +203,12 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
     try {
       const response = await api.delete('/users/me');
       if (response.data.status === 204) {
-        console.log(response.data.message);
+        // console.log(response.data.message);
       } else if (response.data.status === 400) {
-        console.log(response.data.message);
+        // console.log(response.data.message);
       }
     } catch (error) {
-      console.error('회원탈퇴에 실패하였습니다.');
+      // console.error('회원탈퇴에 실패하였습니다.');
     } finally {
       logoutUser();
       window.location.reload();

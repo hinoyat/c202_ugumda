@@ -169,14 +169,14 @@ export const startPlaylistMusic =
     
     if (playPromise !== undefined) {
       playPromise.catch((error) => {
-        console.error('플레이리스트 재생 시도 중 오류:', error);
+
         dispatch(setPlaylistPlaying(false));
       });
     }
     
     return true;
   } catch (error) {
-    console.error('플레이리스트 재생 시작 중 오류 발생:', error);
+
     return false;
   }
 };
@@ -198,14 +198,14 @@ export const stopPlaylistMusic =
       
       if (playPromise !== undefined) {
         playPromise.catch((error) => {
-          console.error('배경음악 재개 시도 중 오류:', error);
+          // console.error('배경음악 재개 시도 중 오류:', error);
         });
       }
     }
     
     return true;
   } catch (error) {
-    console.error('플레이리스트 재생 종료 중 오류 발생:', error);
+    // console.error('플레이리스트 재생 종료 중 오류 발생:', error);
     return false;
   }
 };

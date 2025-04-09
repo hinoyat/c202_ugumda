@@ -43,12 +43,9 @@ const userpageSlice = createSlice({
         state.introduction = null;
         state.iconSeq = 0;
         state.isSubscribed = '';
-        console.log(
-          '다른 사람 페이지로 못 넘어갔는지 redux 정보도 확인해 봅세'
-        );
+
       })
       .addCase(visitOtherUserpage.fulfilled, (state, action) => {
-        console.log('랜덤방문 여기 넘어왔나요?');
         state.userSeq = action.payload.userSeq;
         state.username = action.payload.username;
         state.nickname = action.payload.nickname;

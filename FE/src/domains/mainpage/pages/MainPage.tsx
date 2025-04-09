@@ -70,8 +70,7 @@ const MainPage = () => {
       setShowOnboarding(true);
     }
     if (params.username) {
-      console.log('✅ MainPage 마운트됨!');
-      console.log('내 우주인가?: ' + isMySpace);
+
       dispatch(visitUserpage({ username: params.username }));
     }
   }, [params, dispatch]);
@@ -90,7 +89,7 @@ const MainPage = () => {
     // 사용자 정의 배경음악 또는 기본 배경음악을 자동으로 선택함
     dispatch(initializeAudio()).then((result) => {
       if (!result) {
-        console.error('오디오 초기화 실패....');
+
       }
     });
   }, [dispatch]);

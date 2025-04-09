@@ -2,11 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { selectDominantEmotion } from '../store/dashboardSelector';
 import { selectMusicVolume, selectPlaylistPlaying } from '@/stores/music/musicSelectors';
-import { startPlaylistMusic, stopPlaylistMusic, setAsBackgroundMusic } from '@/stores/music/musicThunks';
+import { startPlaylistMusic, setAsBackgroundMusic, changeVolume, stopPlaylistMusic } from '@/stores/music/musicThunks';
 import { MusicList } from "./MusicData"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBackward, faPlay, faStop, faForward, faMusic } from '@fortawesome/free-solid-svg-icons';
-import 'font-awesome/css/font-awesome.min.css';
+import { faBackward, faPlay, faStop, faForward, faMusic, faVolumeUp, faVolumeDown, faVolumeMute } from '@fortawesome/free-solid-svg-icons';import 'font-awesome/css/font-awesome.min.css';
 
 interface Song {
   name: string;
@@ -61,6 +60,8 @@ const MusicPlaylist: React.FC = () => {
   const [index, setIndex] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<string>('0:00');
   const [pause, setPause] = useState<boolean>(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
+  const [localVolume, setLocalVolume] = useState<number>(volume)
   
   const playerRef = useRef<HTMLAudioElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -151,6 +152,13 @@ const MusicPlaylist: React.FC = () => {
     alert(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`);
   };
 
+  // 음악 볼륨 조절
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) : void =>{
+    const newVolume = parseFloat(e.target.value)
+    setLocalVolume(newVolume)
+    dispatch(changeVolume(newVolume))
+  }
+
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -190,7 +198,10 @@ const MusicPlaylist: React.FC = () => {
     setIndex((prevIndex) => (prevIndex + 1) % displayMusicList.length);
     
     if (!pause && playerRef.current) {
-      playerRef.current.play();
+      dispatch(stopPlaylistMusic());
+      setTimeout(() => {
+        dispatch(startPlaylistMusic(displayMusicList[(index + 1) % displayMusicList.length].audio));
+      }, 100);
     }
   };
 
@@ -207,8 +218,10 @@ const MusicPlaylist: React.FC = () => {
     
     if (!pause) {
       playerRef.current.pause();
+      dispatch(stopPlaylistMusic());
     } else {
       playerRef.current.play();
+      dispatch(startPlaylistMusic(currentSong.audio));
     }
     
     setPause(!pause);
@@ -235,6 +248,17 @@ const MusicPlaylist: React.FC = () => {
         }
       }, 100);
     }
+  };
+
+  // toggleVolumeSlider
+  const toggleVolumeSlider = (): void => {
+    setShowVolumeSlider(!showVolumeSlider)
+  }
+
+  const getVolumeIcon = (): typeof faVolumeUp | typeof faVolumeDown | typeof faVolumeMute => {
+    if (localVolume === 0) return faVolumeMute;
+    if (localVolume < 0.5) return faVolumeDown;
+    return faVolumeUp;
   };
 
   const currentSong = displayMusicList[index];
@@ -292,6 +316,32 @@ const MusicPlaylist: React.FC = () => {
             <button onClick={nextSong} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
                 <FontAwesomeIcon icon={faForward} />
             </button>
+
+            {/* 음량 컨트롤 추가 */}
+          <div className="relative mt-[10px] w-[240px] flex items-center justify-between">
+            <div className="flex items-center">
+              <button 
+                onClick={toggleVolumeSlider}
+                className="text-[#071739] rounded-full mr-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]"
+              >
+                <FontAwesomeIcon icon={getVolumeIcon()} />
+              </button>
+              
+              {showVolumeSlider && (
+                <div className="flex items-center w-[100px] ml-[5px]">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={localVolume}
+                    onChange={handleVolumeChange}
+                    className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
           </div>
         </div>
         

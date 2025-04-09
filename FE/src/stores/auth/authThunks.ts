@@ -62,15 +62,12 @@ export const updateToken = createAsyncThunk<
     const newAccessToken = response.data.data.accessToken;
 
     localStorage.setItem('accessToken', newAccessToken);
-    console.log(
-      '[updateToken] 토큰 갱신 성공 → 새로운 accessToken 저장 완료',
-      newAccessToken
-    );
+
 
     return { accessToken: newAccessToken };
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
-    console.error('[updateToken] 토큰 갱신 실패 ❌', axiosError);
+    
     return rejectWithValue(
       axiosError.response?.data?.message || '토큰 갱신 실패'
     );

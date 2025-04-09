@@ -168,7 +168,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         setShowDetail(true);
       }
     } catch (error) {
-      console.error('일기 조회 중 오류 발생 : ', error);
+
 
       // 에러 응답 확인
       const err = error as any;
@@ -304,7 +304,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
     } catch (error) {
-      console.error('일기 삭제 중 오류 발생:', error);
+
       alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -350,7 +350,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           }
         }
       } catch (error) {
-        console.error('선택된 일기 처리 중 오류 발생:', error);
+
       }
     };
 
@@ -381,7 +381,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           setDiaryEntries(response.data.data);
         }
       } catch (error) {
-        console.error('일기 목록 데이터 로드 중 오류 발생 : ', error);
+
       }
     };
 
@@ -399,14 +399,14 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       try {
         const response = await diaryApi.getUniverseData(visitUser.userSeq);
         if (response && response.data) {
-          console.log('우주 데이터 로드됨:', response.data);
+
           setUniverseData(response.data.data);
           if (response.data.data.connections) {
             setConnections(response.data.data.connections);
           }
         }
       } catch (error) {
-        console.error('우주 데이터 로드 중 오류 발생:', error);
+
       }
     };
 

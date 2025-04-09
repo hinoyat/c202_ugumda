@@ -23,10 +23,10 @@ const MyInformationContent: React.FC = () => {
     try {
       const response = await api.get('/users/me');
       const data = response.data;
-      console.log('정보 갱신 테스트', data, data);
+
       setUserData(data.data);
     } catch (error) {
-      console.error('유저 정보를 불러오는데 실패하였습니다.', error);
+
     }
   }, []);
 
