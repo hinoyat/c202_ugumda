@@ -98,7 +98,7 @@ const UserInfoData = ()=>{
     />  
       {/* <div className="bg-cyan-800/50 rounded-xl flex items-center"> */}
         <h1 className="text-white/85 text-[20px] ml-3">{user?.nickname}님</h1>
-        <h1 className="p-3 text-[20px] text-white/90">{emotionMessage}</h1>
+        <h1 className="p-3 text-[20px] text-[#f4f797]">{emotionMessage}</h1>
       {/* </div> */}
       {/* 색 : text-blue-300 text-lime-300 text-amber-300*/}
     </div>
