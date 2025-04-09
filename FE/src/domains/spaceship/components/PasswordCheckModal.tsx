@@ -39,7 +39,6 @@ const PasswordCheckModal = () => {
         setPassword("");
       }
     } catch(error) {
-      console.error("비밀번호 확인 오류: ", error);
       
       // 에러 객체에서 응답 데이터 가져오기
       if (error.response) {

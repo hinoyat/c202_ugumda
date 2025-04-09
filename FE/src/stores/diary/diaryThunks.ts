@@ -18,7 +18,7 @@ export const fetchDiaries = () => async (dispatch: AppDispatch) => {
     dispatch(setDiaries(response.data));
     dispatch(setError(null));
   } catch (error) {
-    console.error('Failed to fetch diaries:', error);
+
     dispatch(setError('일기 목록을 불러오는 데 실패했습니다.'));
   } finally {
     dispatch(setLoading(false));
@@ -35,7 +35,6 @@ export const fetchDiaryById =
       dispatch(setError(null));
       return response.data;
     } catch (error) {
-      console.error(`Failed to fetch diary with ID ${diarySeq}:`, error);
       dispatch(setError('일기를 불러오는 데 실패했습니다.'));
       return null;
     } finally {
@@ -53,7 +52,7 @@ export const createNewDiary =
       dispatch(setError(null));
       return response.data;
     } catch (error) {
-      console.error('Failed to create diary:', error);
+
       dispatch(setError('일기 생성에 실패했습니다.'));
       throw error;
     } finally {

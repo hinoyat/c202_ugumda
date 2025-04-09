@@ -62,7 +62,6 @@ const UserSpaceHeader = ({
         // Redux 상태도 업데이트
         dispatch(updateSubscriptionStatus(newStatus));
       } catch (error) {
-        console.error('에러가 발생하였습니다:', error);
         // 오류 발생시 사용자에게 알림 (선택사항)
         alert('구독 상태 변경 중 오류가 발생했습니다.');
       }

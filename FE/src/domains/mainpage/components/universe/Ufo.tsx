@@ -19,8 +19,8 @@ export default function Ufo() {
     fbx.traverse((child) => {
       const mesh = child as THREE.Mesh;
       if (mesh.isMesh && mesh.material instanceof THREE.MeshStandardMaterial) {
-        console.log('Mesh name:', mesh.name);
-        console.log('Material:', mesh.material);
+        // console.log('Mesh name:', mesh.name);
+        // console.log('Material:', mesh.material);
       }
     });
   }, [fbx]);
@@ -38,7 +38,6 @@ export default function Ufo() {
   // 클릭 이벤트 핸들러
   const handleUfoClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation(); // 이벤트 버블링 방지
-    console.log('🚀 UFO가 클릭되었습니다! 👽');
 
     //아래는 우주선 이동할떄 쓰는 일회성 localstorage니까 지우지 말아주세요!
     localStorage.setItem("EnterSpaceShip","ok");

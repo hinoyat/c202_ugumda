@@ -46,14 +46,14 @@ export default function BlackHole() {
     e.stopPropagation();
     try {
       const result = await dispatch(visitOtherUserpage()).unwrap();
-      console.log('누구를 랜덤 방문할까?', result);
+
 
       if (result?.username) {
         nav(`/${result.username}`);
         window.location.reload();
       }
     } catch (error) {
-      console.error('랜덤 방문 실패:', error);
+
     }
   };
 
