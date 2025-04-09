@@ -38,18 +38,18 @@ const GraphSection = () => {
   }));
 
   return (
-            <div className="flex flex-col pl-30 pt-15 w-[47vw] gap-23 ">
+            <div className="flex flex-col pl-30 pt-5 w-[47vw] gap-16 ">
             <div className="flex flex-col">
                 <GgumGraph 
                     periodName={14}  
-                    height="42%"
+                    height="39%"
                     data={twoWeeksDataArray}
                      />
             </div>
             <div className="flex flex-col">
                 <GgumGraph 
                     periodName={30}  
-                    height="42%"
+                    height="39%"
                     data={monthlyDataArray}
                      />
             </div>
