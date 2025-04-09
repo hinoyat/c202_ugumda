@@ -60,7 +60,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const glowRef = useRef<THREE.Mesh>(null); // 새 별 주변에 발광 효과를 위해
 
   // 별 크기
-  const starSize = 3;
+  const starSize = 1.9;
 
   // 별 생성 시간 확인 함수 (하이라이트 효과를 위해)
   const isWithin30Minutes = (dateString: string) => {
@@ -80,8 +80,8 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   // : '#00ffe0' // 기존 별은 파란색
   const starColor = new THREE.Color(
     isNew
-      ? '#9932CC' // 새 별은 보라색
-      : '#FF4500' // 기존 별은 선명한 주황색
+      ? '#ffcc00'
+      : '#00ffe0'
   );
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
