@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { loginUser, logoutUser, updateToken } from './authThunks';
-import { AuthState, User } from './authTypes';
+import { AuthState } from './authTypes';
+import { toast } from 'react-toastify';
 
 const initialState: AuthState = {
   user: JSON.parse(localStorage.getItem('User') || 'null'),
@@ -43,10 +44,22 @@ const authSlice = createSlice({
     builder
       // 로그인 성공
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log('로그인 후 페이로드', action.payload);
         state.accessToken = action.payload.accessToken;
         state.isAuthenticated = true;
         state.user = action.payload.user;
+      })
+      .addCase(loginUser.rejected, () => {
+        toast.error(
+          '로그인에 실패하였습니다. 아이디나 비밀번호를 잘 확인해주세요.',
+          {
+            position: 'bottom-right',
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'dark',
+          }
+        );
       })
       // 토큰 갱신 성공
       .addCase(updateToken.fulfilled, (state, action) => {
