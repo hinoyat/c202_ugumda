@@ -539,7 +539,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
             autoRotate={false}
             rotateSpeed={0.5}
             minDistance={5}
-            maxDistance={200}
+            maxDistance={420}
             target={[0, 0, 0]} // 항상 구의 중심을 바라보도록
             zoomSpeed={3} // 스크롤 속도 증가
           />
