@@ -39,17 +39,21 @@ async def create_video(generate_chat_request_dto:GenerateVideoRequestDto, backgr
 
     return response
 
-# 현호야 이거로 테스트해!!
-# url만 보내기
-@app.post("/api/ai/test-sample-video")
-async def sample_video(generate_chat_request_dto: GenerateVideoRequestDto):
+# 테스트 로직
+@app.post("api/ai/test-sample-video")
+async def sample_video(generate_chat_request_dto:GenerateVideoRequestDto, background_tasks:BackgroundTasks, authorization: str = Header(None)):
     logging.info(f"일기 내용 받기 성공, dairy_pk: {generate_chat_request_dto.diary_pk}")
-
-    # 함수를 직접 호출하고 결과를 받음
-    result = test_logic_1(
+    background_tasks.add_task(
+        test_logic_1,
         content=generate_chat_request_dto.content,
         diary_pk=generate_chat_request_dto.diary_pk,
+        token=authorization,
     )
 
-    # 응답 반환
-    return {"status": "success", "message": result}
+    # 포스트맨에 뜨는 메세지(원래는 프론트에 보내짐)
+    response = VideoGenerateResponseDto(
+        message="일기 생성 요청을 성공적으로 받았습니다.",
+        diary_pk=generate_chat_request_dto.diary_pk
+    )
+
+    return response
