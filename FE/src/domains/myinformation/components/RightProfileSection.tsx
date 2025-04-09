@@ -9,6 +9,8 @@ import check from '@/assets/images/pixcelCheck.svg';
 import docs from '@/assets/images/pixcelDoc.svg';
 import api from '@/apis/apiClient';
 import { logoutUser } from '@/stores/auth/authThunks';
+import { useDispatch } from 'react-redux';
+import { openModal } from '@/stores/modal/modalSlice';
 
 interface LeftProfileSectionProps {
   userData: {
@@ -37,8 +39,10 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const datePickerRef = useRef<HTMLDivElement>(null);
+  
 
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const onClickCancle = () => {
     nav('/spaceship');
@@ -199,20 +203,21 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
     }
   };
 
-  const handleWithDraw = async () => {
-    try {
-      const response = await api.delete('/users/me');
-      if (response.data.status === 204) {
-        // console.log(response.data.message);
-      } else if (response.data.status === 400) {
-        // console.log(response.data.message);
-      }
-    } catch (error) {
-      // console.error('회원탈퇴에 실패하였습니다.');
-    } finally {
-      logoutUser();
-      window.location.reload();
-    }
+  const handleWithDraw =  () => {
+    // try {
+    //   const response = await api.delete('/users/me');
+    //   if (response.data.status === 204) {
+    //     // console.log(response.data.message);
+    //   } else if (response.data.status === 400) {
+    //     // console.log(response.data.message);
+    //   }
+    // } catch (error) {
+    //   // console.error('회원탈퇴에 실패하였습니다.');
+    // } finally {
+    //   logoutUser();
+    //   window.location.reload();
+    // }
+    dispatch(openModal());
   };
 
   return (
