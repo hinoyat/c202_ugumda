@@ -80,7 +80,7 @@ const MusicPlaylist: React.FC = () => {
       );
       // 만약 필터링 결과가 없다면 전체 목록을 사용하거나, 원하는 방식으로 처리
       setDisplayMusicList(filtered.length > 0 ? filtered : flattenedMusicList);
-      console.log("displayMusicList 초기화됨:", filtered);
+  
       // 감정이 바뀌면 index도 초기화
       setIndex(0);
     }
@@ -91,7 +91,7 @@ const MusicPlaylist: React.FC = () => {
     dispatch(stopBackgroundMusic());
     // displayMusicList가 초기화되지 않았다면 로딩이므로 로그 출력은 생략
     if (displayMusicList.length > 0) {
-      console.log("mount - Now playing song:", displayMusicList[0].audio);
+      
     }
     return () => {
       dispatch(stopPlaylistMusic());
@@ -147,7 +147,7 @@ const MusicPlaylist: React.FC = () => {
     if (displayMusicList.length === 0) return;
     
     if (isPlaying) {
-      console.log("updatePlayer - Playing song:", displayMusicList[index]);
+      
       // load 후 약간의 지연 후 자동 재생
       setTimeout(() => {
         if (playerRef.current) {
@@ -232,18 +232,18 @@ const MusicPlaylist: React.FC = () => {
       playerRef.current.pause();
       dispatch(stopPlaylistMusic());
       setIsPlaying(false);
-      console.log("playOrPause - Paused song:", currentSong);
+    
     } else {
       playerRef.current.play();
       dispatch(startPlaylistMusic(currentSong.audio));
       setIsPlaying(true);
-      console.log("playOrPause - Playing song:", currentSong);
+     
     }
   };
 
   const clickAudio = (key: number): void => {
     if (displayMusicList.length === 0) return;
-    console.log("clickAudio - Selected song:", displayMusicList[key]);
+
     setIndex(key);
 
     if (playerRef.current) {
@@ -253,7 +253,7 @@ const MusicPlaylist: React.FC = () => {
         if (playerRef.current) {
           playerRef.current.play();
           dispatch(startPlaylistMusic(displayMusicList[key].audio));
-          console.log("clickAudio - Now playing song:", displayMusicList[key]);
+         
         }
       }, 100);
     }
