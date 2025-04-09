@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/DiarySearch.css';
-import DiaryList from './DiaryList';
+import DiaryList from '@/domains/search/components/DiaryList';
 import api from '@/apis/apiClient';
 import { selectVisitUser } from '@/domains/mainpage/stores/userSelectors';
 import { useSelector } from 'react-redux';
@@ -93,7 +93,6 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
       ) {
         setDiaryData(response.data);
       } else {
-        console.error('응답 데이터가 예상된 형식이 아닙니다:', response);
         setDiaryData({
           timestamp: '',
           status: 200,
