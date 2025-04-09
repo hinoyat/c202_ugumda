@@ -18,7 +18,7 @@ public class EmotionDataInitializer implements CommandLineRunner {
     private final EmotionRepository emotionRepository;
 
     // 구의 반경 (전체 우주의 크기)
-    private static final double SPHERE_RADIUS = 200.0;
+    private static final double SPHERE_RADIUS = 220.0;
 
     @Override
     public void run(String... args) {

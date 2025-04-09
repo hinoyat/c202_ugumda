@@ -40,7 +40,7 @@ public class CoordinateResetService {
     private static final int MIN_DIARIES_PER_CONSTELLATION = 3;
 
     // 구의 반경 (전체 우주의 크기)
-    private static final double SPHERE_RADIUS = 150.0;
+    private static final double SPHERE_RADIUS = 200.0;
 
     /**
      * 전체 우주를 재배치합니다.

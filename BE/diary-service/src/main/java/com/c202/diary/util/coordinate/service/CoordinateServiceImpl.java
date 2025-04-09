@@ -40,7 +40,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     private static final long CACHE_VALIDITY_MS = 5 * 60 * 1000;
 
     // 구의 반경 (전체 우주의 크기)
-    private static final double SPHERE_RADIUS = 150.0;
+    private static final double SPHERE_RADIUS = 200.0;
 
     /**
      * 새 일기를 위한 좌표를 생성합니다.
