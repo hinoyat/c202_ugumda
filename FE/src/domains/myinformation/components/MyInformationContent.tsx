@@ -6,10 +6,12 @@ import RightProfileSection from './RightProfileSection';
 import { IoClose } from 'react-icons/io5';
 import exampleProfile from '@/assets/images/exampleProfile.svg';
 import information_bg from '@/assets/images/information_bg.svg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '@/stores/auth/authSelectors';
 import api from '@/apis/apiClient';
-
+import { UseSelector } from 'react-redux';
+import { closeModal } from '@/stores/modal/modalSlice';
+import WithDrawModal from './WithDrawModal';
 
 const MyInformationContent: React.FC = () => {
   const glowingTextStyle: React.CSSProperties = {
@@ -17,6 +19,9 @@ const MyInformationContent: React.FC = () => {
   };
 
   const user = useSelector(selectUser);
+  const { isOpen } = useSelector(state => state.modal);
+  const dispatch = useDispatch();
+
   const [userdata, setUserData] = useState(null);
 
   const refreshUserData = useCallback(async () => {
@@ -68,6 +73,10 @@ const MyInformationContent: React.FC = () => {
 
         {/*오른쪽 영역끝 */}
       </div>
+      {isOpen && (
+        <WithDrawModal/>
+      )}
+
     </div>
   );
 };
