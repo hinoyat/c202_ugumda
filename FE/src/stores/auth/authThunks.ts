@@ -1,13 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import axios from 'axios';
 import api from '@/apis/apiClient';
 
 import {
   LoginCredentials,
   LoginResponse,
-  RefreshResponse,
-  User,
+  RefreshResponseData,
   LoginResponseData,
 } from './authTypes';
 
@@ -41,7 +39,6 @@ export const logoutUser = createAsyncThunk(
 
       localStorage.removeItem('accessToken');
       localStorage.removeItem('User');
-
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       return rejectWithValue(
@@ -57,11 +54,18 @@ export const updateToken = createAsyncThunk<
   { rejectValue: string }
 >('auth/refresh', async (_, { rejectWithValue }) => {
   try {
-    const response = await api.post<RefreshResponse>('/auth/refresh', {}, { withCredentials: true });
+    const response = await api.post<RefreshResponseData>(
+      '/auth/refresh',
+      {},
+      { withCredentials: true }
+    );
     const newAccessToken = response.data.data.accessToken;
 
     localStorage.setItem('accessToken', newAccessToken);
-    console.log('[updateToken] 토큰 갱신 성공 → 새로운 accessToken 저장 완료', newAccessToken);
+    console.log(
+      '[updateToken] 토큰 갱신 성공 → 새로운 accessToken 저장 완료',
+      newAccessToken
+    );
 
     return { accessToken: newAccessToken };
   } catch (error) {
