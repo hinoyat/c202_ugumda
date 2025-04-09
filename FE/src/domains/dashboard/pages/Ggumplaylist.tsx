@@ -40,7 +40,7 @@ const DreamSolve: React.FC = () => {
       <div className="absolute w-[93%] h-[88%] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="w-full h-full flex flex-col">
           {/* UserInfoData 중앙 상단에 배치 */}
-          <div className="w-full flex justify-center mb-6">
+          <div className="w-full flex justify-center mb-1">
             <UserInfoData />
           </div>
           

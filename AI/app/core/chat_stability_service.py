@@ -34,6 +34,31 @@ def stability(prompt:str):
         response_json = response.json()
         base64_image = response_json["image"]
 
+
+        # 여기서부터 추가
+        # base64 디코딩
+        import base64
+        import uuid
+
+        # 디코딩하여 바이너리 데이터로 변환
+        image_data = base64.b64decode(base64_image)
+
+        # 파일 이름 생성 (UUID 사용하여 고유한 이름 생성)
+        file_name = f"{uuid.uuid4()}.png"
+
+        # 저장 경로
+        save_path = f"AI/src/{file_name}"
+
+        # 디렉토리가 없으면 생성
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+        # 파일로 저장
+        with open(save_path, "wb") as file:
+            file.write(image_data)
+
+        logging.info(f"이미지가 {save_path}에 저장되었습니다.")
+
+
         return base64_image
     else:
         raise Exception(str(response.json()))
