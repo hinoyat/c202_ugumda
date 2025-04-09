@@ -39,6 +39,8 @@ const dashboardSlice = createSlice({
         const emotionData = action.payload.data.data;      
 
         const formattedData = {} as Record<string, number>;
+        const emotionPriority = ['행복', '희망', '평화', '슬픔', '불안', '분노', '공포'];
+
         let maxCount = 0;
         let dominantEmotionName = '';
 
@@ -47,7 +49,9 @@ const dashboardSlice = createSlice({
           formattedData[item.emotion] = item.count;
           
           // 현재 감정의 카운트가 지금까지의 최대값보다 크면 업데이트
-          if (item.count > maxCount) {
+          if (item.count > maxCount ||
+            (item.count === maxCount && emotionPriority.indexOf(item.emotion) < emotionPriority.indexOf(dominantEmotionName))
+          ) {
             maxCount = item.count;
             dominantEmotionName = item.emotion;
           }
