@@ -5,13 +5,22 @@ import UserInfoData from '../components/UserInfoData';
 import dreamSolve_bg from '@/assets/images/dreamSolve_bg.svg';
 import { Canvas } from '@react-three/fiber';
 import StarField from '@/domains/mainpage/components/universe/StarField';
+import { initializeAudio } from '@/stores/music/musicThunks';
+import { useAppDispatch } from '@/hooks/hooks';
+
+
 
 
 const DreamSolve: React.FC = () => {
   const nav = useNavigate();
+  const dispatch = useAppDispatch()
   const onClickHome = () => {
     nav('/spaceship');
+    dispatch(initializeAudio());
   };
+
+
+
 
   return (
     <div className="w-screen h-screen relative">
