@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { store } from './stores/store';
 import { useEffect } from 'react';
 import useSSE from './hooks/useSSE';
-import api from './apis/apiClient';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -40,7 +39,6 @@ function App() {
         <AppRouter />
       </BrowserRouter>
       <ToastContainer
-        position="bottom-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop

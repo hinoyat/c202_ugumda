@@ -36,3 +36,7 @@ export interface LoginResponseData {
 export interface RefreshResponse {
   accessToken: string;
 }
+
+export interface RefreshResponseData {
+  data: RefreshResponse;
+}

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import axios from 'axios';
-import { SignupResponse, SignupForm, SignupResponseData } from './signupTypes';
+import { SignupForm, SignupResponseData } from './signupTypes';
 
 export const checkUsername = createAsyncThunk(
   'signup/checkUsername',
@@ -43,7 +43,6 @@ export const signupUser = createAsyncThunk<
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
-    console.log('회원가입 실패 🥲🥲🥲🥲🥲🥲🥲');
     return rejectWithValue(
       axiosError.response?.data?.message ?? '회원가입 실패'
     );

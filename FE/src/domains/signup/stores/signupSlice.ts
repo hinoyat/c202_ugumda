@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SignupState } from './signupTypes';
 import { checkUsername, checkNickname, signupUser } from './signupThunks';
+import { toast } from 'react-toastify';
 
 const initialState: SignupState = {
   username: '',
@@ -154,7 +155,6 @@ const signupSlice = createSlice({
         state.nicknameStatus = 'checking';
       })
       .addCase(checkNickname.fulfilled, (state, action) => {
-        console.log(action.payload);
         if (action.payload === '이미 사용 중인 닉네임입니다.') {
           state.nicknameStatus = 'invalid';
           state.nicknameMessage = '이미 사용 중인 닉네임입니다.';
@@ -169,23 +169,31 @@ const signupSlice = createSlice({
         state.nicknameMessage = '다시 시도해 주세요.';
       })
       .addCase(signupUser.fulfilled, (state) => {
-        state.username= '';
-        state.usernameStatus= 'invalid';
-        state.usernameMessage= '';
-        state.nickname= '';
-        state.nicknameStatus= 'invalid';
-        state.nicknameMessage= '';
-        state.password= '';
-        state.confirmPassword= '';
-        state.confirmPasswordMessage= '';
-        state.confirmPasswordStatus= 'invalid';
-        state.passwordMessage= '';
-        state.passwordStatus= 'invalid';
-        state.iconSeq= 0;
-        state.birthDate= '';
-        state.birthDateMessage= '';
-        state.birthDateStatus= 'invalid';
-      })
+        state.username = '';
+        state.usernameStatus = 'invalid';
+        state.usernameMessage = '';
+        state.nickname = '';
+        state.nicknameStatus = 'invalid';
+        state.nicknameMessage = '';
+        state.password = '';
+        state.confirmPassword = '';
+        state.confirmPasswordMessage = '';
+        state.confirmPasswordStatus = 'invalid';
+        state.passwordMessage = '';
+        state.passwordStatus = 'invalid';
+        state.iconSeq = 0;
+        state.birthDate = '';
+        state.birthDateMessage = '';
+        state.birthDateStatus = 'invalid';
+        toast.success('회원가입을 성공했습니다. 로그인 페이지로 이동합니다.', {
+          position: 'bottom-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+      });
   },
 });
 
