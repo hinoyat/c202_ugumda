@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import DiarySearch from '../components/DiarySearch';
 import UserSearch from '../components/UserSearch';
 import { IoClose } from 'react-icons/io5';
+import ModalBase from '@/domains/diary/components/modalBase';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -28,38 +29,42 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     <div className="absolute inset-0">
       <div className="absolute inset-0 z-10 backdrop-blur-[2px]"></div>
       {/* 모달 배경 */}
-      <div className="absolute w-[70%] h-[80%] rounded-lg py-10 px-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#6E6E6E]/90 z-25 flex flex-col items-center">
-        {/* 닫기버튼 */}
-        <div
-          className="absolute z-40 top-[2%] right-[1%] cursor-pointer"
-          onClick={handleClose}>
-          <IoClose className="text-white text-3xl" />
-        </div>
-        {/* 검색탭 */}
-        <div className="flex gap-10 text-white text-xl">
-          <button
-            onClick={() => setActiveTab('diary')}
-            className={`${
-              activeTab === 'diary'
-                ? 'font-bold underline underline-offset-6'
-                : 'hover:font-bold hover:underline hover:underline-offset-5'
-            } cursor-pointer`}>
-            일기검색
-          </button>
-          <p>|</p>
-          <button
-            onClick={() => setActiveTab('user')}
-            className={`${
-              activeTab === 'user'
-                ? 'font-bold underline underline-offset-6'
-                : 'hover:font-bold hover:underline hover:underline-offset-5'
-            } cursor-pointer`}>
-            유저검색
-          </button>
-        </div>
+      <div className="absolute w-[70%] h-[80%] rounded-lg py-10 px-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-25 flex flex-col items-center">
+        <ModalBase>
+          <div className="flex flex-col items-center py-10 px-20 w-full h-full">
+            {/* 닫기버튼 */}
+            <div
+              className="absolute z-40 top-[2%] right-[1%] cursor-pointer"
+              onClick={handleClose}>
+              <IoClose className="text-white text-3xl" />
+            </div>
+            {/* 검색탭 */}
+            <div className="flex gap-10 text-white text-xl">
+              <button
+                onClick={() => setActiveTab('diary')}
+                className={`${
+                  activeTab === 'diary'
+                    ? 'font-bold underline underline-offset-6'
+                    : 'hover:font-bold hover:underline hover:underline-offset-5'
+                } cursor-pointer`}>
+                일기검색
+              </button>
+              <p>|</p>
+              <button
+                onClick={() => setActiveTab('user')}
+                className={`${
+                  activeTab === 'user'
+                    ? 'font-bold underline underline-offset-6'
+                    : 'hover:font-bold hover:underline hover:underline-offset-5'
+                } cursor-pointer`}>
+                유저검색
+              </button>
+            </div>
 
-        {activeTab === 'diary' && <DiarySearch onClose={onClose} />}
-        {activeTab === 'user' && <UserSearch onClose={onClose} />}
+            {activeTab === 'diary' && <DiarySearch onClose={onClose} />}
+            {activeTab === 'user' && <UserSearch onClose={onClose} />}
+          </div>
+        </ModalBase>
       </div>
     </div>
   );

@@ -82,6 +82,11 @@ public class Diary {
         this.z = z;
         this.emotionSeq = emotionSeq;
     }
+    public void setCoordinate(Double x, Double y, Double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
     public void setVideo(String videoUrl) { this.videoUrl = videoUrl; }
 }

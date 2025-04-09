@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '@/apis/apiClient';
 import { getIconById } from '@/hooks/ProfileIcons';
 import { useNavigate } from 'react-router-dom';
+import ButtonBase from '@/domains/diary/components/details/button/ButtonBase';
 
 interface Tag {
   tagSeq: number | null;
@@ -44,7 +45,7 @@ interface DiaryListProps {
   onClose: () => void;
 }
 
-const DiaryList: React.FC<DiaryListProps> = ({ data,onClose }) => {
+const DiaryList: React.FC<DiaryListProps> = ({ data, onClose }) => {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const nav = useNavigate();
@@ -136,7 +137,7 @@ const DiaryList: React.FC<DiaryListProps> = ({ data,onClose }) => {
         <div
           key={diary.diarySeq}
           className="truncate w-full">
-          <div className="bg-[#505050]/90 flex px-10 py-5 gap-8 w-full rounded-lg">
+          <div className="border border-white/90 border-dashed flex px-10 py-5 gap-8 w-full rounded-lg">
             {/*방명록 왼쪽 시작 */}
             {/* 제목 */}
             <div className="flex flex-col truncate gap-2 basis-6/8">
@@ -183,8 +184,7 @@ const DiaryList: React.FC<DiaryListProps> = ({ data,onClose }) => {
               </div>
 
               <div>
-                <button
-                  className="text-[14px] bg-[#363736] text-white px-4 py-1 rounded cursor-pointer hover:bg-neutral-500"
+                <ButtonBase
                   onClick={() => {
                     // 현재 선택한 일기 정보를 LocalStorage에 저장
                     localStorage.setItem(
@@ -194,9 +194,13 @@ const DiaryList: React.FC<DiaryListProps> = ({ data,onClose }) => {
                     // 페이지 이동
                     nav(`/${diary.username || ''}`);
                     handleClose();
-                  }}>
+                  }}
+                  width="85px" // 원하는 너비 설정
+                  height="32px" // 원하는 높이 설정
+                  borderRadius="8px" // 원하는 테두리 둥글기 설정
+                >
                   보러가기
-                </button>
+                </ButtonBase>
               </div>
             </div>
           </div>

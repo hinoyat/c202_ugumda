@@ -29,7 +29,6 @@ const dashboardSlice = createSlice({
       builder.addCase(fetchFourteenDaysEmotionStats.pending, (state)=> {
         state.loading = true;    // 로딩 상태를 true로 설정
         state.error = null;      // 이전 오류 메시지를 초기화
-        console.log("시작시 state가 뭔지 궁금해요!!!", JSON.parse(JSON.stringify(state)))
       })
 
       // 14일 데이터 로드 성공 시
@@ -38,7 +37,6 @@ const dashboardSlice = createSlice({
 
         // API 응답에서 감정 데이터 배열을 추출
         const emotionData = action.payload.data.data;      
-        console.log("로드성공시 state가 뭔지 궁금해요!!!", JSON.parse(JSON.stringify(state)))
 
         const formattedData = {} as Record<string, number>;
         let maxCount = 0;

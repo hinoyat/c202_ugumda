@@ -67,7 +67,6 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
 
     if (data) {
       setGuestbookEntries(data.data);
-      // console.log('📜 엔트리 데이터', data.data);
     }
   };
 
@@ -98,14 +97,12 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
       );
 
       if (response) {
-        // console.log('✅ 방명록 작성 성공:', response);
         // 입력 필드 초기화
         setNewEntry('');
         // 방명록 목록 새로고침
         fetchGuestbook();
       }
     } catch (error) {
-      // console.error('❌ 방명록 작성 실패:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -119,7 +116,6 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
 
       fetchGuestbook();
     } catch (error) {
-      console.error('❌ 방명록 삭제 실패:', error);
     }
   };
 
@@ -148,7 +144,6 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
     try {
       const response = await putGuestbookIntroduction({ introduction });
       if (response) {
-        console.log('✅ 소개글 수정 성공', response);
         setIsEditingIntro(false);
         dispatch(setIntro(introduction));
         dispatch(updateIntroduction(introduction));
@@ -162,7 +157,6 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
         }
       }
     } catch (error) {
-      console.error('❌ 소개글 수정 실패', error);
     } finally {
       setIsUpdatingIntro(false);
     }

@@ -12,9 +12,8 @@ let isRefreshing = false;
 let isLoggingOut = false;
 let failedQueue: any[] = [];
 
-
 const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (token) {
       prom.resolve(token);
     } else {
@@ -23,7 +22,6 @@ const processQueue = (error: any, token: string | null = null) => {
   });
   failedQueue = [];
 };
-
 
 // 요청 인터셉터 - accessToken 자동 추가
 api.interceptors.request.use((config) => {
@@ -53,8 +51,14 @@ api.interceptors.response.use(
     };
 
     // 🔁 리프레시 요청 자체가 실패한 경우 -> 바로 로그아웃
-    if (isRefreshRequest && (error.response?.status === 401 || error.response?.status === 403)) {
+    if (
+      isRefreshRequest &&
+      (error.response?.status === 401 || error.response?.status === 403)
+    ) {
       console.warn('[apiClient] refresh 요청 실패 → 로그아웃 진행');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('User');
+
       await handleLogout();
       return Promise.reject(error);
     }
@@ -76,7 +80,6 @@ api.interceptors.response.use(
       }
 
       isRefreshing = true;
-
 
       console.warn('[apiClient] 401 → accessToken 갱신 시도');
 
@@ -100,7 +103,7 @@ api.interceptors.response.use(
     }
 
     // 🔒 403 → 바로 로그아웃
-    if (error.response?.status === 403  && !isOnLoginPage) {
+    if (error.response?.status === 403 && !isOnLoginPage) {
       await handleLogout();
       return Promise.reject(error);
     }

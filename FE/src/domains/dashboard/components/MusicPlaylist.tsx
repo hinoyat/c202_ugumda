@@ -243,31 +243,31 @@ const MusicPlaylist: React.FC = () => {
   const svgUrl = "data:image/svg+xml,%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 56 56' style='enable-background:new 0 0 56 56;' xml:space='preserve'%3E%3Cpath style='fill:%23071739;' d='M47.799,8.201c-10.935-10.935-28.663-10.935-39.598,0c-10.935,10.935-10.935,28.663,0,39.598 c10.935,10.935,28.663,10.935,39.598,0C58.734,36.864,58.734,19.136,47.799,8.201z M32.95,32.95c-2.734,2.734-7.166,2.734-9.899,0 c-2.734-2.734-2.734-7.166,0-9.899s7.166-2.734,9.899,0S35.683,30.216,32.95,32.95z'/%3E%3Cpath style='fill:%23E7ECED;' d='M35.778,20.222c-4.296-4.296-11.261-4.296-15.556,0c-4.296,4.296-4.296,11.261,0,15.556 c4.296,4.296,11.261,4.296,15.556,0C40.074,31.482,40.074,24.518,35.778,20.222z M30.121,30.121c-1.172,1.172-3.071,1.172-4.243,0 s-1.172-3.071,0-4.243s3.071-1.172,4.243,0S31.293,28.95,30.121,30.121z'/%3E%3Cg%3E%3Cpath style='fill:%23709fdc;' d='M35.778,35.778c-0.76,0.76-1.607,1.378-2.504,1.87l8.157,14.92c2.284-1.25,4.434-2.835,6.368-4.769 c1.934-1.934,3.519-4.084,4.769-6.368l-14.92-8.157C37.157,34.172,36.538,35.018,35.778,35.778z'/%3E%3Cpath style='fill:%23709fdc;' d='M20.222,20.222c0.76-0.76,1.607-1.378,2.504-1.87l-8.157-14.92c-2.284,1.25-4.434,2.835-6.368,4.769 s-3.519,4.084-4.769,6.368l14.92,8.157C18.843,21.828,19.462,20.982,20.222,20.222z'/%3E%3C/g%3E%3C/svg%3E";
 
   return (
-    <div className="absolute w-[93%] h-[88%] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-15 pl">
-      <div className="flex flex-col justify-center items-center max-w-[380px] py-0 px-[5px] mt-[0px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
-        <div className="flex flex-col items-center w-full py-[20px] px-0 rounded-[20px] text-[#071739] bg-white">
+    <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-17">
+      <div className="flex flex-col justify-center items-center max-w-[370px] py-0 px-[5px] mt-[0px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
+        <div className="flex flex-col items-center w-full py-[12px] px-0 pt-5 rounded-[20px] text-[#071739] bg-white">
           <audio ref={playerRef}>
             <source src={currentSong.audio} type="audio/ogg" />
             Your browser does not support the audio element.
           </audio>
           
-          <div className="relative mx-auto w-[280px] h-[210px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
+          <div className="relative mx-auto w-[270px] h-[190px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
             {/* 배경음악으로 설정하는 버튼을 사진 위에 절대 위치로 배치 */}
             <button 
               onClick={setCurrentAsBackground}
               className="absolute top-[8px] left-1/2 transform -translate-x-1/2 text-xs z-10 flex items-center justify-center px-[15px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]"
             >
-              <FontAwesomeIcon icon={faMusic} className="mr-[5px]" />
+              <FontAwesomeIcon icon={faMusic} className="mr-[4px]" />
               배경음악으로 설정
             </button>
             
-            <img src={currentSong.img} alt={currentSong.name} className="w-auto h-full" />
+            <img src={currentSong.img} alt={currentSong.name} className="w-full h-full object-cover" />
           </div>
           
-          <span className="mt-[30px] text-[22px]">{currentSong.name}</span>
+          <span className="mt-[22px] text-[22px]">{currentSong.name}</span>
           <span className="text-[#709fdc]">{currentSong.category}</span>
           
-          <div className="flex justify-between mt-[10px] w-[240px]">
+          <div className="flex justify-between mt-[5px] w-[240px]">
             <div>{currentTime}</div>
             <div>{currentSong.duration}</div>
           </div>
@@ -297,16 +297,16 @@ const MusicPlaylist: React.FC = () => {
         
         <div
           ref={playlistContainerRef} 
-          className="flex flex-col p-[10px] h-[193px] overflow-y-scroll [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-thumb]:rounded-[5px] [&::-webkit-scrollbar-track]:bg-[#071739]">
+          className="flex flex-col p-[10px] h-[160px] overflow-y-scroll [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-thumb]:rounded-[5px] [&::-webkit-scrollbar-track]:bg-[#071739]">
           {displayMusicList.map((music, key) => (
             <div
               key={key}
               data-index={key}
               className={`
-                flex items-center mb-[10px] rounded-[10px] border border-transparent transition-[0.3s] cursor-pointer
+                flex items-center mb-[8px] rounded-[10px] border border-transparent transition-[0.3s] cursor-pointer
                 hover:bg-[#274684] hover:border-[#274684] hover:relative
                 ${index === key && !pause ? 'bg-[#274684] shadow-[0px_0px_15px_0px_#274684]' : ''}
-                ${index === key && pause ? `bg-[#274684] shadow-[0px_0px_15px_0px_#274684] relative after:content-[''] after:block after:absolute after:left-[17px] after:w-[57px] after:h-[57px] after:rounded-[10px] after:text-[16px] after:animate-[play_2s_linear_infinite] after:bg-[url("${svgUrl}")]` : ''}
+                ${index === key && pause ? `bg-[#274684] shadow-[0px_0px_15px_0px_#274684] relative after:content-[''] after:block after:absolute after:left-[15px] after:w-[55px] after:h-[57px] after:rounded-[10px] after:text-[16px] after:animate-[play_2s_linear_infinite] after:bg-[url("${svgUrl}")]` : ''}
               `}
             >
               {/* 음악 재생 클릭 영역 */}
@@ -326,7 +326,7 @@ const MusicPlaylist: React.FC = () => {
                 <span className="text-[17px] mt-[8px]">{music.name}</span>
                 <span className="mt-[8px] font-[300] text-[#709fdc]">{music.category}</span>
               </div>
-              <span className="min-w-[40px] ml-[10px] mr-[10px] font-[500]">
+              <span className="min-w-[40px] ml-[9px] mr-9px] font-[500]">
                 {index === key ? currentTime : music.duration}
               </span>
             </div>
