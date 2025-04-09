@@ -14,6 +14,10 @@ export const visitUserpage = createAsyncThunk<
       `/users/name/${credentials.username}`
     );
 
+    if (response) {
+      await api.post(`/diaries/relayout/${response.data.data.userSeq}`);
+    }
+
     return response.data.data;
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
