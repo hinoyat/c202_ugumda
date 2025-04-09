@@ -34,6 +34,7 @@ def stability(prompt:str):
         response_json = response.json()
         base64_image = response_json["image"]
 
+
         return base64_image
     else:
         raise Exception(str(response.json()))

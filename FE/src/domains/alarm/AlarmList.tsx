@@ -61,7 +61,6 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
 
   // 알림 하나 클릭
   const handleAlarmClick = (alarm: Alarm) => {
-    console.log('알림 눌렀지롱', alarm);
     if (alarm.isRead === 'N') {
       dispatch(readAlarm(alarm.alarmSeq));
     }
@@ -77,6 +76,7 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
     } else if (alarm.diarySeq) {
       // 일기 상세 모달을 띄우기 위해 diarySeq를 localStorage에 저장하고 Redux 상태 업데이트
       localStorage.setItem('selectedDiarySeq', alarm.diarySeq.toString());
+      navigate(`/${loginUser?.username}`);
       dispatch(showDiaryModal(alarm.diarySeq));
     }
 

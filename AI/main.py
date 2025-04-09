@@ -19,18 +19,6 @@ logging_check()
 '''
 app = FastAPI()
 
-'''
-1. chat api 가져와서 프롬프트 생성 (키워드추출, 필터링)
-2. image 생성
-3. video 생성
-
-'''
-
-'''
-추가 수정 사항: 
-1. return 값 변경 프론트에 보낼 responsedto 만들기
-2. 백에 보낼 
-'''
 
 @app.post("/api/ai/create-video")
 async def create_video(generate_chat_request_dto:GenerateVideoRequestDto, background_tasks:BackgroundTasks, authorization: str = Header(None)):
@@ -51,9 +39,8 @@ async def create_video(generate_chat_request_dto:GenerateVideoRequestDto, backgr
 
     return response
 
-# 현호야 이거로 테스트해!!
-# url만 보내기
-@app.post("/api/ai/test-sample-video")
+# 테스트 로직
+@app.post("api/ai/test-sample-video")
 async def sample_video(generate_chat_request_dto:GenerateVideoRequestDto, background_tasks:BackgroundTasks, authorization: str = Header(None)):
     logging.info(f"일기 내용 받기 성공, dairy_pk: {generate_chat_request_dto.diary_pk}")
     background_tasks.add_task(

@@ -71,7 +71,6 @@ const UserInfoData = ()=>{
 
     const user = useSelector(selectUser)
     const dominantEmotion = useSelector(selectDominantEmotion)
-    console.log("지배감정:", dominantEmotion);
 
     let emotionMessage = "";
 
@@ -81,27 +80,28 @@ const UserInfoData = ()=>{
         item => item.emotion.toLowerCase() === dominantEmotion.toLowerCase()
       );
 
-      console.log("일치하는 감정 데이터:", emotionData);
       
       if (emotionData) {
         // 메시지 배열에서 무작위로 하나 선택
         const randomIndex = Math.floor(Math.random() * emotionData.messages.length);
         emotionMessage = emotionData.messages[randomIndex];
-        console.log("랜덤 메세지!!!",emotionMessage)
       }
     }
     
 
     return(
-    <div className="flex items-center mt-7.5">
+    <div className="flex items-center mt-2 pt-3">
     <img
       src={getIconById((user as any).iconSeq)}
       alt="프로필 사진"
-      className="w-13 h-14"
-    />
-        <h1 className="text-white/85 text-[23px] ml-3">{user?.nickname}님</h1>
-        <div className="p-3 bg-gray-800 rounded-lg text-[23px] text-white/85">{emotionMessage}</div>
-  </div>
+      className="w-12 h-12"
+    />  
+      {/* <div className="bg-cyan-800/50 rounded-xl flex items-center"> */}
+        <h1 className="text-white/85 text-[20px] ml-3">{user?.nickname}님</h1>
+        <h1 className="p-3 text-[20px] text-[#f4f797]">{emotionMessage}</h1>
+      {/* </div> */}
+      {/* 색 : text-blue-300 text-lime-300 text-amber-300*/}
+    </div>
 );
 }
 export default UserInfoData

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import '../styles/DiarySearch.css';
 import DiaryList from './DiaryList';
 import api from '@/apis/apiClient';
+import { selectVisitUser } from '@/domains/mainpage/stores/userSelectors';
+import { useSelector } from 'react-redux';
 
 interface DiarySearchProps {
   onClose: () => void;
@@ -24,6 +26,9 @@ interface PaginatedResponse {
 }
 
 const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
+  // visitUser 정보 가져오기
+  const visitUser = useSelector(selectVisitUser);
+
   const [diaryData, setDiaryData] = useState<PaginatedResponse>({
     timestamp: '',
     status: 200,
@@ -62,13 +67,19 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
         searchTitle: searchOptions.searchTitle,
         searchContent: searchOptions.searchContent,
         searchTag: searchOptions.searchTag,
-        currentUserOnly: searchOptions.currentUserOnly,
+        // 백엔드 요구사항에 맞게 수정
+        currentUserOnly: searchOptions.currentUserOnly, // 체크박스 상태에 따라 설정
+        useCurrentUser: false, // 항상 false로 설정
+        targetUserSeq: searchOptions.currentUserOnly
+          ? visitUser?.userSeq // 현재 우주가 체크되면 visitUser의 userSeq 사용
+          : undefined, // 현재 우주가 체크 해제되면 targetUserSeq를 보내지 않음
         page: page, // API는 1부터 시작하는 페이지 번호 사용
         size: 20, // 페이지당 아이템 수
       };
 
-      // 쿼리 스트링으로 변환
+      // 쿼리 스트링으로 변환 (null이나 undefined 값은 제외)
       const queryString = Object.entries(params)
+        .filter(([_, value]) => value !== null && value !== undefined)
         .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
         .join('&');
 
@@ -123,7 +134,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
     await loadSearchData(1); // 검색 시 첫 페이지로 리셋
   };
 
-  const handleCheckboxChange = (option) => {
+  const handleCheckboxChange = (option: any) => {
     setSearchOptions((prev) => ({
       ...prev,
       [option]: !prev[option],
@@ -229,6 +240,8 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
           <p className="text-white">현재 우주</p>
         </div>
 
+        {/* 검색결과 */}
+
         <div className="flex gap-1.5 items-center">
           <label className="cont">
             <input
@@ -283,7 +296,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
                 ...diaryData,
                 data: diaryData.data.content,
               }}
-              onClose ={onClose}
+              onClose={onClose}
             />
             <div className="w-full block">{renderPagination()}</div>
           </>
