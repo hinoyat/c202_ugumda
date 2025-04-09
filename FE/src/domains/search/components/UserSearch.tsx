@@ -86,10 +86,10 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
         status: 200,
         message: '',
         data: {
-          content: [],
+          content: friends, // 내 친구 목록을 content로 설정
           currentPage: 1,
           totalPages: 1,
-          totalElements: 0,
+          totalElements: friends.length,
           size: 20,
           first: true,
           last: true,
@@ -102,16 +102,32 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
   const loadSearchData = async (page: number) => {
     if (!searchText.trim()) {
       setFilteredUsers(friends);
+      setPaginatedData({
+        timestamp: '',
+        status: 200,
+        message: '',
+        data: {
+          content: friends, // 내 친구 목록을 content로 설정
+          currentPage: 1,
+          totalPages: 1,
+          totalElements: friends.length,
+          size: 20,
+          first: true,
+          last: true,
+        },
+      });
       return;
     }
 
     setIsLoading(true);
     try {
       // 검색 조건 적용
-      const params = {
+      const params: Record<string, string | number | boolean> = {
         keyword: searchText,
         page: page, // API는 1부터 시작하는 페이지 번호 사용
         size: 20, // 페이지당 아이템 수
+        searchNickname: searchFilters.searchNickname, // 닉네임 검색 필터 상태 추가
+        searchUsername: searchFilters.searchUsername, // 아이디 검색 필터 상태 추가
       };
 
       // 쿼리 스트링으로 변환
@@ -141,19 +157,6 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
           }
         );
 
-        // 필터 적용
-        const filtered = usersWithSubscriptionStatus.filter((user: User) => {
-          const matchNickname =
-            searchFilters.searchNickname &&
-            user.nickname.toLowerCase().includes(searchText.toLowerCase());
-
-          const matchUsername =
-            searchFilters.searchUsername &&
-            user.username.toLowerCase().includes(searchText.toLowerCase());
-
-          return matchNickname || matchUsername;
-        });
-
         // 응답 데이터 업데이트
         const updatedResponse = {
           ...response.data,
@@ -164,7 +167,7 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
         };
 
         setPaginatedData(updatedResponse);
-        setFilteredUsers(filtered);
+        setFilteredUsers(usersWithSubscriptionStatus); // 서버에서 필터링된 결과를 그대로 사용
       } else {
         console.error('응답 데이터가 예상된 형식이 아닙니다:', response);
         setPaginatedData({
@@ -304,27 +307,6 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
       ...prev,
       [filter]: !prev[filter],
     }));
-
-    // 필터 변경 시 현재 검색 결과에 새 필터 적용
-    if (paginatedData.data.content.length > 0) {
-      const filtered = paginatedData.data.content.filter((user) => {
-        const matchNickname =
-          (filter === 'searchNickname'
-            ? !searchFilters.searchNickname
-            : searchFilters.searchNickname) &&
-          user.nickname.toLowerCase().includes(searchText.toLowerCase());
-
-        const matchUsername =
-          (filter === 'searchUsername'
-            ? !searchFilters.searchUsername
-            : searchFilters.searchUsername) &&
-          user.username.toLowerCase().includes(searchText.toLowerCase());
-
-        return matchNickname || matchUsername;
-      });
-
-      setFilteredUsers(filtered);
-    }
   };
 
   // 페이지 버튼 렌더링 함수
@@ -384,6 +366,27 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
       </div>
     );
   };
+
+  // 컴포넌트 마운트 시 검색어가 없을 때 친구 목록을 보여주기 위한 초기 로딩
+  useEffect(() => {
+    if (friends.length > 0 && !searchText.trim()) {
+      setFilteredUsers(friends);
+      setPaginatedData({
+        timestamp: '',
+        status: 200,
+        message: '',
+        data: {
+          content: friends,
+          currentPage: 1,
+          totalPages: 1,
+          totalElements: friends.length,
+          size: 20,
+          first: true,
+          last: true,
+        },
+      });
+    }
+  }, [friends]);
 
   return (
     <div className="w-full flex flex-col gap-4 overflow-hidden">
