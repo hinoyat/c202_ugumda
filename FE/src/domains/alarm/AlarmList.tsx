@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { IoMdMail, IoMdMailOpen } from 'react-icons/io';
 import { useAppDispatch } from '@/hooks/hooks';
 import { useSelector } from 'react-redux';
 import {
@@ -16,7 +17,6 @@ import {
 } from './stores/alarmSelectors';
 import { Alarm } from './stores/alarmTypes';
 import './themes/alarm.css';
-import { FaBookReader } from 'react-icons/fa';
 import { BsTrash3Fill } from 'react-icons/bs';
 import { resetPage, resetAlarms } from './stores/alarmSlice';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -136,11 +136,12 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
             className="overflow-y-auto">
             {alarms.map((alarm, index) => (
               <div
-                onClick={() => handleAlarmClick(alarm)}
                 key={alarm.alarmSeq}
                 ref={index === alarms.length - 1 ? lastAlarmRef : null}
                 className={`p-4 text-white border-b border-gray-300 flex items-center justify-between ${alarm.isRead === 'N' ? 'font-bold' : 'text-white/50'}`}>
-                <div className="relative group overflow-hidden w-[75%] text-lg cursor-pointer">
+                <div
+                  onClick={() => handleAlarmClick(alarm)}
+                  className="relative group overflow-hidden w-[75%] text-lg cursor-pointer">
                   <span className="block truncate group-hover:hidden">
                     {alarm.content}
                   </span>
@@ -150,10 +151,14 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
                 </div>
                 {/* 아이콘 부분 */}
                 <div className="flex justify-center items-center gap-4">
-                  <FaBookReader
-                    onClick={() => handleReadAlarm(alarm)}
-                    className="w-5 h-5 cursor-pointer"
-                  />
+                  {alarm.isRead === 'N' ? (
+                    <IoMdMail
+                      onClick={() => handleReadAlarm(alarm)}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                  ) : (
+                    <IoMdMailOpen className="w-5 h-5 cursor-pointer" />
+                  )}
                   <BsTrash3Fill
                     onClick={() => handleDeleteAlarm(alarm)}
                     className="w-5 h-5 cursor-pointer"

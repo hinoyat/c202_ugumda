@@ -36,44 +36,38 @@ const TodayFortune = () => {
       
       try {
         const checkResponse = await api.get('/daily-fortune');
-        console.log("GET Response:", checkResponse);
+
         if (isMounted) {
           if (checkResponse?.data?.data && 
               checkResponse.data.data !== "오늘의 운세가 아직 생성되지 않았습니다.") {
-            console.log("Setting fortune from GET:", checkResponse.data.data);
+
             setFortuneContent(checkResponse.data.data);
           } 
           else {
-            console.log("Creating new fortune...");
+            // console.log("Creating new fortune...");
             try {
               const createResponse = await api.post('/daily-fortune');
-              console.log("POST Response:", createResponse);
               await new Promise(resolve => setTimeout(resolve, 500));
               
               if (isMounted) {
                 try {
                   const finalResponse = await api.get('/daily-fortune');
-                  console.log("Final GET Response:", finalResponse);
                   
                   if (isMounted && finalResponse?.data?.data) {
-                    console.log("Setting fortune from final GET:", finalResponse.data.data);
                     setFortuneContent(finalResponse.data.data);
                   } else {
                     setFortuneContent("운세 내용을 찾을 수 없습니다.");
                   }
                 } catch (finalError) {
-                  console.error("Final GET request failed:", finalError);
                   setFortuneContent("운세를 가져오는데 실패하였습니다.");
                 }
               }
             } catch (createError) {
-              console.error("POST request failed:", createError);
               setFortuneContent("새 운세를 생성하는데 실패하였습니다.");
             }
           }
         }
       } catch (error) {
-        console.error("운세를 가져오는 중 오류 발생:", error);
         if (isMounted) {
           setFortuneContent("오늘의 운세를 가져오는데 실패하였습니다.");
         }
@@ -110,10 +104,9 @@ const TodayFortune = () => {
   useEffect(() => {
     const handleContextLost = (e) => {
       e.preventDefault();
-      console.warn("WebGL context lost, attempting to restore...");
     };
     const handleContextRestored = () => {
-      console.log("WebGL context restored");
+      // console.log("WebGL context restored");
     };
 
     const canvas = document.querySelector("canvas");
@@ -144,7 +137,6 @@ const TodayFortune = () => {
         camera={{ position: [0, 0, 5] }}
         onContextLost={(e) => {
           e.preventDefault();
-          console.log("Canvas context lost");
         }}>
         <StarField />
       </Canvas>

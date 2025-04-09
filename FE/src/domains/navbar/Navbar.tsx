@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdHomeFilled } from 'react-icons/md';
 import { BsEnvelopePaperHeartFill } from 'react-icons/bs';
 
-import { VscSearch } from 'react-icons/vsc';
-import { FaRegBell } from 'react-icons/fa6';
+import { VscSearch, VscBell, VscBellDot } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 import SearchModal from '../search/modal/SearchModal'; // 모달 임포트
 import { Tooltip } from 'react-tooltip';
 import GuestBook from '../guestbook/GuestBook';
-import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 
 import AlarmList from '../alarm/AlarmList';
 import { selectUser } from '@/stores/auth/authSelectors';
@@ -20,35 +17,33 @@ import { showGuestbookModal } from '@/stores/guestbook/guestbookSlice';
 import { RootState } from '@/stores/store';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
+  const [hasAlarm, setHasAlarm] = useState(false);
+
+  const alarmExistence = localStorage.getItem('alarmExistence');
+
   // 모달 열림 여부
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   // 모달 열기
   const openModal = () => setIsModalOpen(true);
   // 모달 닫기
   const closeModal = () => setIsModalOpen(false);
 
-  //방명록을 열기 위해 유저정보 가져오기
-  const params = useParams();
-  const dispatch = useDispatch();
-
-  const user = useSelector(selectUser);
   const { guestbookModal } = useSelector((state: RootState) => state.guestbook);
 
-  // useEffect(() => {
-  //   if (params.username) {
-  //     console.log(params.username);
-  //   }
-  // }, [params.username, dispatch]);
-
-  //방명록 모달 -필요없어도 되나?
-  const [showGuestbook, setShowGuestbook] = useState(false);
-
   const onClickGuestBookModal = () => {
-    // console.log('방명록 버튼 클릭됨:', showGuestbook);
     dispatch(showGuestbookModal());
-    // setShowGuestbook(!showGuestbook);
   };
+
+  useEffect(() => {
+    if (alarmExistence === 'Y') {
+      setHasAlarm(true);
+    } else {
+      setHasAlarm(false);
+    }
+  }, [alarmExistence]);
 
   // 알림 모달 열림 여부
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
@@ -91,12 +86,21 @@ const Navbar = () => {
           data-tooltip-content="검색하기"
         />
         {/* bell */}
-        <FaRegBell
-          onClick={isAlarmOpen ? closeAlarm : openAlarm} // 알림창 뜨기
-          className="hover:text-white cursor-pointer w-5 h-5"
-          data-tooltip-id="notification-tooltip"
-          data-tooltip-content="알림"
-        />
+        {hasAlarm ? (
+          <VscBellDot
+            onClick={isAlarmOpen ? closeAlarm : openAlarm}
+            className="hover:text-white cursor-pointer w-6 h-6"
+            data-tooltip-id="notification-tooltip"
+            data-tooltip-content="알림"
+          />
+        ) : (
+          <VscBell
+            onClick={isAlarmOpen ? closeAlarm : openAlarm}
+            className="hover:text-white cursor-pointer w-6 h-6"
+            data-tooltip-id="notification-tooltip"
+            data-tooltip-content="알림"
+          />
+        )}
       </nav>
       {/* 툴팁 컴포넌트들 */}
       <Tooltip

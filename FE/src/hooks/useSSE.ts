@@ -153,10 +153,10 @@ const useSSE = (url: string): SSEHookReturn => {
 
         // 연결 정리
         cleanup();
+        localStorage.removeItem('alarmExistence');
 
         // 3초 후 재연결 시도
         reconnectTimeoutRef.current = window.setTimeout(() => {
-          console.log('SSE 재연결 시도');
           connectSSE();
         }, 3000);
       };
@@ -164,7 +164,6 @@ const useSSE = (url: string): SSEHookReturn => {
       // 알림 이벤트 리스너
       // alarm으로 바꿀 것
       eventSource.addEventListener('alarm', ((event: SSEEvent) => {
-        console.log('알림 이벤트 수신:', event.data);
         lastHeartbeatRef.current = Date.now();
 
         try {
@@ -285,8 +284,14 @@ const useSSE = (url: string): SSEHookReturn => {
       }) as EventListener);
 
       // 기타 이벤트 리스너들
-      eventSource.addEventListener('unread', (() => {
+      eventSource.addEventListener('unread', ((event: SSEEvent) => {
         lastHeartbeatRef.current = Date.now();
+        const data = JSON.parse(event.data);
+        if (data.count > 0) {
+          localStorage.setItem('alarmExistence', 'Y');
+        } else {
+          localStorage.setItem('alarmExistence', 'N');
+        }
       }) as EventListener);
 
       eventSource.addEventListener('recent-alarms', (() => {
@@ -295,6 +300,7 @@ const useSSE = (url: string): SSEHookReturn => {
     } catch (error) {
       console.error('SSE 연결 생성 중 오류:', error);
       isConnectingRef.current = false;
+      localStorage.removeItem('alarmExistence');
 
       // 오류 발생 시 3초 후 재시도
       reconnectTimeoutRef.current = window.setTimeout(() => {

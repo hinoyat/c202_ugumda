@@ -38,7 +38,7 @@ import {
   checkNickname,
   signupUser,
 } from '../stores/signupThunks';
-import { events } from '@react-three/fiber';
+import { toast } from 'react-toastify';
 
 // 프로필 아이콘 이미지 추가
 const SignupForm = () => {
@@ -79,14 +79,12 @@ const SignupForm = () => {
   // 아이콘 선택 핸들러
   const handleIconSelect = (iconSrc: string, iconIndex: number): void => {
     dispatch(setIconSeq(iconIndex));
-    console.log('선택된 아이콘:', iconSrc, '인덱스:', iconIndex);
   };
 
   // 아이디
   // 아이디 중복확인 핸들러
   const handleIDCheckDuplicate = () => {
     dispatch(checkUsername(username));
-    console.log('중복 확인할 아이디:', username);
   };
 
   // 아이디 유효성 검사
@@ -98,7 +96,6 @@ const SignupForm = () => {
   // 닉네임 중복확인 핸들러
   const handleNicknameCheckDuplicate = () => {
     dispatch(checkNickname(nickname));
-    console.log('중복 확인할 닉네임:', nickname);
   };
 
   // 닉네임 유효성 검사
@@ -133,7 +130,7 @@ const SignupForm = () => {
     IsConfirmPassword,
   };
 
-  const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (Object.values(validStates).every((status) => status === 'available')) {
       dispatch(
@@ -141,7 +138,14 @@ const SignupForm = () => {
       );
       nav('/login');
     } else {
-      alert('회원가입 실패!');
+      toast.error('회원가입에 실패했습니다. 양식을 다시 확인해 주세요.', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
     }
   };
 
@@ -213,7 +217,11 @@ const SignupForm = () => {
                 className="validation-message dung-font"
                 style={{
                   color:
-                    IsUsernameDuplicate != 'invalid' ? '#4ade80' : '#ff6b6b', // 중복 확인용 색상 골라야할 듯
+                    IsUsernameDuplicate === 'idle'
+                      ? '#FFB968'
+                      : IsUsernameDuplicate !== 'invalid'
+                        ? '#4ade80'
+                        : '#ff6b6b',
                   fontSize: '0.7rem',
                   marginTop: '4px',
                   marginLeft: '4px',
@@ -380,7 +388,11 @@ const SignupForm = () => {
                 className="validation-message dung-font"
                 style={{
                   color:
-                    IsNicknameDuplicate != 'invalid' ? '#4ade80' : '#ff6b6b',
+                    IsNicknameDuplicate === 'idle'
+                      ? '#FFB968'
+                      : IsNicknameDuplicate !== 'invalid'
+                        ? '#4ade80'
+                        : '#ff6b6b',
                   fontSize: '0.7rem',
                   marginTop: '4px',
                   marginLeft: '4px',

@@ -50,14 +50,14 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
         );
         setCurrentIconUrl(iconModule.default);
       } catch (err) {
-        console.error('아이콘을 불러오는데 실패했습니다:', err);
+   
         try {
           const defaultIconModule = await import(
             '@/assets/profile-icon/icon1.svg'
           );
           setCurrentIconUrl(defaultIconModule.default);
         } catch (fallbackErr) {
-          console.error('기본 아이콘도 불러오지 못했습니다:', fallbackErr);
+        
         }
       }
     };
@@ -80,11 +80,11 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
         birthDate: userData.birthDate.replace(/-/g, ''),
       });
 
-      console.log('아이콘 업데이트 성공:', response);
+   
 
       // API 호출이 성공하면 부모 컴포넌트에 알림
       if (response.data && response.data.status === 200) {
-        console.log('아이콘이 성공적으로 업데이트되었습니다.');
+        
 
         // 중요: 부모에게 업데이트 성공을 알림 -> 즉각적인 데이터 갱신 트리거
         if (onUpdateSuccess) {
@@ -92,7 +92,7 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
         }
       }
     } catch (error) {
-      console.error('아이콘 업데이트 실패:', error);
+    
       // 실패 시 원래 아이콘으로 롤백
       if (userData && userData.iconSeq) {
         setCurrentIconId(userData.iconSeq);

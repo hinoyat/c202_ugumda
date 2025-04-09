@@ -12,10 +12,10 @@ const getSavedMusicState = (): { isPlaying: boolean; volume: number, customBackg
       return JSON.parse(savedState);
     }
   } catch (error) {
-    console.error('음악 불러오기 실패ㅠㅠㅠㅠㅠ:', error);
+
   }
   // 저장된 설정이 없으면 기본값=음악 켜진상태
-  return { isPlaying: true, volume: 0.5, customBackgroundTrack: null };
+  return { isPlaying: true, volume: 3, customBackgroundTrack: null };
 };
 
 // ------------------------------------------------------------------------------------
