@@ -565,10 +565,10 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
                   [connection.to.x, connection.to.y, connection.to.z],
                 ]}
                 color="rgb(220, 230, 255)" // 연한 푸른 빛 흰색
-                lineWidth={1.8} // 선 두께
+                lineWidth={1} // 선 두께
                 dashed // 점선 효과 추가
-                dashSize={1.8} // 점선 크기
-                dashScale={10} // 점선 간격 조정
+                dashSize={3} // 점선 크기
+                dashScale={-10} // 점선 간격 조정
                 dashOffset={0} // 점선 시작 위치
               />
             ))}

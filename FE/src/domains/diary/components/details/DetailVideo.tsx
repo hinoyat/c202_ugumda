@@ -4,12 +4,14 @@ interface DiaryDetailProps {
   dream_video?: string | null;
   onVideoRetry?: () => void;
   isVideoGenerating?: boolean;
+  isMySpace?: boolean;
 }
 
 const DetailVideo: React.FC<DiaryDetailProps> = ({
   dream_video,
   onVideoRetry,
   isVideoGenerating,
+  isMySpace = false,
 }) => {
   // const videoSrc = dream_video || miroVideo;
 
@@ -40,12 +42,14 @@ const DetailVideo: React.FC<DiaryDetailProps> = ({
           className="w-full rounded-lg shadow-md"
         />
       ) : (
-        <ButtonBase
-          onClick={onVideoRetry}
-          disabled={isVideoGenerating}
-          className={` ${isVideoGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}>
-          {isVideoGenerating ? '생성 중...' : '영상 다시 생성'}
-        </ButtonBase>
+        isMySpace && (
+          <ButtonBase
+            onClick={onVideoRetry}
+            disabled={isVideoGenerating}
+            className={` ${isVideoGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            {isVideoGenerating ? '생성 중...' : '영상 다시 생성'}
+          </ButtonBase>
+        )
       )}
     </div>
   );
