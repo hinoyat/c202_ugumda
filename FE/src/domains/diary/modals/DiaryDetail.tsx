@@ -185,6 +185,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                         !currentDiary.videoUrl ? handleVideoRetry : undefined
                       }
                       isVideoGenerating={isVideoGenerating}
+                      isMySpace={isMySpace}
                     />
                   </div>
                   {/* 태그 */}
@@ -248,7 +249,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
                 {/* 4. 운세보러가기 버튼 */}
                 <div className="flex flex-col items-end">
-                  {dreamMeaning && (
+                  {dreamMeaning && isMySpace && (
                     <>
                       <DestinyButton isGood={dreamMeaning.isGood} />
                       <p className="text-white/85 text-xs mt-2 text-right">

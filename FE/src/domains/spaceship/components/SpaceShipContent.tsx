@@ -48,7 +48,7 @@ const SpaceShipContent = () => {
         <button
           onClick={onClickDream}
           className="relative top-[-20px] text-white text-2xl font-bold cursor-pointer hover:scale-105 transition-transform neon-text whitespace-nowrap">
-          꿈 플레이리스트
+          꿈 대시보드
         </button>
 
         {/* 오늘의 운세 버튼 */}
