@@ -327,12 +327,12 @@ const MusicPlaylist: React.FC = () => {
             <div ref={playheadRef} className="relative z-[2] w-0 h-[5px] rounded-[5px] bg-[#071739]"></div>
           </div>
           
-          <div className="mt-[10px]">
-            <button onClick={prevSong} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+          <div className="mt-[2vh] flex items-center justify-center">
+            <button onClick={prevSong} className="text-[#071739] rounded-full mr-[5px] ml-[1.8vw] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
                <FontAwesomeIcon icon={faBackward} />
             </button>
             
-            <button onClick={playOrPause} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[50px] h-[50px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
+            <button onClick={playOrPause} className="text-[#071739] rounded-full mx-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[50px] h-[50px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
               {isPlaying ? (
                 <FontAwesomeIcon icon={faStop} />
               ) : (
@@ -340,34 +340,30 @@ const MusicPlaylist: React.FC = () => {
               )}
             </button>
             
-            <button onClick={nextSong} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+            <button onClick={nextSong} className="text-[#071739] rounded-full mx-[5px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
                 <FontAwesomeIcon icon={faForward} />
             </button>
 
-            <div className="relative mt-[10px] w-[240px] flex items-center justify-between">
-              <div className="flex items-center">
-                <button 
-                  onClick={toggleVolumeSlider}
-                  className="text-[#071739] rounded-full mr-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]"
-                >
-                  <FontAwesomeIcon icon={getVolumeIcon()} />
-                </button>
-                
-                {showVolumeSlider && (
-                  <div className="flex items-center w-[100px] ml-[5px]">
-                    <input
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      value={localVolume}
-                      onChange={handleVolumeChange}
-                      className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
+              <button 
+                onClick={toggleVolumeSlider}
+                className="text-[#071739] rounded-full mr-[1px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]"
+              >
+                <FontAwesomeIcon icon={getVolumeIcon()} />
+              </button>
+              
+              {showVolumeSlider && (
+                <div className="flex items-center w-[5vw] ml-[0.2vw]">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={localVolume}
+                    onChange={handleVolumeChange}
+                    className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </div>
+              )}
           </div>
         </div>
         
