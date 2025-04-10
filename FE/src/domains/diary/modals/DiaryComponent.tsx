@@ -22,6 +22,8 @@ import { videoApi } from '@/domains/diary/api/videoApi';
 import ModalBase from '@/domains/diary/components/modalBase';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
 import { dreamApi } from '@/domains/diary/api/dreamApi';
+import { toast } from 'react-toastify';
+import api from '@/apis/apiClient';
 
 interface DiaryComponentProps {
   isOpen?: boolean;
@@ -132,13 +134,16 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
         const response = await diaryApi.createDiary(diaryToSave);
 
-        console.log('일기 생성 성공✏️✏️', response);
-
         // 리덕스 스토어에 추가
         dispatch(addDiary(response.data.data));
 
         // 영상 생성 API 요청
         const diarySeq = response.data.data.diarySeq;
+
+        // 영상 생성되자마자 재배치 => 어차피 백 로직이 생성 하자마자 재배치 소환
+        // if (response) {
+        //   await api.post(`/diaries/relayout/${response.data.data.userSeq}`);
+        // }
 
         // content 문자아닌 것 앞에 / 붙임
 
@@ -190,10 +195,26 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
       // 에러 응답 확인
       if (err.response && err.response.status === 400) {
         // 400 에러인 경우 태그 관련 에러 메시지 표시
-        alert('태그는 한글, 영문, 숫자만 사용 가능합니다.');
+        // alert('태그는 한글, 영문, 숫자만 사용 가능합니다.');
+        toast.info('태그는 한글, 영문, 숫자만 사용 가능합니다.', {
+          position: 'bottom-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       } else {
         // 기타 에러
-        alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
+        // alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
+        toast.error('일기 저장에 실패했습니다. 다시 시도해주세요.', {
+          position: 'bottom-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       }
     }
   };

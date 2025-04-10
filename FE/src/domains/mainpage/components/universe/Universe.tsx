@@ -15,6 +15,7 @@ import {
   showDiaryModal,
   hideDiaryModal,
   addDiary,
+  setDiaries,
 } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
@@ -23,6 +24,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as THREE from 'three';
 import { selectVisitUser } from '../../stores/userSelectors';
+import { selectUser } from '@/stores/auth/authSelectors';
+import api from '@/apis/apiClient';
 
 // props의 타입 정의
 interface UniverseProps {
@@ -37,6 +40,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     (state: RootState) => state.diary
   );
   const visitUser = useSelector(selectVisitUser);
+  const loginUser = useSelector(selectUser);
 
   // ------------------- 상태관리 ------------------- //
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -168,8 +172,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         setShowDetail(true);
       }
     } catch (error) {
-
-
       // 에러 응답 확인
       const err = error as any;
 
@@ -207,14 +209,25 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   };
 
   // 일기 별 생성 -> DiaryComponent로 전달
-  const handleDiaryCreated = (responseData: any) => {
-    const newDiary = responseData.data;
+  const handleDiaryCreated = async (responseData: any) => {
+    // const newDiary = responseData.data;
 
-    // 새로 생성된 일기를 diaryEntries 배열에 추가
-    setDiaryEntries((prev) => [...prev, newDiary]);
+    // 다이어리 시퀀스 기억하기
+    const newDiarySeq = responseData.data.diarySeq;
+    // 백에서 일기 생성하고 별자리 재배치 되었을 테니까 우주 정보 데이터 조회를 해서 거기서 기억한 다이어리 시퀀스 찾아내기
+    const response = await api.get(`/diaries/universe/${loginUser?.userSeq}`);
 
-    // Redux 스토어에도 추가
-    dispatch(addDiary(newDiary));
+    let newDiary: any;
+    if (response) {
+      newDiary = response.data.data.diaries.find(
+        (diary: { diarySeq: number }) => diary.diarySeq === newDiarySeq
+      );
+      // 근데 일기 생성하고 바로 일기 재배치 한 저 위에 우주 정보 데이터를 diaryEntries에 바꿔치기를 해버릴까...?
+      setDiaryEntries(response.data.data.diaries);
+      // 그러면 리덕스에 엤는 diaries를 똑같이 바꿔치기 해버려야해. => dispatch(setDiaries(우주 데이터 중 일기))
+      dispatch(setDiaries(response.data.data.diaries));
+      setConnections(response.data.data.connections);
+    }
 
     // 새 별 id 설정 (노란색 효과를 위해) - 10분 동안 유지
     setNewStarId(newDiary.diarySeq);
@@ -304,7 +317,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
     } catch (error) {
-
       alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -349,9 +361,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
             localStorage.removeItem('selectedDiarySeq');
           }
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
 
     if (diaryEntries.length > 0) {
@@ -380,9 +390,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         if (response && response.data && response.data.data) {
           setDiaryEntries(response.data.data);
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
 
     // userSeq에 맞게 데이터 로드
@@ -399,15 +407,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       try {
         const response = await diaryApi.getUniverseData(visitUser.userSeq);
         if (response && response.data) {
-
           setUniverseData(response.data.data);
           if (response.data.data.connections) {
             setConnections(response.data.data.connections);
           }
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
 
     fetchUniverseData();
@@ -477,6 +482,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
     return connectionLines;
   };
+
+  useEffect(() => {
+    if (diaryEntries.length > 0) {
+      generateConnectionsFromApi();
+    }
+  }, [diaryEntries]);
 
   return (
     <div
