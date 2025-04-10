@@ -53,9 +53,10 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
 }) => {
   // 상태
   const [hovered, setHovered] = useState<boolean>(false);
-  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 8 : 5);
+  const [highlightIntensity, setHighlightIntensity] = useState(isNew ? 12 : 8);
 
-  const { x, y, z } = entry;
+  // const { x, y, z } = entry;
+  const { x, y, z, isPublic } = entry;
   const meshRef = useRef<THREE.Mesh>(null); // 직접 별을 클릭하기 위해
   const glowRef = useRef<THREE.Mesh>(null); // 새 별 주변에 발광 효과를 위해
 
@@ -78,7 +79,16 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   // 별 색상 - 새 별은 노란색, 기존 별은 파란색
   // ? '#ffcc00' // 새 별은 노란색
   // : '#00ffe0' // 기존 별은 파란색
-  const starColor = new THREE.Color(isNew ? '#FF4D4D' : '#00ffe0');
+  // const starColor = new THREE.Color(isNew ? '#FF4D4D' : '#00ffe0');
+  // 별 색상 - 공개여부에 따라 색상 결정
+  // 새 별 > 공개 일기 > 비공개 일기 우선순위
+  const starColor = new THREE.Color(
+    isNew
+      ? '#FF00BF' // 새 별은 빨간색
+      : isPublic === 'Y'
+        ? '#00ffe0' // 공개 일기
+        : '#FF4D4D' // 비공개 일기
+  );
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
   useEffect(() => {
@@ -183,7 +193,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
         <meshStandardMaterial
           color={starColor}
           emissive={starColor}
-          emissiveIntensity={hovered ? 5 : highlightIntensity} // 하이라이트 강도 사용
+          emissiveIntensity={hovered ? 10 : highlightIntensity} // 하이라이트 강도 사용
         />
       </mesh>
       {/* 반짝이는 효과가 있는 별이라면 빛나는 효과 추가 */}
