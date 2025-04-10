@@ -8,8 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBackward, faPlay, faStop, faForward, faMusic, faVolumeUp, faVolumeDown, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 import 'font-awesome/css/font-awesome.min.css';
 import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface Song {
   name: string;
@@ -163,7 +161,14 @@ const MusicPlaylist: React.FC = () => {
     if (displayMusicList.length === 0) return;
     const currentSong = displayMusicList[index];
     dispatch(setAsBackgroundMusic(currentSong.audio));
-    toast.success(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`);
+    toast.success(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`,{
+      position: 'bottom-right',
+      autoClose: 3000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'dark',
+    });
   };
 
   // 볼륨 변경 핸들러
@@ -270,7 +275,19 @@ const MusicPlaylist: React.FC = () => {
   };
 
   // guard: displayMusicList가 아직 준비되지 않았으면 로딩 처리
-  if (displayMusicList.length === 0) {
+  if (!dominantEmotion || dominantEmotion === "null") {
+    return (
+      <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-17">
+        <div className="flex flex-col justify-center items-center max-w-[370px] py-0 px-[5px] mt-[0px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
+          <div className="flex items-center justify-center w-full h-[160px] text-white p-5 text-center">
+          꿈이 더 많이 쌓이면,<br/>
+          그 감정에 꼭 맞는 노래를 들려줄 수 있어요.<br/><br/>  
+          다음 이야기를 기다릴게요 🌙
+          </div>
+        </div>
+      </div>
+    );
+  } else if (displayMusicList.length === 0) {
     return <div>로딩중...</div>;
   }
 
@@ -310,12 +327,12 @@ const MusicPlaylist: React.FC = () => {
             <div ref={playheadRef} className="relative z-[2] w-0 h-[5px] rounded-[5px] bg-[#071739]"></div>
           </div>
           
-          <div className="mt-[10px]">
-            <button onClick={prevSong} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+          <div className="mt-[2vh] flex items-center justify-center">
+            <button onClick={prevSong} className="text-[#071739] rounded-full mr-[5px] ml-[1.8vw] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
                <FontAwesomeIcon icon={faBackward} />
             </button>
             
-            <button onClick={playOrPause} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[50px] h-[50px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
+            <button onClick={playOrPause} className="text-[#071739] rounded-full mx-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[50px] h-[50px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
               {isPlaying ? (
                 <FontAwesomeIcon icon={faStop} />
               ) : (
@@ -323,34 +340,30 @@ const MusicPlaylist: React.FC = () => {
               )}
             </button>
             
-            <button onClick={nextSong} className="text-[#071739] rounded-full mx-[15px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+            <button onClick={nextSong} className="text-[#071739] rounded-full mx-[5px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
                 <FontAwesomeIcon icon={faForward} />
             </button>
 
-            <div className="relative mt-[10px] w-[240px] flex items-center justify-between">
-              <div className="flex items-center">
-                <button 
-                  onClick={toggleVolumeSlider}
-                  className="text-[#071739] rounded-full mr-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]"
-                >
-                  <FontAwesomeIcon icon={getVolumeIcon()} />
-                </button>
-                
-                {showVolumeSlider && (
-                  <div className="flex items-center w-[100px] ml-[5px]">
-                    <input
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      value={localVolume}
-                      onChange={handleVolumeChange}
-                      className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
+              <button 
+                onClick={toggleVolumeSlider}
+                className="text-[#071739] rounded-full mr-[1px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]"
+              >
+                <FontAwesomeIcon icon={getVolumeIcon()} />
+              </button>
+              
+              {showVolumeSlider && (
+                <div className="flex items-center w-[5vw] ml-[0.2vw]">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={localVolume}
+                    onChange={handleVolumeChange}
+                    className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
+                  />
+                </div>
+              )}
           </div>
         </div>
         
@@ -379,30 +392,6 @@ const MusicPlaylist: React.FC = () => {
           ))}
         </div>
       </div>
-      <ToastContainer
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        position='bottom-left'
-        theme="dark"
-        icon={({ type }) => {
-          switch (type) {
-            case 'success':
-              return '🚀';
-            case 'error':
-              return '❌';
-            case 'info':
-              return '♥️';
-            default:
-              return '📢';
-          }
-        }}
-      />
     </div>
     
   );
