@@ -78,11 +78,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   // 별 색상 - 새 별은 노란색, 기존 별은 파란색
   // ? '#ffcc00' // 새 별은 노란색
   // : '#00ffe0' // 기존 별은 파란색
-  const starColor = new THREE.Color(
-    isNew
-      ? '#ffcc00'
-      : '#00ffe0'
-  );
+  const starColor = new THREE.Color(isNew ? '#FF7777' : '#00ffe0');
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
   useEffect(() => {
