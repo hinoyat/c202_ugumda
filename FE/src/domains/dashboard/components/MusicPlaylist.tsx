@@ -229,6 +229,9 @@ const MusicPlaylist: React.FC = () => {
     }
   };
 
+    // 추가: Redux에서 재생 상태 가져오기
+  const isPlaylistPlaying = useSelector(state => state.music.isPlaylistPlaying);
+
   const playOrPause = (): void => {
     if (!playerRef.current || displayMusicList.length === 0) return;
     const currentSong = displayMusicList[index];
@@ -237,12 +240,12 @@ const MusicPlaylist: React.FC = () => {
       playerRef.current.pause();
       dispatch(stopPlaylistMusic());
       setIsPlaying(false);
-    
+      console.log("playOrPause - Paused song:", currentSong);
     } else {
       playerRef.current.play();
-      dispatch(startPlaylistMusic(currentSong.audio));
+      // dispatch(startPlaylistMusic(currentSong.audio));
       setIsPlaying(true);
-     
+      console.log("playOr - Playing song:", currentSong);
     }
   };
 
@@ -258,7 +261,7 @@ const MusicPlaylist: React.FC = () => {
         if (playerRef.current) {
           playerRef.current.play();
           dispatch(startPlaylistMusic(displayMusicList[key].audio));
-         
+          console.log("clickAudio - Now playing song:", displayMusicList[key]);
         }
       }, 100);
     }
@@ -385,7 +388,7 @@ const MusicPlaylist: React.FC = () => {
                   <span className="mt-[8px] font-[300] text-[#709fdc]">{music.category}</span>
                 </div>
                 <span className="min-w-[40px] ml-[9px] mr-9px] font-[500]">
-                  {index === key ? currentTime : music.duration}
+                  {music.duration}
                 </span>
               </div>
             </div>

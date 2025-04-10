@@ -147,13 +147,11 @@ export const changeVolume =
     }
   };
 
-// --------------------- 플레이리스트 재생 시작 함수 (배경음악 일시정지) --------------------------- //
+// --------------------- 플레이리스트 재생 시작 함수  --------------------------- //
 export const startPlaylistMusic =
 (playlistSrc: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
   try {
-    // 현재 배경음악 일시정지
-    backgroundAudioInstance.pause();
-    
+
     // 플레이리스트 음악 설정 및 재생
     playlistAudioInstance.src = playlistSrc;
     playlistAudioInstance.volume = getState().music.volume;
