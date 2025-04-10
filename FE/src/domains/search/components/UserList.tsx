@@ -1,6 +1,7 @@
 import React from 'react';
 import { getIconById } from '@/hooks/ProfileIcons';
 import ButtonBase from '@/domains/diary/components/details/button/ButtonBase';
+import RedButtonBase from '@/domains/diary/components/create_edit/RedButtonBase';
 
 // 사용자 데이터 타입 정의
 interface User {
@@ -68,14 +69,8 @@ const UserList: React.FC<UserListProps> = ({
             <div className="flex gap-3 text-white outline:none">
               {isSubscribed ? (
                 // 이미 구독 중인 경우 - 구독취소 버튼
-                // <button
-                //   className="bg-[#363736] text-white text-[16px] py-1 w-28 rounded cursor-pointer hover:bg-neutral-500"
-                //   onClick={() =>
-                //     user.subscribedSeq && onUnsubscribe(user.subscribedSeq)
-                //   }>
-                //   구독취소
-                // </button>
-                <ButtonBase
+
+                <RedButtonBase
                   onClick={() =>
                     user.subscribedSeq && onUnsubscribe(user.subscribedSeq)
                   }
@@ -83,7 +78,7 @@ const UserList: React.FC<UserListProps> = ({
                   height="36px"
                   borderRadius="8px">
                   구독취소
-                </ButtonBase>
+                </RedButtonBase>
               ) : (
                 // 구독 중이 아닌 경우 - 구독하기 버튼
                 <ButtonBase
