@@ -112,32 +112,32 @@ public class EmotionDataInitializer implements CommandLineRunner {
      * @return 계산된 감정 영역 반경
      */
     private double calculateEmotionRadius(String emotionName, double baseRadius) {
-        double radius = baseRadius * 0.5;
-        switch (emotionName) {
-            case "행복":
-                radius *= 1.15;
-                break;
-            case "불안":
-                radius *= 1.25;
-                break;
-            case "공포":
-                radius *= 1.2;
-                break;
-            case "평화":
-                radius *= 0.95;
-                break;
-            case "희망":
-                radius *= 1.05;
-                break;
-            case "슬픔":
-                radius *= 1.0;
-                break;
-            case "분노":
-                radius *= 0.9;
-                break;
-            default:
-                break;
-        }
+        double radius = baseRadius * 0.48;
+//        switch (emotionName) {
+//            case "행복":
+//                radius *= 1.15;
+//                break;
+//            case "불안":
+//                radius *= 1.25;
+//                break;
+//            case "공포":
+//                radius *= 1.2;
+//                break;
+//            case "평화":
+//                radius *= 0.95;
+//                break;
+//            case "희망":
+//                radius *= 1.05;
+//                break;
+//            case "슬픔":
+//                radius *= 1.0;
+//                break;
+//            case "분노":
+//                radius *= 0.9;
+//                break;
+//            default:
+//                break;
+//        }
         return radius;
     }
 }

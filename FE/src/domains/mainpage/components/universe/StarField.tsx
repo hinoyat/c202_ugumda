@@ -55,7 +55,7 @@ const StarField = () => {
               if (ref) materialRefs.current[index] = ref;
             }}
             color="white"
-            size={6} // 배경 별 사이즈
+            size={3.5} // 배경 별 사이즈
             sizeAttenuation
             transparent
             opacity={1.0}
