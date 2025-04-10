@@ -66,7 +66,7 @@ public class AlarmService {
     public void sendDiaryLikeAlarm(Integer userSeq, String diaryTitle, Integer diarySeq, String nickname) {
         AlarmMessageDto alarmMessage = AlarmMessageDto.builder()
                 .userSeq(userSeq)
-                .content(nickname + "님이 꿈" + diaryTitle + "에 좋아요를 눌렀어요!")
+                .content(nickname + "님이 꿈 " + diaryTitle + "에 좋아요를 눌렀어요!")
                 .type("LIKE_CREATED")
                 .diarySeq(diarySeq)
                 .requiresPersistence(true)
