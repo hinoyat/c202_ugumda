@@ -46,10 +46,9 @@ const DiaryTags: FC<DiaryTagsProps> = ({
   // 최근 사용 태그 가져오기
   useEffect(() => {
     const fetchRecentTags = async () => {
-      // console.log('태그 api 호출 시작 ♥️♥️♥️♥️♥️♥️♥️');
+      
       try {
         const response = await tagApi.getRecentTags();
-        // console.log('최근태그응답====>', response.data);
 
         if (response.data && response.data.data) {
           setHistoryTags(response.data.data);
@@ -57,7 +56,6 @@ const DiaryTags: FC<DiaryTagsProps> = ({
           setHistoryTags([]);
         }
       } catch (error) {
-        console.error('최근 태그 가져오기 실패 : ', error);
         // 에러 시 빈 배열 사용
         setHistoryTags([]);
       }
