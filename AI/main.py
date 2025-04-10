@@ -40,7 +40,7 @@ async def create_video(generate_chat_request_dto:GenerateVideoRequestDto, backgr
     return response
 
 # 테스트 로직
-@app.post("api/ai/test-sample-video")
+@app.post("/api/ai/test-sample-video")
 async def sample_video(generate_chat_request_dto:GenerateVideoRequestDto, background_tasks:BackgroundTasks, authorization: str = Header(None)):
     logging.info(f"일기 내용 받기 성공, dairy_pk: {generate_chat_request_dto.diary_pk}")
     background_tasks.add_task(
