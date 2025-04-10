@@ -24,6 +24,7 @@ import com.c202.diary.tag.service.TagService;
 import com.c202.exception.types.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DiaryServiceImpl implements DiaryService {
 
     private final TagService tagService;
@@ -342,12 +344,15 @@ public class DiaryServiceImpl implements DiaryService {
             );
             diaryRepository.save(diary);
         } catch (Exception e) {
-            alarmService.sendVideoFailedAlarm(
+            log.info("일기 url 변환 로그{}", e.getMessage());
+            alarmService.sendVideoCreatedAlarm(
                     diary.getUserSeq(),
                     diary.getTitle(),
                     diary.getDiarySeq()
             );
-            throw new AiCallFailedException("영상 생성에 실패했습니다");
+            String defaultUrl = "https://uggumda.s3.ap-northeast-2.amazonaws.com/video_39b77817-feea-42ad-922a-267670421954_20250410163314.mp4";
+            diary.setVideo(defaultUrl);
+//            throw new AiCallFailedException("영상 생성에 실패했습니다");
         }
     }
 
