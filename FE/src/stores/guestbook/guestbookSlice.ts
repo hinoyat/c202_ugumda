@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface GuestbookState {
   guestbookModal: boolean;
@@ -15,9 +15,6 @@ const guestbookSlice = createSlice({
     showGuestbookModal: (state) => {
       state.guestbookModal = !state.guestbookModal;
     },
-    // hideGuestbookModal: (state) => {
-    //   state.showGuestbookModal = false;
-    // },
   },
 });
 
