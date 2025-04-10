@@ -240,12 +240,12 @@ const MusicPlaylist: React.FC = () => {
       playerRef.current.pause();
       dispatch(stopPlaylistMusic());
       setIsPlaying(false);
-      console.log("playOrPause - Paused song:", currentSong);
+      
     } else {
       playerRef.current.play();
       // dispatch(startPlaylistMusic(currentSong.audio));
       setIsPlaying(true);
-      console.log("playOr - Playing song:", currentSong);
+      
     }
   };
 
@@ -261,7 +261,7 @@ const MusicPlaylist: React.FC = () => {
         if (playerRef.current) {
           playerRef.current.play();
           dispatch(startPlaylistMusic(displayMusicList[key].audio));
-          console.log("clickAudio - Now playing song:", displayMusicList[key]);
+          
         }
       }, 100);
     }
