@@ -15,7 +15,7 @@ const getSavedMusicState = (): { isPlaying: boolean; volume: number, customBackg
 
   }
   // 저장된 설정이 없으면 기본값=음악 켜진상태
-  return { isPlaying: true, volume: 3, customBackgroundTrack: null };
+  return { isPlaying: true, volume: 0.5, customBackgroundTrack: null };
 };
 
 // ------------------------------------------------------------------------------------

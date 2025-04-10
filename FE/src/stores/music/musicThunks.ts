@@ -181,7 +181,7 @@ export const startPlaylistMusic =
   }
 };
 
-// --------------------- 플레이리스트 재생 종료 함수 (배경음악 재개) --------------------------- //
+// --------------------- 플레이리스트 재생 종료 함수 --------------------------- //
 export const stopPlaylistMusic =
 () => async (dispatch: AppDispatch, getState: () => RootState) => {
   try {
@@ -191,21 +191,23 @@ export const stopPlaylistMusic =
     // 플레이리스트 재생 상태 해제
     dispatch(setPlaylistPlaying(false));
     
-    // 배경음악 상태 확인 후 필요시 재생
-    const state = getState().music;
-    if (state.isPlaying) {
-      const playPromise = backgroundAudioInstance.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          // console.error('배경음악 재개 시도 중 오류:', error);
-        });
-      }
-    }
-    
     return true;
   } catch (error) {
     // console.error('플레이리스트 재생 종료 중 오류 발생:', error);
+    return false;
+  }
+};
+
+// --------------------- 배경음악 정지 함수 --------------------------- //
+export const stopBackgroundMusic =
+() => async (dispatch: AppDispatch, getState: () => RootState) => {
+  try {
+    // 플레이리스트 음악 정지
+    backgroundAudioInstance.pause();
+    
+    
+    return true;
+  } catch (error) {
     return false;
   }
 };
@@ -223,9 +225,9 @@ export const setAsBackgroundMusic =
     saveMusicSettings(state.isPlaying, state.volume, trackSrc);
     
     // 현재 배경음악 업데이트 (플레이리스트 음악이 재생 중이 아닐 경우에만)
-    if (!state.isPlaylistPlaying) {
-      dispatch(initializeAudio(trackSrc));
-    }
+    // if (!state.isPlaylistPlaying) {
+    //   dispatch(initializeAudio(trackSrc));
+    // }
     
     return true;
   } catch (error) {
