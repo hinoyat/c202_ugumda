@@ -8,8 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBackward, faPlay, faStop, faForward, faMusic, faVolumeUp, faVolumeDown, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 import 'font-awesome/css/font-awesome.min.css';
 import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface Song {
   name: string;
@@ -163,7 +161,14 @@ const MusicPlaylist: React.FC = () => {
     if (displayMusicList.length === 0) return;
     const currentSong = displayMusicList[index];
     dispatch(setAsBackgroundMusic(currentSong.audio));
-    toast.success(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`);
+    toast.success(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`,{
+      position: 'bottom-right',
+      autoClose: 3000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'dark',
+    });
   };
 
   // 볼륨 변경 핸들러
@@ -391,30 +396,6 @@ const MusicPlaylist: React.FC = () => {
           ))}
         </div>
       </div>
-      <ToastContainer
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        position='bottom-left'
-        theme="dark"
-        icon={({ type }) => {
-          switch (type) {
-            case 'success':
-              return '🚀';
-            case 'error':
-              return '❌';
-            case 'info':
-              return '♥️';
-            default:
-              return '📢';
-          }
-        }}
-      />
     </div>
     
   );
