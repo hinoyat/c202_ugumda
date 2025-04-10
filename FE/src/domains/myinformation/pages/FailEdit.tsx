@@ -17,7 +17,7 @@ const FailEdit = () => {
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-[600px] animate-pulse"
         />
         <div className="absolute flex flex-col gap-4 items-center justify-center z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse">
-          <p className="text-[#86F5FF] dung-font text-xl tracking-widest press-font">
+          <p className="text-[#86F5FF] dung-font text-xl tracking-widest dung-font">
             회원수정이 실패했습니다.
           </p>
           <div className="box-button">
