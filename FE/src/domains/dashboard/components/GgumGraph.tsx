@@ -10,9 +10,10 @@ interface GgumGrapProps {
     data: { emotion: string; count: number }[]
 }
 
+
 const GgumGraph = ({periodName=30, height = "50%", data }: GgumGrapProps)=>{
     const user = useSelector(selectUser)
-    const chartRef = useRef(null);
+    const chartRef = useRef<HTMLDivElement|null>(null);
     const chartId = useRef(`chart-${Math.random().toString(36).substr(2, 9)}`);
 
         // 샤이닝 효과를 위한 스타일 추가
@@ -40,18 +41,19 @@ const GgumGraph = ({periodName=30, height = "50%", data }: GgumGrapProps)=>{
         const emotions = data.map(item => item.emotion)
         const emotionsCounts = data.map(item=>item.count)
 
-        const periodMapping = {
+        const periodMapping:Record<string, string> = {
             "14": "이주일",
             "30": "한 달"
           };
 
         // 숫자 값을 한글로 변환하는 함수
         const getPeriodNameInKorean = (periodName: number) => {
-            return periodMapping[periodName] || `${periodName}`;
+            return periodMapping[periodName.toString()] || `${periodName}`;
         };
            
-        Highcharts.chart(chartRef.current, {
+        Highcharts.chart(chartId.current, {
             chart: {
+                renderTo: chartRef.current,
                 backgroundColor: '#000000',  // 검은색 배경 설정
                 height: height,
                 spacingTop: 1,
@@ -59,7 +61,7 @@ const GgumGraph = ({periodName=30, height = "50%", data }: GgumGrapProps)=>{
                     load: function() {
                         // 차트 로드 후에 타이틀 요소를 찾아서 클래스 추가
                         setTimeout(() => {
-                            const titleEl = document.querySelector(`#${chartRef.current.id} .highcharts-title`);
+                            const titleEl = chartRef.current? document.querySelector(`#${chartRef.current.id} .highcharts-title`): null;
                             if (titleEl) {
                                 titleEl.classList.add('chart-title-shining');
                             }
