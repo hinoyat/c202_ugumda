@@ -86,13 +86,13 @@ const MusicPlaylist: React.FC = () => {
 
   // 컴포넌트 마운트 시 배경음악 중지, 언마운트 시 플레이리스트 음악 정지
   useEffect(() => {
-    dispatch(stopBackgroundMusic());
+    dispatch(stopBackgroundMusic() as any);
     // displayMusicList가 초기화되지 않았다면 로딩이므로 로그 출력은 생략
     if (displayMusicList.length > 0) {
       
     }
     return () => {
-      dispatch(stopPlaylistMusic());
+      dispatch(stopPlaylistMusic()as any);
     };
   }, [dispatch, displayMusicList]);
 
@@ -150,7 +150,7 @@ const MusicPlaylist: React.FC = () => {
       setTimeout(() => {
         if (playerRef.current) {
           playerRef.current.play();
-          dispatch(startPlaylistMusic(displayMusicList[index].audio));
+          dispatch(startPlaylistMusic(displayMusicList[index].audio) as any);
         }
       }, 100);
     }
@@ -160,7 +160,7 @@ const MusicPlaylist: React.FC = () => {
   const setCurrentAsBackground = (): void => {
     if (displayMusicList.length === 0) return;
     const currentSong = displayMusicList[index];
-    dispatch(setAsBackgroundMusic(currentSong.audio));
+    dispatch(setAsBackgroundMusic(currentSong.audio) as any);
     toast.success(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`,{
       position: 'bottom-right',
       autoClose: 3000,
@@ -175,7 +175,7 @@ const MusicPlaylist: React.FC = () => {
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newVolume = parseFloat(e.target.value);
     setLocalVolume(newVolume);
-    dispatch(changeVolume(newVolume));
+    dispatch(changeVolume(newVolume) as any);
   };
 
   const formatTime = (seconds: number): string => {
@@ -213,9 +213,9 @@ const MusicPlaylist: React.FC = () => {
     setIndex((prevIndex) => (prevIndex + 1) % displayMusicList.length);
 
     if (isPlaying && playerRef.current) {
-      dispatch(stopPlaylistMusic());
+      dispatch(stopPlaylistMusic() as any);
       setTimeout(() => {
-        dispatch(startPlaylistMusic(displayMusicList[(index + 1) % displayMusicList.length].audio));
+        dispatch(startPlaylistMusic(displayMusicList[(index + 1) % displayMusicList.length].audio) as any);
       }, 100);
     }
   };
@@ -229,16 +229,13 @@ const MusicPlaylist: React.FC = () => {
     }
   };
 
-    // 추가: Redux에서 재생 상태 가져오기
-  const isPlaylistPlaying = useSelector(state => state.music.isPlaylistPlaying);
 
   const playOrPause = (): void => {
     if (!playerRef.current || displayMusicList.length === 0) return;
-    const currentSong = displayMusicList[index];
 
     if (isPlaying) {
       playerRef.current.pause();
-      dispatch(stopPlaylistMusic());
+      dispatch(stopPlaylistMusic() as any);
       setIsPlaying(false);
       
     } else {
@@ -260,7 +257,7 @@ const MusicPlaylist: React.FC = () => {
       setTimeout(() => {
         if (playerRef.current) {
           playerRef.current.play();
-          dispatch(startPlaylistMusic(displayMusicList[key].audio));
+          dispatch(startPlaylistMusic(displayMusicList[key].audio) as any);
           
         }
       }, 100);

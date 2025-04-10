@@ -140,11 +140,6 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 영상 생성 API 요청
         const diarySeq = response.data.data.diarySeq;
 
-        // 영상 생성되자마자 재배치 => 어차피 백 로직이 생성 하자마자 재배치 소환
-        // if (response) {
-        //   await api.post(`/diaries/relayout/${response.data.data.userSeq}`);
-        // }
-
         // content 문자아닌 것 앞에 / 붙임
 
         const escapeSpecialCharsForVideo = (text: string) => {
@@ -234,7 +229,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           <div className="w-full h-full py-8 px-4 pl-8 overflow-y-scroll custom-scrollbar">
             <div className="pr-3 flex flex-col gap-5">
               <DiaryHeader
-                onClose={onClose}
+                onClose={onClose ? onClose : () => {}}
                 isEditing={isEditing}
               />
             </div>

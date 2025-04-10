@@ -1,7 +1,5 @@
 // 일기조회에서의 꿈해몽 컴포넌트
 
-import { DreamSolveResponse } from '@/domains/diary/api/dreamApi';
-
 interface DreamMeaningViewProps {
   resultContent: string;
   isGood?: string;
