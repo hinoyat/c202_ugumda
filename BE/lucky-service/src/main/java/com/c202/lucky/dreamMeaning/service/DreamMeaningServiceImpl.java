@@ -96,10 +96,10 @@ public class DreamMeaningServiceImpl implements DreamMeaningService {
     public DreamMeaningDto getDreamMeaning(Integer userSeq, Integer diarySeq) {
         DreamMeaning dreamMeaning = dreamMeaningRepository.findByDiarySeq(diarySeq)
                 .orElseThrow(() -> new NotFoundException("해당 꿈 해몽을 찾을 수 없습니다."));
-
-        if (!dreamMeaning.getUserSeq().equals(userSeq)) {
-            throw new UnauthorizedException("해당 해몽을 조회할 권한이 없습니다.");
-        }
+//
+//        if (!dreamMeaning.getUserSeq().equals(userSeq)) {
+//            throw new UnauthorizedException("해당 해몽을 조회할 권한이 없습니다.");
+//        }
         return DreamMeaningDto.fromEntity(dreamMeaning);
     }
 
