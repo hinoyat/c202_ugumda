@@ -270,7 +270,19 @@ const MusicPlaylist: React.FC = () => {
   };
 
   // guard: displayMusicList가 아직 준비되지 않았으면 로딩 처리
-  if (displayMusicList.length === 0) {
+  if (!dominantEmotion || dominantEmotion === "null") {
+    return (
+      <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-17">
+        <div className="flex flex-col justify-center items-center max-w-[370px] py-0 px-[5px] mt-[0px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
+          <div className="flex items-center justify-center w-full h-[160px] text-white p-5 text-center">
+          꿈이 더 많이 쌓이면,<br/>
+          그 감정에 꼭 맞는 노래를 들려줄 수 있어요.<br/><br/>  
+          다음 이야기를 기다릴게요 🌙
+          </div>
+        </div>
+      </div>
+    );
+  } else if (displayMusicList.length === 0) {
     return <div>로딩중...</div>;
   }
 
