@@ -45,6 +45,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   // ------------------- 상태관리 ------------------- //
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [wasJustUpdated, setWasJustUpdated] = useState(false); // 일기 수정 여부 추적
 
   // 별 관련 상태
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]); // 일기 목록
@@ -268,8 +269,26 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   };
 
   // ----------------------- 일기 수정 ---------------------------- //
-  const handleDiaryUpdated = (responseData: any) => {
-    const updatedDiary = responseData.data;
+  const handleDiaryUpdated = async (responseData: any) => {
+    const updatedDiarySeq = responseData.data.diarySeq;
+    const updatedVideoUrl = responseData.data.videoUrl;
+    const updateTags = responseData.data.tags;
+    // 백에서 일기 생성하고 별자리 재배치 되었을 테니까 우주 정보 데이터 조회를 해서 거기서 기억한 다이어리 시퀀스 찾아내기
+    const response = await api.get(`/diaries/universe/${loginUser?.userSeq}`);
+    let updatedDiary: any;
+    if (response) {
+      updatedDiary = response.data.data.diaries.find(
+        (diary: { diarySeq: number }) => diary.diarySeq === updatedDiarySeq
+      );
+      setDiaryEntries(response.data.data.diaries);
+      dispatch(setDiaries(response.data.data.diaries));
+      setConnections(response.data.data.connections);
+    }
+    updatedDiary = {
+      ...updatedDiary,
+      videoUrl: updatedVideoUrl,
+      tags: updateTags,
+    };
 
     // 리덕스 스토어 업데이트
     dispatch(updateDiary(updatedDiary));
@@ -288,7 +307,56 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
     // 수정된 일기 조회 띄우기
     setShowDetail(true);
+
+    // 하이라이트 효과 적용 (반짝임)
+    setHighlightStarId(updatedDiary.diarySeq);
+
+    // 닫고나서 수정 위치 카메라 돌리기
+    // 현재 카메라 위치 저장 (나중에 원래 위치로 돌아가기 위해)
+    if (controlsRef.current) {
+      initialCameraPosition.current = {
+        position: [...controlsRef.current.object.position.toArray()],
+        target: [...controlsRef.current.target.toArray()],
+      };
+    }
+    // 카메라를 새로운 별 위치로 이동
+    if (controlsRef.current) {
+      controlsRef.current.target.set(
+        responseData.data.x,
+        responseData.data.y,
+        responseData.data.z
+      );
+      controlsRef.current.update();
+    }
+    // 5초 후 하이라이트 효과 제거 및 카메라 원위치
+    // setTimeout(() => {
+    //   setHighlightStarId(null); // 반짝이는 효과만 제거
+
+    //   // 카메라를 초기 위치로 부드럽게 복원
+    //   if (controlsRef.current) {
+    //     animateCameraReturn(initialCameraPosition.current);
+    //   }
+    // }, 5000);
+
+    setWasJustUpdated(true);
   };
+
+  useEffect(() => {
+    if (wasJustUpdated) {
+      if (!showDetail) {
+        setTimeout(() => {
+          setHighlightStarId(null); // 반짝이는 효과만 제거
+          if (controlsRef.current) {
+            animateCameraReturn(initialCameraPosition.current);
+          } else {
+            console.log('controlsRef 업대ㅠㅠㅠㅠㅠ');
+          }
+          setWasJustUpdated(false);
+          setCurrentDiaryDetail(null);
+        }, 5000);
+      }
+    }
+  }, [showDetail, wasJustUpdated]);
 
   // ----------------------- 일기 삭제 ---------------------------- //
   const handleDeleteDiary = async () => {
