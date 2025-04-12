@@ -130,6 +130,7 @@ public class DiaryServiceImpl implements DiaryService {
         List<TagResponseDto> tagDtos = new ArrayList<>();
 
         diaryTagRepository.deleteByDiary(diary);
+        diaryTagRepository.flush();
 
         tagDtos = tagService.processTags(diary, request.getTags(), now);
 
