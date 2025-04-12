@@ -329,7 +329,7 @@ const MusicPlaylist: React.FC = () => {
   return (
     <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-17">
       <div className="flex flex-col justify-center items-center max-w-[370px] py-0 px-[5px] mt-[0px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
-        <div className="flex flex-col items-center w-full py-[12px] px-0 pt-5 rounded-[20px] text-[#071739] bg-white">
+        <div className="flex flex-col items-center w-full py-[12px] px-0 pt-2.5 rounded-[20px] text-[#071739] bg-white">
           <audio ref={playerRef}>
             <source
               src={currentSong.audio}
@@ -338,23 +338,23 @@ const MusicPlaylist: React.FC = () => {
             Your browser does not support the audio element.
           </audio>
 
-          <div className="relative mx-auto w-[270px] h-[190px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
+          <div className="mx-auto w-[270px] flex flex-col items-center">
             <button
               onClick={setCurrentAsBackground}
-              className="absolute top-[8px] left-1/2 transform -translate-x-1/2 text-xs z-10 flex items-center justify-center px-[15px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
-              <FontAwesomeIcon
-                icon={faMusic}
-                className="mr-[4px]"
-              />
+              className="mb-[8px] text-xs flex items-center justify-center px-[15px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
+              <FontAwesomeIcon icon={faMusic} className="mr-[4px]" />
               배경음악으로 설정
             </button>
 
-            <img
-              src={currentSong.img}
-              alt={currentSong.name}
-              className="w-full h-full object-cover"
-            />
+            <div className="w-[270px] h-[190px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
+              <img
+                src={currentSong.img}
+                alt={currentSong.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
+
 
           <span className="mt-[22px] text-[22px]">{currentSong.name}</span>
           <span className="text-[#709fdc]">{currentSong.category}</span>
