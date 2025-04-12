@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useGLTF, useCursor, Text } from '@react-three/drei';
+import { useGLTF, useCursor, Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useAppDispatch } from '@/hooks/hooks';
@@ -7,12 +7,14 @@ import { visitOtherUserpage } from '@/domains/mainpage/stores/userThunks';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectVisitUser } from '@/domains/mainpage/stores/userSelectors';
+import test2 from "@/assets/images/blackhole_hangle.svg"
 
 export default function BlackHole() {
   const { scene } = useGLTF('/universe/blackholes/scene.gltf');
   const [modelReady, setModelReady] = useState(false);
   const [hovered, setHovered] = useState(false);
   const blackHoleRef = useRef();
+  const imageRef = useRef();
 
   // useCursor 훅을 사용하여 hovered 상태에 따라 커서를 변경합니다.
   useCursor(hovered, 'pointer', 'auto');
@@ -47,13 +49,12 @@ export default function BlackHole() {
     try {
       const result = await dispatch(visitOtherUserpage()).unwrap();
 
-
       if (result?.username) {
         nav(`/${result.username}`);
         window.location.reload();
       }
     } catch (error) {
-
+      // 에러 처리
     }
   };
 
@@ -75,23 +76,39 @@ export default function BlackHole() {
         />
       </mesh>
 
-      {/* 호버 시 텍스트 표시 - 좌우 반전 적용 */}
+      {/* 호버 시 이미지 표시 - 고정된 위치에서 자체 회전 */}
       {hovered && (
-        <Text
-          position={[-150, 200, 150]} // 블랙홀 위에 텍스트 위치 조정
-          fontSize={16}
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.5}
-          outlineColor="black"
-          fillOpacity={1}
-          userData={{ disablePicking: true }}
-          billboard // 텍스트가 항상 카메라를 향하도록 함
-          scale={[-1, 1, 1]} // X축으로 -1 스케일을 적용하여 좌우 반전
+        <group 
+          ref={imageRef} 
+          position={[-175, 170, 160]} // 블랙홀 위의 고정된 위치
+          scale={[-1, 1, 1]} // 다시 좌우 반전 적용
         >
-          Blackhole
-        </Text>
+          <Html
+            center
+            distanceFactor={15}
+            transform
+            sprite
+          >
+            <div style={{ 
+              width: '1500px', 
+              height: '1500px', 
+              backgroundColor: 'transparent',
+              pointerEvents: 'none',
+              transform: 'scaleX(-1)', // div 자체에도 좌우 반전 적용
+            }}>
+              <img 
+                src={test2}
+                alt="Blackhole Info" 
+                style={{ 
+                  width: '100%', 
+                  height: '100%',
+                  objectFit: 'contain',
+                  transform: 'scaleX(-1)', // 이미지에도 좌우 반전 적용
+                }} 
+              />
+            </div>
+          </Html>
+        </group>
       )}
     </group>
   );

@@ -4,7 +4,13 @@ import { useState, useEffect, useDebugValue } from 'react';
 import { getRandomIcon } from '@/hooks/ProfileIcons';
 import api from '@/apis/apiClient';
 import { changeIcon } from '@/stores/auth/authSlice';
-import { useAppDispatch } from '@/hooks/hooks';
+import { useAppDispatch,useAppSelector } from '@/hooks/hooks';
+import { 
+  openShuffleModal, 
+  closeShuffleModal, 
+  getSpecialIcon, 
+  getNormalIcon 
+} from '@/stores/modal/shuffleSlice';
 
 interface LeftProfileSectionProps {
   userData: {
@@ -33,6 +39,7 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
+  const { isSpecial, isShuffle } = useAppSelector((state) => state.shuffle);
 
   // userData가 변경될 때마다 아이콘 ID 업데이트
   useEffect(() => {
@@ -106,6 +113,10 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
   const handleShuffle = () => {
     // 업데이트 중이면 중복 요청 방지
     if (isUpdating) return;
+    if(isSpecial){
+      dispatch(openShuffleModal());
+      return;
+    }
 
     // 랜덤 아이콘 정보 가져오기
     const randomIcon = getRandomIcon();
@@ -113,6 +124,16 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
     // UI를 즉시 업데이트 (낙관적 업데이트)
     setCurrentIconId(randomIcon.id);
     setShuffleCount((prev) => prev + 1);
+
+    if(randomIcon.isRare || randomIcon.isEpic|| randomIcon.isUnique|| randomIcon.isLegendary){
+      dispatch(getSpecialIcon());
+    } else{
+      dispatch(getNormalIcon());
+      setShowRareMessage(false);
+      setShowEpicMessage(false);
+      setShowUniqueMessage(false);
+      setShowLegendaryMessage(false);
+    }
 
     // 희귀 아이콘일 경우 메시지 표시
     if (randomIcon.isRare) {
@@ -122,21 +143,21 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
       setShowRareMessage(true);
       setTimeout(() => setShowRareMessage(false), 3000);
     }
-    if (randomIcon.isEpic) {
+    else if (randomIcon.isEpic) {
       setShowRareMessage(false);
       setShowUniqueMessage(false);
       setShowLegendaryMessage(false);
       setShowEpicMessage(true);
       setTimeout(() => setShowEpicMessage(false), 3000);
     }
-    if (randomIcon.isUnique) {
+    else if (randomIcon.isUnique) {
       setShowRareMessage(false);
       setShowEpicMessage(false);
       setShowLegendaryMessage(false);
       setShowUniqueMessage(true);
       setTimeout(() => setShowUniqueMessage(false), 3000);
     }
-    if (randomIcon.isLegendary) {
+    else if (randomIcon.isLegendary) {
       setShowRareMessage(false);
       setShowEpicMessage(false);
       setShowUniqueMessage(false);
@@ -161,30 +182,30 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
             <img
               src={currentIconUrl}
               alt="프로필 이미지"
-              className="w-20 object-cover rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="w-14 object-cover rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             />
           )}
 
           {showRareMessage && (
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-blue-500 text-white p-2 rounded-md animate-bounce w-full">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-blue-500 text-white p-2 rounded-md animate-bounce w-full text-center">
               🎉 희귀 아이콘 획득!
             </div>
           )}
 
           {showEpicMessage && (
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-purple-500 text-white p-2 rounded-md animate-bounce w-full">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-purple-500 text-white p-2 rounded-md animate-bounce w-full text-center">
               🎉 에픽 아이콘 획득!
             </div>
           )}
 
           {showUniqueMessage && (
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-yellow-500 text-white p-2 rounded-md animate-bounce w-full">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-yellow-500 text-white p-2 rounded-md animate-bounce w-full text-center">
               🎉 유니크 아이콘 획득!
             </div>
           )}
 
           {showLegendaryMessage && (
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-emerald-400 text-white p-2 rounded-md animate-bounce w-full">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-emerald-400 text-white p-2 rounded-md animate-bounce w-full text-center">
               🎉 레전드리 아이콘 획득!
             </div>
           )}
@@ -199,6 +220,7 @@ const LeftProfileSection: React.FC<LeftProfileSectionProps> = ({
         <div className="flex flex-col items-center justify-center text-[20px] tracking-wide dung-font">
           <p>Hello, {userData?.nickname || 'Guest'} !!!</p>
           <p>버튼을 눌러 아이콘을 수정하세요</p>
+          <p className="text-[12px]">주의! 아이콘은 변경 후 즉시 저장되니 조심하세요!</p>
         </div>
 
         <div className="box-button">

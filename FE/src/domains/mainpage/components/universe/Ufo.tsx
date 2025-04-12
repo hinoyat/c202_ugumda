@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFBX, useCursor, Text } from '@react-three/drei';
+import { useFBX, useCursor, Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ThreeEvent } from '@react-three/fiber';
+import test from "@/assets/images/ufo_hangle.svg"
 
 export default function Ufo() {
   const fbx = useFBX('/universe/ufo/scene.fbx');
@@ -68,24 +69,35 @@ export default function Ufo() {
           onPointerOver={() => setHovered(true)}
           onPointerOut={() => setHovered(false)}
         />
-
-        {/* 호버 시 3D 텍스트 표시 */}
-        {hovered && (
-          <Text
-            position={[0, 80, 0]}
-            fontSize={14}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-            outlineWidth={0.5}
-            outlineColor="black"
-            fillOpacity={1}
-            userData={{ disablePicking: true }} // 마우스 이벤트가 투과되도록 설정
-          >
-            UFO
-          </Text>
-        )}
       </group>
+
+      {/* 호버 시 이미지 표시 - UFO와 별개로 표시 */}
+      {hovered && (
+        <Html
+          position={[190, 80, -300]} // UFO 위치 + 오프셋
+          center
+          distanceFactor={15}
+          sprite // 항상 카메라를 향하도록 설정
+          transform
+        >
+          <div style={{ 
+            width: '1500px', 
+            height: '1500px', 
+            backgroundColor: 'transparent',
+            pointerEvents: 'none' // 이미지가 마우스 이벤트를 캡처하지 않도록
+          }}>
+            <img 
+              src={test}
+              alt="UFO Info" 
+              style={{ 
+                width: '100%', 
+                height: '100%',
+                objectFit: 'contain'
+              }} 
+            />
+          </div>
+        </Html>
+      )}
     </>
   );
 }

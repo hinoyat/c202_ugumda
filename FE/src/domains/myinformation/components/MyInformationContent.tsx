@@ -12,6 +12,7 @@ import api from '@/apis/apiClient';
 import { UseSelector } from 'react-redux';
 import { closeModal } from '@/stores/modal/modalSlice';
 import WithDrawModal from './WithDrawModal';
+import ShuffleModal from './ShuffleModal'; // ShuffleModal 컴포넌트 import
 
 const MyInformationContent: React.FC = () => {
   const glowingTextStyle: React.CSSProperties = {
@@ -20,6 +21,7 @@ const MyInformationContent: React.FC = () => {
 
   const user = useSelector(selectUser);
   const { isOpen } = useSelector(state => state.modal);
+  const { isShuffle } = useSelector(state => state.shuffle); // shuffle 상태 추가
   const dispatch = useDispatch();
 
   const [userdata, setUserData] = useState(null);
@@ -49,7 +51,7 @@ const MyInformationContent: React.FC = () => {
   const userData = userdata;
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 overflow-hidden">
       <div className="absolute inset-0 bg-black opacity-50 z-20"></div>
       <img
         src={information_bg}
@@ -75,6 +77,14 @@ const MyInformationContent: React.FC = () => {
       </div>
       {isOpen && (
         <WithDrawModal/>
+      )}
+      
+      {/* ShuffleModal 조건부 렌더링 추가 */}
+      {isShuffle && (
+        <ShuffleModal 
+          userData={userData} 
+          onUpdateSuccess={refreshUserData} 
+        />
       )}
 
     </div>
