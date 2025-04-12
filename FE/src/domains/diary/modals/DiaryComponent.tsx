@@ -83,7 +83,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   const handleSave = async () => {
     // 이미 저장 중이면 중복 실행 방지
     if (isSaving) return;
-    
+
     // 저장 시작 상태로 변경
     setIsSaving(true);
 
@@ -115,15 +115,12 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 내용이 변경된 경우에만 꿈해몽 api 요청
         if (content !== diaryData.content) {
           try {
-            await dreamApi.createDreamMeaning(
-              diaryData.diarySeq,
-              content
-            );
+            await dreamApi.createDreamMeaning(diaryData.diarySeq, content);
           } catch (dreamError) {
             console.error('꿈해몽 생성 중 오류:', dreamError);
             // 꿈해몽 오류는 사용자 경험에 핵심적이지 않을 수 있으므로 토스트 메시지만 표시
             toast.warning('꿈해몽 생성 중 문제가 발생했습니다.', {
-              position: 'bottom-right',
+              // position: 'bottom-right',
               autoClose: 3000,
             });
           }
@@ -134,7 +131,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         }
 
         toast.success('일기가 성공적으로 수정되었습니다.', {
-          position: 'bottom-right',
+          // position: 'bottom-right',
           autoClose: 2000,
         });
 
@@ -146,7 +143,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 생성 모드
         const response = await diaryApi.createDiary(diaryToSave);
         const diarySeq = response.data.data.diarySeq;
-        
+
         // 리덕스 스토어에 추가
         dispatch(addDiary(response.data.data));
 
@@ -171,7 +168,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
             diary_pk: diarySeq,
             content: escapedContent,
           }),
-          dreamApi.createDreamMeaning(diarySeq, content)
+          dreamApi.createDreamMeaning(diarySeq, content),
         ]);
 
         // 성공 시 onDiaryCreated 콜백 호출
@@ -180,7 +177,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         }
 
         toast.success('일기가 성공적으로 저장되었습니다.', {
-          position: 'bottom-right',
+          // position: 'bottom-right',
           autoClose: 2000,
         });
 
