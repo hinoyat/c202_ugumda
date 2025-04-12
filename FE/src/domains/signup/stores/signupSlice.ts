@@ -186,7 +186,7 @@ const signupSlice = createSlice({
         state.birthDateMessage = '';
         state.birthDateStatus = 'invalid';
         toast.success('회원가입을 성공했습니다. 로그인 페이지로 이동합니다.', {
-          position: 'bottom-right',
+          // position: 'top-right',
           autoClose: 3000,
           closeOnClick: true,
           pauseOnHover: true,

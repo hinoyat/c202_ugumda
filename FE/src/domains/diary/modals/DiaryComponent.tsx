@@ -192,7 +192,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 400 에러인 경우 태그 관련 에러 메시지 표시
         // alert('태그는 한글, 영문, 숫자만 사용 가능합니다.');
         toast.info('태그는 한글, 영문, 숫자만 사용 가능합니다.', {
-          position: 'bottom-right',
+          // position: 'top-right',
           autoClose: 3000,
           closeOnClick: true,
           pauseOnHover: true,
@@ -203,7 +203,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 기타 에러
         // alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
         toast.error('일기 저장에 실패했습니다. 다시 시도해주세요.', {
-          position: 'bottom-right',
+          // position: 'top-right',
           autoClose: 3000,
           closeOnClick: true,
           pauseOnHover: true,
