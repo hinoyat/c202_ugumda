@@ -296,7 +296,7 @@ const LuckyNumber = () => {
       {/* 닫기 버튼 */}
       <div
         className="absolute top-3 right-4 text-2xl text-white"
-        style={{ zIndex: 30 }}>
+        style={{ zIndex: 9999 }}>
         <button
           onClick={onClickHome}
           className="cursor-pointer hover:text-gray-200">
