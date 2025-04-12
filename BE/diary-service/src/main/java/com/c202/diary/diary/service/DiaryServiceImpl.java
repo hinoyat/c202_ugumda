@@ -76,6 +76,7 @@ public class DiaryServiceImpl implements DiaryService {
                 .isPublic(request.getIsPublic())
                 .createdAt(now)
                 .updatedAt(now)
+                .videoUrl("pending")
                 .isDeleted("N")
                 .x(coordinates.getX())
                 .y(coordinates.getY())
@@ -129,6 +130,7 @@ public class DiaryServiceImpl implements DiaryService {
         List<TagResponseDto> tagDtos = new ArrayList<>();
 
         diaryTagRepository.deleteByDiary(diary);
+        diaryTagRepository.flush();
 
         tagDtos = tagService.processTags(diary, request.getTags(), now);
 
