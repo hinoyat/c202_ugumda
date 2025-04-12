@@ -11,6 +11,7 @@ import api from '@/apis/apiClient';
 import { logoutUser } from '@/stores/auth/authThunks';
 import { useDispatch } from 'react-redux';
 import { openModal } from '@/stores/modal/modalSlice';
+import { toast } from 'react-toastify';
 
 interface LeftProfileSectionProps {
   userData: {
@@ -39,7 +40,6 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const datePickerRef = useRef<HTMLDivElement>(null);
-  
 
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -137,43 +137,92 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const handleNicknameCheck = async () => {
     try {
       if (nickname === userData?.nickname) {
-        alert('현재 당신의 닉네임입니다.');
+        toast.error('현재와 동일한 닉네임 입니다.', {
+          // position: 'top-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
         return;
       }
       const response = await api.get(`/auth/check-nickname/${nickname}`);
 
-
       if (response && response.status === 200) {
         setNicknameCheck(true);
+        toast.success('사용 가능한 닉네임 입니다.', {
+          // position: 'top-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       } else {
         setNicknameCheck(false);
+        toast.error('사용 불가한 닉네임 입니다. 다른 닉네임을 사용해 주세요.', {
+          // position: 'top-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       }
     } catch (error) {
-
       setNicknameCheck(false);
     }
   };
 
   const handleSubmit = async () => {
     if (password !== password_check) {
-      alert('비밀번호가 일치하지 않습니다.');
+      toast.error('비밀번호가 일치하지 않습니다.', {
+        // position: 'top-right',
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
       return;
     }
 
     if (!nickname) {
-      alert('닉네임을 입력해주세요');
+      toast.error('닉네임을 입력해주세요.', {
+        // position: 'top-right',
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
       return;
     }
 
     if (!birthDate) {
-      alert('생년월일을 입력해주세요');
+      toast.error('생년월일을 입력해주세요.', {
+        // position: 'top-right',
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
       return;
     }
     if (!nicknameCheck) {
       if (nickname === userData?.nickname) {
         setNicknameCheck(true);
       } else {
-        alert('닉네임 중복체크를 해주세요');
+        toast.error('닉네임 중복 확인을 해주세요.', {
+          // position: 'top-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
         return;
       }
     }
@@ -189,34 +238,20 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         password,
         birthDate: birthDateFormatted,
       });
-  
+
       if (response.data && response.data.status === 200) {
         nav('/successedit');
       } else {
         nav('/failedit');
       }
     } catch (error) {
-   
       nav('/failedit');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleWithDraw =  () => {
-    // try {
-    //   const response = await api.delete('/users/me');
-    //   if (response.data.status === 204) {
-    //     // console.log(response.data.message);
-    //   } else if (response.data.status === 400) {
-    //     // console.log(response.data.message);
-    //   }
-    // } catch (error) {
-    //   // console.error('회원탈퇴에 실패하였습니다.');
-    // } finally {
-    //   logoutUser();
-    //   window.location.reload();
-    // }
+  const handleWithDraw = () => {
     dispatch(openModal());
   };
 

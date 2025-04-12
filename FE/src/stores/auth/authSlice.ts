@@ -52,7 +52,7 @@ const authSlice = createSlice({
         toast.error(
           '로그인에 실패하였습니다. 아이디나 비밀번호를 잘 확인해주세요.',
           {
-            position: 'bottom-right',
+            // position: 'top-right',
             autoClose: 3000,
             closeOnClick: true,
             pauseOnHover: true,

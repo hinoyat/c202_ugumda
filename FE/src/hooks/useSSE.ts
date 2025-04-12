@@ -173,7 +173,7 @@ const useSSE = (url: string): SSEHookReturn => {
             data.forEach((item) => {
               if (item.type === 'DIARY_CREATED') {
                 toast.success(item.content, {
-                  position: 'bottom-right',
+                  // position: 'top-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
@@ -182,7 +182,7 @@ const useSSE = (url: string): SSEHookReturn => {
                 });
               } else if (item.type === 'VIDEO_CREATED') {
                 toast.success(item.content, {
-                  position: 'bottom-right',
+                  // position: 'top-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
@@ -191,7 +191,7 @@ const useSSE = (url: string): SSEHookReturn => {
                 });
               } else if (item.type === 'VIDEO_CREATED_FAILED') {
                 toast.error(item.content, {
-                  position: 'bottom-right',
+                  // position: 'top-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
@@ -200,7 +200,7 @@ const useSSE = (url: string): SSEHookReturn => {
                 });
               } else if (item.type === 'LIKE_CREATED') {
                 toast.info(item.content, {
-                  position: 'bottom-right',
+                  // position: 'top-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
@@ -209,7 +209,7 @@ const useSSE = (url: string): SSEHookReturn => {
                 });
               } else if (item.type === 'GUESTBOOK_CREATED') {
                 toast.info(item.content, {
-                  position: 'bottom-right',
+                  // position: 'top-right',
                   autoClose: 5000,
                   closeOnClick: true,
                   pauseOnHover: true,
@@ -223,7 +223,7 @@ const useSSE = (url: string): SSEHookReturn => {
           else if (data && data.content) {
             if (data.type === 'DIARY_CREATED') {
               toast.success(data.content, {
-                position: 'bottom-right',
+                // position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -232,7 +232,7 @@ const useSSE = (url: string): SSEHookReturn => {
               });
             } else if (data.type === 'VIDEO_CREATED') {
               toast.success(data.content, {
-                position: 'bottom-right',
+                // position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -241,7 +241,7 @@ const useSSE = (url: string): SSEHookReturn => {
               });
             } else if (data.type === 'VIDEO_CREATED_FAILED') {
               toast.error(data.content, {
-                position: 'bottom-right',
+                // position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -250,7 +250,7 @@ const useSSE = (url: string): SSEHookReturn => {
               });
             } else if (data.type === 'LIKE_CREATED') {
               toast.info(data.content, {
-                position: 'bottom-right',
+                // position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -259,7 +259,7 @@ const useSSE = (url: string): SSEHookReturn => {
               });
             } else if (data.type === 'GUESTBOOK_CREATED') {
               toast.info(data.content, {
-                position: 'bottom-right',
+                // position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,
                 pauseOnHover: true,
