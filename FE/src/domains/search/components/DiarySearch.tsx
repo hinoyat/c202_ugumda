@@ -38,7 +38,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
       currentPage: 1, // API는 1부터 시작하므로 초기값도 1로 설정
       totalPages: 1,
       totalElements: 0,
-      size: 20,
+      size: 5,
       first: true,
       last: true,
     },
@@ -74,7 +74,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
           ? visitUser?.userSeq // 현재 우주가 체크되면 visitUser의 userSeq 사용
           : undefined, // 현재 우주가 체크 해제되면 targetUserSeq를 보내지 않음
         page: page, // API는 1부터 시작하는 페이지 번호 사용
-        size: 20, // 페이지당 아이템 수
+        size: 5, // 페이지당 아이템 수
       };
 
       // 쿼리 스트링으로 변환 (null이나 undefined 값은 제외)
@@ -102,7 +102,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
             currentPage: 1,
             totalPages: 1,
             totalElements: 0,
-            size: 20,
+            size: 5,
             first: true,
             last: true,
           },
@@ -119,7 +119,7 @@ const DiarySearch: React.FC<DiarySearchProps> = ({ onClose }) => {
           currentPage: 1,
           totalPages: 1,
           totalElements: 0,
-          size: 20,
+          size: 5,
           first: true,
           last: true,
         },
