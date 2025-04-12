@@ -8,6 +8,7 @@ import musicReducer from '@/stores/music/musicSlice';
 import dashboardSlice from '@/domains/dashboard/store/dashboardSlice';
 import guestbookReducer from '@/stores/guestbook/guestbookSlice';
 import modalReducer from '@/stores/modal/modalSlice';
+import shuffleReducer from '@/stores/modal/shuffleSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     music: musicReducer,
     dashboard: dashboardSlice,
     guestbook: guestbookReducer,
-    modal: modalReducer
+    modal: modalReducer,
+    shuffle: shuffleReducer
   },
 });
 
