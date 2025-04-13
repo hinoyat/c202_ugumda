@@ -411,8 +411,8 @@ const MusicPlaylist: React.FC = () => {
 
   return (
     <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <div className="flex flex-col justify-center items-center max-w-[370px] h-130 py-0 px-[5px] mt-[70px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
-        <div className="flex flex-col items-center w-full  pt-2.5 rounded-[20px] text-[#071739] bg-white">
+      <div className="flex flex-col items-center max-w-[370px] h-130 py-0 px-[5px] mt-[70px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] ">
+        <div className="flex flex-col items-center w-full h-[70%] pt-2.5 rounded-[20px] text-[#071739] bg-white">
           <div className="flex flex-col items-center">
           <audio 
             ref={playerRef}
@@ -435,7 +435,7 @@ const MusicPlaylist: React.FC = () => {
           <div className="mx-auto w-[270px] flex flex-col items-center">
             <button
               onClick={setCurrentAsBackground}
-              className="mb-[8px] text-xs flex items-center justify-center px-[15px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
+              className="mb-[8px] text-xs flex items-center justify-center px-[15px] py-[6px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
               <FontAwesomeIcon
                 icon={faMusic}
                 className="mr-[4px]"
@@ -443,7 +443,7 @@ const MusicPlaylist: React.FC = () => {
               배경음악으로 설정
             </button>
 
-            <div className="w-[270px] h-[190px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
+            <div className="w-full h-[75%] overflow-hidden rounded-[20px] shadow-[0px_10px_20px_0px_rgba(39,70,132,0.7)] mt-1">
               <img
                 src={currentSong.img}
                 alt={currentSong.name}
@@ -452,7 +452,7 @@ const MusicPlaylist: React.FC = () => {
             </div>
           </div>
 
-          <span className="mt-[22px] text-[22px]">{currentSong.name}</span>
+          <span className="mt-[3px] text-[18px] font-bold">{currentSong.name}</span>
           <span className="text-[#709fdc]">{currentSong.category}</span>
 
           <div className="flex justify-between  w-[240px]">
@@ -468,16 +468,16 @@ const MusicPlaylist: React.FC = () => {
               className="relative z-[2] w-0 h-[5px] rounded-[5px] bg-[#071739]"></div>
           </div>
 
-          <div className="mt-[2vh] flex items-center justify-center">
+          <div className="mt-[1vh] flex items-center justify-center">
             <button
               onClick={prevSong}
-              className="text-[#071739] rounded-full mr-[5px] ml-[1.8vw] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+              className="text-[#071739] rounded-full mr-[5px] ml-[1.8vw] text-[15px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
               <FontAwesomeIcon icon={faBackward} />
             </button>
 
             <button
               onClick={playOrPause}
-              className="text-[#071739] rounded-full mx-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[50px] h-[50px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
+              className="text-[#071739] rounded-full mx-[10px] text-[15px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[36px] h-[36px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
               {isPlaying ? (
                 <FontAwesomeIcon icon={faStop} />
               ) : (
@@ -487,13 +487,13 @@ const MusicPlaylist: React.FC = () => {
 
             <button
               onClick={nextSong}
-              className="text-[#071739] rounded-full mx-[5px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+              className="text-[#071739] rounded-full mx-[5px] text-[15px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
               <FontAwesomeIcon icon={faForward} />
             </button>
 
             <button
               onClick={toggleVolumeSlider}
-              className="text-[#071739] rounded-full mr-[1px] text-[18px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]">
+              className="text-[#071739] rounded-full mr-[1px] text-[15px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]">
               <FontAwesomeIcon icon={getVolumeIcon()} />
             </button>
 
@@ -533,17 +533,17 @@ const MusicPlaylist: React.FC = () => {
                   clickAudio(key);
                 }}>
                 <img
-                  className={`w-[90px] rounded-[10px] ${index === key && !isPlaying ? 'opacity-[70%]' : ''}`}
+                  className={`w-[80px] rounded-[10px] ${index === key && !isPlaying ? 'opacity-[70%]' : ''}`}
                   src={music.img}
                   alt={music.name}
                 />
                 <div className="ml-[15px] flex flex-col min-w-[190px]">
                   <span className="text-[17px] mt-[8px]">{music.name}</span>
-                  <span className="mt-[8px] font-[300] text-[#709fdc]">
+                  <span className="mt-[3px] font-[300] text-[#709fdc]">
                     {music.category}
                   </span>
                 </div>
-                <span className="min-w-[40px] ml-[9px] mr-9px] font-[500]">
+                <span className="min-w-[40px] ml-[9px] mr-[9px] font-[500]">
                   {music.duration}
                 </span>
               </div>
