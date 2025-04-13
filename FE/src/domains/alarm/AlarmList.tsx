@@ -23,6 +23,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { showDiaryModal } from '@/stores/diary/diarySlice';
 import { showGuestbookModal } from '@/stores/guestbook/guestbookSlice';
 import { selectUser } from '@/stores/auth/authSelectors';
+import { setAlarmFalse } from '@/stores/auth/authSlice';
 
 interface AlarmProps {
   isOpen: boolean;
@@ -98,11 +99,14 @@ const AlarmList: React.FC<AlarmProps> = ({ isOpen, onClose }) => {
   // 알림 전체 삭제
   const handleDeleteAllAlarms = () => {
     dispatch(deleteAllAlarms());
+    // localStorage.setItem('alarmExistence', 'N');
+    dispatch(setAlarmFalse());
   };
 
   // 알림 전체 읽음
   const handleReadAllAlarms = () => {
     dispatch(readAllAlarms());
+    dispatch(setAlarmFalse());
   };
 
   return (

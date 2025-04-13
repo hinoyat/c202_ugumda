@@ -7,6 +7,7 @@ const initialState: AuthState = {
   user: JSON.parse(localStorage.getItem('User') || 'null'),
   accessToken: localStorage.getItem('accessToken') || null,
   isAuthenticated: !!localStorage.getItem('accessToken'),
+  alarmExistence: false,
 };
 
 const authSlice = createSlice({
@@ -34,10 +35,18 @@ const authSlice = createSlice({
       localStorage.removeItem('accessToken');
       localStorage.removeItem('User');
     },
+
     changeIcon: (state, action) => {
       if (state.user) {
         state.user.iconSeq = action.payload;
       }
+    },
+
+    setAlarmTrue: (state) => {
+      state.alarmExistence = true;
+    },
+    setAlarmFalse: (state) => {
+      state.alarmExistence = false;
     },
   },
   extraReducers: (builder) => {
@@ -77,6 +86,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { setIntro, setAccessToken, clearAuth, changeIcon } =
-  authSlice.actions;
+export const {
+  setIntro,
+  setAccessToken,
+  clearAuth,
+  changeIcon,
+  setAlarmTrue,
+  setAlarmFalse,
+} = authSlice.actions;
 export default authSlice.reducer;
