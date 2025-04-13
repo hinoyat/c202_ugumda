@@ -15,7 +15,7 @@ public class AlarmService {
     public void sendGuestbookCreatedAlarm(Integer userSeq, String username, Integer diarySeq) {
         AlarmMessageDto alarmMessage = AlarmMessageDto.builder()
                 .userSeq(userSeq)
-                .content("똑똑" + username + "님의 따뜻한 메시지가 당신의 방명록에 새겨졌어요.")
+                .content("똑똑 " + username + " 님의 따뜻한 메시지가 당신의 방명록에 새겨졌어요.")
                 .type("GUESTBOOK_CREATED")
                 .diarySeq(null)
                 .requiresPersistence(true)
