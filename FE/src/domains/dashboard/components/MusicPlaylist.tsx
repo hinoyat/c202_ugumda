@@ -452,6 +452,7 @@ const MusicPlaylist: React.FC = () => {
             </div>
           </div>
 
+
           <span className="mt-[3px] text-[18px] font-bold">{currentSong.name}</span>
           <span className="text-[#709fdc]">{currentSong.category}</span>
 
