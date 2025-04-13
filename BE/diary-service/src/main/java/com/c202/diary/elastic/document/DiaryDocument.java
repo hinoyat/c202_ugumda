@@ -27,13 +27,13 @@ public class DiaryDocument {
     @Field(type = FieldType.Integer)
     private Integer userSeq;
 
-    @Field(type = FieldType.Text, analyzer = "korean")
+    @Field(type = FieldType.Text, analyzer = "korean", searchAnalyzer = "korean_search")
     private String title;
 
-    @Field(type = FieldType.Text, analyzer = "korean")
+    @Field(type = FieldType.Text, analyzer = "korean", searchAnalyzer = "korean_search")
     private String content;
 
-    @Field(type = FieldType.Text, analyzer = "korean")
+    @Field(type = FieldType.Text, analyzer = "korean", searchAnalyzer = "korean_search")
     private List<String> tags;
 
     @Field(type = FieldType.Keyword)

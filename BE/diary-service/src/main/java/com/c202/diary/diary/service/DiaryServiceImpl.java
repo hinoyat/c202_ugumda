@@ -88,7 +88,6 @@ public class DiaryServiceImpl implements DiaryService {
 
         diaryRepository.save(diary);
 
-        diaryIndexService.indexDiary(diary); // ElasticSearch 색인 업데이트
 
         alarmService.sendDiaryCreatedAlarm(
                 diary.getUserSeq(),
@@ -100,6 +99,11 @@ public class DiaryServiceImpl implements DiaryService {
         if (request.getTags() != null && !request.getTags().isEmpty()) {
             tagDtos = tagService.processTags(diary, request.getTags(), now);
         }
+
+        Diary updatedDiary = diaryRepository.findByDiarySeqAndIsDeleted(diary.getDiarySeq(), "N")
+                .orElseThrow(() -> new NotFoundException("다시 불러온 일기가 없습니다."));
+
+        diaryIndexService.indexDiary(updatedDiary); // ElasticSearch 색인 업데이트
 
         coordinateService.relayoutUniverse(userSeq);
 
@@ -157,7 +161,9 @@ public class DiaryServiceImpl implements DiaryService {
 
         diaryRepository.save(diary);
 
-        diaryIndexService.indexDiary(diary);
+        Diary updatedDiary = diaryRepository.findByDiarySeqAndIsDeleted(diary.getDiarySeq(), "N")
+                .orElseThrow(() -> new NotFoundException("업데이트 후 일기를 다시 불러올 수 없습니다."));
+        diaryIndexService.indexDiary(updatedDiary);
 
         List<Integer> connectedDiaries = coordinateService.findSimilarDiaries(diary.getDiarySeq(), 5);
 
@@ -179,9 +185,10 @@ public class DiaryServiceImpl implements DiaryService {
             emotionService.decrementDiaryCount(diary.getEmotionSeq());
         }
 
-        diaryIndexService.indexDiary(diary);
 
         diary.deleteDiary();
+
+        diaryIndexService.indexDiary(diary);
 
         coordinateService.relayoutUniverse(userSeq);
     }
@@ -252,7 +259,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         return DiaryDetailResponseDto.toDto(diary, tagDtos, emotionName, connectedDiaries, likeCount, hasLiked);
     }
-    
+
     @Transactional
     @Override
     public DiaryDetailResponseDto toggleDiaryIsPublic(Integer diarySeq, Integer userSeq) {
@@ -307,10 +314,17 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         // 일기 DTO 생성
-        List<DiaryListResponseDto> diaryDtos = diaries.stream()
-                .map(diary -> DiaryListResponseDto.toDto(diary, emotionNames.get(diary.getDiarySeq())))
-                .collect(Collectors.toList());
-
+        List<DiaryListResponseDto> diaryDtos = new ArrayList<>();
+        for (Diary diary : diaries) {
+            // 각 일기의 태그 정보 가져오기
+            List<TagResponseDto> tags = getTagsForDiary(diary);
+            // 태그와 감정 이름을 포함한 DTO 생성
+            diaryDtos.add(DiaryListResponseDto.toDto(
+                    diary,
+                    emotionNames.get(diary.getDiarySeq()),
+                    tags
+            ));
+        }
         // 모든 감정 영역 정보 가져오기
         List<EmotionResponseDto> emotions = emotionService.getAllEmotions();
 
