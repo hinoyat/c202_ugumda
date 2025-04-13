@@ -307,10 +307,17 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         // 일기 DTO 생성
-        List<DiaryListResponseDto> diaryDtos = diaries.stream()
-                .map(diary -> DiaryListResponseDto.toDto(diary, emotionNames.get(diary.getDiarySeq())))
-                .collect(Collectors.toList());
-
+        List<DiaryListResponseDto> diaryDtos = new ArrayList<>();
+        for (Diary diary : diaries) {
+            // 각 일기의 태그 정보 가져오기
+            List<TagResponseDto> tags = getTagsForDiary(diary);
+            // 태그와 감정 이름을 포함한 DTO 생성
+            diaryDtos.add(DiaryListResponseDto.toDto(
+                    diary,
+                    emotionNames.get(diary.getDiarySeq()),
+                    tags
+            ));
+        }
         // 모든 감정 영역 정보 가져오기
         List<EmotionResponseDto> emotions = emotionService.getAllEmotions();
 
