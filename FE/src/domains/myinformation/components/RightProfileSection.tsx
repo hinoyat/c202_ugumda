@@ -11,6 +11,7 @@ import api from '@/apis/apiClient';
 import { logoutUser } from '@/stores/auth/authThunks';
 import { useDispatch } from 'react-redux';
 import { openModal } from '@/stores/modal/modalSlice';
+import { toast } from 'react-toastify';
 
 interface LeftProfileSectionProps {
   userData: {
@@ -37,9 +38,15 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  
+  // 안내 메시지 표시 상태
+  const [showNicknameMessage, setShowNicknameMessage] = useState(false);
+  const [showPasswordMessage, setShowPasswordMessage] = useState(false);
+  
+  // 기존 데이터 저장
+  const [originalNickname, setOriginalNickname] = useState('');
 
   const datePickerRef = useRef<HTMLDivElement>(null);
-  
 
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -51,6 +58,7 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
   useEffect(() => {
     if (userData) {
       setNickname(userData.nickname);
+      setOriginalNickname(userData.nickname);
       setBirthDate(formatDateInput(userData.birthDate));
 
       // birthDate가 유효한 형식이면 Date 객체로 변환
@@ -79,6 +87,16 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // 닉네임 변경 여부 확인
+  const isNicknameChanged = () => {
+    return nickname !== originalNickname;
+  };
+
+  // 닉네임 길이 체크 함수
+  const isNicknameValid = (nick: string): boolean => {
+    return nick.length >= 5 && nick.length <= 12;
+  };
 
   // 날짜 문자열을 YYYY-MM-DD 형식으로 변환
   const formatDateString = (dateStr: string): string | null => {
@@ -136,46 +154,149 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
 
   const handleNicknameCheck = async () => {
     try {
-      if (nickname === userData?.nickname) {
-        alert('현재 당신의 닉네임입니다.');
+      // 닉네임이 변경되지 않았으면 검사하지 않음
+      if (!isNicknameChanged()) {
+        toast.info('현재와 동일한 닉네임 입니다.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        // 현재 닉네임 사용 가능으로 설정
+        setNicknameCheck(true);
         return;
       }
+      
+      // 닉네임이 변경된 경우에만 유효성 검사
+      if (!isNicknameValid(nickname)) {
+        toast.error('닉네임은 5~12자 사이여야 합니다.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        return;
+      }
+      
       const response = await api.get(`/auth/check-nickname/${nickname}`);
-
 
       if (response && response.status === 200) {
         setNicknameCheck(true);
+        toast.success('사용 가능한 닉네임 입니다.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       } else {
         setNicknameCheck(false);
+        toast.error('사용 불가한 닉네임 입니다. 다른 닉네임을 사용해 주세요.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       }
     } catch (error) {
-
       setNicknameCheck(false);
     }
   };
 
+  // 비밀번호 유효성 검사 함수
+  const isPasswordValid = (pw: string): boolean => {
+    // 8자 이상 체크
+    if (pw.length < 8) return false;
+    
+    // 영문 포함 체크
+    const hasLetter = /[a-zA-Z]/.test(pw);
+    
+    // 숫자 포함 체크
+    const hasNumber = /[0-9]/.test(pw);
+    
+    // 특수문자 포함 체크
+    const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw);
+    
+    // 모든 조건을 만족해야 true 반환
+    return hasLetter && hasNumber && hasSpecial;
+  };
+
   const handleSubmit = async () => {
-    if (password !== password_check) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
+    // 닉네임이 변경된 경우에만 유효성 검사 및 중복 체크 요구
+    if (isNicknameChanged()) {
+      // 닉네임 길이 체크
+      if (!isNicknameValid(nickname)) {
+        toast.error('닉네임은 5~12자 사이여야 합니다.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        return;
+      }
+      
+      // 중복 체크 여부 확인
+      if (!nicknameCheck) {
+        toast.error('닉네임 중복 확인을 해주세요.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        return;
+      }
+    }
+    
+    // 비밀번호가 입력된 경우에만 유효성 검사
+    if (password) {
+      if (!isPasswordValid(password)) {
+        toast.error('비밀번호는 8자 이상, 영문, 숫자, 특수문자를 모두 포함해야 합니다.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        return;
+      }
+      
+      if (password !== password_check) {
+        toast.error('비밀번호가 일치하지 않습니다.', {
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        return;
+      }
     }
 
     if (!nickname) {
-      alert('닉네임을 입력해주세요');
+      toast.error('닉네임을 입력해주세요.', {
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
       return;
     }
 
     if (!birthDate) {
-      alert('생년월일을 입력해주세요');
+      toast.error('생년월일을 입력해주세요.', {
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
       return;
-    }
-    if (!nicknameCheck) {
-      if (nickname === userData?.nickname) {
-        setNicknameCheck(true);
-      } else {
-        alert('닉네임 중복체크를 해주세요');
-        return;
-      }
     }
 
     setIsLoading(true);
@@ -189,117 +310,136 @@ const RightProfileSection: React.FC<LeftProfileSectionProps> = ({
         password,
         birthDate: birthDateFormatted,
       });
-  
+
       if (response.data && response.data.status === 200) {
         nav('/successedit');
       } else {
         nav('/failedit');
       }
     } catch (error) {
-   
       nav('/failedit');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleWithDraw =  () => {
-    // try {
-    //   const response = await api.delete('/users/me');
-    //   if (response.data.status === 204) {
-    //     // console.log(response.data.message);
-    //   } else if (response.data.status === 400) {
-    //     // console.log(response.data.message);
-    //   }
-    // } catch (error) {
-    //   // console.error('회원탈퇴에 실패하였습니다.');
-    // } finally {
-    //   logoutUser();
-    //   window.location.reload();
-    // }
+  const handleWithDraw = () => {
     dispatch(openModal());
   };
 
   return (
     <div className="text-white flex-1">
-      <div className="w-full h-full flex flex-col items-center justify-center gap-10 px-10 pl-30 pb-10 text-[#86F5FF]">
+      <div className="w-full h-full flex flex-col items-center justify-center gap-7 px-10 pl-30 pb-10 text-[#86F5FF]">
         {/* 닉네임 행 */}
-        <div className="flex items-center gap-4 text-xl w-full dung-font relative">
-          <p className="w-1/4">nickname</p>
-          <input
-            type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            className="flex-1 bg-transparent focus:outline-none pl-8"
-          />
-          <img
-            src={check}
-            alt="닉네임 확인"
-            className="w-6 h-6 cursor-pointer absolute right-0"
-            onClick={handleNicknameCheck}
-          />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-4 text-xl w-full dung-font relative">
+            <p className="w-1/4">nickname</p>
+          
+              <input
+                type="text"
+                value={nickname}
+                onChange={(e) => {
+                  setNickname(e.target.value);
+                  if (e.target.value !== originalNickname) {
+                    setNicknameCheck(false);
+                  } else {
+                    setNicknameCheck(true);
+                  }
+                }}
+                onFocus={() => setShowNicknameMessage(true)}
+                onBlur={() => setShowNicknameMessage(false)}
+                className="flex-1 bg-transparent focus:outline-none pl-8"
+              />
+            <img
+              src={check}
+              alt="닉네임 확인"
+              className="w-6 h-6 cursor-pointer absolute right-0"
+              onClick={handleNicknameCheck}
+            />
+          </div>
+          {showNicknameMessage && (
+            <div className="">
+              <p className="pl-4 text-[12px] text-white dung-font">닉네임은 5~12자 사이여야 하며, 변경 후 중복체크 버튼을 꼭 눌러주세요!</p>
+            </div>
+          )}
         </div>
 
         {/* 비밀번호 입력 행 */}
-        <div className="flex items-center gap-8 text-xl w-full dung-font relative">
-          <p className="w-1/4">password</p>
-          <div className="flex items-center gap-2 w-3/4 overflow-visible">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              className="w-[235px] focus:outline-none rounded bg-transparent"
-              placeholder="비밀번호를 입력하세요"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              onClick={() => setShowPassword(!showPassword)}
-              className="cursor-pointer flex-shrink-0 ml-2 absolute right-0">
-              {showPassword ? (
-                <img
-                  src={close}
-                  alt="비밀번호 숨기기"
-                  className="w-6 h-6"
-                />
-              ) : (
-                <img
-                  src={open}
-                  alt="비밀번호 표시"
-                  className="w-6 h-6"
-                />
-              )}
-            </button>
+        <div className='flex flex-col gap-2 w-full'>
+          <div className="flex items-center gap-8 text-xl w-full dung-font relative">
+            <p className="w-1/4">password</p>
+            <div className="flex items-center gap-2 w-3/4 overflow-visible">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="w-[235px] focus:outline-none rounded bg-transparent"
+                placeholder="비밀번호를 입력하세요"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setShowPasswordMessage(true)}
+                onBlur={() => setShowPasswordMessage(false)}
+              />
+              <button
+                onClick={() => setShowPassword(!showPassword)}
+                className="cursor-pointer flex-shrink-0 ml-2 absolute right-0">
+                {showPassword ? (
+                  <img
+                    src={close}
+                    alt="비밀번호 숨기기"
+                    className="w-6 h-6"
+                  />
+                ) : (
+                  <img
+                    src={open}
+                    alt="비밀번호 표시"
+                    className="w-6 h-6"
+                  />
+                )}
+              </button>
+            </div>
           </div>
+          {showPasswordMessage && (
+            <div className="dung-font text-[12px] text-white">
+                <p className="pl-4">비밀번호는 8자 이상, 영문, 숫자, 특수문자를 포함해야 합니다.</p>
+            </div>
+          )}
         </div>
 
         {/* 비밀번호 확인 입력 행 */}
-        <div className="flex items-center gap-8 text-xl w-full dung-font relative">
-          <p className="w-1/4">pw_check</p>
-          <div className="flex items-center gap-2 w-3/4 overflow-visible">
-            <input
-              type={showPw_Check ? 'text' : 'password'}
-              className="w-[235px] focus:outline-none rounded bg-transparent"
-              placeholder="비밀번호를 입력하세요"
-              value={password_check}
-              onChange={(e) => setPassword_check(e.target.value)}
-            />
-            <button
-              onClick={() => setShowPassword_Check(!showPw_Check)}
-              className="cursor-pointer flex-shrink-0 ml-2 absolute right-0">
-              {showPw_Check ? (
-                <img
-                  src={close}
-                  alt="비밀번호 숨기기"
-                  className="w-6 h-6"
-                />
-              ) : (
-                <img
-                  src={open}
-                  alt="비밀번호 표시"
-                  className="w-6 h-6"
-                />
-              )}
-            </button>
+        <div className='flex flex-col gap-2 w-full'>
+          <div className="flex items-center gap-8 text-xl w-full dung-font relative">
+            <p className="w-1/4">pw_check</p>
+            <div className="flex items-center gap-2 w-3/4 overflow-visible">
+              <input
+                type={showPw_Check ? 'text' : 'password'}
+                className="w-[235px] focus:outline-none rounded bg-transparent"
+                placeholder="비밀번호를 입력하세요"
+                value={password_check}
+                onChange={(e) => setPassword_check(e.target.value)}
+              />
+              <button
+                onClick={() => setShowPassword_Check(!showPw_Check)}
+                className="cursor-pointer flex-shrink-0 ml-2 absolute right-0">
+                {showPw_Check ? (
+                  <img
+                    src={close}
+                    alt="비밀번호 숨기기"
+                    className="w-6 h-6"
+                  />
+                ) : (
+                  <img
+                    src={open}
+                    alt="비밀번호 표시"
+                    className="w-6 h-6"
+                  />
+                )}
+              </button>
+            </div>
           </div>
+          {password && password_check && password !== password_check && (
+            <div className="dung-font text-[12px] text-white">
+                <p className="pl-4">비밀번호가 올바르지 않습니다.</p>
+            </div>
+          )}
         </div>
 
         {/* 생년월일 행 */}

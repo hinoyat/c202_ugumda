@@ -240,11 +240,11 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
 
             {/*방명록 남기는 부분 */}
             {PageUserNumber !== LoginUserNumber ? (
-              <div className="flex gap-5 justify-center text-[15px]">
+              <div className="flex gap-4 justify-start text-[20px] pl-3">
                 <input
                   type="text"
                   placeholder="내용을 입력해 주세요."
-                  className="w-[90%] p-1 border-b border-gray-200 text-gray-200 outline-none"
+                  className="w-[85%] p-1 border-b border-gray-200 text-gray-200 outline-none"
                   value={newEntry}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
@@ -255,7 +255,7 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
                   }}
                 />
                 <button
-                  className="bg-white/90 px-2 py-1 text-[#06061E] font-semibold rounded text-[16px] w-20 cursor-pointer hover:bg-[#cdcccc]"
+                  className="bg-white/90 px-2 py-2 text-[#06061E] font-semibold rounded-lg text-[16px] w-24 cursor-pointer hover:bg-[#cdcccc] transition-all duration-200"
                   onClick={handleSubmit}
                   disabled={isSubmitting}>
                   남기기

@@ -4,6 +4,8 @@ import com.c202.diary.diary.entity.Diary;
 import com.c202.diary.elastic.document.DiaryDocument;
 import com.c202.diary.elastic.repository.DiarySearchRepository;
 import com.c202.diary.tag.entity.DiaryTag;
+import com.c202.diary.tag.repository.DiaryTagRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,27 @@ import java.util.stream.Collectors;
 public class DiaryIndexService {
 
     private final DiarySearchRepository diarySearchRepository;
+    private final DiaryTagRepository diaryTagRepository;
 
+    @Transactional
     public void indexDiary(Diary diary) {
-        DiaryDocument document = convertToDocument(diary);
+        // 항상 최신 태그 목록을 조회
+        List<String> tags = diaryTagRepository.findByDiary(diary).stream()
+                .map(diaryTag -> diaryTag.getTag().getName())
+                .collect(Collectors.toList());
+
+        DiaryDocument document = DiaryDocument.builder()
+                .diarySeq(diary.getDiarySeq())
+                .userSeq(diary.getUserSeq())
+                .title(diary.getTitle())
+                .content(diary.getContent())
+                .tags(tags)
+                .dreamDate(diary.getDreamDate())
+                .isPublic(diary.getIsPublic())
+                .isDeleted(diary.getIsDeleted())
+                .emotionSeq(diary.getEmotionSeq())
+                .build();
+
         diarySearchRepository.save(document);
     }
 

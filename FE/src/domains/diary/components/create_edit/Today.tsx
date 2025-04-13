@@ -1,4 +1,3 @@
-import React from 'react';
 
 const Today = () => {
   const today = new Date();

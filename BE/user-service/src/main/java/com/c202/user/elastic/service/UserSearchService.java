@@ -17,7 +17,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,30 +41,125 @@ public class UserSearchService {
         if (requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty()) {
             BoolQuery.Builder keywordQueryBuilder = new BoolQuery.Builder();
 
-            if (requestDto.isSearchUsername()) {
-                keywordQueryBuilder.should(Query.of(q -> q
-                        .match(m -> m
-                                .field("username")
-                                .query(requestDto.getKeyword())
-                        )
-                ));
-            }
-
             if (requestDto.isSearchNickname()) {
+                // 1. 기본 match 쿼리 (단일 토큰 검색)
                 keywordQueryBuilder.should(Query.of(q -> q
                         .match(m -> m
                                 .field("nickname")
                                 .query(requestDto.getKeyword())
                         )
                 ));
+
+                // 2. 정확한 구문 검색을 위한 match_phrase
+                keywordQueryBuilder.should(Query.of(q -> q
+                        .matchPhrase(mp -> mp
+                                .field("nickname")
+                                .query(requestDto.getKeyword())
+                        )
+                ));
+
+                // 3. 부분 문자열 검색을 위한 n-gram 검색
+                keywordQueryBuilder.should(Query.of(q -> q
+                        .wildcard(w -> w
+                                .field("nickname")
+                                .wildcard("*" + requestDto.getKeyword() + "*")
+                        )
+                ));
+
+                // 4. 각 글자별 AND 검색 (모든 글자가 포함된 경우)
+                if (requestDto.getKeyword().length() > 1) {
+                    BoolQuery.Builder charQueryBuilder = new BoolQuery.Builder();
+
+                    for (int i = 0; i < requestDto.getKeyword().length(); i++) {
+                        String singleChar = String.valueOf(requestDto.getKeyword().charAt(i));
+                        charQueryBuilder.should(Query.of(q -> q
+                                .match(m -> m
+                                        .field("nickname")
+                                        .query(singleChar)
+                                )
+                        ));
+                    }
+
+                    // 모든 글자가 포함되어야 함
+                    charQueryBuilder.minimumShouldMatch("" + requestDto.getKeyword().length());
+
+                    keywordQueryBuilder.should(Query.of(q -> q.bool(charQueryBuilder.build())));
+                }
+
+                // 5. 연속된 부분 문자열 검색
+                if (requestDto.getKeyword().length() > 1) {
+                    for (int i = 0; i < requestDto.getKeyword().length() - 1; i++) {
+                        String subString = requestDto.getKeyword().substring(i, i + 2);
+                        keywordQueryBuilder.should(Query.of(q -> q
+                                .match(m -> m
+                                        .field("nickname")
+                                        .query(subString)
+                                )
+                        ));
+                    }
+                }
+            }
+
+            if (requestDto.isSearchUsername()) {
+                // 1. 기본 match 쿼리
+                keywordQueryBuilder.should(Query.of(q -> q
+                        .match(m -> m
+                                .field("username")
+                                .query(requestDto.getKeyword())
+                        )
+                ));
+
+                // 2. 정확한 구문 검색
+                keywordQueryBuilder.should(Query.of(q -> q
+                        .matchPhrase(mp -> mp
+                                .field("username")
+                                .query(requestDto.getKeyword())
+                        )
+                ));
+
+                // 3. 부분 문자열 검색
+                keywordQueryBuilder.should(Query.of(q -> q
+                        .wildcard(w -> w
+                                .field("username")
+                                .wildcard("*" + requestDto.getKeyword() + "*")
+                        )
+                ));
+
+                // 4. 각 글자별 AND 검색
+                if (requestDto.getKeyword().length() > 1) {
+                    BoolQuery.Builder charQueryBuilder = new BoolQuery.Builder();
+
+                    for (int i = 0; i < requestDto.getKeyword().length(); i++) {
+                        String singleChar = String.valueOf(requestDto.getKeyword().charAt(i));
+                        charQueryBuilder.should(Query.of(q -> q
+                                .match(m -> m
+                                        .field("username")
+                                        .query(singleChar)
+                                )
+                        ));
+                    }
+
+                    charQueryBuilder.minimumShouldMatch("" + requestDto.getKeyword().length());
+
+                    keywordQueryBuilder.should(Query.of(q -> q.bool(charQueryBuilder.build())));
+                }
+
+                // 5. 연속된 부분 문자열 검색
+                if (requestDto.getKeyword().length() > 1) {
+                    for (int i = 0; i < requestDto.getKeyword().length() - 1; i++) {
+                        String subString = requestDto.getKeyword().substring(i, i + 2);
+                        keywordQueryBuilder.should(Query.of(q -> q
+                                .match(m -> m
+                                        .field("username")
+                                        .query(subString)
+                                )
+                        ));
+                    }
+                }
             }
 
             boolQueryBuilder.must(Query.of(q -> q.bool(keywordQueryBuilder.build())));
         }
-
-
-
-
 
         Integer page = requestDto.getPage() != null ? requestDto.getPage() - 1 : 0;
         Integer size = requestDto.getSize() != null ? requestDto.getSize() : 20;

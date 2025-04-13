@@ -91,7 +91,6 @@ const DiaryList: React.FC<DiaryListProps> = ({ data, onClose }) => {
             }
             return response.data;
           } catch (error) {
-            console.warn(`Error fetching user ${userSeq}:`, error);
             return null;
           }
         });
@@ -110,8 +109,6 @@ const DiaryList: React.FC<DiaryListProps> = ({ data, onClose }) => {
 
         setDiaries(diariesWithUserInfo);
       } catch (error) {
-        console.error('Error fetching user data:', error);
-        // If there's an error, still show diaries but without user info
         setDiaries(data.data);
       } finally {
         setLoading(false);

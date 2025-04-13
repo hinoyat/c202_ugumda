@@ -70,8 +70,6 @@ spring:
           uri: lb://lucky-service
           predicates:
             - Path=/api/dream-meaning/**
-          filters:
-            - name: JwtAuthFilter
 
         - id: guestbook-service
           uri: lb://guestbook-service

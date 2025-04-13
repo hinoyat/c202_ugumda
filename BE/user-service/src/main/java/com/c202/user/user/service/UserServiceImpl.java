@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserWithSubscriptionDto getRandomUser(Integer userSeq) {
-        User randomUser =  userRepository.findRandomActiveUser().
+        User randomUser =  userRepository.findRandomActiveUserExceptSelf(userSeq).
                 orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
         String isSubscribed = getSubscriptionStatus(randomUser.getUserSeq(), userSeq);

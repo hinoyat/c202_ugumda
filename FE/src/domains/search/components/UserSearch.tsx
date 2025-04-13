@@ -68,11 +68,8 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
       try {
         const response = await api.get('/subscription');
         const friendData = response.data.data;
-        console.log('내 친구 목록:', friendData);
         setFriends(friendData);
-      } catch (error) {
-        console.error('친구 목록 가져오기 오류:', error);
-      }
+      } catch (error) {}
     };
     fetchFriends();
   }, []);
@@ -169,7 +166,6 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
         setPaginatedData(updatedResponse);
         setFilteredUsers(usersWithSubscriptionStatus); // 서버에서 필터링된 결과를 그대로 사용
       } else {
-        console.error('응답 데이터가 예상된 형식이 아닙니다:', response);
         setPaginatedData({
           timestamp: '',
           status: 200,
@@ -187,7 +183,6 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
         setFilteredUsers([]);
       }
     } catch (error) {
-      console.error('사용자 검색 오류:', error);
       setPaginatedData({
         timestamp: '',
         status: 500,
@@ -256,9 +251,7 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
         user.userSeq === userSeq ? { ...user, isSubscribed: true } : user
       );
       setFilteredUsers(updatedFilteredUsers);
-    } catch (error) {
-      console.error('구독 오류:', error);
-    }
+    } catch (error) {}
   };
 
   // 구독 취소 핸들러
@@ -277,24 +270,18 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose }) => {
         (user) => user.subscribedSeq !== subscribedSeq
       );
       setFilteredUsers(updatedFilteredUsers);
-    } catch (error) {
-      console.error('구독 취소 오류:', error);
-    }
+    } catch (error) {}
   };
 
   // 놀러가기 핸들러
   const handleVisit = (userSeq: number) => {
-    console.log('버튼 눌렸따.');
-
     const takeNickname = async () => {
       try {
         const response = await api.get(`/users/seq/${userSeq}`);
         const paramsUsername = response.data.data.username;
         onClose();
         navigate(`/${paramsUsername}`);
-      } catch (error) {
-        console.error(error, '닉네임 추출에 실패하였습니다.');
-      }
+      } catch (error) {}
     };
 
     // 함수 정의 후 실행

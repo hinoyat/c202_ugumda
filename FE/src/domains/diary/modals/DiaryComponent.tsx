@@ -22,6 +22,8 @@ import { videoApi } from '@/domains/diary/api/videoApi';
 import ModalBase from '@/domains/diary/components/modalBase';
 import DiaryTags from '@/domains/diary/components/create_edit/DiaryTags';
 import { dreamApi } from '@/domains/diary/api/dreamApi';
+import { toast } from 'react-toastify';
+import api from '@/apis/apiClient';
 
 interface DiaryComponentProps {
   isOpen?: boolean;
@@ -54,11 +56,8 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
   const [tags, setTags] = useState<string[]>([]);
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [emotion, setEmotion] = useState<string>(''); // 감정태그
+  const [isSaving, setIsSaving] = useState<boolean>(false); // 저장 중 상태 추가
 
-  //   //-------------동영상 생성 가능 횟수도 영상 api 통신 하면서 수정 해야함 --------------//
-  //   const Count = 3; // 동영상 생성 가능 횟수
-
-  // -------------------- 일기 수정 --------------------//
   // 수정모드에서 데이터 불러오기
   useEffect(() => {
     if (isEditing && diaryData) {
@@ -80,8 +79,14 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
     }
   }, [isEditing, diaryData, dispatch]);
 
-  // -------------------- 일기 저장 -------------------- //
+  // 일기 저장 함수
   const handleSave = async () => {
+    // 이미 저장 중이면 중복 실행 방지
+    if (isSaving) return;
+
+    // 저장 시작 상태로 변경
+    setIsSaving(true);
+
     // 수정 시 감정 태그가 비어있으면 기존 값 사용
     const finalEmotion =
       isEditing && !emotion && diaryData ? diaryData.mainEmotion : emotion;
@@ -110,47 +115,44 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         // 내용이 변경된 경우에만 꿈해몽 api 요청
         if (content !== diaryData.content) {
           try {
-            // 여기서 await을 추가하여 API 호출이 완료될 때까지 기다림
-            const dreamResponse = await dreamApi.createDreamMeaning(
-              diaryData.diarySeq,
-              content
-            );
-          } catch (dreamError) {}
-        } else {
+            await dreamApi.createDreamMeaning(diaryData.diarySeq, content);
+          } catch (dreamError) {
+            console.error('꿈해몽 생성 중 오류:', dreamError);
+            // 꿈해몽 오류는 사용자 경험에 핵심적이지 않을 수 있으므로 토스트 메시지만 표시
+            toast.warning('꿈해몽 생성 중 문제가 발생했습니다.', {
+              // position: 'bottom-right',
+              autoClose: 3000,
+            });
+          }
         }
 
         if (onDiaryUpdated) {
           onDiaryUpdated(response.data);
         }
 
+        toast.success('일기가 성공적으로 수정되었습니다.', {
+          // position: 'bottom-right',
+          autoClose: 2000,
+        });
+
         // 모든 처리가 완료된 후 모달 닫기
         if (onClose) {
           onClose();
         }
       } else {
-        // --------------- 생성 모드 ----------------
-
+        // 생성 모드
         const response = await diaryApi.createDiary(diaryToSave);
-
-        console.log('일기 생성 성공✏️✏️', response);
+        const diarySeq = response.data.data.diarySeq;
 
         // 리덕스 스토어에 추가
         dispatch(addDiary(response.data.data));
 
-        // 영상 생성 API 요청
-        const diarySeq = response.data.data.diarySeq;
-
-        // content 문자아닌 것 앞에 / 붙임
-
+        // 영상 생성 및 꿈해몽 API 요청을 동시에 실행하되 모두 완료될 때까지 기다림
         const escapeSpecialCharsForVideo = (text: string) => {
           return text
             .split('')
             .map((char) => {
-              // 백슬래시는 특별한 이스케이프 문자이기 때문에 정규표현식에서 추가 처리가 필요
-              // 백슬래시는 먼저 처리
               if (char === '\\') return '/\\';
-
-              // 한글 음절, 자음, 모음, 알파벳, 숫자, 공백인 경우 그대로 유지
               return /[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]/.test(char)
                 ? char
                 : `/${char}`;
@@ -160,45 +162,59 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
 
         const escapedContent = escapeSpecialCharsForVideo(content);
 
-        videoApi
-          .createVideo({
+        // Promise.allSettled로 모든 API 요청이 완료되기를 기다림
+        await Promise.allSettled([
+          videoApi.createVideo({
             diary_pk: diarySeq,
             content: escapedContent,
-          })
-          .then((response) => {}) // 지우기
-          .catch((videoError) => {});
-
-        // 꿈해몽 생성 api 호출
-        dreamApi
-          .createDreamMeaning(diarySeq, content)
-          .then((dreamResponse) => {})
-          .catch((dreamError) => {});
+          }),
+          dreamApi.createDreamMeaning(diarySeq, content),
+        ]);
 
         // 성공 시 onDiaryCreated 콜백 호출
-        // 부모 컴포넌트(유니버스)로 전달 -> 새로운 일기 별 생성에 사용
         if (onDiaryCreated) {
           onDiaryCreated(response.data);
         }
-      }
 
-      if (onClose) {
-        onClose();
+        toast.success('일기가 성공적으로 저장되었습니다.', {
+          // position: 'bottom-right',
+          autoClose: 2000,
+        });
+
+        // 모든 처리가 완료된 후 모달 닫기
+        if (onClose) {
+          onClose();
+        }
       }
     } catch (error) {
       const err = error as any;
 
       // 에러 응답 확인
       if (err.response && err.response.status === 400) {
-        // 400 에러인 경우 태그 관련 에러 메시지 표시
-        alert('태그는 한글, 영문, 숫자만 사용 가능합니다.');
+        toast.info('태그는 한글, 영문, 숫자만 사용 가능합니다.', {
+          // position: 'top-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
       } else {
-        // 기타 에러
-        alert('일기 저장에 실패했습니다. 다시 시도해주세요.');
+        toast.error('일기 저장에 실패했습니다. 다시 시도해주세요.', {
+          // position: 'top-right',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'dark',
+        });
+        console.error('일기 저장 오류:', error);
       }
+    } finally {
+      // 저장 작업이 완료되면 상태 업데이트
+      setIsSaving(false);
     }
   };
-
-  // ---------- 모달 바깥쪽을 누르면 모달이 닫힘 ---------- //
 
   if (!isOpen) return null;
 
@@ -213,7 +229,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
           <div className="w-full h-full py-8 px-4 pl-8 overflow-y-scroll custom-scrollbar">
             <div className="pr-3 flex flex-col gap-5">
               <DiaryHeader
-                onClose={onClose}
+                onClose={onClose ? onClose : () => {}}
                 isEditing={isEditing}
               />
             </div>
@@ -262,6 +278,7 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
                 onCreate={handleSave}
                 isEditing={isEditing}
                 onDelete={isEditing ? onDeleteDiary : undefined}
+                isLoading={isSaving} // 로딩 상태 전달
               />
             </div>
           </div>

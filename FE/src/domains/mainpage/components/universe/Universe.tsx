@@ -15,6 +15,7 @@ import {
   showDiaryModal,
   hideDiaryModal,
   addDiary,
+  setDiaries,
 } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
 import { Line, OrbitControls } from '@react-three/drei';
@@ -23,6 +24,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as THREE from 'three';
 import { selectVisitUser } from '../../stores/userSelectors';
+import { selectUser } from '@/stores/auth/authSelectors';
+import api from '@/apis/apiClient';
 
 // props의 타입 정의
 interface UniverseProps {
@@ -37,10 +40,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     (state: RootState) => state.diary
   );
   const visitUser = useSelector(selectVisitUser);
+  const loginUser = useSelector(selectUser);
 
   // ------------------- 상태관리 ------------------- //
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [wasJustUpdated, setWasJustUpdated] = useState(false); // 일기 수정 여부 추적
 
   // 별 관련 상태
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]); // 일기 목록
@@ -168,8 +173,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         setShowDetail(true);
       }
     } catch (error) {
-
-
       // 에러 응답 확인
       const err = error as any;
 
@@ -207,14 +210,25 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   };
 
   // 일기 별 생성 -> DiaryComponent로 전달
-  const handleDiaryCreated = (responseData: any) => {
-    const newDiary = responseData.data;
+  const handleDiaryCreated = async (responseData: any) => {
+    // const newDiary = responseData.data;
 
-    // 새로 생성된 일기를 diaryEntries 배열에 추가
-    setDiaryEntries((prev) => [...prev, newDiary]);
+    // 다이어리 시퀀스 기억하기
+    const newDiarySeq = responseData.data.diarySeq;
+    // 백에서 일기 생성하고 별자리 재배치 되었을 테니까 우주 정보 데이터 조회를 해서 거기서 기억한 다이어리 시퀀스 찾아내기
+    const response = await api.get(`/diaries/universe/${loginUser?.userSeq}`);
 
-    // Redux 스토어에도 추가
-    dispatch(addDiary(newDiary));
+    let newDiary: any;
+    if (response) {
+      newDiary = response.data.data.diaries.find(
+        (diary: { diarySeq: number }) => diary.diarySeq === newDiarySeq
+      );
+      // 근데 일기 생성하고 바로 일기 재배치 한 저 위에 우주 정보 데이터를 diaryEntries에 바꿔치기를 해버릴까...?
+      setDiaryEntries(response.data.data.diaries);
+      // 그러면 리덕스에 엤는 diaries를 똑같이 바꿔치기 해버려야해. => dispatch(setDiaries(우주 데이터 중 일기))
+      dispatch(setDiaries(response.data.data.diaries));
+      setConnections(response.data.data.connections);
+    }
 
     // 새 별 id 설정 (노란색 효과를 위해) - 10분 동안 유지
     setNewStarId(newDiary.diarySeq);
@@ -255,8 +269,26 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
   };
 
   // ----------------------- 일기 수정 ---------------------------- //
-  const handleDiaryUpdated = (responseData: any) => {
-    const updatedDiary = responseData.data;
+  const handleDiaryUpdated = async (responseData: any) => {
+    const updatedDiarySeq = responseData.data.diarySeq;
+    const updatedVideoUrl = responseData.data.videoUrl;
+    const updateTags = responseData.data.tags;
+    // 백에서 일기 생성하고 별자리 재배치 되었을 테니까 우주 정보 데이터 조회를 해서 거기서 기억한 다이어리 시퀀스 찾아내기
+    const response = await api.get(`/diaries/universe/${loginUser?.userSeq}`);
+    let updatedDiary: any;
+    if (response) {
+      updatedDiary = response.data.data.diaries.find(
+        (diary: { diarySeq: number }) => diary.diarySeq === updatedDiarySeq
+      );
+      setDiaryEntries(response.data.data.diaries);
+      dispatch(setDiaries(response.data.data.diaries));
+      setConnections(response.data.data.connections);
+    }
+    updatedDiary = {
+      ...updatedDiary,
+      videoUrl: updatedVideoUrl,
+      tags: updateTags,
+    };
 
     // 리덕스 스토어 업데이트
     dispatch(updateDiary(updatedDiary));
@@ -275,7 +307,56 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
     // 수정된 일기 조회 띄우기
     setShowDetail(true);
+
+    // 하이라이트 효과 적용 (반짝임)
+    setHighlightStarId(updatedDiary.diarySeq);
+
+    // 닫고나서 수정 위치 카메라 돌리기
+    // 현재 카메라 위치 저장 (나중에 원래 위치로 돌아가기 위해)
+    if (controlsRef.current) {
+      initialCameraPosition.current = {
+        position: [...controlsRef.current.object.position.toArray()],
+        target: [...controlsRef.current.target.toArray()],
+      };
+    }
+    // 카메라를 새로운 별 위치로 이동
+    if (controlsRef.current) {
+      controlsRef.current.target.set(
+        responseData.data.x,
+        responseData.data.y,
+        responseData.data.z
+      );
+      controlsRef.current.update();
+    }
+    // 5초 후 하이라이트 효과 제거 및 카메라 원위치
+    // setTimeout(() => {
+    //   setHighlightStarId(null); // 반짝이는 효과만 제거
+
+    //   // 카메라를 초기 위치로 부드럽게 복원
+    //   if (controlsRef.current) {
+    //     animateCameraReturn(initialCameraPosition.current);
+    //   }
+    // }, 5000);
+
+    setWasJustUpdated(true);
   };
+
+  useEffect(() => {
+    if (wasJustUpdated) {
+      if (!showDetail) {
+        setTimeout(() => {
+          setHighlightStarId(null); // 반짝이는 효과만 제거
+          if (controlsRef.current) {
+            animateCameraReturn(initialCameraPosition.current);
+          } else {
+            console.log('controlsRef 업대ㅠㅠㅠㅠㅠ');
+          }
+          setWasJustUpdated(false);
+          setCurrentDiaryDetail(null);
+        }, 5000);
+      }
+    }
+  }, [showDetail, wasJustUpdated]);
 
   // ----------------------- 일기 삭제 ---------------------------- //
   const handleDeleteDiary = async () => {
@@ -304,7 +385,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       // 성공 메시지 표시
       alert('일기가 삭제되었습니다.');
     } catch (error) {
-
       alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -349,9 +429,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
             localStorage.removeItem('selectedDiarySeq');
           }
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
 
     if (diaryEntries.length > 0) {
@@ -380,9 +458,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
         if (response && response.data && response.data.data) {
           setDiaryEntries(response.data.data);
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
 
     // userSeq에 맞게 데이터 로드
@@ -399,15 +475,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       try {
         const response = await diaryApi.getUniverseData(visitUser.userSeq);
         if (response && response.data) {
-
           setUniverseData(response.data.data);
           if (response.data.data.connections) {
             setConnections(response.data.data.connections);
           }
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
 
     fetchUniverseData();
@@ -477,6 +550,12 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
 
     return connectionLines;
   };
+
+  useEffect(() => {
+    if (diaryEntries.length > 0) {
+      generateConnectionsFromApi();
+    }
+  }, [diaryEntries]);
 
   return (
     <div
@@ -554,10 +633,10 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
                   [connection.to.x, connection.to.y, connection.to.z],
                 ]}
                 color="rgb(220, 230, 255)" // 연한 푸른 빛 흰색
-                lineWidth={1.8} // 선 두께
+                lineWidth={1.2} // 선 두께
                 dashed // 점선 효과 추가
-                dashSize={1.8} // 점선 크기
-                dashScale={10} // 점선 간격 조정
+                dashSize={2.5} // 점선 크기
+                dashScale={-10} // 점선 간격 조정
                 dashOffset={0} // 점선 시작 위치
               />
             ))}

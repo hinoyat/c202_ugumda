@@ -3,17 +3,30 @@
     "analyzer": {
       "korean": {
         "type": "custom",
-        "tokenizer": "nori_tokenizer",
+        "tokenizer": "my_nori_tokenizer",
         "filter": [
           "lowercase",
           "korean_edge_ngram"
         ]
+      },
+      "korean_search": {
+        "type": "custom",
+        "tokenizer": "my_nori_tokenizer",
+        "filter": [
+          "lowercase"
+        ]
+      }
+    },
+    "tokenizer": {
+      "my_nori_tokenizer": {
+        "type": "nori_tokenizer",
+        "decompound_mode": "mixed"
       }
     },
     "filter": {
       "korean_edge_ngram": {
         "type": "edge_ngram",
-        "min_gram": 2,
+        "min_gram": 1,
         "max_gram": 10
       }
     }

@@ -139,7 +139,7 @@ const SignupForm = () => {
       nav('/login');
     } else {
       toast.error('회원가입에 실패했습니다. 양식을 다시 확인해 주세요.', {
-        position: 'bottom-right',
+        // position: 'top-right',
         autoClose: 3000,
         closeOnClick: true,
         pauseOnHover: true,

@@ -21,7 +21,7 @@ const saveMusicSettings = (isPlaying: boolean, volume: number, customBackgroundT
       JSON.stringify({ isPlaying, volume, customBackgroundTrack })
     );
   } catch (error) {
-    console.error('음악 설정을 저장하는데 실패했습니다:', error);
+    
   }
 };
 
@@ -52,7 +52,7 @@ export const initializeAudio =
 
      // canplaythrough 이벤트: 오디오 충분히 로드되어 끊김 없이 재생 가능할 때
      backgroundAudioInstance.addEventListener('canplaythrough', () => {
-       console.log('📻🎼🎵 배경음악 로드 완료, 재생 준비됨');
+       
 
        // 상태가 '재생 중'이면서 플레이리스트가 재생 중이 아니면 자동으로 재생 시작
        if (state.isPlaying && !state.isPlaylistPlaying) {
@@ -63,26 +63,26 @@ export const initializeAudio =
            // play()는 Promise를 반환하며, 자동 재생 정책으로 실패할 수 있음
            if (playPromise !== undefined) {
              playPromise.catch((error) => {
-               console.error('배경음악 자동 재생 차단됨:', error);
+               
                // 설정 저장 시 현재 상태 반영
                saveMusicSettings(false, state.volume, state.customBackgroundTrack);
              });
            }
          } catch (error) {
-           console.error('배경음악 재생 시도 중 오류 발생:', error);
+           
          }
        }
      });
 
      // 오류 발생 시 처리
      backgroundAudioInstance.addEventListener('error', () => {
-       console.error('배경음악 로드 중 오류 발생');
+       
        dispatch(setAudioLoaded(false));
      });
 
       return true;
     } catch (error) {
-      console.error('배경음악 초기화 실패:', error);
+      
       dispatch(setAudioLoaded(false));
       return false;
     }
@@ -106,7 +106,7 @@ export const togglePlayback =
 
         if (playPromise !== undefined) {
           playPromise.catch((error) => {
-            console.error('재생 시도 중 오류:', error);
+            
             // 실패 시 상태 다시 업데이트
             // dispatch(setIsPlaying(false));
             saveMusicSettings(false, state.volume ,state.customBackgroundTrack);
@@ -120,7 +120,7 @@ export const togglePlayback =
       // 변경된 설정 저장
       saveMusicSettings(willBePlaying, state.volume ,state.customBackgroundTrack);
     } catch (error) {
-      console.error('재생 상태 변경 중 오류 발생:', error);
+      
 
       // 실제 오디오 상태와 리덕스 상태 동기화
       const actuallyPlaying = !backgroundAudioInstance.paused;
@@ -143,17 +143,15 @@ export const changeVolume =
       const state = getState().music;
       saveMusicSettings(state.isPlaying, volume, state.customBackgroundTrack);
     } catch (error) {
-      console.error('볼륨 변경 중 오류 발생:', error);
+      
     }
   };
 
-// --------------------- 플레이리스트 재생 시작 함수 (배경음악 일시정지) --------------------------- //
+// --------------------- 플레이리스트 재생 시작 함수  --------------------------- //
 export const startPlaylistMusic =
 (playlistSrc: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
   try {
-    // 현재 배경음악 일시정지
-    backgroundAudioInstance.pause();
-    
+
     // 플레이리스트 음악 설정 및 재생
     playlistAudioInstance.src = playlistSrc;
     playlistAudioInstance.volume = getState().music.volume;
@@ -231,7 +229,7 @@ export const setAsBackgroundMusic =
     
     return true;
   } catch (error) {
-    console.error('배경음악 설정 중 오류 발생:', error);
+   
     return false;
   }
 };
@@ -253,7 +251,7 @@ export const resetMusicOnLogin =
     
     return true;
   } catch (error) {
-    console.error('배경음악 초기화 중 오류 발생:', error);
+    
     return false;
   }
 };
