@@ -13,6 +13,7 @@ export interface AuthState {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
+  alarmExistence: boolean;
 }
 
 // 로그인 요청 시 필요한 데이터 타입

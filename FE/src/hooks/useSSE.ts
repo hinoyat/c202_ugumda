@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { setAlarmTrue, setAlarmFalse } from '@/stores/auth/authSlice';
 import { RootState } from '@/stores/store';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import api from '@/apis/apiClient';
+import { useAppDispatch } from './hooks';
 
 // EventSource 이벤트 타입 정의
 interface SSEEvent extends Event {
@@ -32,6 +34,8 @@ const useSSE = (url: string): SSEHookReturn => {
   const { isAuthenticated, accessToken } = useSelector(
     (state: RootState) => state.auth
   );
+
+  const dispatch = useAppDispatch();
 
   // 재연결 타이머 참조
   const reconnectTimeoutRef = useRef<number | null>(null);
@@ -85,7 +89,6 @@ const useSSE = (url: string): SSEHookReturn => {
         // 30초 이상 하트비트가 없으면 연결이 끊어진 것으로 간주
         const timeSinceLastHeartbeat = Date.now() - lastHeartbeatRef.current;
         if (timeSinceLastHeartbeat > 30000) {
-          console.warn('30초 이상 하트비트 없음, 연결 재설정');
           cleanup();
           connectSSE();
           return;
@@ -94,11 +97,8 @@ const useSSE = (url: string): SSEHookReturn => {
         // 핑 요청 전송
         await api.get('/notifications/ping');
       } catch (error: any) {
-        console.error('핑 테스트 실패:', error);
-
         // 410 에러(Gone)가 발생하면 연결이 비활성화된 것으로 간주
         if (error.response && error.response.status === 410) {
-          console.log('연결이 비활성화됨. 재연결 시도...');
           cleanup();
           connectSSE();
         }
@@ -149,11 +149,9 @@ const useSSE = (url: string): SSEHookReturn => {
 
       // 연결 오류 이벤트
       eventSource.onerror = (error) => {
-        console.error('SSE 연결 오류:', error);
-
         // 연결 정리
         cleanup();
-        localStorage.removeItem('alarmExistence');
+        dispatch(setAlarmFalse());
 
         // 3초 후 재연결 시도
         reconnectTimeoutRef.current = window.setTimeout(() => {
@@ -269,7 +267,7 @@ const useSSE = (url: string): SSEHookReturn => {
             }
           }
         } catch (error) {
-          console.error('알림 데이터 파싱 오류:', error);
+          console.error('알림 데이터 파싱 오류:');
         }
       }) as EventListener);
 
@@ -288,9 +286,9 @@ const useSSE = (url: string): SSEHookReturn => {
         lastHeartbeatRef.current = Date.now();
         const data = JSON.parse(event.data);
         if (data.count > 0) {
-          localStorage.setItem('alarmExistence', 'Y');
+          dispatch(setAlarmTrue());
         } else {
-          localStorage.setItem('alarmExistence', 'N');
+          dispatch(setAlarmFalse());
         }
       }) as EventListener);
 
@@ -298,9 +296,8 @@ const useSSE = (url: string): SSEHookReturn => {
         lastHeartbeatRef.current = Date.now();
       }) as EventListener);
     } catch (error) {
-      console.error('SSE 연결 생성 중 오류:', error);
       isConnectingRef.current = false;
-      localStorage.removeItem('alarmExistence');
+      dispatch(setAlarmFalse());
 
       // 오류 발생 시 3초 후 재시도
       reconnectTimeoutRef.current = window.setTimeout(() => {

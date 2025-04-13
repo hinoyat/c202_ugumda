@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdHomeFilled } from 'react-icons/md';
 import { BsEnvelopePaperHeartFill } from 'react-icons/bs';
 
@@ -10,7 +10,7 @@ import GuestBook from '../guestbook/GuestBook';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AlarmList from '../alarm/AlarmList';
-import { selectUser } from '@/stores/auth/authSelectors';
+import { selectUser, selectAlarmExistence } from '@/stores/auth/authSelectors';
 import { resetAlarms } from '../alarm/stores/alarmSlice';
 
 import { showGuestbookModal } from '@/stores/guestbook/guestbookSlice';
@@ -20,9 +20,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
-  const [hasAlarm, setHasAlarm] = useState(false);
 
-  const alarmExistence = localStorage.getItem('alarmExistence');
+  const alarmExistence = useSelector(selectAlarmExistence);
 
   // 모달 열림 여부
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,14 +35,6 @@ const Navbar = () => {
   const onClickGuestBookModal = () => {
     dispatch(showGuestbookModal());
   };
-
-  useEffect(() => {
-    if (alarmExistence === 'Y') {
-      setHasAlarm(true);
-    } else {
-      setHasAlarm(false);
-    }
-  }, [alarmExistence]);
 
   // 알림 모달 열림 여부
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
@@ -86,7 +77,7 @@ const Navbar = () => {
           data-tooltip-content="검색하기"
         />
         {/* bell */}
-        {hasAlarm ? (
+        {alarmExistence ? (
           <VscBellDot
             onClick={isAlarmOpen ? closeAlarm : openAlarm}
             className="hover:text-white cursor-pointer w-6 h-6"

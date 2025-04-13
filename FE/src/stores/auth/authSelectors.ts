@@ -9,3 +9,6 @@ export const selectIsAuthenticated = (state: RootState) =>
 
 // 액세스 토큰 가져오기 (API 호출 시 사용 가능)
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
+
+export const selectAlarmExistence = (state: RootState) =>
+  state.auth.alarmExistence;
