@@ -22,10 +22,10 @@ public class UserDocument {
     @Field(type = FieldType.Integer)
     private Integer userSeq;
 
-    @Field(type = FieldType.Text, analyzer = "korean")
+    @Field(type = FieldType.Text, analyzer = "korean", searchAnalyzer = "korean_search")
     private String username;
 
-    @Field(type = FieldType.Text, analyzer = "korean")
+    @Field(type = FieldType.Text, analyzer = "korean", searchAnalyzer = "korean_search")
     private String nickname;
 
     @Field(type = FieldType.Keyword)
