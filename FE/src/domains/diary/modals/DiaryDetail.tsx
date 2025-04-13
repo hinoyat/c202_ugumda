@@ -50,6 +50,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   } | null>(null);
   const [loadingDreamMeaning, setLoadingDreamMeaning] = useState(false);
   const [isVideoGenerating, setIsVideoGenerating] = useState(false); // 꿈영상 재생성
+  const [isPendingVideo, setIsPendingVideo] = useState(false);       // 꿈영상중 = pending
   // ------------------------------------------ //
 
   // 날짜 포맷 함수
@@ -90,6 +91,16 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     } catch (error) {}
   };
 
+  // ---------- 꿈영상 생성중 = pending ----------- //
+
+  useEffect(()=>{
+
+    if(initialDiary.videoUrl === 'pending'){
+      setIsPendingVideo(true)
+    }else{
+      setIsPendingVideo(false)
+    }
+  },[initialDiary.videoUrl]);
   // ---------- 꿈영상 재생성 ----------- //
 
   const handleVideoRetry = async () => {
@@ -143,6 +154,28 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     fetchDreamMeaning();
   }, [initialDiary.diarySeq]);
 
+  // --------- 오늘 날짜 확인  ---------- //
+    const isTodayDiary = () => {
+      if (!currentDiary.createdAt || currentDiary.createdAt.length < 8) return false;
+      
+      // createdAt에서 날짜 부분만 추출 (YYYYMMDD)
+      const year = currentDiary.createdAt.substring(0, 4);
+      const month = currentDiary.createdAt.substring(4, 6);
+      const day = currentDiary.createdAt.substring(6, 8);
+      const diaryDateStr = `${year}${month}${day}`;
+     
+      
+      // 오늘 날짜를 "YYYYMMDD" 형식으로 변환
+      const today = new Date();
+      const todayYear = today.getFullYear();
+      const todayMonth = String(today.getMonth() + 1).padStart(2, '0');
+      const todayDay = String(today.getDate()).padStart(2, '0');
+      const todayStr = `${todayYear}${todayMonth}${todayDay}`;
+
+      
+      return diaryDateStr === todayStr;
+    };
+
   return (
     <>
       {/* 모달 바깥 부분 */}
@@ -180,11 +213,11 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                   <div className="w-[90%] mb-14 mx-auto flex justify-center items-center h-64">
                     {/* 영상 */}
                     <DetailVideo
-                      dream_video={currentDiary.videoUrl || null}
-                      onVideoRetry={
-                        !currentDiary.videoUrl ? handleVideoRetry : undefined
+                      dream_video={currentDiary.videoUrl && currentDiary.videoUrl !== 'pending' ? currentDiary.videoUrl : null}
+                      onVideoRetry={currentDiary.videoUrl === null ? handleVideoRetry : undefined
                       }
                       isVideoGenerating={isVideoGenerating}
+                      isPendingVideo={isPendingVideo}
                       isMySpace={isMySpace}
                     />
                   </div>
@@ -249,7 +282,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
                 {/* 4. 운세보러가기 버튼 */}
                 <div className="flex flex-col items-end">
-                  {dreamMeaning && isMySpace && (
+                  {dreamMeaning && isMySpace && isTodayDiary() && (
                     <>
                       <DestinyButton isGood={dreamMeaning.isGood} />
                       <p className="text-white/85 text-xs mt-2 text-right">
