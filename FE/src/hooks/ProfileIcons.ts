@@ -138,10 +138,10 @@ export const iconWeights: IconWeight[] = Array.from({ length: 56 }, (_, i) => ({
 
 // id는 1부터 시작하므로 배열 인덱스와 동일하게 설정하려면 -1을 해줍니다
 // 매우 희귀한 아이콘 설정
-iconWeights[19].weight = 3;  // 아이콘 20
+iconWeights[19].weight = 1;  // 아이콘 20
 iconWeights[19].isRare = true;
 
-iconWeights[21].weight = 3;  // 아이콘 22
+iconWeights[21].weight = 1;  // 아이콘 22
 iconWeights[21].isRare = true;
 
 iconWeights[20].weight = 0.5;  // 아이콘 21

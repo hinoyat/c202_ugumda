@@ -76,6 +76,8 @@ const MusicPlaylist: React.FC = () => {
   const playheadRef = useRef<HTMLDivElement>(null);
   const playlistContainerRef = useRef<HTMLDivElement>(null);
   const firstRenderRef = useRef(true);
+  // 이 플래그는 Redux를 통한 재생인지 로컬 audio 요소를 통한 재생인지 추적
+  const usingReduxAudio = useRef(false);
 
   // dominantEmotion 변경 시 categoryToShow 업데이트
   useEffect(() => {
@@ -102,13 +104,13 @@ const MusicPlaylist: React.FC = () => {
   // 컴포넌트 마운트 시 배경음악 중지, 언마운트 시 플레이리스트 음악 정지
   useEffect(() => {
     dispatch(stopBackgroundMusic() as any);
-    // displayMusicList가 초기화되지 않았다면 로딩이므로 로그 출력은 생략
-    if (displayMusicList.length > 0) {
-    }
+    
     return () => {
-      dispatch(stopPlaylistMusic() as any);
+      if (usingReduxAudio.current) {
+        dispatch(stopPlaylistMusic() as any);
+      }
     };
-  }, [dispatch, displayMusicList]);
+  }, [dispatch]);
 
   // 볼륨 변경 시 playerRef.volume 업데이트
   useEffect(() => {
@@ -122,17 +124,34 @@ const MusicPlaylist: React.FC = () => {
     if (!playerRef.current || !timelineRef.current || !playheadRef.current)
       return;
 
-    playerRef.current.addEventListener('timeupdate', timeUpdate);
-    playerRef.current.addEventListener('ended', nextSong);
-    timelineRef.current.addEventListener('click', changeCurrentTime);
+    const player = playerRef.current;
+    const timeline = timelineRef.current;
+    
+    const timeUpdateHandler = () => {
+      if (!usingReduxAudio.current) {
+        timeUpdate();
+      }
+    };
+    
+    const nextSongHandler = () => {
+      if (!usingReduxAudio.current) {
+        nextSong();
+      }
+    };
+    
+    // 타임라인 클릭 이벤트 핸들러를 수정
+    const changeTimeHandler = (e: MouseEvent) => changeCurrentTime(e);
+    
+    player.addEventListener('timeupdate', timeUpdateHandler);
+    player.addEventListener('ended', nextSongHandler);
+    timeline.addEventListener('click', changeTimeHandler);
 
     return () => {
-      if (!playerRef.current || !timelineRef.current) return;
-      playerRef.current.removeEventListener('timeupdate', timeUpdate);
-      playerRef.current.removeEventListener('ended', nextSong);
-      timelineRef.current.removeEventListener('click', changeCurrentTime);
+      player.removeEventListener('timeupdate', timeUpdateHandler);
+      player.removeEventListener('ended', nextSongHandler);
+      timeline.removeEventListener('click', changeTimeHandler);
     };
-  }, []);
+  }, [index, displayMusicList]);
 
   // index 변경 시 player 업데이트 및 목록 내 해당 항목 스크롤
   useEffect(() => {
@@ -159,19 +178,31 @@ const MusicPlaylist: React.FC = () => {
 
   const updatePlayer = (): void => {
     if (!playerRef.current) return;
-    playerRef.current.load();
-
-    // guard: displayMusicList가 비어있지 않은 경우만 실행
     if (displayMusicList.length === 0) return;
 
+    // redux를 통해 재생하고 있었다면 중지
+    if (usingReduxAudio.current) {
+      dispatch(stopPlaylistMusic() as any);
+    }
+
     if (isPlaying) {
-      // load 후 약간의 지연 후 자동 재생
-      setTimeout(() => {
-        if (playerRef.current) {
-          playerRef.current.play();
-          dispatch(startPlaylistMusic(displayMusicList[index].audio) as any);
-        }
-      }, 100);
+      if (usingReduxAudio.current) {
+        // Redux 오디오 인스턴스 사용
+        dispatch(startPlaylistMusic(displayMusicList[index].audio) as any);
+      } else {
+        // 로컬 오디오 태그 사용
+        playerRef.current.load();
+        // load 후 약간의 지연 후 자동 재생
+        setTimeout(() => {
+          if (playerRef.current) {
+            playerRef.current.play()
+              .catch(error => {
+                console.error("재생 오류:", error);
+                setIsPlaying(false);
+              });
+          }
+        }, 100);
+      }
     }
   };
 
@@ -181,7 +212,6 @@ const MusicPlaylist: React.FC = () => {
     const currentSong = displayMusicList[index];
     dispatch(setAsBackgroundMusic(currentSong.audio) as any);
     toast.success(`${currentSong.name}이(가) 배경음악으로 설정되었습니다.`, {
-      // position: 'top-right',
       autoClose: 3000,
       closeOnClick: true,
       pauseOnHover: true,
@@ -210,6 +240,9 @@ const MusicPlaylist: React.FC = () => {
       return;
 
     const duration = playerRef.current.duration;
+    // 음악이 로드되기 전에 duration이 NaN인 경우를 처리
+    if (isNaN(duration)) return;
+    
     const playPercent = 100 * (playerRef.current.currentTime / duration);
     playheadRef.current.style.width = `${playPercent}%`;
 
@@ -221,69 +254,119 @@ const MusicPlaylist: React.FC = () => {
       return;
 
     const duration = playerRef.current.duration;
-    const playheadWidth = timelineRef.current.offsetWidth;
-    const offsetWidth = timelineRef.current.offsetLeft;
-    const userClickWidth = e.clientX - offsetWidth;
-    const userClickWidthInPercent = (userClickWidth * 100) / playheadWidth;
-
-    playheadRef.current.style.width = `${userClickWidthInPercent}%`;
-    playerRef.current.currentTime = (duration * userClickWidthInPercent) / 100;
+    if (isNaN(duration)) return; // duration이 유효하지 않은 경우 처리
+    
+    // 재생 중이었는지 상태 저장
+    const wasPlaying = !playerRef.current.paused;
+    
+    // 재생 중이었다면 일시 정지
+    if (wasPlaying) {
+      playerRef.current.pause();
+    }
+    
+    // 타임라인의 정확한 위치와 너비 계산
+    const timelineRect = timelineRef.current.getBoundingClientRect();
+    const clickPosition = e.clientX - timelineRect.left;
+    const timelineWidth = timelineRect.width;
+    
+    // 클릭한 위치의 비율 계산 (0~1 사이의 값)
+    const ratio = Math.max(0, Math.min(1, clickPosition / timelineWidth));
+    
+    // 비율에 따른 새로운 시간 계산
+    const newTime = duration * ratio;
+    
+    // 플레이헤드 UI 업데이트
+    playheadRef.current.style.width = `${ratio * 100}%`;
+    
+    // 실제 재생 위치 업데이트
+    playerRef.current.currentTime = newTime;
+    
+    // 현재 시간 표시 업데이트
+    setCurrentTime(formatTime(newTime));
+    
+    // 재생 중이었다면 짧은 지연 후에 다시 재생 시작
+    if (wasPlaying) {
+      setTimeout(() => {
+        if (playerRef.current) {
+          playerRef.current.play()
+            .catch(error => {
+              console.error("재생 위치 이동 후 재생 오류:", error);
+              setIsPlaying(false);
+            });
+        }
+      }, 50); // 짧은 지연으로 오디오 겹침 방지
+    }
   };
 
   const nextSong = (): void => {
     if (displayMusicList.length === 0) return;
-    setIndex((prevIndex) => (prevIndex + 1) % displayMusicList.length);
-
-    if (isPlaying && playerRef.current) {
+    
+    // Redux를 통한 재생인 경우 중지
+    if (usingReduxAudio.current) {
       dispatch(stopPlaylistMusic() as any);
-      setTimeout(() => {
-        dispatch(
-          startPlaylistMusic(
-            displayMusicList[(index + 1) % displayMusicList.length].audio
-          ) as any
-        );
-      }, 100);
     }
+    
+    setIndex((prevIndex) => (prevIndex + 1) % displayMusicList.length);
   };
 
   const prevSong = (): void => {
     if (displayMusicList.length === 0) return;
+    
+    // Redux를 통한 재생인 경우 중지
+    if (usingReduxAudio.current) {
+      dispatch(stopPlaylistMusic() as any);
+    }
+    
     setIndex(
       (prevIndex) =>
         (prevIndex + displayMusicList.length - 1) % displayMusicList.length
     );
-
-    if (isPlaying && playerRef.current) {
-      playerRef.current.play();
-    }
   };
 
   const playOrPause = (): void => {
     if (!playerRef.current || displayMusicList.length === 0) return;
 
-    if (isPlaying) {
-      playerRef.current.pause();
-      dispatch(stopPlaylistMusic() as any);
-      setIsPlaying(false);
+    setIsPlaying(!isPlaying);
+
+    if (!isPlaying) {
+      // 재생 시작
+      playerRef.current.load();
+      playerRef.current.play()
+        .catch(error => {
+          console.error("재생 오류:", error);
+          setIsPlaying(false);
+        });
     } else {
-      playerRef.current.play();
-      // dispatch(startPlaylistMusic(currentSong.audio));
-      setIsPlaying(true);
+      // 일시 정지
+      playerRef.current.pause();
+      
+      // Redux를 통한 재생인 경우 중지
+      if (usingReduxAudio.current) {
+        dispatch(stopPlaylistMusic() as any);
+      }
     }
   };
 
   const clickAudio = (key: number): void => {
     if (displayMusicList.length === 0) return;
 
+    // 이미 Redux 오디오가 재생 중이면 중지
+    if (usingReduxAudio.current) {
+      dispatch(stopPlaylistMusic() as any);
+    }
+    
     setIndex(key);
+    setIsPlaying(true);
 
     if (playerRef.current) {
       playerRef.current.load();
-      setIsPlaying(true);
       setTimeout(() => {
         if (playerRef.current) {
-          playerRef.current.play();
-          dispatch(startPlaylistMusic(displayMusicList[key].audio) as any);
+          playerRef.current.play()
+            .catch(error => {
+              console.error("재생 오류:", error);
+              setIsPlaying(false);
+            });
         }
       }, 100);
     }
@@ -327,10 +410,21 @@ const MusicPlaylist: React.FC = () => {
     "data:image/svg+xml,%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 56 56' style='enable-background:new 0 0 56 56;' xml:space='preserve'%3E%3Cpath style='fill:%23071739;' d='M47.799,8.201c-10.935-10.935-28.663-10.935-39.598,0c-10.935,10.935-10.935,28.663,0,39.598 c10.935,10.935,28.663,10.935,39.598,0C58.734,36.864,58.734,19.136,47.799,8.201z M32.95,32.95c-2.734,2.734-7.166,2.734-9.899,0 c-2.734-2.734-2.734-7.166,0-9.899s7.166-2.734,9.899,0S35.683,30.216,32.95,32.95z'/%3E%3Cpath style='fill:%23E7ECED;' d='M35.778,20.222c-4.296-4.296-11.261-4.296-15.556,0c-4.296,4.296-4.296,11.261,0,15.556 c4.296,4.296,11.261,4.296,15.556,0C40.074,31.482,40.074,24.518,35.778,20.222z M30.121,30.121c-1.172,1.172-3.071,1.172-4.243,0 s-1.172-3.071,0-4.243s3.071-1.172,4.243,0S31.293,28.95,30.121,30.121z'/%3E%3Cg%3E%3Cpath style='fill:%23709fdc;' d='M35.778,35.778c-0.76,0.76-1.607,1.378-2.504,1.87l8.157,14.92c2.284-1.25,4.434-2.835,6.368-4.769 c1.934-1.934,3.519-4.084,4.769-6.368l-14.92-8.157C37.157,34.172,36.538,35.018,35.778,35.778z'/%3E%3Cpath style='fill:%23709fdc;' d='M20.222,20.222c0.76-0.76,1.607-1.378,2.504-1.87l-8.157-14.92c-2.284,1.25-4.434,2.835-6.368,4.769 s-3.519,4.084-4.769,6.368l14.92,8.157C18.843,21.828,19.462,20.982,20.222,20.222z'/%3E%3C/g%3E%3C/svg%3E";
 
   return (
-    <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-17">
-      <div className="flex flex-col justify-center items-center max-w-[370px] py-0 px-[5px] mt-[0px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
-        <div className="flex flex-col items-center w-full py-[12px] px-0 pt-5 rounded-[20px] text-[#071739] bg-white">
-          <audio ref={playerRef}>
+    <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div className="flex flex-col justify-center items-center max-w-[370px] h-130 py-0 px-[5px] mt-[70px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] overflow-hidden">
+        <div className="flex flex-col items-center w-full  pt-2.5 rounded-[20px] text-[#071739] bg-white">
+          <div className="flex flex-col items-center">
+          <audio 
+            ref={playerRef}
+            onLoadedMetadata={() => {
+              if (playerRef.current) {
+                setCurrentTime("0:00");
+                if (playheadRef.current) {
+                  playheadRef.current.style.width = "0%";
+                }
+              }
+            }}
+          >
             <source
               src={currentSong.audio}
               type="audio/ogg"
@@ -338,10 +432,10 @@ const MusicPlaylist: React.FC = () => {
             Your browser does not support the audio element.
           </audio>
 
-          <div className="relative mx-auto w-[270px] h-[190px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
+          <div className="mx-auto w-[270px] flex flex-col items-center">
             <button
               onClick={setCurrentAsBackground}
-              className="absolute top-[8px] left-1/2 transform -translate-x-1/2 text-xs z-10 flex items-center justify-center px-[15px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
+              className="mb-[8px] text-xs flex items-center justify-center px-[15px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
               <FontAwesomeIcon
                 icon={faMusic}
                 className="mr-[4px]"
@@ -349,17 +443,19 @@ const MusicPlaylist: React.FC = () => {
               배경음악으로 설정
             </button>
 
-            <img
-              src={currentSong.img}
-              alt={currentSong.name}
-              className="w-full h-full object-cover"
-            />
+            <div className="w-[270px] h-[190px] overflow-hidden rounded-[20px] shadow-[0px_10px_40px_0px_rgba(39,70,132,0.7)]">
+              <img
+                src={currentSong.img}
+                alt={currentSong.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
 
           <span className="mt-[22px] text-[22px]">{currentSong.name}</span>
           <span className="text-[#709fdc]">{currentSong.category}</span>
 
-          <div className="flex justify-between mt-[5px] w-[240px]">
+          <div className="flex justify-between  w-[240px]">
             <div>{currentTime}</div>
             <div>{currentSong.duration}</div>
           </div>
@@ -415,11 +511,12 @@ const MusicPlaylist: React.FC = () => {
               </div>
             )}
           </div>
+          </div>
         </div>
 
         <div
           ref={playlistContainerRef}
-          className="flex flex-col p-[10px] h-[160px] overflow-y-scroll [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-thumb]:rounded-[5px] [&::-webkit-scrollbar-track]:bg-[#071739]">
+          className="flex flex-col p-[8px] h-[160px] overflow-y-scroll [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-thumb]:rounded-[5px] [&::-webkit-scrollbar-track]:bg-[#071739]">
           {displayMusicList.map((music, key) => (
             <div
               key={key}
