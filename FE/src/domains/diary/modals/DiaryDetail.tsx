@@ -50,6 +50,7 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
   } | null>(null);
   const [loadingDreamMeaning, setLoadingDreamMeaning] = useState(false);
   const [isVideoGenerating, setIsVideoGenerating] = useState(false); // 꿈영상 재생성
+  const [isPendingVideo, setIsPendingVideo] = useState(false);       // 꿈영상중 = pending
   // ------------------------------------------ //
 
   // 날짜 포맷 함수
@@ -90,6 +91,16 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
     } catch (error) {}
   };
 
+  // ---------- 꿈영상 생성중 = pending ----------- //
+
+  useEffect(()=>{
+
+    if(initialDiary.videoUrl === 'pending'){
+      setIsPendingVideo(true)
+    }else{
+      setIsPendingVideo(false)
+    }
+  },[initialDiary.videoUrl]);
   // ---------- 꿈영상 재생성 ----------- //
 
   const handleVideoRetry = async () => {
@@ -180,11 +191,11 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
                   <div className="w-[90%] mb-14 mx-auto flex justify-center items-center h-64">
                     {/* 영상 */}
                     <DetailVideo
-                      dream_video={currentDiary.videoUrl || null}
-                      onVideoRetry={
-                        !currentDiary.videoUrl ? handleVideoRetry : undefined
+                      dream_video={currentDiary.videoUrl && currentDiary.videoUrl !== 'pending' ? currentDiary.videoUrl : null}
+                      onVideoRetry={currentDiary.videoUrl === null ? handleVideoRetry : undefined
                       }
                       isVideoGenerating={isVideoGenerating}
+                      isPendingVideo={isPendingVideo}
                       isMySpace={isMySpace}
                     />
                   </div>
