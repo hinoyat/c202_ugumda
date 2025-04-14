@@ -509,7 +509,7 @@ const MusicPlaylist: React.FC = () => {
                   step="0.01"
                   value={localVolume}
                   onChange={handleVolumeChange}
-                  className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
+                  className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
                 />
               </div>
             )}
