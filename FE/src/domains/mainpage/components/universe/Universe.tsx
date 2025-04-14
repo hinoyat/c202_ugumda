@@ -12,9 +12,7 @@ import {
   removeDiary,
   setCurrentDiary,
   updateDiary,
-  showDiaryModal,
   hideDiaryModal,
-  addDiary,
   setDiaries,
 } from '@/stores/diary/diarySlice';
 import { RootState } from '@/stores/store';
@@ -26,6 +24,7 @@ import * as THREE from 'three';
 import { selectVisitUser } from '../../stores/userSelectors';
 import { selectUser } from '@/stores/auth/authSelectors';
 import api from '@/apis/apiClient';
+import { toast } from 'react-toastify';
 
 // props의 타입 정의
 interface UniverseProps {
@@ -182,19 +181,52 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           err.response.data &&
           err.response.data.message === '해당 일기를 찾을 수 없습니다.'
         ) {
-          alert('해당 일기를 찾을 수 없습니다.');
+          toast.error('해당 일기를 찾을 수 없습니다.', {
+            // position: 'bottom-right',
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'dark',
+          });
         } else {
-          alert('일기 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+          toast.error(
+            '일기 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+            {
+              // position: 'bottom-right',
+              autoClose: 3000,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              theme: 'dark',
+            }
+          );
         }
       } else if (err.response && err.response.status === 401) {
         // 401 권한 오류 처리
-        alert(
-          '로그인이 필요하거나 세션이 만료되었습니다. 다시 로그인해주세요.'
+        toast.error(
+          '로그인이 필요하거나 세션이 만료되었습니다. 다시 로그인해주세요.',
+          {
+            // position: 'bottom-right',
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'dark',
+          }
         );
       } else {
         // 기타 오류
-        alert(
-          '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+        toast.error(
+          '일기를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+          {
+            // position: 'bottom-right',
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'dark',
+          }
         );
       }
     }
@@ -328,16 +360,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       );
       controlsRef.current.update();
     }
-    // 5초 후 하이라이트 효과 제거 및 카메라 원위치
-    // setTimeout(() => {
-    //   setHighlightStarId(null); // 반짝이는 효과만 제거
-
-    //   // 카메라를 초기 위치로 부드럽게 복원
-    //   if (controlsRef.current) {
-    //     animateCameraReturn(initialCameraPosition.current);
-    //   }
-    // }, 5000);
-
     setWasJustUpdated(true);
   };
 
@@ -348,8 +370,6 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
           setHighlightStarId(null); // 반짝이는 효과만 제거
           if (controlsRef.current) {
             animateCameraReturn(initialCameraPosition.current);
-          } else {
-            console.log('controlsRef 업대ㅠㅠㅠㅠㅠ');
           }
           setWasJustUpdated(false);
           setCurrentDiaryDetail(null);
@@ -365,15 +385,26 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
     try {
       await diaryApi.deleteDiary(currentDiaryDetail.diarySeq);
 
+      // 백에서 일기 생성하고 별자리 재배치 되었을 테니까 우주 정보 데이터 조회를 해서 거기서 기억한 다이어리 시퀀스 찾아내기
+      const response = await api.get(`/diaries/universe/${loginUser?.userSeq}`);
+
+      if (response) {
+        // 근데 일기 생성하고 바로 일기 재배치 한 저 위에 우주 정보 데이터를 diaryEntries에 바꿔치기를 해버릴까...?
+        setDiaryEntries(response.data.data.diaries);
+        // 그러면 리덕스에 엤는 diaries를 똑같이 바꿔치기 해버려야해. => dispatch(setDiaries(우주 데이터 중 일기))
+        dispatch(setDiaries(response.data.data.diaries));
+        setConnections(response.data.data.connections);
+      }
+
       // 성공 시 로컬 상태 업데이트
-      setDiaryEntries((prevEntries) =>
-        prevEntries.filter(
-          (entry) => entry.diarySeq !== currentDiaryDetail.diarySeq
-        )
-      );
+      // setDiaryEntries((prevEntries) =>
+      //   prevEntries.filter(
+      //     (entry) => entry.diarySeq !== currentDiaryDetail.diarySeq
+      //   )
+      // );
 
       // 리덕스 스토어에서도 제거
-      dispatch(removeDiary(currentDiaryDetail.diarySeq));
+      // dispatch(removeDiary(currentDiaryDetail.diarySeq));
 
       // 조회 모달 닫기
       setShowDetail(false);
@@ -383,9 +414,23 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
       setShowForm(false);
 
       // 성공 메시지 표시
-      alert('일기가 삭제되었습니다.');
+      toast.error('일기가 삭제되었습니다.', {
+        // position: 'bottom-right',
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
     } catch (error) {
-      alert('일기 삭제에 실패했습니다. 다시 시도해주세요.');
+      toast.error('일기 삭제에 실패했습니다. 다시 시도해주세요.', {
+        // position: 'bottom-right',
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark',
+      });
     }
   };
 
