@@ -286,3 +286,4 @@ const GuestBook: React.FC<MainPageProps> = ({ onClose }) => {
 };
 
 export default GuestBook;
+
