@@ -411,8 +411,8 @@ const MusicPlaylist: React.FC = () => {
 
   return (
     <div className="absolute w-[110%] top-[1100%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <div className="flex flex-col items-center max-w-[370px] h-130 py-0 px-[5px] mt-[70px] ml-[4vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] ">
-        <div className="flex flex-col items-center w-full h-[70%] pt-2.5 rounded-[20px] text-[#071739] bg-white">
+      <div className="flex flex-col items-center max-w-[360px] h-130 py-0 px-[5px] mt-[15vh] ml-[3vw] rounded-[20px] text-white font-light shadow-[0px_0px_70px_0px_#274684] bg-[#071739] ">
+        <div className="flex flex-col items-center w-[98%] h-[77%] pt-3 rounded-[20px] text-[#071739] bg-white">
           <div className="flex flex-col items-center">
           <audio 
             ref={playerRef}
@@ -422,6 +422,8 @@ const MusicPlaylist: React.FC = () => {
                 if (playheadRef.current) {
                   playheadRef.current.style.width = "0%";
                 }
+                playerRef.current.volume = 0.2;
+                setLocalVolume(0.2); 
               }
             }}
           >
@@ -435,15 +437,15 @@ const MusicPlaylist: React.FC = () => {
           <div className="mx-auto w-[270px] flex flex-col items-center">
             <button
               onClick={setCurrentAsBackground}
-              className="mb-[8px] text-xs flex items-center justify-center px-[15px] py-[6px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
+              className="mb-[5px] text-[12px] flex items-center justify-center px-[17px] py-[8px] rounded-[20px] bg-[#709fdc] text-white transition-[0.2s] cursor-pointer hover:bg-[#4d7fd8]">
               <FontAwesomeIcon
                 icon={faMusic}
-                className="mr-[4px]"
+                className="mr-[4px] text-[13px]"
               />
               배경음악으로 설정
             </button>
 
-            <div className="w-full h-[75%] overflow-hidden rounded-[20px] shadow-[0px_10px_20px_0px_rgba(39,70,132,0.7)] mt-1">
+            <div className="w-[95%] h-[75%] overflow-hidden rounded-[20px] shadow-[0px_10px_20px_0px_rgba(39,70,132,0.7)] mt-2">
               <img
                 src={currentSong.img}
                 alt={currentSong.name}
@@ -453,32 +455,32 @@ const MusicPlaylist: React.FC = () => {
           </div>
 
 
-          <span className="mt-[3px] text-[18px] font-bold">{currentSong.name}</span>
+          <span className="mt-[3px] text-[17px] font-bold">{currentSong.name}</span>
           <span className="text-[#709fdc]">{currentSong.category}</span>
 
-          <div className="flex justify-between  w-[240px]">
+          <div className="flex justify-between  w-[230px]">
             <div>{currentTime}</div>
             <div>{currentSong.duration}</div>
           </div>
 
           <div
             ref={timelineRef}
-            className="relative mx-auto w-[240px] h-[5px] bg-[#709fdc] rounded-[5px] cursor-pointer hover:[&_.hover-playhead]:opacity-100">
+            className="relative mx-auto w-[230px] h-[5px] bg-[#709fdc] rounded-[5px] cursor-pointer hover:[&_.hover-playhead]:opacity-100">
             <div
               ref={playheadRef}
               className="relative z-[2] w-0 h-[5px] rounded-[5px] bg-[#071739]"></div>
           </div>
 
-          <div className="mt-[1vh] flex items-center justify-center">
+          <div className="mt-[1.5vh] flex items-center justify-center">
             <button
               onClick={prevSong}
-              className="text-[#071739] rounded-full mr-[5px] ml-[1.8vw] text-[15px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+              className="text-[#071739] rounded-full mr-[5px] ml-[1.8vw] text-[19px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
               <FontAwesomeIcon icon={faBackward} />
             </button>
 
             <button
               onClick={playOrPause}
-              className="text-[#071739] rounded-full mx-[10px] text-[15px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[36px] h-[36px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
+              className="text-[#071739] rounded-full mx-[10px] text-[18px] text-center transition-[0.2s] cursor-pointer border border-[#e2e2e2] bg-[transparent] focus:outline-none w-[36px] h-[36px] hover:left-0 hover:shadow-[0px_0px_15px_0px_rgba(39,70,132,0.7)]">
               {isPlaying ? (
                 <FontAwesomeIcon icon={faStop} />
               ) : (
@@ -488,13 +490,13 @@ const MusicPlaylist: React.FC = () => {
 
             <button
               onClick={nextSong}
-              className="text-[#071739] rounded-full mx-[5px] text-[15px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
+              className="text-[#071739] rounded-full mx-[5px] text-[19px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[35px] h-[35px] hover:transform hover:scale-[1.2]">
               <FontAwesomeIcon icon={faForward} />
             </button>
 
             <button
               onClick={toggleVolumeSlider}
-              className="text-[#071739] rounded-full mr-[1px] text-[15px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]">
+              className="text-[#071739] rounded-full mr-[1px] text-[19px] text-center transition-[0.2s] cursor-pointer border-none bg-[transparent] focus:outline-none w-[30px] h-[30px] hover:transform hover:scale-[1.1]">
               <FontAwesomeIcon icon={getVolumeIcon()} />
             </button>
 
@@ -507,7 +509,7 @@ const MusicPlaylist: React.FC = () => {
                   step="0.01"
                   value={localVolume}
                   onChange={handleVolumeChange}
-                  className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
+                  className="w-full h-[4px] bg-[#709fdc] rounded-[5px] appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-10px] [&::-webkit-slider-thumb]:h-[10px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#071739] [&::-webkit-slider-thumb]:cursor-pointer"
                 />
               </div>
             )}
@@ -534,17 +536,17 @@ const MusicPlaylist: React.FC = () => {
                   clickAudio(key);
                 }}>
                 <img
-                  className={`w-[80px] rounded-[10px] ${index === key && !isPlaying ? 'opacity-[70%]' : ''}`}
+                  className={`w-[78px] rounded-[10px] ${index === key && !isPlaying ? 'opacity-[70%]' : ''}`}
                   src={music.img}
                   alt={music.name}
                 />
-                <div className="ml-[15px] flex flex-col min-w-[190px]">
+                <div className="ml-[15px] flex flex-col min-w-[187px]">
                   <span className="text-[17px] mt-[8px]">{music.name}</span>
                   <span className="mt-[3px] font-[300] text-[#709fdc]">
                     {music.category}
                   </span>
                 </div>
-                <span className="min-w-[40px] ml-[9px] mr-[9px] font-[500]">
+                <span className="min-w-[40px] ml-[7px] mr-[9px] font-[500]">
                   {music.duration}
                 </span>
               </div>
