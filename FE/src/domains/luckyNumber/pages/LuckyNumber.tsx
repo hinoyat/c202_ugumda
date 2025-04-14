@@ -74,7 +74,6 @@ const LuckyNumber = () => {
         // 데이터 로딩 완료 표시
         setDataLoaded(true);
       } catch (error) {
-
         // 에러 발생 시에도 버튼 표시
         setShowButton(true);
         setDataLoaded(true);
@@ -86,12 +85,12 @@ const LuckyNumber = () => {
 
   const nav = useNavigate();
   const onClickHome = () => {
-    const whereShouldIgo = localStorage.getItem("FromDiary");
-    if(whereShouldIgo==="goUniverse"){
-      nav("/")
-      localStorage.removeItem("FromDiary");
-    }else{
-      nav("/spaceship")
+    const whereShouldIgo = localStorage.getItem('FromDiary');
+    if (whereShouldIgo === 'goUniverse') {
+      nav('/');
+      localStorage.removeItem('FromDiary');
+    } else {
+      nav('/spaceship');
     }
   };
 
@@ -147,7 +146,6 @@ const LuckyNumber = () => {
 
       // 응답으로 받은 번호로 stars 배열 업데이트
       if (numbersFromResponse && numbersFromResponse.length > 0) {
-
         const updatedStars = [...stars];
         numbersFromResponse.forEach((num, index) => {
           if (index < updatedStars.length) {
@@ -168,8 +166,7 @@ const LuckyNumber = () => {
   };
 
   // animationStage 변경 추적
-  useEffect(() => {
-  }, [animationStage]);
+  useEffect(() => {}, [animationStage]);
 
   useEffect(() => {
     if (animationStage === 1) {
@@ -194,7 +191,6 @@ const LuckyNumber = () => {
 
   useEffect(() => {
     if (animationStage === 2) {
-
       // 초기화
       setVisibleStars([]);
       setVisibleLines([]);
@@ -269,8 +265,7 @@ const LuckyNumber = () => {
   }, [animationStage]);
 
   // stars 상태 변경 감지
-  useEffect(() => {
-  }, [stars]);
+  useEffect(() => {}, [stars]);
 
   return (
     <div className="w-screen h-screen relative clover-font bg-black">
@@ -410,6 +405,16 @@ const LuckyNumber = () => {
             onClick={handleDrawClick}
             visible={true}
           />
+        </div>
+      )}
+
+      {showButton && dataLoaded && (
+        <div
+          className="absolute top-40 left-0 right-0 text-center"
+          style={{ zIndex: 30 }}>
+          <div className="text-lg text-white/95 dung-font">
+            하루에 한 번만 뽑을 수 있습니다 🍀
+          </div>
         </div>
       )}
     </div>

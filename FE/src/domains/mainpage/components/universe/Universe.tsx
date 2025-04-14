@@ -635,7 +635,7 @@ const Universe: React.FC<UniverseProps> = ({ isMySpace = true, userSeq }) => {
                 color="rgb(220, 230, 255)" // 연한 푸른 빛 흰색
                 lineWidth={1.2} // 선 두께
                 dashed // 점선 효과 추가
-                dashSize={2.5} // 점선 크기
+                dashSize={1} // 점선 크기
                 dashScale={-10} // 점선 간격 조정
                 dashOffset={0} // 점선 시작 위치
               />
