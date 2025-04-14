@@ -61,7 +61,7 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const glowRef = useRef<THREE.Mesh>(null); // 새 별 주변에 발광 효과를 위해
 
   // 별 크기
-  const starSize = 2.5;
+  const starSize = 2.7;
 
   // 별 생성 시간 확인 함수 (하이라이트 효과를 위해)
   const isWithin30Minutes = (dateString: string) => {
@@ -76,18 +76,44 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
     return Date.now() - date.getTime() < 30 * 60 * 1000;
   };
 
-  // 별 색상 - 새 별은 노란색, 기존 별은 파란색
-  // ? '#ffcc00' // 새 별은 노란색
-  // : '#00ffe0' // 기존 별은 파란색
   // const starColor = new THREE.Color(isNew ? '#FF4D4D' : '#00ffe0');
   // 별 색상 - 공개여부에 따라 색상 결정
   // 새 별 > 공개 일기 > 비공개 일기 우선순위
+  // const starColor = new THREE.Color(
+  //   isNew
+  //     ? '#FF00BF' // 새 별은 빨간색
+  //     : isPublic === 'Y'
+  //       ? '#00ffe0' // 공개 일기
+  //       : '#FF4D4D' // 비공개 일기
+  // );
+
+  const getEmotionColor = (emotionName: string): string => {
+    switch (emotionName) {
+      case '행복':
+        return '#FFD700'; // 골드 옐로우
+      case '슬픔':
+        return '#0047AB'; // 코발트 블루
+      case '분노':
+        return '#FF0000'; // 순수 빨간색
+      case '불안':
+        return '#8A2BE2'; // 블루 바이올렛 (보라색)
+      case '평화':
+        return '#32CD32'; // 라임 그린
+      case '희망':
+        return '#48D1CC'; // 터콰이즈
+      case '공포':
+        return '#696969'; // 살짝 회색
+      default:
+        return '#FFFFFF'; // 기본 흰색
+    }
+  };
+
   const starColor = new THREE.Color(
     isNew
       ? '#FF00BF' // 새 별은 빨간색
       : isPublic === 'Y'
-        ? '#00ffe0' // 공개 일기
-        : '#FF4D4D' // 비공개 일기
+        ? getEmotionColor(entry.emotionName) // 공개 일기는 감정에 따른 색상
+        : '#FFFFFF' // 비공개 일기는 흰색
   );
 
   // 새 별의 경우 특별한 애니메이션 효과 적용
