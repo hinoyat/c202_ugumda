@@ -396,7 +396,7 @@ const MusicPlaylist: React.FC = () => {
             그 감정에 꼭 맞는 노래를 들려줄 수 있어요.
             <br />
             <br />
-            다음 이야기를 기다릴게요 🌙
+            다음 이야기를 기다릴게요. 🌙
           </div>
         </div>
       </div>
