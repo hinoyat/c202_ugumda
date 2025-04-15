@@ -10,66 +10,67 @@ import api from '@/apis/apiClient';
 const TodayFortune = () => {
   const nav = useNavigate();
   const [isAnimated, setIsAnimated] = useState(false);
-  const [initialAnimationComplete, setInitialAnimationComplete] = useState(false);
+  const [initialAnimationComplete, setInitialAnimationComplete] =
+    useState(false);
   const [isGlowing, setIsGlowing] = useState(false);
-  const [fortuneContent, setFortuneContent] = useState("");
+  const [fortuneContent, setFortuneContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const onClickHome = () => {
-    const whereShouldIgo = localStorage.getItem("FromDiary");
-    if(whereShouldIgo==="goUniverse"){
-      nav("/")
-      localStorage.removeItem("FromDiary");
-    }else{
-      nav("/spaceship")
+    const whereShouldIgo = localStorage.getItem('FromDiary');
+    if (whereShouldIgo === 'goUniverse') {
+      nav('/');
+      localStorage.removeItem('FromDiary');
+    } else {
+      nav('/spaceship');
     }
   };
 
-
   useEffect(() => {
     let isMounted = true;
-    
-    const fetchFortune = async() => {
+
+    const fetchFortune = async () => {
       if (isLoading) return;
       setIsLoading(true);
-      
+
       try {
         const checkResponse = await api.get('/daily-fortune');
 
         if (isMounted) {
-          if (checkResponse?.data?.data && 
-              checkResponse.data.data !== "오늘의 운세가 아직 생성되지 않았습니다.") {
-
+          if (
+            checkResponse?.data?.data &&
+            checkResponse.data.data !==
+              '오늘의 운세가 아직 생성되지 않았습니다.'
+          ) {
             setFortuneContent(checkResponse.data.data);
-          } 
-          else {
+          } else {
             // console.log("Creating new fortune...");
             try {
               const createResponse = await api.post('/daily-fortune');
-              await new Promise(resolve => setTimeout(resolve, 500));
-              
+              await new Promise((resolve) => setTimeout(resolve, 500));
+
               if (isMounted) {
                 try {
                   const finalResponse = await api.get('/daily-fortune');
-                  
+
                   if (isMounted && finalResponse?.data?.data) {
                     setFortuneContent(finalResponse.data.data);
                   } else {
-                    setFortuneContent("운세 내용을 찾을 수 없습니다.");
+                    setFortuneContent('운세 내용을 찾을 수 없습니다.');
                   }
                 } catch (finalError) {
-                  setFortuneContent("운세를 가져오는데 실패하였습니다.");
+                  setFortuneContent('운세를 가져오는데 실패하였습니다.');
                 }
               }
             } catch (createError) {
-              setFortuneContent("새 운세를 생성하는데 실패하였습니다.");
+              setFortuneContent('새 운세를 생성하는데 실패하였습니다.');
             }
           }
         }
       } catch (error) {
         if (isMounted) {
-          setFortuneContent("오늘의 운세를 가져오는데 실패하였습니다.");
+          setFortuneContent('오늘의 운세를 가져오는데 실패하였습니다.');
         }
       } finally {
         if (isMounted) {
@@ -77,9 +78,9 @@ const TodayFortune = () => {
         }
       }
     };
-    
+
     fetchFortune();
-    
+
     return () => {
       isMounted = false;
     };
@@ -98,7 +99,7 @@ const TodayFortune = () => {
       }, 1000);
       return () => clearTimeout(animationTimer2);
     }, 100);
-    
+
     return () => clearTimeout(animationTimer1);
   }, []);
   useEffect(() => {
@@ -109,16 +110,19 @@ const TodayFortune = () => {
       // console.log("WebGL context restored");
     };
 
-    const canvas = document.querySelector("canvas");
+    const canvas = document.querySelector('canvas');
     if (canvas) {
-      canvas.addEventListener("webglcontextlost", handleContextLost);
-      canvas.addEventListener("webglcontextrestored", handleContextRestored);
+      canvas.addEventListener('webglcontextlost', handleContextLost);
+      canvas.addEventListener('webglcontextrestored', handleContextRestored);
     }
 
     return () => {
       if (canvas) {
-        canvas.removeEventListener("webglcontextlost", handleContextLost);
-        canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+        canvas.removeEventListener('webglcontextlost', handleContextLost);
+        canvas.removeEventListener(
+          'webglcontextrestored',
+          handleContextRestored
+        );
       }
     };
   }, []);
@@ -160,15 +164,11 @@ const TodayFortune = () => {
           <img
             src={card}
             alt="fortune card"
-            className="w-65"
+            className="w-70"
           />
           {isAnimated && (
-            <div className="maru-font text-[14px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center p-4 fortune-text">
-              {isLoading ? (
-                <p></p>
-              ) : (
-                <p>{fortuneContent}</p>
-              )}
+            <div className="maru-font text-[17px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center p-4 fortune-text">
+              {isLoading ? <p></p> : <p>{fortuneContent}</p>}
             </div>
           )}
         </div>
