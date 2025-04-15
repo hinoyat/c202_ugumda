@@ -90,9 +90,9 @@ const DiaryStar: React.FC<DiaryStarProps> = ({
   const getEmotionColor = (emotionName: string): string => {
     switch (emotionName) {
       case '행복':
-        return '#FFD700'; // 골드 옐로우
+        return '#0047AB'; // 골드 옐로우0047AB
       case '슬픔':
-        return '#0047AB'; // 코발트 블루
+        return '#FFD700'; // 코발트 블루
       case '분노':
         return '#FF0000'; // 순수 빨간색
       case '불안':
