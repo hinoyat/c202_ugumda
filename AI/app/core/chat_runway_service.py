@@ -23,7 +23,7 @@ def runway(image_base64:str, prompt:str):
     time.sleep(10)  # Wait for a second before polling
     task = client.tasks.retrieve(task_id)
 
-    if task.status != 'SUCCEEDED':
+    if task.status == 'FAILED':
         task_expect_url = "https://dnznrvs05pmza.cloudfront.net/4e89ed2d-13ba-4e12-9b4c-05bbdae46641.mp4?_JhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYzQ3ZDdhOWI2YWE1MmY3NyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc0MzI5MjgwMH0.ddvpDnzMFvUSgTsuvrgBEo-RLJMLH5zWSKOyC-PKETo"
         logging.info(task.status)
         logging.info(task)
@@ -39,7 +39,7 @@ def runway(image_base64:str, prompt:str):
         logging.info(task)
         return task_expect_url
 
-
+    logging.info(task)
     logging.info(task.output[0])
 
     return task.output[0]
