@@ -18,14 +18,14 @@ def chat_gpt(content:str):
 
     # 영어 번역 부분만 출력
     try:
-        match = re.search(r"영어\s*번역:\s*\[([^\]]+)\]", full_prompt)
+        match = re.search(r"English\s*keywords:\s*\[([^\]]+)\]", full_prompt)
         if match:
             keywords_str = match.group(1)   # 쉼표로 분리
             keywords = [keyword.strip() for keyword in keywords_str.split(",")]  # 공백 제거
             prompt = ",".join(keywords)
             logging.info(f"추출된 prompt: {prompt}")
         else:
-            logging.info("'영어번역:' 패턴을 찾을 수 없습니다.")
+            logging.info("'English:' 패턴을 찾을 수 없습니다.")
             logging.info("대신 다음 키워드를 사용합니다: 'ancient book, glowing golden letters, sparkling light, mystical atmosphere'")
             prompt = "ancient book, glowing golden letters, sparkling light, mystical atmosphere"
     except Exception as e:

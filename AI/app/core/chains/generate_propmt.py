@@ -8,16 +8,16 @@ load_dotenv()
 # 객체 생성
 llm = ChatOpenAI(
     temperature=0.1,  # 창의성 (0.0 ~ 2.0)
-    model_name="gpt-3.5-turbo",  # 모델명
+    model_name="gpt-4",  # 모델명
 )
 
 # 요약 및 번역을 동시에 수행하는 프롬프트 템플릿
 prompt = ChatPromptTemplate.from_template(
     """
-    다음의 한국어 꿈일기 텍스트를 분석하여 핵심 키워드를 최소 4개 이상 추출하고, 해당 키워드를 영어로 번역해주세요. 이 결과는 후속 text-to-image 모델과 text-to-video 모델의 프롬프트로 사용됩니다.
-
+    다음의 한국어 꿈일기 텍스트를 분석하여 핵심 키워드를 최소 4개 이상 추출하고, 해당 키워드를 영어로만 번역해주세요. 반드시 출력형태는 영어로만 출력해주세요. 이 결과는 후속 text-to-image 모델과 text-to-video 모델의 프롬프트로 사용됩니다.
+    
     [작업 지시]
-    1. 입력된 꿈일기 텍스트를 주의 깊게 읽고, 텍스트의 주요 이미지를 형성하는 최소 4개 이상의 핵심키워드를 선정합니다.
+    1. 입력된 꿈일기 텍스트를 주의 깊게 읽고, 텍스트의 주요 이미지를 형성하는 최소 4개 이상의 핵심 영어키워드를 선정합니다.
     2. 선정 기준은 꿈에서 자주 등장하거나 감정, 분위기, 상징 등이 잘 드러나는 단어들입니다.
     3. 불필요한 부가 설명이나 감정 표현은 제외하고, 핵심적인 명사 및 짧은 구문으로만 구성하세요.
     4. 선정된 키워드를 한글로 요약한 후, 같은 키워드를 영어로 번역합니다.
@@ -164,7 +164,7 @@ prompt = ChatPromptTemplate.from_template(
     {text}  
 
     ### 출력 형식:  
-    영어 번역: [english keyword 1, english keyword 2, ..., english keyword N]
+    English keywords: [keyword 1, english keyword 2, ..., english keyword N]
     """
 )
 
