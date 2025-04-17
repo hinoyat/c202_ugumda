@@ -105,22 +105,22 @@ const DiaryDetail: React.FC<DiaryDetailProps> = ({
 
   const handleVideoRetry = async () => {
     setIsVideoGenerating(true);
-    try {
-      const response = await videoApi.createVideo({
-        diary_pk: initialDiary.diarySeq,
-        content: initialDiary.content,
-      });
+    // try {
+    //   const response = await videoApi.createVideo({
+    //     diary_pk: initialDiary.diarySeq,
+    //     content: initialDiary.content,
+    //   });
 
-      // 영상 재생성에 성공 시
-      setCurrentDiary((prevDiary) => ({
-        ...prevDiary,
-        videoUrl: response.data.videoUrl,
-      }));
-    } catch (error) {
-      alert('영상 재생성에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsVideoGenerating(false);
-    }
+    //   // 영상 재생성에 성공 시
+    //   setCurrentDiary((prevDiary) => ({
+    //     ...prevDiary,
+    //     videoUrl: response.data.videoUrl,
+    //   }));
+    // } catch (error) {
+    //   alert('영상 재생성에 실패했습니다. 다시 시도해주세요.');
+    // } finally {
+    //   setIsVideoGenerating(false);
+    // }
   };
 
   // --------- 꿈해몽 ---------- //

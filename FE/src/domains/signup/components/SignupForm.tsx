@@ -433,10 +433,10 @@ const SignupForm = () => {
 
         {/* 회원가입 버튼 */}
         <button
-          // type="submit"
+          type="submit"
           className="submit dung-font"
           style={{ marginTop: '20px' }}
-          // onClick={handleSignup}
+          onClick={handleSignup}
         >
           <span className="sign-text dung-font">CREATE ACCOUNT</span>
         </button>
