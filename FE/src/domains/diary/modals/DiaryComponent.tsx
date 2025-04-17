@@ -163,13 +163,13 @@ const DiaryComponent: React.FC<DiaryComponentProps> = ({
         const escapedContent = escapeSpecialCharsForVideo(content);
 
         // Promise.allSettled로 모든 API 요청이 완료되기를 기다림
-        await Promise.allSettled([
-          videoApi.createVideo({
-            diary_pk: diarySeq,
-            content: escapedContent,
-          }),
-          dreamApi.createDreamMeaning(diarySeq, content),
-        ]);
+        // await Promise.allSettled([
+        //   videoApi.createVideo({
+        //     diary_pk: diarySeq,
+        //     content: escapedContent,
+        //   }),
+        //   dreamApi.createDreamMeaning(diarySeq, content),
+        // ]);
 
         // 성공 시 onDiaryCreated 콜백 호출
         if (onDiaryCreated) {
