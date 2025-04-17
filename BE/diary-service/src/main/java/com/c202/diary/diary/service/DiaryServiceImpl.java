@@ -76,7 +76,7 @@ public class DiaryServiceImpl implements DiaryService {
                 .isPublic(request.getIsPublic())
                 .createdAt(now)
                 .updatedAt(now)
-                .videoUrl("pending")
+                .videoUrl("https://uggumda.s3.ap-northeast-2.amazonaws.com/Video_8551152a-a54b-42f3-add2-35137fe7e76d.mp4")
                 .isDeleted("N")
                 .x(coordinates.getX())
                 .y(coordinates.getY())
